@@ -1,0 +1,19 @@
+{
+  "name": "reviews-and-ratings",
+  "vendor": "vtex",
+  "version": "0.0.1",
+  "title": "Reviews and Ratings",
+  "description": "An app for saving and retrieving product reviews and ratings.",
+  "scripts": {
+    "prereleasy": "bash pre.sh"
+  },
+  "builders": {
+    "pages": "1.x",
+    "react": "3.x",
+    "dotnet": "0.x",
+    "graphql": "1.x"
+  },
+  "dependencies": {
+    "vtex.styleguide": "9.x"
+  }
+}
