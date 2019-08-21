@@ -13,7 +13,8 @@
 
     public class ProductReviewRepository : IProductReviewRepository
     {
-        private const string BUCKET = "productReviews";
+        private const string REVIEWS_BUCKET = "productReviews";
+        private const string LOOKUP = "productLookup";
         private const string HEADER_VTEX_CREDENTIAL = "X-Vtex-Credential";
         private const string APPLICATION_JSON = "application/json";
         private readonly IVtexEnvironmentVariableProvider _environmentVariableProvider;
@@ -48,7 +49,7 @@
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri($"http://vbase.{this._environmentVariableProvider.Region}.vtex.io/{this._environmentVariableProvider.Account}/{this._environmentVariableProvider.Workspace}/buckets/{this._applicationName}/{BUCKET}/files/{productId}"),
+                RequestUri = new Uri($"http://vbase.{this._environmentVariableProvider.Region}.vtex.io/{this._environmentVariableProvider.Account}/{this._environmentVariableProvider.Workspace}/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{productId}"),
             };
 
             string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
@@ -71,7 +72,7 @@
             return productReviews;
         }
 
-        public async Task SaveProductReviewsAsync(string productId,IList<Review> productReviews)
+        public async Task SaveProductReviewsAsync(string productId, IList<Review> productReviews)
         {
             if (productReviews == null)
             {
@@ -82,7 +83,7 @@
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Put,
-                RequestUri = new Uri($"http://vbase.{this._environmentVariableProvider.Region}.vtex.io/{this._environmentVariableProvider.Account}/{this._environmentVariableProvider.Workspace}/buckets/{this._applicationName}/{BUCKET}/files/{productId}"),
+                RequestUri = new Uri($"http://vbase.{this._environmentVariableProvider.Region}.vtex.io/{this._environmentVariableProvider.Account}/{this._environmentVariableProvider.Workspace}/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{productId}"),
                 Content = new StringContent(jsonSerializedProducReviews, Encoding.UTF8, APPLICATION_JSON)
             };
 
@@ -97,5 +98,59 @@
             response.EnsureSuccessStatusCode();
         }
 
+        public async Task<IDictionary<string, string>> LoadLookupAsync()
+        {
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri($"http://vbase.{this._environmentVariableProvider.Region}.vtex.io/{this._environmentVariableProvider.Account}/{this._environmentVariableProvider.Workspace}/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{LOOKUP}"),
+            };
+
+            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+            if (authToken != null)
+            {
+                request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
+            }
+
+            var response = await _httpClient.SendAsync(request);
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+
+            response.EnsureSuccessStatusCode();
+
+            IDictionary<string, string> lookupDictionary = JsonConvert.DeserializeObject<IDictionary<string, string>>(responseContent);
+
+            return lookupDictionary;
+        }
+
+        public async Task SaveLookupAsync(IDictionary<string, string> lookupDictionary)
+        {
+            if (lookupDictionary == null)
+            {
+                lookupDictionary = new Dictionary<string, string>();
+            }
+
+            var jsonSerializedLookup = JsonConvert.SerializeObject(lookupDictionary);
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Put,
+                RequestUri = new Uri($"http://vbase.{this._environmentVariableProvider.Region}.vtex.io/{this._environmentVariableProvider.Account}/{this._environmentVariableProvider.Workspace}/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{LOOKUP}"),
+                Content = new StringContent(jsonSerializedLookup, Encoding.UTF8, APPLICATION_JSON)
+            };
+
+            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+            if (authToken != null)
+            {
+                request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
+            }
+
+            var response = await _httpClient.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+        }
     }
 }

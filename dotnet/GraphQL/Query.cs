@@ -1,8 +1,6 @@
 using GraphQL;
 using GraphQL.Types;
-using ReviewsRatings.DataSources;
 using ReviewsRatings.GraphQL.Types;
-using ReviewsRatings.Markdown;
 using ReviewsRatings.Services;
 
 namespace ReviewsRatings.GraphQL
@@ -40,7 +38,7 @@ namespace ReviewsRatings.GraphQL
                     new QueryArgument<IntGraphType> { Name = "limit", Description = "Limit" },
                     new QueryArgument<IntGraphType> { Name = "orderBy", Description = "Order by" }
                 ),
-                resolve: context => productReviewService.GetReviewsByProductId(context.GetArgument<string>("productId")).Count
+                resolve: context => productReviewService.GetReviewsByProductId(context.GetArgument<string>("productId")).Result.Count
             );
 
             Field<IntGraphType>(
@@ -56,7 +54,7 @@ namespace ReviewsRatings.GraphQL
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "productId", Description = "Product Id" }
                     ),
-                resolve: context => productReviewService.GetReviewsByProductId(context.GetArgument<string>("productId")).Count
+                resolve: context => productReviewService.GetReviewsByProductId(context.GetArgument<string>("productId")).Result.Count
             );
         }
     }
