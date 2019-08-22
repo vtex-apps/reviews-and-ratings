@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ReviewsRatings.DataSources;
 using ReviewsRatings.Services;
-using System.Net.Http;
 
 namespace Vtex
 {
@@ -27,7 +26,7 @@ namespace Vtex
             services.AddTransient<IProductReviewRepository, ProductReviewRepository>();
             services.AddSingleton<IVtexEnvironmentVariableProvider, VtexEnvironmentVariableProvider>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSingleton<HttpClient>();
+            services.AddHttpClient();
         }
 
         // This method is called inside Startup.Configure() before calling app.UseMvc()

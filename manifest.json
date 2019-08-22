@@ -10,10 +10,11 @@
   "builders": {
     "pages": "1.x",
     "react": "3.x",
-    "dotnet": "0.x",
+    "dotnet": "1.x",
     "graphql": "1.x"
   },
   "dependencies": {
     "vtex.styleguide": "9.x"
-  }
+  },
+  "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"
 }

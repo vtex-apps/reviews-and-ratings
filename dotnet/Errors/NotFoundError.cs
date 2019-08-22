@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using ReviewsRatings.Errors;
 using GraphQL;
 using Microsoft.AspNetCore.Http;
 
