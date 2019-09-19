@@ -10,8 +10,8 @@
 
         Task SaveProductReviewsAsync(string productId, IList<Review> productReviews);
 
-        Task<IDictionary<string, string>> LoadLookupAsync();
+        Task<IDictionary<int, string>> LoadLookupAsync();
 
-        Task SaveLookupAsync(IDictionary<string, string> lookupDictionary);
+        Task SaveLookupAsync(IDictionary<int, string> lookupDictionary);
     }
 }

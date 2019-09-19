@@ -1,3 +1,0 @@
-mutation DeleteElement($id: String) {
-  delete(id: $id)
-}

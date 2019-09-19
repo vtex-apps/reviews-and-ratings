@@ -14,7 +14,7 @@ namespace ReviewsRatings.GraphQL
             Name = "Mutation";
 
             Field<ReviewType>(
-                "NewReview",
+                "newReview",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<ReviewInputType>> {Name = "review"}
                 ),
@@ -25,27 +25,27 @@ namespace ReviewsRatings.GraphQL
                 });
 
             Field<ReviewType>(
-                "EditReview",
+                "editReview",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IdGraphType>> {Name = "id"},
                     new QueryArgument<NonNullGraphType<ReviewInputType>> {Name = "review"}
                 ),
                 resolve: context =>
                 {
-                    var id = context.GetArgument<string>("id");
+                    var id = context.GetArgument<int>("id");
                     var review = context.GetArgument<Review>("review");
                     review.Id = id;
                     return productReviewService.EditReview(review);
                 });
 
             Field<BooleanGraphType>(
-                "DeleteReview",
+                "deleteReview",
                 arguments: new QueryArguments(
                     new QueryArgument<StringGraphType> {Name = "id"}
                 ),
                 resolve: context =>
                 {
-                    var id = context.GetArgument<string>("id");
+                    var id = context.GetArgument<int>("id");
                     return productReviewService.DeleteReview(id);
                 });
         }

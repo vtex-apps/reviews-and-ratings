@@ -8,7 +8,7 @@
     {
         Task<IList<Review>> GetReviewsByProductId(string productId);
 
-        Task<Review> GetReview(string Id);
+        Task<Review> GetReview(int Id);
 
         Task<IList<Review>> GetReviews();
 
@@ -18,6 +18,6 @@
 
         Task<Review> EditReview(Review review);
 
-        Task<bool> DeleteReview(string Id);
+        Task<bool> DeleteReview(int Id);
     }
 }

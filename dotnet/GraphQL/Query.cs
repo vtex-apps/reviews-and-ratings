@@ -13,15 +13,15 @@ namespace ReviewsRatings.GraphQL
             Name = "Query";
 
             Field<ReviewType>(
-                "Review",
+                "review",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id", Description = "id of the review" }
                 ),
-                resolve: context => productReviewService.GetReview(context.GetArgument<string>("id"))
+                resolve: context => productReviewService.GetReview(context.GetArgument<int>("id"))
             );
 
             Field<ListGraphType<ReviewType>>(
-                "Reviews",
+                "reviews",
                 arguments: new QueryArguments(
                     new QueryArgument<IntGraphType> { Name = "offset", Description = "Offset" },
                     new QueryArgument<IntGraphType> { Name = "limit", Description = "Limit" },
@@ -31,7 +31,7 @@ namespace ReviewsRatings.GraphQL
             );
 
             Field<ListGraphType<ReviewType>>(
-                "Reviews",
+                "reviewsByProductId",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "productId", Description = "Product Id" },
                     new QueryArgument<IntGraphType> { Name = "offset", Description = "Offset" },
@@ -42,7 +42,7 @@ namespace ReviewsRatings.GraphQL
             );
 
             Field<IntGraphType>(
-                "AverageRatingByProductId",
+                "averageRatingByProductId",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "productId", Description = "Product Id" }
                     ),
@@ -50,7 +50,7 @@ namespace ReviewsRatings.GraphQL
             );
 
             Field<IntGraphType>(
-                "TotalReviewsByProductId",
+                "totalReviewsByProductId",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "productId", Description = "Product Id" }
                     ),

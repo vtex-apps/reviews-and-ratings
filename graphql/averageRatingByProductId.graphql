@@ -1,0 +1,3 @@
+query AverageRatingByProductId($productId: String!) {
+    averageRatingByProductId(productId: $productId) 
+}

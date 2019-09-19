@@ -1,0 +1,14 @@
+mutation EditReview($id: ID!, $review: ReviewInput!) {
+    editReview(id: $id, review: $review) {
+        id
+        cacheId
+        productId
+        rating
+        title
+        text
+        reviewerName
+        shopperId
+        reviewDateTime
+        verifiedPurchaser
+    }
+}

@@ -1,31 +1,41 @@
-type Book {
-  authors: [String!]
-  cacheId: ID!
-  id: ID!
-  name: String
-}
-
-# It is necessary to generate input types for creating books
-# ref: http://graphql.org/graphql-js/mutations-and-input-types/
-input BookInput {
-  authors: [String!]
-  cacheId: ID
-  id: ID
-  name: String
+type Review {
+    id: ID!
+    cacheId: ID!
+    productId: String!
+    rating: Int!
+    title: String
+    text: String
+    reviewerName: String
+    shopperId: String
+    reviewDateTime: String
+    verifiedPurchaser: Boolean
 }
 
 type Query {
-  # Cache control can only be set at root fields
-  book(id: ID!): Book
-  books(from: Int = 0, to: Int = 4): [Book] @cacheControl(scope: PUBLIC, maxAge: SHORT)
-  total: Int
+    review(id: ID!): Review
+    reviews(offset: Int, limit: Int, orderBy: String): [Review] @cacheControl(scope: PUBLIC, maxAge: SHORT)
+    reviewsByProductId(productId: String!, offset: Int, limit: Int, orderBy: String): [Review] @cacheControl(scope: PUBLIC, maxAge: SHORT)
+    averageRatingByProductId(productId: String!): Float
+    totalReviewsByProductId(productId: String!): Int
+}
 
-  source(id: ID!): String
+# Mutations
+
+input ReviewInput {
+    id: ID
+    cacheId: ID
+    productId: String!
+    rating: Int!
+    title: String
+    text: String
+    reviewerName: String
+    shopperId: String!
+    reviewDateTime: String
+    verifiedPurchaser: Boolean!
 }
 
 type Mutation {
-  # You should always return the whole object in a mutation, not only a boolean. This will help in browser caching
-  delete(id: String): Boolean
-  editBook(id: ID!, book: BookInput!): Book
-  newBook(book: BookInput!): Book
+    newReview(review: ReviewInput!): Review
+    editReview(id: ID!, review: ReviewInput!): Review
+    deleteReview(id: ID!): Boolean
 }

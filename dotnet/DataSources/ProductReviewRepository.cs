@@ -19,12 +19,12 @@
         private const string APPLICATION_JSON = "application/json";
         private readonly IVtexEnvironmentVariableProvider _environmentVariableProvider;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly HttpClient _httpClient;
+        private readonly IHttpClientFactory _clientFactory;
         private readonly string _applicationName;
         private string AUTHORIZATION_HEADER_NAME;
 
 
-        public ProductReviewRepository(IVtexEnvironmentVariableProvider environmentVariableProvider, IHttpContextAccessor httpContextAccessor, HttpClient httpClient)
+        public ProductReviewRepository(IVtexEnvironmentVariableProvider environmentVariableProvider, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory)
         {
             this._environmentVariableProvider = environmentVariableProvider ??
                                                 throw new ArgumentNullException(nameof(environmentVariableProvider));
@@ -32,8 +32,8 @@
             this._httpContextAccessor = httpContextAccessor ??
                                         throw new ArgumentNullException(nameof(httpContextAccessor));
 
-            this._httpClient = httpClient ??
-                               throw new ArgumentNullException(nameof(httpClient));
+            this._clientFactory = clientFactory ??
+                               throw new ArgumentNullException(nameof(clientFactory));
 
             this._applicationName =
                 $"{this._environmentVariableProvider.ApplicationVendor}.{this._environmentVariableProvider.ApplicationName}";
@@ -58,7 +58,8 @@
                 request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
             }
 
-            var response = await _httpClient.SendAsync(request);
+            var client = _clientFactory.CreateClient();
+            var response = await client.SendAsync(request);
             string responseContent = await response.Content.ReadAsStringAsync();
 
             if (response.StatusCode == HttpStatusCode.NotFound)
@@ -93,12 +94,13 @@
                 request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
             }
 
-            var response = await _httpClient.SendAsync(request);
+            var client = _clientFactory.CreateClient();
+            var response = await client.SendAsync(request);
 
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task<IDictionary<string, string>> LoadLookupAsync()
+        public async Task<IDictionary<int, string>> LoadLookupAsync()
         {
             var request = new HttpRequestMessage
             {
@@ -112,7 +114,8 @@
                 request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
             }
 
-            var response = await _httpClient.SendAsync(request);
+            var client = _clientFactory.CreateClient();
+            var response = await client.SendAsync(request);
             string responseContent = await response.Content.ReadAsStringAsync();
 
             if (response.StatusCode == HttpStatusCode.NotFound)
@@ -122,16 +125,16 @@
 
             response.EnsureSuccessStatusCode();
 
-            IDictionary<string, string> lookupDictionary = JsonConvert.DeserializeObject<IDictionary<string, string>>(responseContent);
+            IDictionary<int, string> lookupDictionary = JsonConvert.DeserializeObject<IDictionary<int, string>>(responseContent);
 
             return lookupDictionary;
         }
 
-        public async Task SaveLookupAsync(IDictionary<string, string> lookupDictionary)
+        public async Task SaveLookupAsync(IDictionary<int, string> lookupDictionary)
         {
             if (lookupDictionary == null)
             {
-                lookupDictionary = new Dictionary<string, string>();
+                lookupDictionary = new Dictionary<int, string>();
             }
 
             var jsonSerializedLookup = JsonConvert.SerializeObject(lookupDictionary);
@@ -148,7 +151,8 @@
                 request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
             }
 
-            var response = await _httpClient.SendAsync(request);
+            var client = _clientFactory.CreateClient();
+            var response = await client.SendAsync(request);
 
             response.EnsureSuccessStatusCode();
         }

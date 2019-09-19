@@ -8,13 +8,38 @@
     "prereleasy": "bash pre.sh"
   },
   "builders": {
-    "pages": "1.x",
-    "react": "3.x",
     "dotnet": "1.x",
-    "graphql": "1.x"
+	"graphql": "1.x"
   },
   "dependencies": {
     "vtex.styleguide": "9.x"
   },
+  "policies": [
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "bnb.data.bl.uk"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "nuget.org"
+      }
+    },
+    {
+      "name": "ADMIN_DS"
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "{{account}}.vtexcommercestable.com.br",
+        "path": "/api/dataentities/*"
+      }
+    },
+    {
+      "name": "vbase-read-write"
+    }
+  ],
   "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"
 }

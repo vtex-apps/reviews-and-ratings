@@ -1,8 +1,0 @@
-mutation NewElement ($book: BookInput!) {
-  newBook(book: $book) {
-    authors
-    cacheId
-    id
-    name
-  }
-}
