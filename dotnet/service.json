@@ -7,6 +7,10 @@
     "printHelloWorld": {
       "path": "/_v/vtex/hello",
       "public": true
+    },
+    "clearData": {
+      "path": "/reviews/clear",
+      "public": true
     }
   },
   "events": {

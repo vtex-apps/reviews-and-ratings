@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using System.Threading.Tasks;
     using Models;
     using ReviewsRatings.DataSources;
@@ -13,6 +14,7 @@
     public class ProductReviewService : IProductReviewService
     {
         private readonly IProductReviewRepository _productReviewRepository;
+        private const int maximumReturnedRecords = 99;
 
         public ProductReviewService(IProductReviewRepository productReviewRepository)
         {
@@ -22,6 +24,8 @@
 
         public async Task<bool> DeleteReview(int Id)
         {
+            Console.WriteLine($"    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Deleting {Id}");
+
             bool retval = false;
             IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
             string productId = string.Empty;
@@ -37,9 +41,17 @@
                 }
 
                 // also remove the reference to the review from the loopup
-                lookup.Remove(Id);
-                await _productReviewRepository.SaveLookupAsync(lookup);
+                //lookup.Remove(Id);
+                //await _productReviewRepository.SaveLookupAsync(lookup);
             }
+            else
+            {
+                Console.WriteLine($"    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Unknown Product Id for {Id}");
+            }
+
+            // also remove the reference to the review from the loopup
+            lookup.Remove(Id);
+            await _productReviewRepository.SaveLookupAsync(lookup);
 
             return retval;
         }
@@ -72,6 +84,8 @@
             {
                 int totalRating = reviews.Sum(r => r.Rating);
                 averageRating = totalRating / numberOfReviews;
+
+                Console.WriteLine($" >>>>>>>>>>>>>>>>>>>>>>>>>>>> Average Rating for {productId}: {averageRating} from {numberOfReviews} reviews.");
             }
 
             return averageRating;
@@ -90,18 +104,61 @@
             return review;
         }
 
-        public async Task<IList<Review>> GetReviews()
+        public async Task<IList<Review>> GetReviews(int offset, int limit, string orderBy)
         {
+            Console.WriteLine($"    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> GetReviews ");
+
             List<Review> reviews = new List<Review>();
             IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
             if (lookup != null)
             {
-                List<string> productIds = lookup.Values.ToList();
+                List<string> productIds = lookup.Values.Distinct().ToList();
+                Console.WriteLine($"    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> GetReviews Prod Id #{productIds.Count}");
                 foreach (string productId in productIds)
                 {
-                    IList<Review> returnedReviewList = await this.GetReviewsByProductId(productId);
+                    Console.WriteLine($"    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> GetReviews Prod {productId}");
+                    // Get all results - sort/limit later
+                    IList<Review> returnedReviewList = await this.GetReviewsByProductId(productId, 0, maximumReturnedRecords, string.Empty);
                     reviews.AddRange(returnedReviewList);
                 }
+            }
+
+            if (reviews != null && reviews.Count > 0)
+            {
+                //Console.WriteLine($"    >>>>>>>>>>>>>>>>>   {reviews.Count} reviews (unfiltered)");
+                if (!string.IsNullOrEmpty(orderBy))
+                {
+                    //Console.WriteLine($"    >>>>>>>>>>>>>>>>>   Order By {orderBy}");
+                    string[] orderByArray = orderBy.Split(":");
+                    PropertyInfo pi = typeof(Review).GetProperty(orderByArray[0]);
+                    if (pi != null)
+                    {
+                        bool descendingOrder = false;
+                        if (orderByArray.Length > 1)
+                        {
+                            if (orderByArray[1].ToLower().Contains("desc"))
+                            {
+                                descendingOrder = true;
+                            }
+                        }
+
+                        if (descendingOrder)
+                        {
+                            reviews = reviews.OrderByDescending(x => pi.GetValue(x, null)).ToList();
+                        }
+                        else
+                        {
+                            reviews = reviews.OrderBy(x => pi.GetValue(x, null)).ToList();
+                        }
+                    }
+                    else
+                    {
+                        //Console.WriteLine($"    >>>>>>>>>>>>>>>>>   Could not get {orderBy} property info.");
+                    }
+                }
+
+                reviews = reviews.Skip(offset).Take(limit).ToList();
+                //Console.WriteLine($"    >>>>>>>>>>>>>>>>>   {reviews.Count} reviews (filtered)");
             }
 
             return reviews;
@@ -109,12 +166,66 @@
 
         public async Task<IList<Review>> GetReviewsByProductId(string productId)
         {
-            return await this._productReviewRepository.GetProductReviewsAsync(productId);
+            return await this.GetReviewsByProductId(productId, 0, maximumReturnedRecords, string.Empty);
+        }
+
+        public async Task<IList<Review>> GetReviewsByProductId(string productId, int offset, int limit, string orderBy)
+        {
+            if(limit == 0)
+            {
+                limit = maximumReturnedRecords;
+            }
+
+            limit = Math.Min(limit, maximumReturnedRecords);
+            Console.WriteLine($"    >>>>>>>>>>>>>>>>>  GetReviewsByProductId: {productId}  offset:{offset} limit:{limit} orderBy:{orderBy}");
+            IList<Review> reviews = await this._productReviewRepository.GetProductReviewsAsync(productId);
+            if (reviews != null && reviews.Count > 0)
+            {
+                Console.WriteLine($"    >>>>>>>>>>>>>>>>>   {reviews.Count} reviews (unfiltered)");
+                if (!string.IsNullOrEmpty(orderBy))
+                {
+                    Console.WriteLine($"    >>>>>>>>>>>>>>>>>   Order By {orderBy}");
+                    string[] orderByArray = orderBy.Split(":");
+                    PropertyInfo pi = typeof(Review).GetProperty(orderByArray[0]);
+                    if (pi != null)
+                    {
+                        bool descendingOrder = false;
+                        if (orderByArray.Length > 1)
+                        {
+                            if(orderByArray[1].ToLower().Contains("desc"))
+                            {
+                                descendingOrder = true;
+                            }
+                        }
+
+                        if (descendingOrder)
+                        {
+                            reviews = reviews.OrderByDescending(x => pi.GetValue(x, null)).ToList();
+                        }
+                        else
+                        {
+                            reviews = reviews.OrderBy(x => pi.GetValue(x, null)).ToList();
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"    >>>>>>>>>>>>>>>>>   Could not get {orderBy} property info.");
+                    }
+                }
+
+                reviews = reviews.Skip(offset).Take(limit).ToList();
+                Console.WriteLine($"    >>>>>>>>>>>>>>>>>   {reviews.Count} reviews (filtered)");
+            }
+
+            return reviews;
         }
 
         public async Task<Review> NewReview(Review review)
         {
             IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
+
+            Console.WriteLine($"    >>>>>>>>>>>>>>>>>   ID:{review.Id}  Exists?{lookup.ContainsKey(review.Id)}");
+
             int maxKeyValue = 0;
             if (lookup != null)
             {
@@ -133,19 +244,49 @@
                 //review.ReviewerName = "anon";
             }
 
-            if (review.ReviewDateTime == null)
+            if (string.IsNullOrWhiteSpace(review.ReviewDateTime))
             {
                 review.ReviewDateTime = DateTime.Now.ToString();
             }
 
-            IList<Review> reviews = new List<Review> { review };
             string productId = review.ProductId;
+
+            IList<Review> reviews = await this._productReviewRepository.GetProductReviewsAsync(productId);
+            if (reviews == null)
+            {
+                reviews = new List<Review>();
+            }
+
+            reviews.Add(review);
+
+            Console.WriteLine($"    >>>>>>>>>>>>>>>>>   Saving [{review.Id}] {productId}");
+
             await this._productReviewRepository.SaveProductReviewsAsync(productId, reviews);
 
             lookup.Add(review.Id, review.ProductId);
             await this._productReviewRepository.SaveLookupAsync(lookup);
 
             return review;
+        }
+
+        public async Task ClearData()
+        {
+            Console.WriteLine("------------------------------------------------------------------------");
+            IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
+            if (lookup != null)
+            {
+                List<string> productIds = lookup.Values.Distinct().ToList();
+                Console.WriteLine($"    >>>>>>>>>>>>>>>>>>>>>>  productIds {productIds.Count}");
+                foreach (string productId in productIds)
+                {
+                    Console.WriteLine($"    >>>>>>>>>>>>>>>>>>>>>>  Deleting reviews for {productId}");
+                    await this._productReviewRepository.SaveProductReviewsAsync(productId, null);
+                }
+            }
+
+            Console.WriteLine("     >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  Deleting lookup.");
+            await _productReviewRepository.SaveLookupAsync(null);
+            Console.WriteLine("------------------------------------------------------------------------");
         }
 
         private async Task<string> LookupProductById(int Id)

@@ -41,7 +41,7 @@ namespace ReviewsRatings.GraphQL
             Field<BooleanGraphType>(
                 "deleteReview",
                 arguments: new QueryArguments(
-                    new QueryArgument<StringGraphType> {Name = "id"}
+                    new QueryArgument<IdGraphType> {Name = "id"}
                 ),
                 resolve: context =>
                 {

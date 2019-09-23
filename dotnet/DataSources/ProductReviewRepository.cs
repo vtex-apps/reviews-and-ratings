@@ -75,6 +75,8 @@
 
         public async Task SaveProductReviewsAsync(string productId, IList<Review> productReviews)
         {
+            Console.WriteLine($"        >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> SaveProductReviewsAsync for [{productId}]");
+
             if (productReviews == null)
             {
                 productReviews = new List<Review>();
@@ -98,6 +100,8 @@
             var response = await client.SendAsync(request);
 
             response.EnsureSuccessStatusCode();
+
+            // Console.WriteLine($"        >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> {response.IsSuccessStatusCode} {response.ReasonPhrase}");
         }
 
         public async Task<IDictionary<int, string>> LoadLookupAsync()

@@ -25,26 +25,26 @@ namespace ReviewsRatings.GraphQL
                 arguments: new QueryArguments(
                     new QueryArgument<IntGraphType> { Name = "offset", Description = "Offset" },
                     new QueryArgument<IntGraphType> { Name = "limit", Description = "Limit" },
-                    new QueryArgument<IntGraphType> { Name = "orderBy", Description = "Order by" }
+                    new QueryArgument<StringGraphType> { Name = "orderBy", Description = "Order by" }
                 ),
-                resolve: context => productReviewService.GetReviews()
+                resolve: context => productReviewService.GetReviews(context.GetArgument<int>("offset"), context.GetArgument<int>("limit"), context.GetArgument<string>("orderBy"))
             );
 
             Field<ListGraphType<ReviewType>>(
                 "reviewsByProductId",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "productId", Description = "Product Id" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "productId", Description = "Product Id" },
                     new QueryArgument<IntGraphType> { Name = "offset", Description = "Offset" },
                     new QueryArgument<IntGraphType> { Name = "limit", Description = "Limit" },
-                    new QueryArgument<IntGraphType> { Name = "orderBy", Description = "Order by" }
+                    new QueryArgument<StringGraphType> { Name = "orderBy", Description = "Order by" }
                 ),
-                resolve: context => productReviewService.GetReviewsByProductId(context.GetArgument<string>("productId")).Result.Count
+                resolve: context => productReviewService.GetReviewsByProductId(context.GetArgument<string>("productId"), context.GetArgument<int>("offset"), context.GetArgument<int>("limit"), context.GetArgument<string>("orderBy"))
             );
 
             Field<IntGraphType>(
                 "averageRatingByProductId",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "productId", Description = "Product Id" }
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "productId", Description = "Product Id" }
                     ),
                 resolve: context => productReviewService.GetAverageRatingByProductId(context.GetArgument<string>("productId"))
             );
@@ -52,7 +52,7 @@ namespace ReviewsRatings.GraphQL
             Field<IntGraphType>(
                 "totalReviewsByProductId",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "productId", Description = "Product Id" }
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "productId", Description = "Product Id" }
                     ),
                 resolve: context => productReviewService.GetReviewsByProductId(context.GetArgument<string>("productId")).Result.Count
             );
