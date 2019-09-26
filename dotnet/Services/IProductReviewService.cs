@@ -22,6 +22,8 @@
 
         Task<bool> DeleteReview(int Id);
 
+        Task<IList<Review>> GetReviewsByShopperId(string shopperId, int offset, int limit, string orderBy);
+
         Task ClearData();
     }
 }

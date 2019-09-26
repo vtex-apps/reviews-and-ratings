@@ -10,5 +10,6 @@ mutation NewReview($review: ReviewInput!) {
         shopperId
         reviewDateTime
         verifiedPurchaser
+		sku
     }
 }

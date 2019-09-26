@@ -56,6 +56,17 @@ namespace ReviewsRatings.GraphQL
                     ),
                 resolve: context => productReviewService.GetReviewsByProductId(context.GetArgument<string>("productId")).Result.Count
             );
+
+            Field<ListGraphType<ReviewType>>(
+                "reviewsByShopperId",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "shopperId", Description = "Shopper Id" },
+                    new QueryArgument<IntGraphType> { Name = "offset", Description = "Offset" },
+                    new QueryArgument<IntGraphType> { Name = "limit", Description = "Limit" },
+                    new QueryArgument<StringGraphType> { Name = "orderBy", Description = "Order by" }
+                ),
+                resolve: context => productReviewService.GetReviewsByShopperId(context.GetArgument<string>("shopperId"), context.GetArgument<int>("offset"), context.GetArgument<int>("limit"), context.GetArgument<string>("orderBy"))
+            );
         }
     }
 }

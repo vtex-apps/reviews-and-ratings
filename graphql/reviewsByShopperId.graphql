@@ -1,0 +1,14 @@
+query ReviewsByShopperId($shopperId: String!, $offset: Int, $limit: Int, $orderBy: String) {
+    reviewsByShopperId(shopperId: $shopperId, offset: $offset, limit: $limit, orderBy: $orderBy) {
+        id
+        cacheId
+        productId
+        rating
+        title
+        text
+        reviewerName
+        shopperId
+        reviewDateTime
+        verifiedPurchaser
+    }
+}

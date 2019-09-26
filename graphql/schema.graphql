@@ -9,6 +9,7 @@ type Review {
     shopperId: String
     reviewDateTime: String
     verifiedPurchaser: Boolean
+	sku: String
 }
 
 type Query {
@@ -17,6 +18,7 @@ type Query {
     reviewsByProductId(productId: String!, offset: Int, limit: Int, orderBy: String): [Review] @cacheControl(scope: PUBLIC, maxAge: SHORT)
     averageRatingByProductId(productId: String!): Float
     totalReviewsByProductId(productId: String!): Int
+	reviewsByShopperId(shopperId: String!, offset: Int, limit: Int, orderBy: String): [Review] @cacheControl(scope: PUBLIC, maxAge: SHORT)
 }
 
 # Mutations
@@ -32,6 +34,7 @@ input ReviewInput {
     shopperId: String!
     reviewDateTime: String
     verifiedPurchaser: Boolean!
+	sku: String
 }
 
 type Mutation {

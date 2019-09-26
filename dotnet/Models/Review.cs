@@ -11,6 +11,7 @@
     ///  shopperId: String
     ///  reviewDateTime: String
     ///  verifiedPurchaser: Boolean
+    ///  Sku: String
     /// </summary>
     public class Review
     {
@@ -33,5 +34,7 @@
         public string ReviewDateTime { get; set; }
 
         public bool VerifiedPurchaser { get; set; }
+
+        public string Sku { get; set; }
     }
 }

@@ -10,7 +10,7 @@
     },
     "clearData": {
       "path": "/reviews/clear",
-      "public": true
+      "public": false
     }
   },
   "events": {

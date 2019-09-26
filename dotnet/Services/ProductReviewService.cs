@@ -14,7 +14,7 @@
     public class ProductReviewService : IProductReviewService
     {
         private readonly IProductReviewRepository _productReviewRepository;
-        private const int maximumReturnedRecords = 99;
+        private const int maximumReturnedRecords = 999;
 
         public ProductReviewService(IProductReviewRepository productReviewRepository)
         {
@@ -238,16 +238,21 @@
 
             review.Id = ++maxKeyValue;
             review.CacheId = review.Id;
-            if(string.IsNullOrWhiteSpace(review.ReviewerName))
-            {
-                review.ReviewerName = string.Empty;
-                //review.ReviewerName = "anon";
-            }
+            //if(string.IsNullOrWhiteSpace(review.ReviewerName))
+            //{
+            //    review.ReviewerName = string.Empty;
+            //    //review.ReviewerName = "anon";
+            //}
 
             if (string.IsNullOrWhiteSpace(review.ReviewDateTime))
             {
                 review.ReviewDateTime = DateTime.Now.ToString();
             }
+
+            //if (string.IsNullOrWhiteSpace(review.Sku))
+            //{
+            //    review.Sku = string.Empty;
+            //}
 
             string productId = review.ProductId;
 
@@ -267,6 +272,54 @@
             await this._productReviewRepository.SaveLookupAsync(lookup);
 
             return review;
+        }
+
+        public async Task<IList<Review>> GetReviewsByShopperId(string shopperId, int offset, int limit, string orderBy)
+        {
+            Console.WriteLine($"    >>>>>>>>>>>>>>>>>   GetReviewsByShopperId {shopperId}");
+            IList<Review> reviews = await this.GetReviews(0, maximumReturnedRecords, string.Empty);
+            Console.WriteLine($"    >>>>>>>>>>>>>>>>>   GetReviewsByShopperId {shopperId} - {reviews.Count} total reviews");
+            reviews = reviews.Where(r => r.ShopperId == shopperId).ToList();
+            Console.WriteLine($"    >>>>>>>>>>>>>>>>>   {reviews.Count} reviews for {shopperId}");
+            if (reviews != null && reviews.Count > 0)
+            {
+                //Console.WriteLine($"    >>>>>>>>>>>>>>>>>   {reviews.Count} reviews (unfiltered)");
+                if (!string.IsNullOrEmpty(orderBy))
+                {
+                    //Console.WriteLine($"    >>>>>>>>>>>>>>>>>   Order By {orderBy}");
+                    string[] orderByArray = orderBy.Split(":");
+                    PropertyInfo pi = typeof(Review).GetProperty(orderByArray[0]);
+                    if (pi != null)
+                    {
+                        bool descendingOrder = false;
+                        if (orderByArray.Length > 1)
+                        {
+                            if (orderByArray[1].ToLower().Contains("desc"))
+                            {
+                                descendingOrder = true;
+                            }
+                        }
+
+                        if (descendingOrder)
+                        {
+                            reviews = reviews.OrderByDescending(x => pi.GetValue(x, null)).ToList();
+                        }
+                        else
+                        {
+                            reviews = reviews.OrderBy(x => pi.GetValue(x, null)).ToList();
+                        }
+                    }
+                    else
+                    {
+                        //Console.WriteLine($"    >>>>>>>>>>>>>>>>>   Could not get {orderBy} property info.");
+                    }
+                }
+
+                reviews = reviews.Skip(offset).Take(limit).ToList();
+                //Console.WriteLine($"    >>>>>>>>>>>>>>>>>   {reviews.Count} reviews (filtered)");
+            }
+
+            return reviews;
         }
 
         public async Task ClearData()

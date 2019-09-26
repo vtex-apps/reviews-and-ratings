@@ -16,12 +16,13 @@ namespace ReviewsRatings.GraphQL.Types
             Field(b => b.CacheId).Description("The cache id of the review.");
             Field(b => b.ProductId).Description("The product id of the review.");
             Field(b => b.Rating).Description("The rating of the review.");
-            Field(b => b.Title).Description("The title of the review.");
-            Field(b => b.Text).Description("The text of the review.");
-            Field(b => b.ReviewerName).Description("The name of the reviewer.");
-            Field(b => b.ShopperId).Description("The id of the reviewer.");
-            Field(b => b.ReviewDateTime).Description("The date and time of the review.");
-            Field(b => b.VerifiedPurchaser).Description("Indicates whether the reviewer is a verified purchaser.");
+            Field(b => b.Title, nullable: true).Description("The title of the review.");
+            Field(b => b.Text, nullable: true).Description("The text of the review.");
+            Field(b => b.ReviewerName, nullable: true).Description("The name of the reviewer.");
+            Field(b => b.ShopperId, nullable: true).Description("The id of the reviewer.");
+            Field(b => b.ReviewDateTime, nullable: true).Description("The date and time of the review.");
+            Field(b => b.VerifiedPurchaser, nullable: true).Description("Indicates whether the reviewer is a verified purchaser.");
+            Field(b => b.Sku, nullable: true).Description("The product sku of the review.");
         }
     }
 }
