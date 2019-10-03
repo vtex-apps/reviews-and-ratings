@@ -1,0 +1,3 @@
+query HasShopperReviewed($shopperId: String!, $productId: String!) {
+    hasShopperReviewed(shopperId: $shopperId, productId: $productId)
+}

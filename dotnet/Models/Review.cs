@@ -36,5 +36,7 @@
         public bool VerifiedPurchaser { get; set; }
 
         public string Sku { get; set; }
+
+        public bool Approved { get; set; }
     }
 }

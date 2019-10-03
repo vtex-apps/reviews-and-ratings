@@ -11,5 +11,6 @@ query Reviews($offset: Int, $limit: Int, $orderBy: String) {
         reviewDateTime
         verifiedPurchaser
 		sku
+		approved
     }
 }

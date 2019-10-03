@@ -67,6 +67,15 @@ namespace ReviewsRatings.GraphQL
                 ),
                 resolve: context => productReviewService.GetReviewsByShopperId(context.GetArgument<string>("shopperId"), context.GetArgument<int>("offset"), context.GetArgument<int>("limit"), context.GetArgument<string>("orderBy"))
             );
+
+            Field<BooleanGraphType>(
+                "hasShopperReviewed",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "shopperId", Description = "Shopper Id" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "productId", Description = "Product Id" }
+                    ),
+                resolve: context => productReviewService.HasShopperReviewed(context.GetArgument<string>("shopperId"), context.GetArgument<string>("productId")).Result
+            );
         }
     }
 }

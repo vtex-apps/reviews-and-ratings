@@ -15,6 +15,7 @@
     {
         private readonly IProductReviewRepository _productReviewRepository;
         private const int maximumReturnedRecords = 999;
+        private const string DELIMITER = ":";
 
         public ProductReviewService(IProductReviewRepository productReviewRepository)
         {
@@ -79,13 +80,16 @@
         {
             decimal averageRating = 0m;
             IList<Review> reviews = await this._productReviewRepository.GetProductReviewsAsync(productId);
-            int numberOfReviews = reviews.Count;
-            if (numberOfReviews > 0)
+            if (reviews != null)
             {
-                int totalRating = reviews.Sum(r => r.Rating);
-                averageRating = totalRating / numberOfReviews;
+                int numberOfReviews = reviews.Count;
+                if (numberOfReviews > 0)
+                {
+                    int totalRating = reviews.Sum(r => r.Rating);
+                    averageRating = totalRating / numberOfReviews;
 
-                Console.WriteLine($" >>>>>>>>>>>>>>>>>>>>>>>>>>>> Average Rating for {productId}: {averageRating} from {numberOfReviews} reviews.");
+                    Console.WriteLine($" >>>>>>>>>>>>>>>>>>>>>>>>>>>> Average Rating for {productId}: {averageRating} from {numberOfReviews} reviews.");
+                }
             }
 
             return averageRating;
@@ -129,16 +133,16 @@
                 if (!string.IsNullOrEmpty(orderBy))
                 {
                     //Console.WriteLine($"    >>>>>>>>>>>>>>>>>   Order By {orderBy}");
-                    string[] orderByArray = orderBy.Split(":");
+                    string[] orderByArray = orderBy.Split(DELIMITER);
                     PropertyInfo pi = typeof(Review).GetProperty(orderByArray[0]);
                     if (pi != null)
                     {
-                        bool descendingOrder = false;
+                        bool descendingOrder = true;
                         if (orderByArray.Length > 1)
                         {
-                            if (orderByArray[1].ToLower().Contains("desc"))
+                            if (orderByArray[1].ToLower().Contains("asc"))
                             {
-                                descendingOrder = true;
+                                descendingOrder = false;
                             }
                         }
 
@@ -185,16 +189,16 @@
                 if (!string.IsNullOrEmpty(orderBy))
                 {
                     Console.WriteLine($"    >>>>>>>>>>>>>>>>>   Order By {orderBy}");
-                    string[] orderByArray = orderBy.Split(":");
+                    string[] orderByArray = orderBy.Split(DELIMITER);
                     PropertyInfo pi = typeof(Review).GetProperty(orderByArray[0]);
                     if (pi != null)
                     {
-                        bool descendingOrder = false;
+                        bool descendingOrder = true;
                         if (orderByArray.Length > 1)
                         {
-                            if(orderByArray[1].ToLower().Contains("desc"))
+                            if (orderByArray[1].ToLower().Contains("asc"))
                             {
-                                descendingOrder = true;
+                                descendingOrder = false;
                             }
                         }
 
@@ -215,6 +219,10 @@
 
                 reviews = reviews.Skip(offset).Take(limit).ToList();
                 Console.WriteLine($"    >>>>>>>>>>>>>>>>>   {reviews.Count} reviews (filtered)");
+            }
+            else
+            {
+                reviews = new List<Review>();
             }
 
             return reviews;
@@ -287,16 +295,16 @@
                 if (!string.IsNullOrEmpty(orderBy))
                 {
                     //Console.WriteLine($"    >>>>>>>>>>>>>>>>>   Order By {orderBy}");
-                    string[] orderByArray = orderBy.Split(":");
+                    string[] orderByArray = orderBy.Split(DELIMITER);
                     PropertyInfo pi = typeof(Review).GetProperty(orderByArray[0]);
                     if (pi != null)
                     {
-                        bool descendingOrder = false;
+                        bool descendingOrder = true;
                         if (orderByArray.Length > 1)
                         {
-                            if (orderByArray[1].ToLower().Contains("desc"))
+                            if (orderByArray[1].ToLower().Contains("asc"))
                             {
-                                descendingOrder = true;
+                                descendingOrder = false;
                             }
                         }
 
@@ -360,6 +368,50 @@
             }
 
             return ++maxKeyValue;
+        }
+
+        public async Task<bool> ModerateReview(int[] ids, bool approved)
+        {
+            bool retval = true;
+            IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
+            string productId = string.Empty;
+            foreach (int id in ids)
+            {
+                lookup.TryGetValue(id, out productId);
+                if (!string.IsNullOrEmpty(productId))
+                {
+                    IList<Review> reviews = await this._productReviewRepository.GetProductReviewsAsync(productId);
+                    Review reviewToModerate = reviews.Where(r => r.Id == id).FirstOrDefault();
+                    if (reviewToModerate != null)
+                    {
+                        reviewToModerate.Approved = approved;
+                        await this._productReviewRepository.SaveProductReviewsAsync(productId, reviews);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Unknown Product Id for {id}");
+                    retval = false;
+                }
+            }
+
+            return retval;
+        }
+
+        public async Task<bool> HasShopperReviewed(string shopperId, string productId)
+        {
+            bool retval = false;
+            IList<Review> reviews = await this._productReviewRepository.GetProductReviewsAsync(productId);
+            if (reviews != null && reviews.Count > 0)
+            {
+                reviews = reviews.Where(r => r.ShopperId == shopperId).ToList();
+                if (reviews != null && reviews.Count > 0)
+                {
+                    retval = true;
+                }
+            }
+
+            return retval;
         }
     }
 }

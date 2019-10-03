@@ -48,6 +48,19 @@ namespace ReviewsRatings.GraphQL
                     var id = context.GetArgument<int>("id");
                     return productReviewService.DeleteReview(id);
                 });
+
+            Field<BooleanGraphType>(
+                "moderateReview",
+                arguments: new QueryArguments(
+                    new QueryArgument<IdGraphType> { Name = "ids" },
+                    new QueryArgument<BooleanGraphType> { Name = "approved"}
+                ),
+                resolve: context =>
+                {
+                    var ids = context.GetArgument<int[]>("ids");
+                    var approved = context.GetArgument<bool>("approved");
+                    return productReviewService.ModerateReview(ids, approved);
+                });
         }
     }
 }

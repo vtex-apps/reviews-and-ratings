@@ -25,5 +25,9 @@
         Task<IList<Review>> GetReviewsByShopperId(string shopperId, int offset, int limit, string orderBy);
 
         Task ClearData();
+
+        Task<bool> ModerateReview(int[] ids, bool approved);
+
+        Task<bool> HasShopperReviewed(string shopperId, string productId);
     }
 }
