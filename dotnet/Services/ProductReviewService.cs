@@ -230,54 +230,61 @@
 
         public async Task<Review> NewReview(Review review)
         {
-            IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
-
-            Console.WriteLine($"    >>>>>>>>>>>>>>>>>   ID:{review.Id}  Exists?{lookup.ContainsKey(review.Id)}");
-
-            int maxKeyValue = 0;
-            if (lookup != null)
+            if (review != null)
             {
-                maxKeyValue = lookup.Keys.Max();
+                IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
+
+                // Console.WriteLine($"    >>>>>>>>>>>>>>>>>   ID:{review.Id}  Exists?{lookup.ContainsKey(review.Id)}");
+
+                int maxKeyValue = 0;
+                if (lookup != null && lookup.Count > 0)
+                {
+                    maxKeyValue = lookup.Keys.Max();
+                }
+                else
+                {
+                    lookup = new Dictionary<int, string>();
+                }
+
+                review.Id = ++maxKeyValue;
+                review.CacheId = review.Id;
+                //if(string.IsNullOrWhiteSpace(review.ReviewerName))
+                //{
+                //    review.ReviewerName = string.Empty;
+                //    //review.ReviewerName = "anon";
+                //}
+
+                if (string.IsNullOrWhiteSpace(review.ReviewDateTime))
+                {
+                    review.ReviewDateTime = DateTime.Now.ToString();
+                }
+
+                //if (string.IsNullOrWhiteSpace(review.Sku))
+                //{
+                //    review.Sku = string.Empty;
+                //}
+
+                string productId = review.ProductId;
+
+                IList<Review> reviews = await this._productReviewRepository.GetProductReviewsAsync(productId);
+                if (reviews == null)
+                {
+                    reviews = new List<Review>();
+                }
+
+                reviews.Add(review);
+
+                Console.WriteLine($"    >>>>>>>>>>>>>>>>>   Saving [{review.Id}] {productId}");
+
+                await this._productReviewRepository.SaveProductReviewsAsync(productId, reviews);
+
+                lookup.Add(review.Id, review.ProductId);
+                await this._productReviewRepository.SaveLookupAsync(lookup);
             }
             else
             {
-                lookup = new Dictionary<int, string>();
+                Console.WriteLine("-!-!- New Review - Null review.");
             }
-
-            review.Id = ++maxKeyValue;
-            review.CacheId = review.Id;
-            //if(string.IsNullOrWhiteSpace(review.ReviewerName))
-            //{
-            //    review.ReviewerName = string.Empty;
-            //    //review.ReviewerName = "anon";
-            //}
-
-            if (string.IsNullOrWhiteSpace(review.ReviewDateTime))
-            {
-                review.ReviewDateTime = DateTime.Now.ToString();
-            }
-
-            //if (string.IsNullOrWhiteSpace(review.Sku))
-            //{
-            //    review.Sku = string.Empty;
-            //}
-
-            string productId = review.ProductId;
-
-            IList<Review> reviews = await this._productReviewRepository.GetProductReviewsAsync(productId);
-            if (reviews == null)
-            {
-                reviews = new List<Review>();
-            }
-
-            reviews.Add(review);
-
-            Console.WriteLine($"    >>>>>>>>>>>>>>>>>   Saving [{review.Id}] {productId}");
-
-            await this._productReviewRepository.SaveProductReviewsAsync(productId, reviews);
-
-            lookup.Add(review.Id, review.ProductId);
-            await this._productReviewRepository.SaveLookupAsync(lookup);
 
             return review;
         }
