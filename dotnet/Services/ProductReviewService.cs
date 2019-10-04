@@ -85,7 +85,7 @@
                 int numberOfReviews = reviews.Count;
                 if (numberOfReviews > 0)
                 {
-                    int totalRating = reviews.Sum(r => r.Rating);
+                    decimal totalRating = reviews.Sum(r => r.Rating);
                     averageRating = totalRating / numberOfReviews;
 
                     Console.WriteLine($" >>>>>>>>>>>>>>>>>>>>>>>>>>>> Average Rating for {productId}: {averageRating} from {numberOfReviews} reviews.");

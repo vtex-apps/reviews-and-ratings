@@ -41,7 +41,7 @@ namespace ReviewsRatings.GraphQL
                 resolve: context => productReviewService.GetReviewsByProductId(context.GetArgument<string>("productId"), context.GetArgument<int>("offset"), context.GetArgument<int>("limit"), context.GetArgument<string>("orderBy"))
             );
 
-            Field<IntGraphType>(
+            Field<DecimalGraphType>(
                 "averageRatingByProductId",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "productId", Description = "Product Id" }
