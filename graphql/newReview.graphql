@@ -1,15 +1,16 @@
 mutation NewReview($review: ReviewInput!) {
-    newReview(review: $review) {
-        id
-        cacheId
-        productId
-        rating
-        title
-        text
-        reviewerName
-        shopperId
-        reviewDateTime
-        verifiedPurchaser
-		sku
-    }
+  newReview(review: $review) {
+    id
+    cacheId
+    productId
+    rating
+    title
+    text
+    reviewerName
+    shopperId
+    location
+    reviewDateTime
+    verifiedPurchaser
+    sku
+  }
 }
