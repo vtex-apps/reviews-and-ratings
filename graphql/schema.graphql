@@ -1,47 +1,68 @@
 type Review {
-    id: ID!
-    cacheId: ID!
-    productId: String!
-    rating: Int!
-    title: String
-    text: String
-    reviewerName: String
-    shopperId: String
-    reviewDateTime: String
-    verifiedPurchaser: Boolean
-	sku: String
-	approved: Boolean
+  id: ID!
+  cacheId: ID!
+  productId: String!
+  rating: Int!
+  title: String
+  text: String
+  reviewerName: String
+  shopperId: String
+  reviewDateTime: String
+  verifiedPurchaser: Boolean
+  sku: String
+  approved: Boolean
+}
+
+type AppSettings {
+  allowAnonymousReviews: Boolean
+  requireApproval: Boolean
+  useLocation: Boolean
 }
 
 type Query {
-    review(id: ID!): Review
-    reviews(offset: Int, limit: Int, orderBy: String): [Review] @cacheControl(scope: PUBLIC, maxAge: SHORT)
-    reviewsByProductId(productId: String!, offset: Int, limit: Int, orderBy: String): [Review] @cacheControl(scope: PUBLIC, maxAge: SHORT)
-    averageRatingByProductId(productId: String!): Float
-    totalReviewsByProductId(productId: String!): Int
-	reviewsByShopperId(shopperId: String!, offset: Int, limit: Int, orderBy: String): [Review] @cacheControl(scope: PUBLIC, maxAge: SHORT)
-	hasShopperReviewed(shopperId: String!, productId: String!): Boolean
+  review(id: ID!): Review @cacheControl(scope: PRIVATE, maxAge: SHORT)
+  reviews(offset: Int, limit: Int, orderBy: String): [Review]
+    @cacheControl(scope: PRIVATE, maxAge: SHORT)
+  reviewsByProductId(
+    productId: String!
+    offset: Int
+    limit: Int
+    orderBy: String
+  ): [Review] @cacheControl(scope: PRIVATE, maxAge: SHORT)
+  averageRatingByProductId(productId: String!): Float
+    @cacheControl(scope: PRIVATE, maxAge: SHORT)
+  totalReviewsByProductId(productId: String!): Int
+    @cacheControl(scope: PRIVATE, maxAge: SHORT)
+  reviewsByShopperId(
+    shopperId: String!
+    offset: Int
+    limit: Int
+    orderBy: String
+  ): [Review] @cacheControl(scope: PRIVATE, maxAge: SHORT)
+  hasShopperReviewed(shopperId: String!, productId: String!): Boolean
+    @cacheControl(scope: PRIVATE, maxAge: SHORT)
+  appSettings: AppSettings @cacheControl(scope: PUBLIC, maxAge: SHORT)
 }
 
 # Mutations
 
 input ReviewInput {
-    id: ID
-    cacheId: ID
-    productId: String!
-    rating: Int!
-    title: String
-    text: String
-    reviewerName: String
-    shopperId: String!
-    reviewDateTime: String
-    verifiedPurchaser: Boolean!
-	sku: String
+  id: ID
+  cacheId: ID
+  productId: String!
+  rating: Int!
+  title: String
+  text: String
+  reviewerName: String
+  shopperId: String!
+  reviewDateTime: String
+  verifiedPurchaser: Boolean!
+  sku: String
 }
 
 type Mutation {
-    newReview(review: ReviewInput!): Review
-    editReview(id: ID!, review: ReviewInput!): Review
-    deleteReview(id: ID!): Boolean
-	moderateReview(ids: [ID!], approved: Boolean!): Boolean
+  newReview(review: ReviewInput!): Review
+  editReview(id: ID!, review: ReviewInput!): Review
+  deleteReview(id: ID!): Boolean
+  moderateReview(ids: [ID!], approved: Boolean!): Boolean
 }

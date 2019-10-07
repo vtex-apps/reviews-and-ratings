@@ -8,11 +8,41 @@
     "prereleasy": "bash pre.sh"
   },
   "builders": {
+    "store": "0.x",
     "dotnet": "1.x",
-	"graphql": "1.x"
+    "graphql": "1.x",
+    "react": "3.x"
   },
   "dependencies": {
-    "vtex.styleguide": "9.x"
+    "vtex.styleguide": "9.x",
+    "vtex.product-review-interfaces": "1.x",
+    "vtex.product-summary": "2.x",
+    "vtex.product-context": "0.x",
+    "vtex.store": "2.x"
+  },
+  "settingsSchema": {
+    "title": "Reviews and Ratings",
+    "type": "object",
+    "properties": {
+      "allowAnonymousReviews": {
+        "title": "Allow Anonymous Reviews",
+        "description": "Allow shoppers to submit reviews even if they are not logged in",
+        "type": "boolean",
+        "default": false
+      },
+      "requireApproval": {
+        "title": "Require Admin Approval",
+        "description": "Require administrator approval before newly submitted reviews are displayed",
+        "type": "boolean",
+        "default": false
+      },
+      "useLocation": {
+        "title": "Ask for Reviewer's Location",
+        "description": "Include a field for reviewer to input their location when submitting review",
+        "type": "boolean",
+        "default": false
+      }
+    }
   },
   "policies": [
     {
