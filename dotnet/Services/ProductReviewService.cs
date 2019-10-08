@@ -14,13 +14,16 @@
     public class ProductReviewService : IProductReviewService
     {
         private readonly IProductReviewRepository _productReviewRepository;
+        private readonly IAppSettingsRepository _appSettingsRepository;
         private const int maximumReturnedRecords = 999;
         private const string DELIMITER = ":";
 
-        public ProductReviewService(IProductReviewRepository productReviewRepository)
+        public ProductReviewService(IProductReviewRepository productReviewRepository, IAppSettingsRepository appSettingsRepository)
         {
             this._productReviewRepository = productReviewRepository ??
                                             throw new ArgumentNullException(nameof(productReviewRepository));
+            this._appSettingsRepository = appSettingsRepository ??
+                                            throw new ArgumentNullException(nameof(appSettingsRepository));
         }
 
         public async Task<bool> DeleteReview(int Id)
@@ -419,6 +422,16 @@
             }
 
             return retval;
+        }
+
+        public async Task<AppSettings> GetAppSettings()
+        {
+            return await this._appSettingsRepository.GetAppSettingAsync();
+        }
+
+        public async Task SaveAppSettings(AppSettings appSettings)
+        {
+            await this._appSettingsRepository.SaveAppSettingsAsync(appSettings);
         }
     }
 }

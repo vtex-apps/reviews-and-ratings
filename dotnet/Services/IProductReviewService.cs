@@ -29,5 +29,9 @@
         Task<bool> ModerateReview(int[] ids, bool approved);
 
         Task<bool> HasShopperReviewed(string shopperId, string productId);
+
+        Task<AppSettings> GetAppSettings();
+
+        Task SaveAppSettings(AppSettings appSettings);
     }
 }

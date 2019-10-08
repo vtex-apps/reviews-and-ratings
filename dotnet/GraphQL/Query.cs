@@ -76,6 +76,11 @@ namespace ReviewsRatings.GraphQL
                     ),
                 resolve: context => productReviewService.HasShopperReviewed(context.GetArgument<string>("shopperId"), context.GetArgument<string>("productId")).Result
             );
+
+            Field<AppSettingsType>(
+                "appSettings",
+                resolve: context => productReviewService.GetAppSettings().Result
+            );
         }
     }
 }

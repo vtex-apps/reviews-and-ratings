@@ -38,5 +38,7 @@
         public string Sku { get; set; }
 
         public bool Approved { get; set; }
+
+        public string Location { get; set; }
     }
 }

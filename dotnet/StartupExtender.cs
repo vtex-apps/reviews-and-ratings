@@ -24,6 +24,7 @@ namespace Vtex
         {
             services.AddTransient<IProductReviewService, ProductReviewService>();
             services.AddTransient<IProductReviewRepository, ProductReviewRepository>();
+            services.AddTransient<IAppSettingsRepository, AppSettingsRepository>();
             services.AddSingleton<IVtexEnvironmentVariableProvider, VtexEnvironmentVariableProvider>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHttpContextAccessor();
