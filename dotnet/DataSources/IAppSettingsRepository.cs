@@ -6,6 +6,5 @@ namespace ReviewsRatings.DataSources
     public interface IAppSettingsRepository
     {
         Task<AppSettings> GetAppSettingAsync();
-        Task SaveAppSettingsAsync(AppSettings appSettings);
     }
 }

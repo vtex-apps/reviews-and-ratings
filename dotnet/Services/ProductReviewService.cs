@@ -428,10 +428,5 @@
         {
             return await this._appSettingsRepository.GetAppSettingAsync();
         }
-
-        public async Task SaveAppSettings(AppSettings appSettings)
-        {
-            await this._appSettingsRepository.SaveAppSettingsAsync(appSettings);
-        }
     }
 }

@@ -12,8 +12,7 @@
 
     public class AppSettingsRepository : IAppSettingsRepository
     {
-        private const string REVIEWS_BUCKET = "productReviews";
-        private const string SETTINGS = "appSettings";
+        private const string APP_SETTINGS = "vtex.eviews-and-ratings";
         private const string HEADER_VTEX_CREDENTIAL = "X-Vtex-Credential";
         private const string APPLICATION_JSON = "application/json";
         private readonly IVtexEnvironmentVariableProvider _environmentVariableProvider;
@@ -47,7 +46,7 @@
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri($"http://vbase.{this._environmentVariableProvider.Region}.vtex.io/{this._environmentVariableProvider.Account}/{this._environmentVariableProvider.Workspace}/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{SETTINGS}"),
+                RequestUri = new Uri($"http://vbase.{this._environmentVariableProvider.Region}.vtex.io/{this._environmentVariableProvider.Account}/{this._environmentVariableProvider.Workspace}/apps/{APP_SETTINGS}/settings"),
             };
 
             string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
@@ -69,37 +68,6 @@
 
             AppSettings appSettings = JsonConvert.DeserializeObject<AppSettings>(responseContent);
             return appSettings;
-        }
-
-        public async Task SaveAppSettingsAsync(AppSettings appSettings)
-        {
-            Console.WriteLine($"        >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> SaveAppSettingsAsync ");
-
-            if (appSettings == null)
-            {
-                appSettings = new AppSettings();
-            }
-
-            var jsonSerializedAppSettings = JsonConvert.SerializeObject(appSettings);
-            var request = new HttpRequestMessage
-            {
-                Method = HttpMethod.Put,
-                RequestUri = new Uri($"http://vbase.{this._environmentVariableProvider.Region}.vtex.io/{this._environmentVariableProvider.Account}/{this._environmentVariableProvider.Workspace}/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{SETTINGS}"),
-                Content = new StringContent(jsonSerializedAppSettings, Encoding.UTF8, APPLICATION_JSON)
-            };
-
-            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
-            if (authToken != null)
-            {
-                request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
-            }
-
-            var client = _clientFactory.CreateClient();
-            var response = await client.SendAsync(request);
-
-            response.EnsureSuccessStatusCode();
-
-            // Console.WriteLine($"        >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> {response.IsSuccessStatusCode} {response.ReasonPhrase}");
         }
     }
 }
