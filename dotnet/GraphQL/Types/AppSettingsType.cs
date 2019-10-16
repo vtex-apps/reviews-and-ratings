@@ -5,7 +5,7 @@ using ReviewsRatings.Services;
 
 namespace ReviewsRatings.GraphQL.Types
 {
-    [GraphQLMetadata("Review")]
+    [GraphQLMetadata("AppSettings")]
     public class AppSettingsType : ObjectGraphType<AppSettings>
     {
         public AppSettingsType(IProductReviewService productReviewService)

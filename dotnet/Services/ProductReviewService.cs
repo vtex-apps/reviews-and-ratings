@@ -111,27 +111,47 @@
             return review;
         }
 
-        public async Task<IList<Review>> GetReviews(int offset, int limit, string orderBy)
+        public async Task<IList<Review>> GetReviews()
         {
-            Console.WriteLine($"    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> GetReviews ");
-
             List<Review> reviews = new List<Review>();
             IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
             if (lookup != null)
             {
                 List<string> productIds = lookup.Values.Distinct().ToList();
-                Console.WriteLine($"    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> GetReviews Prod Id #{productIds.Count}");
                 foreach (string productId in productIds)
                 {
-                    Console.WriteLine($"    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> GetReviews Prod {productId}");
                     // Get all results - sort/limit later
                     IList<Review> returnedReviewList = await this.GetReviewsByProductId(productId, 0, maximumReturnedRecords, string.Empty);
                     reviews.AddRange(returnedReviewList);
                 }
             }
 
+            return reviews;
+        }
+
+        public IList<Review> LimitReviews(IList<Review> reviews, int from, int to)
+        {
+            int take = maximumReturnedRecords;
+            if (to > 0)
+            {
+                take = Math.Min((to - from) + 1, maximumReturnedRecords);
+                Console.WriteLine($"    >>>>>>>>>>>>>>>>>  Take {take} reviews {from}-{to}");
+            }
+
+            reviews = reviews.Skip(from).Take(take).ToList();
+
+            return reviews;
+        }
+
+        public IList<Review> FilterReviews(IList<Review> reviews, string searchTerm, string orderBy, bool status)
+        {
             if (reviews != null && reviews.Count > 0)
             {
+                if (!string.IsNullOrEmpty(searchTerm))
+                {
+                    reviews = reviews.Where(x => x.ProductId.Contains(searchTerm) || x.Sku.Contains(searchTerm) || x.ShopperId.Contains(searchTerm)).ToList();
+                }
+
                 //Console.WriteLine($"    >>>>>>>>>>>>>>>>>   {reviews.Count} reviews (unfiltered)");
                 if (!string.IsNullOrEmpty(orderBy))
                 {
@@ -163,11 +183,17 @@
                         //Console.WriteLine($"    >>>>>>>>>>>>>>>>>   Could not get {orderBy} property info.");
                     }
                 }
-
-                reviews = reviews.Skip(offset).Take(limit).ToList();
-                //Console.WriteLine($"    >>>>>>>>>>>>>>>>>   {reviews.Count} reviews (filtered)");
             }
 
+            return reviews;
+        }
+
+        /// query Reviews($searchTerm: String, $from: Int, $to: Int, $orderBy: String, $status: String)
+        public async Task<IList<Review>> GetReviews(string searchTerm, int from, int to, string orderBy, bool status)
+        {
+            IList<Review> reviews = await GetReviews();
+            reviews = FilterReviews(reviews, searchTerm, orderBy, status);
+            reviews = LimitReviews(reviews, from, to);
             return reviews;
         }
 
@@ -188,7 +214,7 @@
             IList<Review> reviews = await this._productReviewRepository.GetProductReviewsAsync(productId);
             if (reviews != null && reviews.Count > 0)
             {
-                Console.WriteLine($"    >>>>>>>>>>>>>>>>>   {reviews.Count} reviews (unfiltered)");
+                Console.WriteLine($"    >>>>>>>>>>>>>>>>>   {reviews.Count} reviews for {productId} (unfiltered)");
                 if (!string.IsNullOrEmpty(orderBy))
                 {
                     Console.WriteLine($"    >>>>>>>>>>>>>>>>>   Order By {orderBy}");
@@ -221,7 +247,7 @@
                 }
 
                 reviews = reviews.Skip(offset).Take(limit).ToList();
-                Console.WriteLine($"    >>>>>>>>>>>>>>>>>   {reviews.Count} reviews (filtered)");
+                Console.WriteLine($"    >>>>>>>>>>>>>>>>>   {reviews.Count} reviews for {productId} (filtered)");
             }
             else
             {
@@ -295,7 +321,8 @@
         public async Task<IList<Review>> GetReviewsByShopperId(string shopperId, int offset, int limit, string orderBy)
         {
             Console.WriteLine($"    >>>>>>>>>>>>>>>>>   GetReviewsByShopperId {shopperId}");
-            IList<Review> reviews = await this.GetReviews(0, maximumReturnedRecords, string.Empty);
+            //IList<Review> reviews = await this.GetReviews(0, maximumReturnedRecords, string.Empty);
+            IList<Review> reviews = await this.GetReviews(string.Empty, 0, 0, string.Empty, false);
             Console.WriteLine($"    >>>>>>>>>>>>>>>>>   GetReviewsByShopperId {shopperId} - {reviews.Count} total reviews");
             reviews = reviews.Where(r => r.ShopperId == shopperId).ToList();
             Console.WriteLine($"    >>>>>>>>>>>>>>>>>   {reviews.Count} reviews for {shopperId}");

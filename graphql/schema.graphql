@@ -14,6 +14,33 @@ type Review {
   approved: Boolean
 }
 
+type Reviews {
+  data: Data
+  range: Range
+}
+
+type Data {
+  id: ID!
+  cacheId: ID!
+  productId: String!
+  rating: Int!
+  title: String
+  text: String
+  reviewerName: String
+  shopperId: String
+  location: String
+  reviewDateTime: String
+  verifiedPurchaser: Boolean
+  sku: String
+  approved: Boolean
+}
+
+type Range {
+  total: Int
+  from: Int
+  to: Int
+}
+
 type AppSettings {
   allowAnonymousReviews: Boolean
   requireApproval: Boolean
@@ -22,13 +49,19 @@ type AppSettings {
 
 type Query {
   review(id: ID!): Review @cacheControl(scope: PRIVATE, maxAge: SHORT)
-  reviews(offset: Int, limit: Int, orderBy: String): [Review]
-    @cacheControl(scope: PRIVATE, maxAge: SHORT)
+  reviews(
+    searchTerm: String
+	from: Int
+	to: Int
+	orderBy: String
+	status: String
+  ): [Reviews] @cacheControl(scope: PRIVATE, maxAge: SHORT)
   reviewsByProductId(
     productId: String!
-    offset: Int
-    limit: Int
-    orderBy: String
+    from: Int
+	to: Int
+	orderBy: String
+	status: String
   ): [Review] @cacheControl(scope: PRIVATE, maxAge: SHORT)
   averageRatingByProductId(productId: String!): Float
     @cacheControl(scope: PRIVATE, maxAge: SHORT)
