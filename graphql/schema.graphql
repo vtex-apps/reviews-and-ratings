@@ -15,7 +15,7 @@ type Review {
 }
 
 type Reviews {
-  data: Data
+  data: [Review]
   range: Range
 }
 
@@ -55,7 +55,7 @@ type Query {
 	to: Int
 	orderBy: String
 	status: String
-  ): [Reviews] @cacheControl(scope: PRIVATE, maxAge: SHORT)
+  ): Reviews @cacheControl(scope: PRIVATE, maxAge: SHORT)
   reviewsByProductId(
     productId: String!
     from: Int
