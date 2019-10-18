@@ -22,9 +22,9 @@
 
         Task<Review> EditReview(Review review);
 
-        Task<bool> DeleteReview(int Id);
+        Task<bool> DeleteReview(int[] ids);
 
-        Task<IList<Review>> GetReviewsByShopperId(string shopperId, int offset, int limit, string orderBy);
+        Task<IList<Review>> GetReviewsByShopperId(string shopperId);
 
         Task ClearData();
 

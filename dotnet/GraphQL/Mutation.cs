@@ -45,8 +45,8 @@ namespace ReviewsRatings.GraphQL
                 ),
                 resolve: context =>
                 {
-                    var id = context.GetArgument<int>("id");
-                    return productReviewService.DeleteReview(id);
+                    var ids = context.GetArgument<int[]>("ids");
+                    return productReviewService.DeleteReview(ids);
                 });
 
             Field<BooleanGraphType>(

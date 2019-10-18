@@ -26,35 +26,32 @@
                                             throw new ArgumentNullException(nameof(appSettingsRepository));
         }
 
-        public async Task<bool> DeleteReview(int Id)
+        public async Task<bool> DeleteReview(int[] ids)
         {
-            Console.WriteLine($"    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Deleting {Id}");
-
-            bool retval = false;
+            bool retval = true;
             IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
             string productId = string.Empty;
-            lookup.TryGetValue(Id, out productId);
-            if (!string.IsNullOrEmpty(productId))
+            foreach (int id in ids)
             {
-                IList<Review> reviews = await this._productReviewRepository.GetProductReviewsAsync(productId);
-                Review reviewToRemove = reviews.Where(r => r.Id == Id).FirstOrDefault();
-                if (reviewToRemove != null && reviews.Remove(reviewToRemove))
+                if (lookup.TryGetValue(id, out productId))
                 {
-                    await this._productReviewRepository.SaveProductReviewsAsync(productId, reviews);
-                    retval = true;
+                    IList<Review> reviews = await this._productReviewRepository.GetProductReviewsAsync(productId);
+                    Review reviewToRemove = reviews.Where(r => r.Id == id).FirstOrDefault();
+                    if (reviewToRemove != null && reviews.Remove(reviewToRemove))
+                    {
+                        await this._productReviewRepository.SaveProductReviewsAsync(productId, reviews);
+                    }
+                }
+                else
+                {
+                    retval = false;
+                    Console.WriteLine($"    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Unknown Product Id for {id}");
                 }
 
                 // also remove the reference to the review from the loopup
-                //lookup.Remove(Id);
-                //await _productReviewRepository.SaveLookupAsync(lookup);
-            }
-            else
-            {
-                Console.WriteLine($"    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Unknown Product Id for {Id}");
+                lookup.Remove(id);
             }
 
-            // also remove the reference to the review from the loopup
-            lookup.Remove(Id);
             await _productReviewRepository.SaveLookupAsync(lookup);
 
             return retval;
@@ -318,51 +315,14 @@
             return review;
         }
 
-        public async Task<IList<Review>> GetReviewsByShopperId(string shopperId, int offset, int limit, string orderBy)
+        public async Task<IList<Review>> GetReviewsByShopperId(string shopperId)
         {
             Console.WriteLine($"    >>>>>>>>>>>>>>>>>   GetReviewsByShopperId {shopperId}");
             //IList<Review> reviews = await this.GetReviews(0, maximumReturnedRecords, string.Empty);
-            IList<Review> reviews = await this.GetReviews(string.Empty, 0, 0, string.Empty, false);
+            IList<Review> reviews = await this.GetReviews();
             Console.WriteLine($"    >>>>>>>>>>>>>>>>>   GetReviewsByShopperId {shopperId} - {reviews.Count} total reviews");
             reviews = reviews.Where(r => r.ShopperId == shopperId).ToList();
             Console.WriteLine($"    >>>>>>>>>>>>>>>>>   {reviews.Count} reviews for {shopperId}");
-            if (reviews != null && reviews.Count > 0)
-            {
-                //Console.WriteLine($"    >>>>>>>>>>>>>>>>>   {reviews.Count} reviews (unfiltered)");
-                if (!string.IsNullOrEmpty(orderBy))
-                {
-                    //Console.WriteLine($"    >>>>>>>>>>>>>>>>>   Order By {orderBy}");
-                    string[] orderByArray = orderBy.Split(DELIMITER);
-                    PropertyInfo pi = typeof(Review).GetProperty(orderByArray[0]);
-                    if (pi != null)
-                    {
-                        bool descendingOrder = true;
-                        if (orderByArray.Length > 1)
-                        {
-                            if (orderByArray[1].ToLower().Contains("asc"))
-                            {
-                                descendingOrder = false;
-                            }
-                        }
-
-                        if (descendingOrder)
-                        {
-                            reviews = reviews.OrderByDescending(x => pi.GetValue(x, null)).ToList();
-                        }
-                        else
-                        {
-                            reviews = reviews.OrderBy(x => pi.GetValue(x, null)).ToList();
-                        }
-                    }
-                    else
-                    {
-                        //Console.WriteLine($"    >>>>>>>>>>>>>>>>>   Could not get {orderBy} property info.");
-                    }
-                }
-
-                reviews = reviews.Skip(offset).Take(limit).ToList();
-                //Console.WriteLine($"    >>>>>>>>>>>>>>>>>   {reviews.Count} reviews (filtered)");
-            }
 
             return reviews;
         }

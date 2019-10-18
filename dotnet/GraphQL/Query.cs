@@ -48,20 +48,12 @@ namespace ReviewsRatings.GraphQL
                     int totalCount = searchResult.Result.Count;
                     searchData = productReviewService.LimitReviews(searchResult.Result, from, to);
                     Console.WriteLine($"totalCount = {totalCount} : Filtered to {searchData.Count}");
-                    DataElement dataElement = new DataElement();
-                    dataElement.data = searchData;
-                    //foreach(Review review in searchData)
-                    //{
-                    //    dataElement.data.Add(review);
-                    //}
-
                     SearchResponse searchResponse = new SearchResponse
                     {
-                        Data = dataElement,
+                        Data = new DataElement { data = searchData },
                         Range = new SearchRange { From = from, To = to, Total = totalCount }
                     };
 
-                    //return searchResponse.GetEnumerator();
                     return searchResponse;
                 }
             );
@@ -96,7 +88,6 @@ namespace ReviewsRatings.GraphQL
                         Range = new SearchRange { From = from, To = to, Total = totalCount }
                     };
 
-                    //return searchResponse.GetEnumerator();
                     return searchResponse;
                 }
             );
@@ -117,15 +108,38 @@ namespace ReviewsRatings.GraphQL
                 resolve: context => productReviewService.GetReviewsByProductId(context.GetArgument<string>("productId")).Result.Count
             );
 
-            Field<ListGraphType<ReviewType>>(
+            Field<SearchResponseType>(
                 "reviewsByShopperId",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "shopperId", Description = "Shopper Id" },
-                    new QueryArgument<IntGraphType> { Name = "offset", Description = "Offset" },
-                    new QueryArgument<IntGraphType> { Name = "limit", Description = "Limit" },
-                    new QueryArgument<StringGraphType> { Name = "orderBy", Description = "Order by" }
+                    new QueryArgument<StringGraphType> { Name = "searchTerm", Description = "Search term" },
+                    new QueryArgument<IntGraphType> { Name = "from", Description = "From" },
+                    new QueryArgument<IntGraphType> { Name = "to", Description = "To" },
+                    new QueryArgument<StringGraphType> { Name = "orderBy", Description = "Order by" },
+                    new QueryArgument<BooleanGraphType> { Name = "status", Description = "Status" }
                 ),
-                resolve: context => productReviewService.GetReviewsByShopperId(context.GetArgument<string>("shopperId"), context.GetArgument<int>("offset"), context.GetArgument<int>("limit"), context.GetArgument<string>("orderBy"))
+                resolve: context =>
+                {
+                    string shopperId = context.GetArgument<string>("shopperId");
+                    string searchTerm = context.GetArgument<string>("searchTerm");
+                    int from = context.GetArgument<int>("from");
+                    int to = context.GetArgument<int>("to");
+                    string orderBy = context.GetArgument<string>("orderBy");
+                    bool status = context.GetArgument<bool>("status");
+
+                    var searchResult = productReviewService.GetReviewsByShopperId(shopperId);
+                    IList<Review> searchData = productReviewService.FilterReviews(searchResult.Result, searchTerm, orderBy, status);
+                    int totalCount = searchResult.Result.Count;
+                    searchData = productReviewService.LimitReviews(searchResult.Result, from, to);
+                    Console.WriteLine($"totalCount = {totalCount} : Filtered to {searchData.Count}");
+                    SearchResponse searchResponse = new SearchResponse
+                    {
+                        Data = new DataElement { data = searchData },
+                        Range = new SearchRange { From = from, To = to, Total = totalCount }
+                    };
+
+                    return searchResponse;
+                }
             );
 
             Field<BooleanGraphType>(

@@ -62,17 +62,18 @@ type Query {
 	to: Int
 	orderBy: String
 	status: String
-  ): [Review] @cacheControl(scope: PRIVATE, maxAge: SHORT)
+  ): Reviews @cacheControl(scope: PRIVATE, maxAge: SHORT)
   averageRatingByProductId(productId: String!): Float
     @cacheControl(scope: PRIVATE, maxAge: SHORT)
   totalReviewsByProductId(productId: String!): Int
     @cacheControl(scope: PRIVATE, maxAge: SHORT)
   reviewsByShopperId(
     shopperId: String!
-    offset: Int
-    limit: Int
-    orderBy: String
-  ): [Review] @cacheControl(scope: PRIVATE, maxAge: SHORT)
+    from: Int
+	to: Int
+	orderBy: String
+	status: String
+  ): Reviews @cacheControl(scope: PRIVATE, maxAge: SHORT)
   hasShopperReviewed(shopperId: String!, productId: String!): Boolean
     @cacheControl(scope: PRIVATE, maxAge: SHORT)
   appSettings: AppSettings @cacheControl(scope: PUBLIC, maxAge: SHORT)
@@ -98,6 +99,6 @@ input ReviewInput {
 type Mutation {
   newReview(review: ReviewInput!): Review
   editReview(id: ID!, review: ReviewInput!): Review
-  deleteReview(id: ID!): Boolean
+  deleteReview(ids: [ID!]): Boolean
   moderateReview(ids: [ID!], approved: Boolean!): Boolean
 }
