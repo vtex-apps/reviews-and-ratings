@@ -51,17 +51,17 @@ type Query {
   review(id: ID!): Review @cacheControl(scope: PRIVATE, maxAge: SHORT)
   reviews(
     searchTerm: String
-	from: Int
-	to: Int
-	orderBy: String
-	status: String
+    from: Int
+    to: Int
+    orderBy: String
+    status: String
   ): Reviews @cacheControl(scope: PRIVATE, maxAge: SHORT)
   reviewsByProductId(
     productId: String!
     from: Int
-	to: Int
-	orderBy: String
-	status: String
+    to: Int
+    orderBy: String
+    status: String
   ): Reviews @cacheControl(scope: PRIVATE, maxAge: SHORT)
   averageRatingByProductId(productId: String!): Float
     @cacheControl(scope: PRIVATE, maxAge: SHORT)
@@ -70,9 +70,9 @@ type Query {
   reviewsByShopperId(
     shopperId: String!
     from: Int
-	to: Int
-	orderBy: String
-	status: String
+    to: Int
+    orderBy: String
+    status: String
   ): Reviews @cacheControl(scope: PRIVATE, maxAge: SHORT)
   hasShopperReviewed(shopperId: String!, productId: String!): Boolean
     @cacheControl(scope: PRIVATE, maxAge: SHORT)
