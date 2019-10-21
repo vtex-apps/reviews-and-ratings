@@ -135,12 +135,12 @@
                 Console.WriteLine($"    >>>>>>>>>>>>>>>>>  Take {take} reviews {from}-{to}");
             }
 
-            reviews = reviews.Skip(from).Take(take).ToList();
+            reviews = reviews.Skip(from - 1).Take(take).ToList();
 
             return reviews;
         }
 
-        public IList<Review> FilterReviews(IList<Review> reviews, string searchTerm, string orderBy, bool status)
+        public IList<Review> FilterReviews(IList<Review> reviews, string searchTerm, string orderBy, string status)
         {
             if (reviews != null && reviews.Count > 0)
             {
@@ -180,13 +180,19 @@
                         //Console.WriteLine($"    >>>>>>>>>>>>>>>>>   Could not get {orderBy} property info.");
                     }
                 }
+
+                if (!string.IsNullOrEmpty(status))
+                {
+                    Console.WriteLine($"------------||| Returning order with Approved status of {status} ||||----------------");
+                    reviews = reviews.Where(x => x.Approved.Equals(Boolean.Parse(status))).ToList();
+                }
             }
 
             return reviews;
         }
 
-        /// query Reviews($searchTerm: String, $from: Int, $to: Int, $orderBy: String, $status: String)
-        public async Task<IList<Review>> GetReviews(string searchTerm, int from, int to, string orderBy, bool status)
+        /// query Reviews($searchTerm: String, $from: Int, $to: Int, $orderBy: String, $status: Boolean)
+        public async Task<IList<Review>> GetReviews(string searchTerm, int from, int to, string orderBy, string status)
         {
             IList<Review> reviews = await GetReviews();
             reviews = FilterReviews(reviews, searchTerm, orderBy, status);

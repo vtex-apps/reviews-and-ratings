@@ -14,7 +14,7 @@
 
         Task<IList<Review>> GetReviews();
 
-        Task<IList<Review>> GetReviews(string searchTerm, int from, int to, string orderBy, bool status);
+        Task<IList<Review>> GetReviews(string searchTerm, int from, int to, string orderBy, string status);
 
         Task<decimal> GetAverageRatingByProductId(string productId);
 
@@ -34,7 +34,7 @@
 
         Task<AppSettings> GetAppSettings();
 
-        IList<Review> FilterReviews(IList<Review> reviews, string searchTerm, string orderBy, bool status);
+        IList<Review> FilterReviews(IList<Review> reviews, string searchTerm, string orderBy, string status);
 
         IList<Review> LimitReviews(IList<Review> reviews, int from, int to);
     }

@@ -25,7 +25,7 @@ namespace ReviewsRatings.GraphQL
                 resolve: context => productReviewService.GetReview(context.GetArgument<int>("id"))
             );
 
-            /// query Reviews($searchTerm: String, $from: Int, $to: Int, $orderBy: String, $status: String)
+            /// query Reviews($searchTerm: String, $from: Int, $to: Int, $orderBy: String, $status: Boolean)
             Field<SearchResponseType>(
                 "reviews",
                 arguments: new QueryArguments(
@@ -33,7 +33,7 @@ namespace ReviewsRatings.GraphQL
                     new QueryArgument<IntGraphType> { Name = "from", Description = "From" },
                     new QueryArgument<IntGraphType> { Name = "to", Description = "To" },
                     new QueryArgument<StringGraphType> { Name = "orderBy", Description = "Order by" },
-                    new QueryArgument<BooleanGraphType> { Name = "status", Description = "Status" }
+                    new QueryArgument<StringGraphType> { Name = "status", Description = "Status" }
                 ),
                 resolve: context =>
                 {
@@ -41,12 +41,11 @@ namespace ReviewsRatings.GraphQL
                     int from = context.GetArgument<int>("from");
                     int to = context.GetArgument<int>("to");
                     string orderBy = context.GetArgument<string>("orderBy");
-                    bool status = context.GetArgument<bool>("status");
-
+                    string status = context.GetArgument<string>("status");
                     var searchResult = productReviewService.GetReviews();
                     IList<Review> searchData = productReviewService.FilterReviews(searchResult.Result, searchTerm, orderBy, status);
-                    int totalCount = searchResult.Result.Count;
-                    searchData = productReviewService.LimitReviews(searchResult.Result, from, to);
+                    int totalCount = searchData.Count;
+                    searchData = productReviewService.LimitReviews(searchData, from, to);
                     Console.WriteLine($"totalCount = {totalCount} : Filtered to {searchData.Count}");
                     SearchResponse searchResponse = new SearchResponse
                     {
@@ -66,7 +65,7 @@ namespace ReviewsRatings.GraphQL
                     new QueryArgument<IntGraphType> { Name = "from", Description = "From" },
                     new QueryArgument<IntGraphType> { Name = "to", Description = "To" },
                     new QueryArgument<StringGraphType> { Name = "orderBy", Description = "Order by" },
-                    new QueryArgument<BooleanGraphType> { Name = "status", Description = "Status" }
+                    new QueryArgument<StringGraphType> { Name = "status", Description = "Status" }
                 ),
                 resolve: context =>
                 {
@@ -75,12 +74,12 @@ namespace ReviewsRatings.GraphQL
                     int from = context.GetArgument<int>("from");
                     int to = context.GetArgument<int>("to");
                     string orderBy = context.GetArgument<string>("orderBy");
-                    bool status = context.GetArgument<bool>("status");
+                    string status = context.GetArgument<string>("status");
 
                     var searchResult = productReviewService.GetReviewsByProductId(productId);
                     IList<Review> searchData = productReviewService.FilterReviews(searchResult.Result, searchTerm, orderBy, status);
-                    int totalCount = searchResult.Result.Count;
-                    searchData = productReviewService.LimitReviews(searchResult.Result, from, to);
+                    int totalCount = searchData.Count;
+                    searchData = productReviewService.LimitReviews(searchData, from, to);
                     Console.WriteLine($"totalCount = {totalCount} : Filtered to {searchData.Count}");
                     SearchResponse searchResponse = new SearchResponse
                     {
@@ -116,7 +115,7 @@ namespace ReviewsRatings.GraphQL
                     new QueryArgument<IntGraphType> { Name = "from", Description = "From" },
                     new QueryArgument<IntGraphType> { Name = "to", Description = "To" },
                     new QueryArgument<StringGraphType> { Name = "orderBy", Description = "Order by" },
-                    new QueryArgument<BooleanGraphType> { Name = "status", Description = "Status" }
+                    new QueryArgument<StringGraphType> { Name = "status", Description = "Status" }
                 ),
                 resolve: context =>
                 {
@@ -125,12 +124,12 @@ namespace ReviewsRatings.GraphQL
                     int from = context.GetArgument<int>("from");
                     int to = context.GetArgument<int>("to");
                     string orderBy = context.GetArgument<string>("orderBy");
-                    bool status = context.GetArgument<bool>("status");
+                    string status = context.GetArgument<string>("status");
 
                     var searchResult = productReviewService.GetReviewsByShopperId(shopperId);
                     IList<Review> searchData = productReviewService.FilterReviews(searchResult.Result, searchTerm, orderBy, status);
-                    int totalCount = searchResult.Result.Count;
-                    searchData = productReviewService.LimitReviews(searchResult.Result, from, to);
+                    int totalCount = searchData.Count;
+                    searchData = productReviewService.LimitReviews(searchData, from, to);
                     Console.WriteLine($"totalCount = {totalCount} : Filtered to {searchData.Count}");
                     SearchResponse searchResponse = new SearchResponse
                     {
