@@ -70,13 +70,13 @@ export const PendingReviewsTable: FC<InjectedIntlProps> = ({ intl }) => {
     } = review
 
     return {
-      id,
       date: reviewDateTime,
       product: {
         productId: productId,
         sku: sku,
       },
       review: {
+        id: id,
         shopperId: shopperId,
         reviewerName: reviewerName,
         rating: rating,

@@ -32,6 +32,7 @@ export const reviewSchema = {
       type: 'object',
       width: REVIEW_COLUMN_WIDTH_PX,
       properties: {
+        id: 'string',
         shopperId: 'string',
         reviewerName: 'string',
         rating: 'number',

@@ -6,14 +6,14 @@ import deleteReview from '../../../../graphql/deleteReview.graphql'
 
 interface ApproveReviewsButtonProps extends SKUActionButtonProps {
   buildArgs: () => {
-    id: string[]
+    ids: string[]
     approved: boolean
   }
 }
 
 interface DeleteReviewsButtonProps extends SKUActionButtonProps {
   buildArgs: () => {
-    id: string[]
+    ids: string[]
   }
 }
 

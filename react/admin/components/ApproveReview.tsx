@@ -64,8 +64,8 @@ const ApproveReview = (props: ApproveReviewProps & InjectedIntlProps) => {
 
   const formatReviewsToApprove = () => {
     return {
-      id: displayedReviews.map(review => {
-        const { id } = review
+      ids: displayedReviews.map(row => {
+        const { id } = row.review
         return id
       }),
       approved: true,
@@ -106,12 +106,12 @@ const ApproveReview = (props: ApproveReviewProps & InjectedIntlProps) => {
           <Table
             density="low"
             fullWidth
-            items={displayedReviews.map(review => ({
-              ...review,
+            items={displayedReviews.map(row => ({
+              ...row,
               errorMessage:
                 shouldShowIndividualErrors &&
                 getReviewError({
-                  id: review.id,
+                  id: row.review.id,
                 }),
             }))}
             schema={schema()}

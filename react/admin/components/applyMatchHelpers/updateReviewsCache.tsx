@@ -35,7 +35,7 @@ const updateCache = (
     const filteredReviews = reviewsCache.reviews.data.filter(
       review =>
         !selectedReviews.find(
-          selectedReview => selectedReview.id === review.id
+          selectedReview => selectedReview.review.id === review.id
         ) ||
         data.actionResult.errors.find(
           response => response.reviewId === review.id

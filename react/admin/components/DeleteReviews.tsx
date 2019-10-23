@@ -53,8 +53,8 @@ export const DeleteReviewsPanel: FC<DeleteReviewsPanelProps> = props => {
 
   const formatReviewsForDeletion = () => {
     return {
-      id: displayedReviews.map(review => {
-        const { id } = review
+      ids: displayedReviews.map(row => {
+        const { id } = row.review
         return id
       }),
     }
@@ -89,7 +89,7 @@ export const DeleteReviewsPanel: FC<DeleteReviewsPanelProps> = props => {
             <FormattedMessage
               id="admin/reviews.table.modal.delete.singleReviewQuestion"
               values={{
-                reviewTitle: displayedReviews[0].title,
+                reviewTitle: displayedReviews[0].review.title,
               }}
             />
           </div>

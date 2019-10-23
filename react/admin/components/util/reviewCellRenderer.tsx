@@ -59,7 +59,11 @@ const IntlReviewCellRenderer: React.FC<Props> = ({ cellData, intl }) => {
                 onClick={e => {
                   e.preventDefault()
                   e.stopPropagation()
-                  copy(cellData.shopperId)
+                  copy(
+                    cellData.shopperId != ''
+                      ? cellData.shopperId
+                      : cellData.reviewerName
+                  )
                   showToast({
                     message: (
                       <FormattedMessage id="admin/reviews.table.actions.copy.toast" />

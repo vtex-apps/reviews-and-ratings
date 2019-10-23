@@ -16,15 +16,18 @@ export interface Review {
   approved: boolean
 }
 
-export interface ReviewTableRowData {
+interface ReviewCellData {
   id: string
   shopperId: string
-  productId: string
-  sku?: string
+  reviewerName: string
   rating: number
   title: string
   text: string
-  approved?: boolean
+}
+
+export interface ReviewTableRowData {
+  review: ReviewCellData
+  product: Product
   reviewDateTime: string
 }
 
@@ -86,7 +89,7 @@ export interface ApplyMatchData {
 }
 
 export interface ApplyMatchVariables {
-  id: string[]
+  ids: string[]
   approved?: boolean
 }
 

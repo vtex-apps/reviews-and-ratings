@@ -11,7 +11,12 @@ import {
   ToastRenderProps,
 } from './types'
 
-import { reviewSchema, reviewWithErrorSchema, productSchema } from './schemas'
+import {
+  reviewSchema,
+  reviewWithErrorSchema,
+  productSchema,
+  dateSchema,
+} from './schemas'
 
 import DeleteReviewsPanel from './components/DeleteReviews'
 import useBulkActionsApproved from './components/tableHelpers/useBulkActionsApproved'
@@ -19,11 +24,12 @@ import useLineActionsApproved from './components/tableHelpers/useLineActionsAppr
 import ReviewsTable from './components/ReviewsTable'
 import { TOAST_DURATION_MS } from './utils'
 
-const schema = () => ({
+const schema = (intl: ReactIntl.InjectedIntl) => ({
   properties: {
     ...reviewSchema.properties,
     ...reviewWithErrorSchema,
     ...productSchema.properties,
+    ...dateSchema(intl).properties,
   },
 })
 
@@ -56,17 +62,23 @@ export const ApprovedReviewsTable: FC<InjectedIntlProps> = ({ intl }) => {
       productId,
       shopperId,
       rating,
+      sku,
     } = review
 
     return {
-      id,
-      reviewDateTime,
-      reviewerName,
-      title,
-      text,
-      productId,
-      shopperId,
-      rating,
+      date: reviewDateTime,
+      product: {
+        productId: productId,
+        sku: sku,
+      },
+      review: {
+        id: id,
+        shopperId: shopperId,
+        reviewerName: reviewerName,
+        rating: rating,
+        title: title,
+        text: text,
+      },
     }
   }
 
@@ -85,7 +97,7 @@ export const ApprovedReviewsTable: FC<InjectedIntlProps> = ({ intl }) => {
           <ReviewsTable
             toRowData={toReviewTableRowData}
             reviewStatus="true"
-            schema={schema()}
+            schema={schema(intl)}
             emptyStateText={
               <FormattedMessage id="admin/reviews.table.empty-state.approved" />
             }
