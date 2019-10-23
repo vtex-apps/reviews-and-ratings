@@ -92,7 +92,7 @@
                 }
             }
 
-            return averageRating;
+            return decimal.Round(averageRating, 2, MidpointRounding.AwayFromZero);
         }
 
         public async Task<Review> GetReview(int Id)
