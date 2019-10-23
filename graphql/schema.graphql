@@ -14,7 +14,7 @@ type Review {
   approved: Boolean
 }
 
-type Reviews {
+type ReviewsResult {
   data: [Review]
   range: Range
 }
@@ -55,14 +55,14 @@ type Query {
     to: Int
     orderBy: String
     status: String
-  ): Reviews @cacheControl(scope: PRIVATE, maxAge: SHORT)
+  ): ReviewsResult @cacheControl(scope: PRIVATE, maxAge: SHORT)
   reviewsByProductId(
     productId: String!
     from: Int
     to: Int
     orderBy: String
     status: String
-  ): Reviews @cacheControl(scope: PRIVATE, maxAge: SHORT)
+  ): ReviewsResult @cacheControl(scope: PRIVATE, maxAge: SHORT)
   averageRatingByProductId(productId: String!): Float
     @cacheControl(scope: PRIVATE, maxAge: SHORT)
   totalReviewsByProductId(productId: String!): Int
@@ -73,7 +73,7 @@ type Query {
     to: Int
     orderBy: String
     status: String
-  ): Reviews @cacheControl(scope: PRIVATE, maxAge: SHORT)
+  ): ReviewsResult @cacheControl(scope: PRIVATE, maxAge: SHORT)
   hasShopperReviewed(shopperId: String!, productId: String!): Boolean
     @cacheControl(scope: PRIVATE, maxAge: SHORT)
   appSettings: AppSettings @cacheControl(scope: PUBLIC, maxAge: SHORT)

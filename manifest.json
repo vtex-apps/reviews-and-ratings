@@ -8,17 +8,21 @@
     "prereleasy": "bash pre.sh"
   },
   "builders": {
+    "admin": "0.x",
     "store": "0.x",
     "dotnet": "1.x",
     "graphql": "1.x",
-    "react": "3.x"
+    "react": "3.x",
+    "messages": "1.x"
   },
   "dependencies": {
     "vtex.styleguide": "9.x",
     "vtex.product-review-interfaces": "1.x",
     "vtex.product-summary": "2.x",
     "vtex.product-context": "0.x",
-    "vtex.store": "2.x"
+    "vtex.store": "2.x",
+    "vtex.channels-components": "4.x",
+    "vtex.paginated-table": "0.x"
   },
   "settingsSchema": {
     "title": "Reviews and Ratings",

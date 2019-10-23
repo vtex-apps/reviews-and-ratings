@@ -1,0 +1,66 @@
+import { useState } from 'react'
+import { InjectedIntl } from 'react-intl'
+import { getGraphQLErrorCode } from './index'
+import { ApolloError } from 'apollo-client'
+
+interface GenericError extends ApolloError {
+  code: number
+}
+
+export const useMatchingError = (intl: InjectedIntl, operation?: string) => {
+  const [hasError, setHasError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
+  let partialErrorMessageId: string
+
+  if (operation === 'APPROVE') {
+    partialErrorMessageId = 'approve'
+  } else if (operation === 'DELETE') {
+    partialErrorMessageId = 'delete'
+  } else {
+    partialErrorMessageId = 'generic'
+  }
+
+  const setSingleError = (err: GenericError) => {
+    const graphQLError = err.graphQLErrors && err.graphQLErrors[0]
+    const applyMatchErrorCode =
+      getGraphQLErrorCode(graphQLError) || err.code || 0
+    setHasError(true)
+    setErrorMessage(
+      intl.formatMessage({
+        id: `admin/reviews.table.applyMatch.error.${applyMatchErrorCode}`,
+      })
+    )
+  }
+
+  const setMultipleError = (err: GenericError[]) => {
+    setHasError(true)
+    const pluralCode = err.length > 1 ? 'plural' : 'singular'
+    setErrorMessage(
+      intl.formatMessage(
+        {
+          id: `admin/reviews.table.applyMatch.error.partial.${partialErrorMessageId}.${pluralCode}`,
+        },
+        { errorQuant: err.length }
+      )
+    )
+  }
+
+  const setMainError = (err: GenericError | GenericError[]) => {
+    if (err instanceof Array) {
+      setMultipleError(err)
+    } else {
+      setSingleError(err)
+    }
+  }
+
+  const clearError = () => {
+    setHasError(false)
+  }
+
+  return {
+    hasError,
+    errorMessage,
+    setMainError,
+    clearError,
+  }
+}

@@ -42,8 +42,19 @@ interface Review {
   verifiedPurchaser: boolean
 }
 
+interface Range {
+  total: number
+  from: number
+  to: number
+}
+
+interface ReviewsResult {
+  data: Review[]
+  range: Range
+}
+
 interface ReviewsData {
-  reviewsByProductId: Review[]
+  reviewsByProductId: ReviewsResult
 }
 
 interface TotalData {
@@ -56,8 +67,8 @@ interface AverageData {
 
 interface State {
   sort: string
-  offset: number
-  limit: number
+  from: number
+  to: number
   reviews: Review[] | null
   total: number
   average: number
@@ -122,8 +133,8 @@ const getTimeAgo = (time: string) => {
 
 const initialState = {
   sort: 'ReviewDateTime:desc',
-  offset: 0,
-  limit: 10,
+  from: 0,
+  to: 9,
   reviews: null,
   total: 0,
   average: 0,
@@ -137,12 +148,14 @@ const reducer = (state: State, action: ReducerActions) => {
     case 'SET_NEXT_PAGE':
       return {
         ...state,
-        offset: state.offset + state.limit,
+        from: state.from + 10,
+        to: state.to + 10,
       }
     case 'SET_PREV_PAGE':
       return {
         ...state,
-        offset: state.offset - state.limit < 0 ? 0 : state.offset - state.limit,
+        from: state.from - state.from < 11 ? 0 : 10,
+        to: state.to - state.to < 21 ? 0 : 10,
       }
     case 'TOGGLE_REVIEW_FORM':
       return {
@@ -228,20 +241,20 @@ const Reviews: FunctionComponent<BlockClass & Props> = props => {
         query: ReviewsByProductId,
         variables: {
           productId: productId,
-          offset: state.offset,
-          limit: state.limit,
+          from: state.from,
+          to: state.to,
           orderBy: state.sort,
         },
         fetchPolicy: 'no-cache',
       })
       .then((response: ApolloQueryResult<ReviewsData>) => {
-        const reviews = response.data.reviewsByProductId
+        const reviews = response.data.reviewsByProductId.data
         dispatch({
           type: 'SET_REVIEWS',
           args: { reviews },
         })
       })
-  }, [client, productId, state.limit, state.offset, state.sort])
+  }, [client, productId, state.from, state.to, state.sort])
 
   return (
     <div className={`${baseClassNames} review mw8 center ph5`}>
@@ -332,8 +345,8 @@ const Reviews: FunctionComponent<BlockClass & Props> = props => {
             <div className="review__paging">
               <Pagination
                 textShowRows=""
-                currentItemFrom={state.offset + 1}
-                currentItemTo={state.offset + state.limit}
+                currentItemFrom={state.from}
+                currentItemTo={state.to}
                 textOf="of"
                 totalItems={state.total}
                 onNextClick={() => {

@@ -1,17 +1,36 @@
-query Reviews($offset: Int, $limit: Int, $orderBy: String) {
-  reviews(offset: $offset, limit: $limit, orderBy: $orderBy) {
-    id
-    cacheId
-    productId
-    rating
-    title
-    text
-    reviewerName
-    location
-    shopperId
-    reviewDateTime
-    verifiedPurchaser
-    sku
-    approved
+query Reviews(
+  $searchTerm: String
+  $from: Int
+  $to: Int
+  $orderBy: String
+  $status: String
+) {
+  reviews(
+    searchTerm: $searchTerm
+    from: $from
+    to: $to
+    orderBy: $orderBy
+    status: $status
+  ) {
+    data {
+      id
+      cacheId
+      productId
+      rating
+      title
+      text
+      reviewerName
+      location
+      shopperId
+      reviewDateTime
+      verifiedPurchaser
+      sku
+      approved
+    }
+    range {
+      total
+      from
+      to
+    }
   }
 }

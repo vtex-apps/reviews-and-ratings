@@ -1,0 +1,17 @@
+{
+  "admin.app.reviews": {
+    "around": ["layout"],
+    "path": "/admin/app/reviews-ratings/*"
+  },
+  "admin.app.reviews.pending": {
+    "component": "PendingReviewsTable",
+    "path": "/admin/app/reviews-ratings/pending"
+  },
+  "admin.app.reviews.approved": {
+    "component": "ApprovedReviewsTable",
+    "path": "/admin/app/reviews-ratings/approved"
+  },
+  "layout": {
+    "component": "ReviewAdmin"
+  }
+}

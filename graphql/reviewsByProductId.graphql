@@ -1,25 +1,36 @@
 query ReviewsByProductId(
   $productId: String!
-  $offset: Int
-  $limit: Int
+  $from: Int
+  $to: Int
   $orderBy: String
+  $status: String
 ) {
   reviewsByProductId(
     productId: $productId
-    offset: $offset
-    limit: $limit
+    from: $from
+    to: $to
     orderBy: $orderBy
+    status: $status
   ) {
-    id
-    cacheId
-    productId
-    rating
-    title
-    text
-    reviewerName
-    location
-    shopperId
-    reviewDateTime
-    verifiedPurchaser
+    data {
+      id
+      cacheId
+      productId
+      rating
+      title
+      text
+      reviewerName
+      location
+      shopperId
+      reviewDateTime
+      verifiedPurchaser
+      sku
+      approved
+    }
+    range {
+      total
+      from
+      to
+    }
   }
 }
