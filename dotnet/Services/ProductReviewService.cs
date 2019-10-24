@@ -146,7 +146,13 @@
             {
                 if (!string.IsNullOrEmpty(searchTerm))
                 {
-                    reviews = reviews.Where(x => x.ProductId.Contains(searchTerm) || x.Sku.Contains(searchTerm) || x.ShopperId.Contains(searchTerm)).ToList();
+                    reviews = reviews.Where(x => new[]
+                    {
+                        x.ProductId ?? string.Empty,
+                        x.Sku ?? string.Empty,
+                        x.ShopperId ?? string.Empty,
+                        x.ReviewerName ?? string.Empty
+                    }.Any(s => s.Contains(searchTerm))).ToList();
                 }
 
                 //Console.WriteLine($"    >>>>>>>>>>>>>>>>>   {reviews.Count} reviews (unfiltered)");
