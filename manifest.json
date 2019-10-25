@@ -72,6 +72,13 @@
       }
     },
     {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "apps.{{region}}.vtex.io",
+        "path": "/{{account}}/{{workspace}}/apps/*"
+      }
+    },
+    {
       "name": "vbase-read-write"
     }
   ],

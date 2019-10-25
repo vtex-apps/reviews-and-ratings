@@ -9,6 +9,7 @@ import { tableActionsMessages } from '../../utils/messages'
 const useLineActions = (
   setSelected: (rowData: [ReviewTableRowData]) => void,
   setIsApprovingReviews: (is: boolean) => void,
+  // setIsViewingReviews: (is: boolean) => void,
   setIsDeletingReviews: (is: boolean) => void
 ) => {
   const approveReviewLineAction = {
@@ -18,6 +19,14 @@ const useLineActions = (
       setIsApprovingReviews(true)
     },
   }
+
+  //   const viewLineAction = {
+  //     label: () => <FormattedMessage {...tableActionsMessages.viewReview} />,
+  //     onClick: ({ rowData }: { rowData: ReviewTableRowData }) => {
+  //       setSelected([{ ...rowData }])
+  //       setIsViewingReviews(true)
+  //     },
+  //   }
 
   const deleteLineAction = {
     label: () => <FormattedMessage {...tableActionsMessages.deleteReview} />,
@@ -31,6 +40,7 @@ const useLineActions = (
   return tuple([
     {
       approveReviewLineAction,
+      //viewLineAction,
       deleteLineAction,
     },
     {},

@@ -14,10 +14,10 @@ import { ObservableQueryFields } from 'react-apollo'
 const NETWORK_REFETCHING_STATUS = 4
 const DEFAULT_TABLE_PAGE_TO = 15
 const DEFAULT_TABLE_PAGE_FROM = 0
+const DEFAULT_SORT_ORDER = 'DESC'
 
 const orderByMap: any = {
-  recent: 'ReviewDateTime:desc',
-  old: 'ReviewDateTime:asc',
+  date: 'ReviewDateTime',
 }
 
 interface ReviewsTableProps {
@@ -74,11 +74,12 @@ export const ReviewsTable: FC<ReviewsTableProps & InjectedIntlProps> = ({
 
   const to = query.to ? parseInt(query.to) : DEFAULT_TABLE_PAGE_TO
   const from = query.from ? parseInt(query.from) : DEFAULT_TABLE_PAGE_FROM
-  const orderBy = query.orderBy
+  const sortOrder = query.sortOrder ? query.sortOrder : DEFAULT_SORT_ORDER
+  const sortBy = query.sortedBy
 
   useEffect(() => {
     forceUpdate({})
-  }, [to, from, orderBy])
+  }, [to, from, sortOrder, sortBy])
 
   const initialQueryVariables: SearchReviewArgs = {
     status: reviewStatus,
@@ -112,7 +113,9 @@ export const ReviewsTable: FC<ReviewsTableProps & InjectedIntlProps> = ({
         searchTerm: searchValue,
         from,
         to,
-        orderBy: orderBy && orderByMap[orderBy],
+        orderBy: sortBy
+          ? orderByMap[sortBy] + ':' + sortOrder
+          : 'ReviewDateTime:desc',
       }}
       notifyOnNetworkStatusChange
       fetchPolicy="cache-and-network"
@@ -137,7 +140,7 @@ export const ReviewsTable: FC<ReviewsTableProps & InjectedIntlProps> = ({
           </div>
         )
 
-        const watchedVariablesString = `${searchValue}.${orderBy}`
+        const watchedVariablesString = `${searchValue}.${sortBy}.${sortOrder}`
 
         const table =
           error || (!loading && !data) ? (
@@ -175,9 +178,11 @@ export const ReviewsTable: FC<ReviewsTableProps & InjectedIntlProps> = ({
               }
               updatePaginationKey={watchedVariablesString}
               defaultElementsPerPage={DEFAULT_TABLE_PAGE_TO}
+              defaultSortOrder={DEFAULT_SORT_ORDER}
               lineActions={lineActions}
               bulkActions={bulkActions}
               filters={null}
+              dynamicRowHeight
             />
           )
 

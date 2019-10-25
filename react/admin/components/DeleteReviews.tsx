@@ -13,7 +13,7 @@ import {
   SearchReviewArgs,
   SearchReviewData,
 } from '../types'
-import filterFailedReviews from './util/filterFailedReviews'
+// import filterFailedReviews from './util/filterFailedReviews'
 import { useModalCustomStyles } from '../utils/useModalStyles'
 import { DeleteReviewsButton } from './util/ReviewActionButtons'
 
@@ -33,9 +33,7 @@ type DeleteReviewsPanelProps = {
 
 export const DeleteReviewsPanel: FC<DeleteReviewsPanelProps> = props => {
   const [isModalOpen, setIsModalOpen] = useState(true)
-  const [displayedReviews, setDisplayedReviews] = useState(
-    props.selectedReviews
-  )
+  const [displayedReviews] = useState(props.selectedReviews)
 
   const { hasError, errorMessage, setMainError, clearError } = useMatchingError(
     props.intl,
@@ -117,12 +115,12 @@ export const DeleteReviewsPanel: FC<DeleteReviewsPanelProps> = props => {
                 fetchMore
               )
             }}
-            onMixedError={(errorList: any, successList: any[]) => {
-              setDisplayedReviews(currentDisplayed =>
-                filterFailedReviews(currentDisplayed, successList)
-              )
-              setMainError(errorList)
-            }}
+            // onMixedError={(errorList: any, successList: any[]) => {
+            //   setDisplayedReviews(currentDisplayed =>
+            //     filterFailedReviews(currentDisplayed, successList)
+            //   )
+            //   setMainError(errorList)
+            // }}
             onGlobalError={setMainError}
             onSuccess={() => handleCloseModal(true)}
             buildArgs={formatReviewsForDeletion}

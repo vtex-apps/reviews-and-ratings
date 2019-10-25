@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import reviews from '../../../../graphql/reviews.graphql'
 import {
   ApplyMatchData,
-  SingleActionResponse,
+  // SingleActionResponse,
   ApplyMatchVariables,
 } from '../../types'
 import { Button } from 'vtex.styleguide'
@@ -14,10 +14,7 @@ export interface SKUActionButtonProps {
   label: string | JSX.Element
   buildArgs: () => ApplyMatchVariables
   updateCache?: MutationUpdaterFn<ApplyMatchData>
-  onMixedError?: (
-    errorList: SingleActionResponse[],
-    succesList: SingleActionResponse[]
-  ) => void
+  onMixedError?: () => void
   onGlobalError?: (err: any) => void
   onSuccess?: () => void
   isInputValid?: () => boolean
@@ -44,14 +41,14 @@ const ApplyMatchButton = (props: ApplyMatchProps) => {
     label,
   } = props
 
-  const parseErrors = (errorResponses: SingleActionResponse[]) => {
-    return errorResponses.length !== 0
-      ? errorResponses.map(response => ({
-          ...JSON.parse(response.error || '{}'),
-          reviewId: response.reviewId,
-        }))
-      : errorResponses
-  }
+  // const parseErrors = (errorResponses: SingleActionResponse[]) => {
+  //   return errorResponses.length !== 0
+  //     ? errorResponses.map(response => ({
+  //         ...JSON.parse(response.error || '{}'),
+  //         reviewId: response.reviewId,
+  //       }))
+  //     : errorResponses
+  // }
 
   return (
     <Mutation<ApplyMatchData, ApplyMatchVariables>
@@ -75,9 +72,7 @@ const ApplyMatchButton = (props: ApplyMatchProps) => {
                     {
                       query: reviews,
                       variables: {
-                        searchInput: {
-                          status: 'Pending',
-                        },
+                        status: 'false',
                       },
                     },
                   ],
@@ -88,18 +83,21 @@ const ApplyMatchButton = (props: ApplyMatchProps) => {
                     if (!result || !result.data) {
                       throw new Error()
                     }
-                    const {
-                      errors: allErrors,
-                      successes: allSuccesses,
-                      totalTries,
-                    } = result.data.actionResult
+                    // const {
+                    //   errors: allErrors,
+                    //   successes: allSuccesses,
+                    //   totalTries,
+                    // } = result.data.actionResult
 
                     setIsLoading(false)
-                    if (totalTries === allSuccesses.length) {
+                    if (
+                      result.data.moderateReview ||
+                      result.data.deleteReview
+                    ) {
                       onSuccess()
                     } else {
-                      const parsedErrors = parseErrors(allErrors)
-                      onMixedError(parsedErrors, allSuccesses)
+                      //const parsedErrors = parseErrors(allErrors)
+                      onMixedError()
                     }
                   })
                   .catch(err => {

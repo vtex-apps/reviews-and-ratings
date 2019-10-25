@@ -12,7 +12,7 @@
 
     public class AppSettingsRepository : IAppSettingsRepository
     {
-        private const string APP_SETTINGS = "vtex.eviews-and-ratings";
+        private const string APP_SETTINGS = "vtex.reviews-and-ratings";
         private const string HEADER_VTEX_CREDENTIAL = "X-Vtex-Credential";
         private const string APPLICATION_JSON = "application/json";
         private readonly IVtexEnvironmentVariableProvider _environmentVariableProvider;
@@ -46,7 +46,7 @@
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri($"http://vbase.{this._environmentVariableProvider.Region}.vtex.io/{this._environmentVariableProvider.Account}/{this._environmentVariableProvider.Workspace}/apps/{APP_SETTINGS}/settings"),
+                RequestUri = new Uri($"http://apps.{this._environmentVariableProvider.Region}.vtex.io/{this._environmentVariableProvider.Account}/{this._environmentVariableProvider.Workspace}/apps/{APP_SETTINGS}/settings"),
             };
 
             string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];

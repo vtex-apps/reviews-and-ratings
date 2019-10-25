@@ -1,0 +1,7 @@
+query AppSettings {
+  appSettings {
+    allowAnonymousReviews
+    requireApproval
+    useLocation
+  }
+}

@@ -1,5 +1,6 @@
 {
   "admin/reviews.title": "Reviews",
+  "admin/reviews.settings.title": "Reviews Settings",
   "admin/reviews.tab.pending": "Pending",
   "admin/reviews.tab.approved": "Approved",
   "admin/reviews.reviewSchema.review": "Review",
@@ -29,8 +30,8 @@
   "admin/reviews.table.modal.approveReviews.success": "Review(s) successfully approved",
   "admin/reviews.table.modal.delete.success": "Review(s) deleted",
   "admin/reviews.table.modal.delete.send": "Delete",
-  "admin/reviews.table.modal.delete.singleReviewQuestion": "Reject \"{reviewTitle}\"?",
-  "admin/reviews.table.modal.delete.multipleReviewsQuestion": "Reject the {numberOfSelectedReviews} selected reviews?",
+  "admin/reviews.table.modal.delete.singleReviewQuestion": "Delete \"{reviewTitle}\"?",
+  "admin/reviews.table.modal.delete.multipleReviewsQuestion": "Delete the {numberOfSelectedReviews} selected reviews?",
   "admin/reviews.table.error.refreshButton": "Refresh",
   "admin/reviews.table.empty-state.no-results": "No results were found for \"{searchValue}\".",
   "admin/reviews.table.empty-state.check-spelling": "Check your spelling or try different words.",

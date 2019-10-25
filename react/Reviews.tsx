@@ -8,11 +8,13 @@ import React, {
 import ApolloClient, { ApolloQueryResult } from 'apollo-client'
 import { NormalizedCacheObject } from 'apollo-cache-inmemory'
 import { withApollo } from 'react-apollo'
+import { path } from 'ramda'
 import { ProductContext, Product } from 'vtex.product-context'
 import Stars from './components/Stars'
 import ReviewForm from './ReviewForm'
 import { generateBlockClass, BlockClass } from '@vtex/css-handles'
 import styles from './styles.css'
+import AppSettings from '../graphql/appSettings.graphql'
 import ReviewsByProductId from '../graphql/reviewsByProductId.graphql'
 import TotalReviewsByProductId from '../graphql/totalReviewsByProductId.graphql'
 import AverageRatingByProductId from '../graphql/averageRatingByProductId.graphql'
@@ -36,6 +38,7 @@ interface Review {
   rating: number
   title: string
   text: string
+  location: string | null
   reviewerName: string
   shopperId: string
   reviewDateTime: string
@@ -64,6 +67,15 @@ interface TotalData {
 interface AverageData {
   averageRatingByProductId: number
 }
+interface SettingsData {
+  appSettings: AppSettings
+}
+
+interface AppSettings {
+  allowAnonymousReviews: boolean
+  requireApproval: boolean
+  useLocation: boolean
+}
 
 interface State {
   sort: string
@@ -75,16 +87,22 @@ interface State {
   hasTotal: boolean
   hasAverage: boolean
   showForm: boolean
+  openReview: number | null
+  settings: AppSettings
+  userAuthenticated: boolean
 }
 
 type ReducerActions =
   | { type: 'SET_NEXT_PAGE' }
   | { type: 'SET_PREV_PAGE' }
   | { type: 'TOGGLE_REVIEW_FORM' }
+  | { type: 'TOGGLE_REVIEW_ACCORDION'; args: { reviewNumber: number } }
   | { type: 'SET_SELECTED_SORT'; args: { sort: string } }
   | { type: 'SET_REVIEWS'; args: { reviews: Review[] } }
   | { type: 'SET_TOTAL'; args: { total: number } }
   | { type: 'SET_AVERAGE'; args: { average: number } }
+  | { type: 'SET_SETTINGS'; args: { settings: AppSettings } }
+  | { type: 'SET_AUTHENTICATED'; args: { authenticated: boolean } }
 
 const options = [
   {
@@ -141,6 +159,13 @@ const initialState = {
   hasTotal: false,
   hasAverage: false,
   showForm: false,
+  openReview: null,
+  settings: {
+    allowAnonymousReviews: false,
+    requireApproval: true,
+    useLocation: false,
+  },
+  userAuthenticated: false,
 }
 
 const reducer = (state: State, action: ReducerActions) => {
@@ -161,6 +186,14 @@ const reducer = (state: State, action: ReducerActions) => {
       return {
         ...state,
         showForm: !state.showForm,
+      }
+    case 'TOGGLE_REVIEW_ACCORDION':
+      return {
+        ...state,
+        openReview:
+          action.args.reviewNumber == state.openReview
+            ? null
+            : action.args.reviewNumber,
       }
     case 'SET_SELECTED_SORT':
       return {
@@ -184,6 +217,16 @@ const reducer = (state: State, action: ReducerActions) => {
         average: action.args.average,
         hasAverage: true,
       }
+    case 'SET_SETTINGS':
+      return {
+        ...state,
+        settings: action.args.settings,
+      }
+    case 'SET_AUTHENTICATED':
+      return {
+        ...state,
+        userAuthenticated: action.args.authenticated,
+      }
   }
 }
 
@@ -195,6 +238,43 @@ const Reviews: FunctionComponent<BlockClass & Props> = props => {
   const { productId }: Product = product || {}
 
   const [state, dispatch] = useReducer(reducer, initialState)
+
+  useEffect(() => {
+    window.__RENDER_8_SESSION__.sessionPromise.then((data: any) => {
+      const sessionRespose = data.response
+
+      if (!sessionRespose || !sessionRespose.namespaces) {
+        return
+      }
+
+      const { namespaces } = sessionRespose
+      const storeUserId = path(
+        ['authentication', 'storeUserId', 'value'],
+        namespaces
+      )
+      if (!storeUserId) {
+        return
+      }
+      dispatch({
+        type: 'SET_AUTHENTICATED',
+        args: { authenticated: true },
+      })
+    })
+  })
+
+  useEffect(() => {
+    client
+      .query({
+        query: AppSettings,
+      })
+      .then((response: ApolloQueryResult<SettingsData>) => {
+        const settings = response.data.appSettings
+        dispatch({
+          type: 'SET_SETTINGS',
+          args: { settings },
+        })
+      })
+  }, [client])
 
   useEffect(() => {
     if (!productId) {
@@ -244,6 +324,8 @@ const Reviews: FunctionComponent<BlockClass & Props> = props => {
           from: state.from,
           to: state.to,
           orderBy: state.sort,
+          status:
+            state.settings && !state.settings.requireApproval ? '' : 'true',
         },
         fetchPolicy: 'no-cache',
       })
@@ -254,7 +336,7 @@ const Reviews: FunctionComponent<BlockClass & Props> = props => {
           args: { reviews },
         })
       })
-  }, [client, productId, state.from, state.to, state.sort])
+  }, [client, productId, state.from, state.to, state.sort, state.settings])
 
   return (
     <div className={`${baseClassNames} review mw8 center ph5`}>
@@ -277,21 +359,28 @@ const Reviews: FunctionComponent<BlockClass & Props> = props => {
         )}
       </div>
       <div className="mv5">
-        <Collapsible
-          header={
-            <span className="c-action-primary hover-c-action-primary">
-              Write a review
-            </span>
-          }
-          onClick={() => {
-            dispatch({
-              type: 'TOGGLE_REVIEW_FORM',
-            })
-          }}
-          isOpen={state.showForm}
-        >
-          <ReviewForm />
-        </Collapsible>
+        {(state.settings && state.settings.allowAnonymousReviews) ||
+        (state.settings &&
+          !state.settings.allowAnonymousReviews &&
+          state.userAuthenticated) ? (
+          <Collapsible
+            header={
+              <span className="c-action-primary hover-c-action-primary">
+                Write a review
+              </span>
+            }
+            onClick={() => {
+              dispatch({
+                type: 'TOGGLE_REVIEW_FORM',
+              })
+            }}
+            isOpen={state.showForm}
+          >
+            <ReviewForm settings={state.settings} />
+          </Collapsible>
+        ) : (
+          <span>Please log in to write a review.</span>
+        )}
       </div>
       <div className="review__comments">
         {state.reviews === null ? (
@@ -312,33 +401,53 @@ const Reviews: FunctionComponent<BlockClass & Props> = props => {
                 />
               </div>
             </div>
-            {state.reviews.map((review, i) => {
+            {state.reviews.map((review: Review, i: number) => {
               return (
                 <div
                   key={i}
                   className="review__comment bw2 bb b--muted-5 mb5 pb4"
                 >
-                  <div className="review__comment--rating t-heading-5">
-                    <Stars rating={review.rating} />
-                  </div>
-                  <h5 className="review__comment--user lh-copy mw9 t-heading-5 mt0 mb2">
-                    {review.title}
-                  </h5>
-                  <ul className="pa0 mv2">
-                    {review.verifiedPurchaser ? (
-                      <li className="dib mr5">
-                        <IconSuccess /> Verified Purchaser
+                  <Collapsible
+                    header={
+                      <div className="review__comment--rating t-heading-5">
+                        <Stars rating={review.rating} /> {` `}
+                        <span className="review__comment--user lh-copy mw9 t-heading-5 mt0 mb2">
+                          {review.title}
+                        </span>
+                      </div>
+                    }
+                    onClick={() => {
+                      dispatch({
+                        type: 'TOGGLE_REVIEW_ACCORDION',
+                        args: {
+                          reviewNumber: i,
+                        },
+                      })
+                    }}
+                    isOpen={state.openReview === i}
+                  >
+                    <ul className="pa0 mv2">
+                      {review.verifiedPurchaser ? (
+                        <li className="dib mr5">
+                          <IconSuccess /> Verified Purchaser
+                        </li>
+                      ) : null}
+                      <li className="dib mr2">
+                        <strong>Submitted</strong>{' '}
+                        {getTimeAgo(review.reviewDateTime)}
                       </li>
-                    ) : null}
-                    <li className="dib mr2">
-                      <strong>Submitted</strong>{' '}
-                      {getTimeAgo(review.reviewDateTime)}
-                    </li>
-                    <li className="dib mr5">
-                      <strong>by</strong> {review.reviewerName}
-                    </li>
-                  </ul>
-                  <p className="t-body lh-copy mw9">{review.text}</p>
+                      <li className="dib mr5">
+                        <strong>by</strong> {review.reviewerName}
+                        {state.settings &&
+                          state.settings.useLocation &&
+                          review.location &&
+                          review.location != '' && (
+                            <span>, {review.location}</span>
+                          )}
+                      </li>
+                    </ul>
+                    <p className="t-body lh-copy mw9">{review.text}</p>
+                  </Collapsible>
                 </div>
               )
             })}

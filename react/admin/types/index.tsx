@@ -69,23 +69,25 @@ export interface QueryResults {
   data: Review[]
 }
 
-export interface SingleActionResponse {
-  operation: string
-  message: string
-  details: string
-  reviewId: string
-  error?: string
-}
+// export interface SingleActionResponse {
+//   operation: string
+//   message: string
+//   details: string
+//   reviewId: string
+//   error?: string
+// }
 
-export interface GenericActionResponse {
-  totalTries: number
-  partialError: number
-  successes: SingleActionResponse[]
-  errors: SingleActionResponse[]
-}
+// export interface GenericActionResponse {
+//   totalTries: number
+//   partialError: number
+//   successes: SingleActionResponse[]
+//   errors: SingleActionResponse[]
+// }
 
 export interface ApplyMatchData {
-  actionResult: GenericActionResponse
+  moderateReview?: boolean
+  deleteReview?: boolean
+  //actionResult: GenericActionResponse
 }
 
 export interface ApplyMatchVariables {

@@ -1,0 +1,12 @@
+{
+  "icon": "extensions-ic",
+  "id": "98",
+  "section": "products",
+  "subSection": "catalog",
+  "subSectionItems": [
+    {
+      "labelId": "admin/reviews.title",
+      "path": "/admin/reviews-ratings/pending"
+    }
+  ]
+}

@@ -35,7 +35,7 @@ const IntlReviewCellRenderer: React.FC<Props> = ({ cellData, intl }) => {
     <ToastConsumer>
       {({ showToast }: ToastRenderProps) => (
         <div
-          className="w-100 db t-body review-table-shopper-id"
+          className="w-100 db t-body review-table-shopper-id pv3"
           onMouseEnter={() => setShowCopy(true)}
           onMouseLeave={() => setShowCopy(false)}
         >

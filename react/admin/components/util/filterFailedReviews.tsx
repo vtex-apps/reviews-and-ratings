@@ -1,30 +1,30 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { SingleActionResponse } from '../../types'
+// /* eslint-disable @typescript-eslint/no-explicit-any */
+// import { SingleActionResponse } from '../../types'
 
-const isInMap = (obj: { id: number }, map: any) => {
-  return map[`${obj.id}`] ? true : false
-}
+// const isInMap = (obj: { id: number }, map: any) => {
+//   return map[`${obj.id}`] ? true : false
+// }
 
-const toSuccessMap = (successResponses: SingleActionResponse[]) => {
-  const successResponsesObj =
-    successResponses &&
-    successResponses.reduce((acc, response) => {
-      return {
-        ...acc,
-        [`${response.reviewId}`]: response,
-      }
-    }, {})
+// const toSuccessMap = (successResponses: SingleActionResponse[]) => {
+//   const successResponsesObj =
+//     successResponses &&
+//     successResponses.reduce((acc, response) => {
+//       return {
+//         ...acc,
+//         [`${response.reviewId}`]: response,
+//       }
+//     }, {})
 
-  return successResponsesObj
-}
+//   return successResponsesObj
+// }
 
-const filterFailedReviews = (allReviews: any, successList: any) => {
-  const successMap = toSuccessMap(successList)
+// const filterFailedReviews = (allReviews: any, successList: any) => {
+//   const successMap = toSuccessMap(successList)
 
-  const newValue = allReviews.filter(
-    (review: any) => !isInMap({ id: review.id }, successMap)
-  )
-  return newValue
-}
+//   const newValue = allReviews.filter(
+//     (review: any) => !isInMap({ id: review.id }, successMap)
+//   )
+//   return newValue
+// }
 
-export default filterFailedReviews
+// export default filterFailedReviews

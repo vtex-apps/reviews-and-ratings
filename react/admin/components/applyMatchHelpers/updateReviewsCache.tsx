@@ -3,7 +3,8 @@ import {
   SearchReviewArgs,
   SearchReviewData,
   ReviewTableRowData,
-  GenericActionResponse,
+  ApplyMatchData,
+  // GenericActionResponse,
 } from '../../types'
 import { DataProxy } from 'apollo-cache'
 
@@ -12,7 +13,7 @@ import reviews from '../../../../graphql/reviews.graphql'
 const updateCache = (
   cache: DataProxy,
   selectedReviews: ReviewTableRowData[],
-  data?: { actionResult: GenericActionResponse } | null,
+  data?: ApplyMatchData | null,
   searchReviewsArgs?: SearchReviewArgs,
   fetchMore?: ObservableQueryFields<
     SearchReviewData,
@@ -30,16 +31,17 @@ const updateCache = (
 
   if (data && reviewsCache) {
     const updatedTotal =
-      reviewsCache.reviews.range.total - data.actionResult.successes.length
+      reviewsCache.reviews.range.total - selectedReviews.length
 
     const filteredReviews = reviewsCache.reviews.data.filter(
       review =>
         !selectedReviews.find(
           selectedReview => selectedReview.review.id === review.id
-        ) ||
-        data.actionResult.errors.find(
-          response => response.reviewId === review.id
         )
+      // ||
+      // data.actionResult.errors.find(
+      //   response => response.reviewId === review.id
+      // )
     )
     cache.writeQuery({
       ...queryAndVariables,

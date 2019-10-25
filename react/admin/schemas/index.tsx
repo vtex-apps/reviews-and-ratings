@@ -99,7 +99,7 @@ export const reviewWithErrorSchema = {
       cellData: ReviewSummary
       rowData: { errorMessage: string | JSX.Element }
     }) => (
-      <div className="aspect-ratio--object flex items-center flex-column justify-center">
+      <div className="flex items-center flex-column justify-center">
         <ReviewCellRenderer cellData={cellData} />
         {rowData.errorMessage && (
           <div className="t-small red mt2 w-100">{rowData.errorMessage}</div>

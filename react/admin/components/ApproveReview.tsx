@@ -16,7 +16,7 @@ import { reviewSchema, reviewWithErrorSchema, productSchema } from '../schemas'
 import './global.css'
 import { useMatchingError } from './applyMatchHelpers/useMatchingError'
 import updateReviewsCache from './applyMatchHelpers/updateReviewsCache'
-import filterFailedReviews from './util/filterFailedReviews'
+// import filterFailedReviews from './util/filterFailedReviews'
 import useIndividualErrorMapping from './applyMatchHelpers/useIndividualErrorMapping'
 import { useModalCustomStyles } from '../utils/useModalStyles'
 import { ApproveReviewsButton } from './util/ReviewActionButtons'
@@ -46,12 +46,10 @@ const ApproveReview = (props: ApproveReviewProps & InjectedIntlProps) => {
   )
 
   const [isModalOpen, setIsModalOpen] = useState(true)
-  const [displayedReviews, setDisplayedReviews] = useState(
-    props.selectedReviews
-  )
+  const [displayedReviews] = useState(props.selectedReviews)
   const {
     getReviewError,
-    setAllErrors,
+    // setAllErrors,
     shouldShowIndividualErrors,
   } = useIndividualErrorMapping(props.intl)
 
@@ -139,13 +137,13 @@ const ApproveReview = (props: ApproveReviewProps & InjectedIntlProps) => {
                   fetchMore
                 )
               }}
-              onMixedError={(err: any, successList: any) => {
-                setDisplayedReviews(currentDisplayed =>
-                  filterFailedReviews(currentDisplayed, successList)
-                )
-                setAllErrors(err)
-                setMainError(err)
-              }}
+              // onMixedError={() => {
+              //   setDisplayedReviews(currentDisplayed =>
+              //     filterFailedReviews(currentDisplayed, successList)
+              //   )
+              //   setAllErrors(err)
+              //   setMainError(err)
+              // }}
               onGlobalError={setMainError}
               onSuccess={() => handleCloseModal(true)}
               buildArgs={formatReviewsToApprove}
