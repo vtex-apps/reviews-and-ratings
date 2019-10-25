@@ -167,22 +167,6 @@ export const ReviewForm: FC<BlockClass & Props> = ({
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  async function checkAlreadySubmitted() {
-    client
-      .query({
-        query: HasShopperReviewed,
-        variables: { shopperId: state.shopperId, productId: productId },
-      })
-      .then((result: ApolloQueryResult<HasShopperReviewedData>) => {
-        if (result.data.hasShopperReviewed) {
-          dispatch({
-            type: 'SET_ALREADY_SUBMITTED',
-          })
-          return
-        }
-      })
-  }
-
   useEffect(() => {
     if (!productId) {
       return
@@ -231,14 +215,38 @@ export const ReviewForm: FC<BlockClass & Props> = ({
           },
         })
 
-        checkAlreadySubmitted()
+        client
+          .query({
+            query: HasShopperReviewed,
+            variables: { shopperId: profile.email, productId: productId },
+          })
+          .then((result: ApolloQueryResult<HasShopperReviewedData>) => {
+            if (result.data.hasShopperReviewed) {
+              dispatch({
+                type: 'SET_ALREADY_SUBMITTED',
+              })
+              return
+            }
+          })
       }
     })
-  })
+  }, [client, productId])
 
   async function submitReview() {
     if (state.validation.hasValidEmail) {
-      await checkAlreadySubmitted()
+      client
+        .query({
+          query: HasShopperReviewed,
+          variables: { shopperId: state.shopperId, productId: productId },
+        })
+        .then((result: ApolloQueryResult<HasShopperReviewedData>) => {
+          if (result.data.hasShopperReviewed) {
+            dispatch({
+              type: 'SET_ALREADY_SUBMITTED',
+            })
+            return
+          }
+        })
     }
     if (
       state.validation.hasName &&

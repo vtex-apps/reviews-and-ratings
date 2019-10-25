@@ -151,8 +151,8 @@ const getTimeAgo = (time: string) => {
 
 const initialState = {
   sort: 'ReviewDateTime:desc',
-  from: 0,
-  to: 9,
+  from: 1,
+  to: 10,
   reviews: null,
   total: 0,
   average: 0,
@@ -173,14 +173,14 @@ const reducer = (state: State, action: ReducerActions) => {
     case 'SET_NEXT_PAGE':
       return {
         ...state,
-        from: state.from + 10,
-        to: state.to + 10,
+        from: state.total < 11 ? state.from : state.from + 10,
+        to: state.to + 10 > state.total ? state.total : state.to + 10,
       }
     case 'SET_PREV_PAGE':
       return {
         ...state,
-        from: state.from - state.from < 11 ? 0 : 10,
-        to: state.to - state.to < 21 ? 0 : 10,
+        from: state.from - (state.from < 11 ? 0 : 10),
+        to: state.from > 10 ? state.from - 1 : state.to,
       }
     case 'TOGGLE_REVIEW_FORM':
       return {
@@ -260,7 +260,7 @@ const Reviews: FunctionComponent<BlockClass & Props> = props => {
         args: { authenticated: true },
       })
     })
-  })
+  }, [])
 
   useEffect(() => {
     client
@@ -322,7 +322,7 @@ const Reviews: FunctionComponent<BlockClass & Props> = props => {
         variables: {
           productId: productId,
           from: state.from,
-          to: state.to,
+          to: state.total < 11 ? state.total : state.to,
           orderBy: state.sort,
           status:
             state.settings && !state.settings.requireApproval ? '' : 'true',
@@ -336,7 +336,15 @@ const Reviews: FunctionComponent<BlockClass & Props> = props => {
           args: { reviews },
         })
       })
-  }, [client, productId, state.from, state.to, state.sort, state.settings])
+  }, [
+    client,
+    productId,
+    state.from,
+    state.to,
+    state.sort,
+    state.total,
+    state.settings,
+  ])
 
   return (
     <div className={`${baseClassNames} review mw8 center ph5`}>
