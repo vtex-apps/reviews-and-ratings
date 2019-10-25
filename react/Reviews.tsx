@@ -16,7 +16,7 @@ import { generateBlockClass, BlockClass } from '@vtex/css-handles'
 import styles from './styles.css'
 import AppSettings from '../graphql/appSettings.graphql'
 import ReviewsByProductId from '../graphql/reviewsByProductId.graphql'
-import TotalReviewsByProductId from '../graphql/totalReviewsByProductId.graphql'
+// import TotalReviewsByProductId from '../graphql/totalReviewsByProductId.graphql'
 import AverageRatingByProductId from '../graphql/averageRatingByProductId.graphql'
 
 import {
@@ -60,9 +60,9 @@ interface ReviewsData {
   reviewsByProductId: ReviewsResult
 }
 
-interface TotalData {
-  totalReviewsByProductId: number
-}
+// interface TotalData {
+//   totalReviewsByProductId: number
+// }
 
 interface AverageData {
   averageRatingByProductId: number
@@ -98,7 +98,7 @@ type ReducerActions =
   | { type: 'TOGGLE_REVIEW_FORM' }
   | { type: 'TOGGLE_REVIEW_ACCORDION'; args: { reviewNumber: number } }
   | { type: 'SET_SELECTED_SORT'; args: { sort: string } }
-  | { type: 'SET_REVIEWS'; args: { reviews: Review[] } }
+  | { type: 'SET_REVIEWS'; args: { reviews: Review[]; total: number } }
   | { type: 'SET_TOTAL'; args: { total: number } }
   | { type: 'SET_AVERAGE'; args: { average: number } }
   | { type: 'SET_SETTINGS'; args: { settings: AppSettings } }
@@ -204,6 +204,8 @@ const reducer = (state: State, action: ReducerActions) => {
       return {
         ...state,
         reviews: action.args.reviews || [],
+        total: action.args.total,
+        hasTotal: true,
       }
     case 'SET_TOTAL':
       return {
@@ -283,21 +285,6 @@ const Reviews: FunctionComponent<BlockClass & Props> = props => {
 
     client
       .query({
-        query: TotalReviewsByProductId,
-        variables: {
-          productId: productId,
-        },
-      })
-      .then((response: ApolloQueryResult<TotalData>) => {
-        const total = response.data.totalReviewsByProductId
-        dispatch({
-          type: 'SET_TOTAL',
-          args: { total },
-        })
-      })
-
-    client
-      .query({
         query: AverageRatingByProductId,
         variables: {
           productId: productId,
@@ -322,7 +309,7 @@ const Reviews: FunctionComponent<BlockClass & Props> = props => {
         variables: {
           productId: productId,
           from: state.from,
-          to: state.total < 11 ? state.total : state.to,
+          to: state.to,
           orderBy: state.sort,
           status:
             state.settings && !state.settings.requireApproval ? '' : 'true',
@@ -331,20 +318,13 @@ const Reviews: FunctionComponent<BlockClass & Props> = props => {
       })
       .then((response: ApolloQueryResult<ReviewsData>) => {
         const reviews = response.data.reviewsByProductId.data
+        const total = response.data.reviewsByProductId.range.total
         dispatch({
           type: 'SET_REVIEWS',
-          args: { reviews },
+          args: { reviews, total },
         })
       })
-  }, [
-    client,
-    productId,
-    state.from,
-    state.to,
-    state.sort,
-    state.total,
-    state.settings,
-  ])
+  }, [client, productId, state.from, state.to, state.sort, state.settings])
 
   return (
     <div className={`${baseClassNames} review mw8 center ph5`}>
