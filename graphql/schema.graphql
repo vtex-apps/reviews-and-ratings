@@ -76,7 +76,7 @@ type Query {
   ): ReviewsResult @cacheControl(scope: PRIVATE, maxAge: SHORT)
   hasShopperReviewed(shopperId: String!, productId: String!): Boolean
     @cacheControl(scope: PRIVATE, maxAge: SHORT)
-  appSettings: AppSettings @cacheControl(scope: PUBLIC, maxAge: SHORT)
+  appSettings: AppSettings @cacheControl(scope: PRIVATE, maxAge: SHORT)
 }
 
 # Mutations
