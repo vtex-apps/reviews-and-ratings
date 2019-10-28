@@ -35,7 +35,7 @@ const IntlReviewCellRenderer: React.FC<Props> = ({ cellData, intl }) => {
     <ToastConsumer>
       {({ showToast }: ToastRenderProps) => (
         <div
-          className="w-100 db t-body review-table-shopper-id pv3"
+          className="w-100 db t-body review-table-shopper-id pv3 ws-normal"
           onMouseEnter={() => setShowCopy(true)}
           onMouseLeave={() => setShowCopy(false)}
         >
@@ -43,10 +43,10 @@ const IntlReviewCellRenderer: React.FC<Props> = ({ cellData, intl }) => {
             <span className="t-heading-4 v-mid">
               <Stars rating={cellData.rating} />
             </span>{' '}
-            <span className="truncate">{cellData.title}</span>
+            <span>{cellData.title}</span>
           </p>
           <p className="ma0 flex items-center mt3 t-small c-muted-1">
-            <span className="fw6 mr2 truncate" title={cellData.shopperId}>
+            <span className="fw6 mr2" title={cellData.shopperId}>
               Posted by {cellData.reviewerName}{' '}
               {cellData.shopperId != '' ? `(${cellData.shopperId})` : ''}
             </span>
@@ -77,7 +77,7 @@ const IntlReviewCellRenderer: React.FC<Props> = ({ cellData, intl }) => {
             </Tooltip>
           </p>
           <p className="ma0 mt3 t-small c-muted-1">
-            <span className="truncate">{cellData.text}</span>
+            <span>{cellData.text}</span>
           </p>
         </div>
       )}

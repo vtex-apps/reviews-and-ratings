@@ -285,133 +285,133 @@ export const ReviewForm: FC<BlockClass & Props> = ({
     <div className={`${baseClassNames} bg-muted-5 pa5 mt2`}>
       <Card>
         <h3>Add review</h3>
-        <form>
-          <div className="mv3">
-            <Input
-              label="The bottom line"
-              size="large"
-              value={state.title}
-              required
-              onChange={(event: React.FormEvent<HTMLInputElement>) =>
-                dispatch({
-                  type: 'SET_TITLE',
-                  args: {
-                    title: event.currentTarget.value,
-                  },
-                })
-              }
-              errorMessage={
-                state.showValidationErrors && !state.validation.hasTitle
-                  ? 'This field is required'
-                  : ''
-              }
-            />
+        {state.reviewSubmitted ? (
+          <h5>Your review has been submitted.</h5>
+        ) : state.alreadySubmitted ? (
+          <div className="c-danger t-small mt3 lh-title">
+            You have already submitted a review for this product.
           </div>
-          <div className="mv3">
-            <Input
-              label="Your name"
-              size="large"
-              value={state.reviewerName}
-              onChange={(event: React.FormEvent<HTMLInputElement>) =>
-                dispatch({
-                  type: 'SET_NAME',
-                  args: {
-                    name: event.currentTarget.value,
-                  },
-                })
-              }
-              errorMessage={
-                state.showValidationErrors && !state.validation.hasName
-                  ? 'This field is required'
-                  : ''
-              }
-            />
-          </div>
-          {settings && settings.useLocation && (
+        ) : (
+          <form>
             <div className="mv3">
               <Input
-                label="Your location"
+                label="The bottom line"
                 size="large"
-                value={state.location}
+                value={state.title}
+                required
                 onChange={(event: React.FormEvent<HTMLInputElement>) =>
                   dispatch({
-                    type: 'SET_LOCATION',
+                    type: 'SET_TITLE',
                     args: {
-                      location: event.currentTarget.value,
+                      title: event.currentTarget.value,
                     },
                   })
                 }
+                errorMessage={
+                  state.showValidationErrors && !state.validation.hasTitle
+                    ? 'This field is required'
+                    : ''
+                }
               />
             </div>
-          )}
-          {settings &&
-            settings.allowAnonymousReviews &&
-            !state.userAuthenticated && (
+            <div className="mv3">
+              <Input
+                label="Your name"
+                size="large"
+                value={state.reviewerName}
+                onChange={(event: React.FormEvent<HTMLInputElement>) =>
+                  dispatch({
+                    type: 'SET_NAME',
+                    args: {
+                      name: event.currentTarget.value,
+                    },
+                  })
+                }
+                errorMessage={
+                  state.showValidationErrors && !state.validation.hasName
+                    ? 'This field is required'
+                    : ''
+                }
+              />
+            </div>
+            {settings && settings.useLocation && (
               <div className="mv3">
                 <Input
-                  label="Email address"
+                  label="Your location"
                   size="large"
-                  value={state.shopperId}
+                  value={state.location}
                   onChange={(event: React.FormEvent<HTMLInputElement>) =>
                     dispatch({
-                      type: 'SET_ID',
+                      type: 'SET_LOCATION',
                       args: {
-                        id: event.currentTarget.value,
+                        location: event.currentTarget.value,
                       },
                     })
-                  }
-                  errorMessage={
-                    state.showValidationErrors &&
-                    !state.validation.hasValidEmail
-                      ? 'Please enter a valid email address'
-                      : ''
                   }
                 />
               </div>
             )}
-          <div className="mv3">
-            <Textarea
-              value={state.text}
-              onChange={(event: React.FormEvent<HTMLTextAreaElement>) =>
-                dispatch({
-                  type: 'SET_TEXT',
-                  args: {
-                    text: event.currentTarget.value,
-                  },
-                })
-              }
-              label="Write a review"
-              errorMessage={
-                state.showValidationErrors && !state.validation.hasText
-                  ? 'This field is required'
-                  : ''
-              }
-            />
-          </div>
-          <div className="mv3">
-            <NumericStepper
-              label="Rate the product from 1 to 5 stars"
-              minValue={1}
-              maxValue={5}
-              value={state.rating}
-              onChange={(e: any) => {
-                dispatch({
-                  type: 'SET_RATING',
-                  args: {
-                    rating: parseInt(e.value),
-                  },
-                })
-              }}
-            />
-          </div>
-          <div className="mv3">
-            {state.reviewSubmitted ? (
-              <h5>Your review has been submitted.</h5>
-            ) : state.alreadySubmitted ? (
-              <div className="c-danger t-small mt3 lh-title">
-                You have already submitted a review for this product.
-              </div>
-            ) : (
+            {settings &&
+              settings.allowAnonymousReviews &&
+              !state.userAuthenticated && (
+                <div className="mv3">
+                  <Input
+                    label="Email address"
+                    size="large"
+                    value={state.shopperId}
+                    onChange={(event: React.FormEvent<HTMLInputElement>) =>
+                      dispatch({
+                        type: 'SET_ID',
+                        args: {
+                          id: event.currentTarget.value,
+                        },
+                      })
+                    }
+                    errorMessage={
+                      state.showValidationErrors &&
+                      !state.validation.hasValidEmail
+                        ? 'Please enter a valid email address'
+                        : ''
+                    }
+                  />
+                </div>
+              )}
+            <div className="mv3">
+              <Textarea
+                value={state.text}
+                onChange={(event: React.FormEvent<HTMLTextAreaElement>) =>
+                  dispatch({
+                    type: 'SET_TEXT',
+                    args: {
+                      text: event.currentTarget.value,
+                    },
+                  })
+                }
+                label="Write a review"
+                errorMessage={
+                  state.showValidationErrors && !state.validation.hasText
+                    ? 'This field is required'
+                    : ''
+                }
+              />
+            </div>
+            <div className="mv3">
+              <NumericStepper
+                label="Rate the product from 1 to 5 stars"
+                minValue={1}
+                maxValue={5}
+                value={state.rating}
+                onChange={(e: any) => {
+                  dispatch({
+                    type: 'SET_RATING',
+                    args: {
+                      rating: parseInt(e.value),
+                    },
+                  })
+                }}
+              />
+            </div>
+            <div className="mv3">
               <Fragment>
                 {state.showValidationErrors &&
                   (!state.validation.hasName ||
@@ -426,9 +426,9 @@ export const ReviewForm: FC<BlockClass & Props> = ({
                   Submit Review
                 </Button>
               </Fragment>
-            )}
-          </div>
-        </form>
+            </div>
+          </form>
+        )}
       </Card>
     </div>
   )
