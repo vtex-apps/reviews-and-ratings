@@ -104,7 +104,21 @@ namespace ReviewsRatings.GraphQL
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "productId", Description = "Product Id" }
                     ),
-                resolve: context => productReviewService.GetReviewsByProductId(context.GetArgument<string>("productId")).Result.Count
+                resolve: context =>
+                {
+                    int count = 0;
+                    var searchResult = productReviewService.GetReviewsByProductId(context.GetArgument<string>("productId")).Result;
+                    if (searchResult != null && searchResult.Count > 0)
+                    {
+                        AppSettings appSettings = productReviewService.GetAppSettings().Result;
+                        if (appSettings.RequireApproval)
+                        {
+                            count = searchResult.Where(x => x.Approved).ToList().Count;
+                        }
+                    }
+
+                    return count;
+                }
             );
 
             Field<SearchResponseType>(

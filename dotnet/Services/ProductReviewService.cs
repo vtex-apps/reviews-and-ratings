@@ -82,6 +82,12 @@
             IList<Review> reviews = await this._productReviewRepository.GetProductReviewsAsync(productId);
             if (reviews != null)
             {
+                AppSettings settings = await GetAppSettings();
+                if(settings.RequireApproval)
+                {
+                    reviews = reviews.Where(x => x.Approved).ToList();
+                }
+
                 int numberOfReviews = reviews.Count;
                 if (numberOfReviews > 0)
                 {

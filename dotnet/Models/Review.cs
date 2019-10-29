@@ -1,17 +1,19 @@
 ﻿namespace ReviewsRatings.Models
 {
     /// <summary>
-    ///  id: ID!
-    ///  cacheId: ID!
-    ///  productId: String!
-    ///  rating: Int!
-    ///  title: String
-    ///  text: String
-    ///  reviewerName: String
-    ///  shopperId: String
-    ///  reviewDateTime: String
-    ///  verifiedPurchaser: Boolean
+    ///  Id: ID!
+    ///  CacheId: ID!
+    ///  ProductId: String!
+    ///  Rating: Int!
+    ///  Title: String
+    ///  Text: String
+    ///  ReviewerName: String
+    ///  ShopperId: String
+    ///  ReviewDateTime: String
+    ///  VerifiedPurchaser: Boolean
     ///  Sku: String
+    ///  Approved : Boolean
+    ///  Location : String
     /// </summary>
     public class Review
     {

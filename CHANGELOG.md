@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.0.2] - 2019-10-29
+
+### Fixed
+
+- If 'approval required' setting is enabled, only count approved reviews in average & totals
+
 ## [1.0.1] - 2019-10-28
 
 ### Fixed
