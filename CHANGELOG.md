@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.0.3] - 2019-11-04
+
+### Fixed
+
+- `averageRatingByProductId` and `totalReviewsByProductId` queries now take `requireApproval` setting into account
+
+### Added
+
+- New review form now includes a custom `StarPicker` component instead of `NumericStepper`
+- "Please log in to write review" message now includes link to login page
+
 ## [1.0.2] - 2019-10-29
 
 ### Fixed

@@ -10,13 +10,13 @@ import { NormalizedCacheObject } from 'apollo-cache-inmemory'
 import { withApollo } from 'react-apollo'
 import { path } from 'ramda'
 import { ProductContext, Product } from 'vtex.product-context'
+import { Link, canUseDOM } from 'vtex.render-runtime'
 import Stars from './components/Stars'
 import ReviewForm from './ReviewForm'
 import { generateBlockClass, BlockClass } from '@vtex/css-handles'
 import styles from './styles.css'
 import AppSettings from '../graphql/appSettings.graphql'
 import ReviewsByProductId from '../graphql/reviewsByProductId.graphql'
-// import TotalReviewsByProductId from '../graphql/totalReviewsByProductId.graphql'
 import AverageRatingByProductId from '../graphql/averageRatingByProductId.graphql'
 
 import {
@@ -90,6 +90,11 @@ interface State {
   openReview: number | null
   settings: AppSettings
   userAuthenticated: boolean
+}
+
+declare var global: {
+  __hostname__: string
+  __pathname__: string
 }
 
 type ReducerActions =
@@ -241,6 +246,15 @@ const Reviews: FunctionComponent<BlockClass & Props> = props => {
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
+  const getLocation = () =>
+    canUseDOM
+      ? {
+          url: window.location.pathname + window.location.hash,
+          pathName: window.location.pathname,
+        }
+      : { url: global.__pathname__, pathName: global.__pathname__ }
+
+  const { url } = getLocation()
   useEffect(() => {
     window.__RENDER_8_SESSION__.sessionPromise.then((data: any) => {
       const sessionRespose = data.response
@@ -314,7 +328,6 @@ const Reviews: FunctionComponent<BlockClass & Props> = props => {
           status:
             state.settings && !state.settings.requireApproval ? '' : 'true',
         },
-        fetchPolicy: 'no-cache',
       })
       .then((response: ApolloQueryResult<ReviewsData>) => {
         const reviews = response.data.reviewsByProductId.data
@@ -367,7 +380,13 @@ const Reviews: FunctionComponent<BlockClass & Props> = props => {
             <ReviewForm settings={state.settings} />
           </Collapsible>
         ) : (
-          <span>Please log in to write a review.</span>
+          <Link
+            page={'store.login'}
+            query={`returnUrl=${encodeURIComponent(url)}`}
+            className={`h1 w2 tc flex items-center w-100-s h-100-s pa4-s`}
+          >
+            Please log in to write a review.
+          </Link>
         )}
       </div>
       <div className="review__comments">

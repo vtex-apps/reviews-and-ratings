@@ -48,35 +48,34 @@ type AppSettings {
 }
 
 type Query {
-  review(id: ID!): Review @cacheControl(scope: PRIVATE, maxAge: SHORT)
+  review(id: ID!): Review @cacheControl(scope: PRIVATE)
   reviews(
     searchTerm: String
     from: Int
     to: Int
     orderBy: String
     status: String
-  ): ReviewsResult @cacheControl(scope: PRIVATE, maxAge: SHORT)
+  ): ReviewsResult @cacheControl(scope: PRIVATE)
   reviewsByProductId(
     productId: String!
     from: Int
     to: Int
     orderBy: String
     status: String
-  ): ReviewsResult @cacheControl(scope: PRIVATE, maxAge: SHORT)
+  ): ReviewsResult @cacheControl(scope: PRIVATE)
   averageRatingByProductId(productId: String!): Float
-    @cacheControl(scope: PRIVATE, maxAge: SHORT)
-  totalReviewsByProductId(productId: String!): Int
-    @cacheControl(scope: PRIVATE, maxAge: SHORT)
+    @cacheControl(scope: PRIVATE)
+  totalReviewsByProductId(productId: String!): Int @cacheControl(scope: PRIVATE)
   reviewsByShopperId(
     shopperId: String!
     from: Int
     to: Int
     orderBy: String
     status: String
-  ): ReviewsResult @cacheControl(scope: PRIVATE, maxAge: SHORT)
+  ): ReviewsResult @cacheControl(scope: PRIVATE)
   hasShopperReviewed(shopperId: String!, productId: String!): Boolean
-    @cacheControl(scope: PRIVATE, maxAge: SHORT)
-  appSettings: AppSettings @cacheControl(scope: PRIVATE, maxAge: SHORT)
+    @cacheControl(scope: PRIVATE)
+  appSettings: AppSettings @cacheControl(scope: PRIVATE)
 }
 
 # Mutations

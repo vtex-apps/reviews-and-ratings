@@ -110,6 +110,7 @@ namespace ReviewsRatings.GraphQL
                     var searchResult = productReviewService.GetReviewsByProductId(context.GetArgument<string>("productId")).Result;
                     if (searchResult != null && searchResult.Count > 0)
                     {
+                        count = searchResult.Count;
                         AppSettings appSettings = productReviewService.GetAppSettings().Result;
                         if (appSettings.RequireApproval)
                         {

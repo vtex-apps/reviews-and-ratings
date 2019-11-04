@@ -1,6 +1,6 @@
 import React, { FC, Fragment, useContext, useEffect, useReducer } from 'react'
 import { ProductContext, Product } from 'vtex.product-context'
-// import Stars from './components/Stars'
+import StarPicker from './components/StarPicker'
 import ApolloClient, { ApolloQueryResult } from 'apollo-client'
 import { NormalizedCacheObject } from 'apollo-cache-inmemory'
 import { withApollo } from 'react-apollo'
@@ -11,7 +11,7 @@ import { generateBlockClass, BlockClass } from '@vtex/css-handles'
 import styles from './styles.css'
 import NewReview from '../graphql/newReview.graphql'
 import HasShopperReviewed from '../graphql/hasShopperReviewed.graphql'
-import { Card, Input, Button, Textarea, NumericStepper } from 'vtex.styleguide'
+import { Card, Input, Button, Textarea } from 'vtex.styleguide'
 
 interface AppSettings {
   allowAnonymousReviews: boolean
@@ -62,7 +62,7 @@ type ReducerActions =
   | { type: 'SHOW_VALIDATION' }
 
 const initialState = {
-  rating: 5,
+  rating: 3,
   title: '',
   text: '',
   location: null,
@@ -315,6 +315,20 @@ export const ReviewForm: FC<BlockClass & Props> = ({
               />
             </div>
             <div className="mv3">
+              <StarPicker
+                label="Rate the product from 1 to 5 stars"
+                rating={state.rating}
+                onStarClick={(_, index: number) => {
+                  dispatch({
+                    type: 'SET_RATING',
+                    args: {
+                      rating: index + 1,
+                    },
+                  })
+                }}
+              />
+            </div>
+            <div className="mv3">
               <Input
                 label="Your name"
                 size="large"
@@ -393,22 +407,6 @@ export const ReviewForm: FC<BlockClass & Props> = ({
                     ? 'This field is required'
                     : ''
                 }
-              />
-            </div>
-            <div className="mv3">
-              <NumericStepper
-                label="Rate the product from 1 to 5 stars"
-                minValue={1}
-                maxValue={5}
-                value={state.rating}
-                onChange={(e: any) => {
-                  dispatch({
-                    type: 'SET_RATING',
-                    args: {
-                      rating: parseInt(e.value),
-                    },
-                  })
-                }}
               />
             </div>
             <div className="mv3">
