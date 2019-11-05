@@ -1,7 +1,4 @@
 {
-  "product-review-form.vtex": {
-    "component": "ReviewForm"
-  },
   "product-reviews.vtex": {
     "component": "Reviews"
   },

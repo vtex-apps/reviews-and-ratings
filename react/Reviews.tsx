@@ -433,18 +433,18 @@ const Reviews: FunctionComponent<BlockClass & Props> = props => {
                     }}
                     isOpen={state.openReview === i}
                   >
-                    <ul className="pa0 mv2">
+                    <ul className="pa0 mv2 t-small">
                       {review.verifiedPurchaser ? (
                         <li className="dib mr5">
                           <IconSuccess /> Verified Purchaser
                         </li>
                       ) : null}
                       <li className="dib mr2">
-                        <strong>Submitted</strong>{' '}
-                        {getTimeAgo(review.reviewDateTime)}
+                        Submitted{' '}
+                        <strong>{getTimeAgo(review.reviewDateTime)}</strong>
                       </li>
                       <li className="dib mr5">
-                        <strong>by</strong> {review.reviewerName}
+                        by <strong>{review.reviewerName}</strong>
                         {state.settings &&
                           state.settings.useLocation &&
                           review.location &&

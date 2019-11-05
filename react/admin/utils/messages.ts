@@ -38,10 +38,10 @@ export const tableActionsMessages = defineMessages({
     id: 'admin/reviews.table.actions.approveReview',
     defaultMessage: 'Approve review',
   },
-  viewReview: {
-    id: 'admin/reviews.table.actions.viewReview',
-    defaultMessage: 'Review details',
-  },
+  // viewReview: {
+  //   id: 'admin/reviews.table.actions.viewReview',
+  //   defaultMessage: 'Review details',
+  // },
   deleteReview: {
     id: 'admin/reviews.table.actions.deleteReview',
     defaultMessage: 'Delete review',

@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.0.4] - 2019-11-05
+
+### Added
+
+- Docs folder and README.md
+
+### Removed
+
+- Removed `review-form` interface and plugin (review form is embedded in `Reviews` component, not displayed on separate page)
+
 ## [1.0.3] - 2019-11-04
 
 ### Fixed
