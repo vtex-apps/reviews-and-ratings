@@ -9,8 +9,11 @@ This app provides a VTEX native solution for product reviews and ratings, includ
 ### Setup
 
 After installing this app in your account, navigate to the app's settings in your admin dashboard under **Apps** > **Reviews and Ratings**.
+
 _Allow Anonymous Reviews_: If unchecked, only logged-in shoppers will be able to review products.
+
 _Require Admin Approval_: Checking this box activates the review moderation system. Newly submitted reviews will not be displayed on the store website until an administrator approves them.
+
 _Ask For User's Location_: Checking this box activates an optional review field. Shoppers that submit reviews will be asked to fill in their current location (i.e. "Boston, MA").
 
 ### Moderation
