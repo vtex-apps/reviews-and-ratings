@@ -32,13 +32,14 @@
     "eslint": "^5.16.0",
     "eslint-config-vtex-react": "^4.1.0",
     "prettier": "^1.18.2",
-    "vtex.store": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.store@2.69.0/public/_types/react",
+    "vtex.store": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.store@2.70.2/public/_types/react",
     "vtex.product-review-interfaces": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.product-review-interfaces@1.0.2/public/_types/react",
-    "vtex.styleguide": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.styleguide@9.90.2/public/_types/react",
-    "vtex.product-context": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.product-context@0.3.1/public/@types/vtex.product-context",
-    "vtex.product-summary": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.product-summary@2.43.0/public/_types/react",
-    "vtex.channels-components": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.channels-components@4.4.0/public/@types/vtex.channels-components",
-    "vtex.paginated-table": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.paginated-table@0.5.4/public/@types/vtex.paginated-table",
-    "vtex.render-runtime": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.render-runtime@8.72.4/public/@types/vtex.render-runtime"
+    "vtex.product-context": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.product-context@0.4.0/public/@types/vtex.product-context",
+    "vtex.search-graphql": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.search-graphql@0.8.3/public/@types/vtex.search-graphql",
+    "vtex.channels-components": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.channels-components@4.4.1/public/@types/vtex.channels-components",
+    "vtex.styleguide": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.styleguide@9.91.3/public/_types/react",
+    "vtex.paginated-table": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.paginated-table@0.5.6/public/@types/vtex.paginated-table",
+    "vtex.render-runtime": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.render-runtime@8.76.0/public/@types/vtex.render-runtime",
+    "vtex.product-summary": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.product-summary@2.43.4/public/_types/react"
   }
 }

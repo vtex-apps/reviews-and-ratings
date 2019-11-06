@@ -8,9 +8,15 @@ import {
   injectIntl,
   InjectedIntlProps,
 } from 'react-intl'
+import { useQuery } from 'react-apollo'
 
-import { IconCopy, ToastConsumer, Tooltip } from 'vtex.styleguide'
-
+import {
+  IconCopy,
+  IconExternalLink,
+  ToastConsumer,
+  Tooltip,
+} from 'vtex.styleguide'
+import ProductQuery from '../../graphql/ProductQuery.graphql'
 import { Product, ToastRenderProps } from '../../types'
 
 const DEFAULT_TOAST_DURATION_MS = 1500
@@ -18,6 +24,23 @@ const DEFAULT_TOAST_DURATION_MS = 1500
 type Props = {
   cellData: Product
 } & InjectedIntlProps
+
+interface ProductResult {
+  productName: string
+}
+
+interface ProductData {
+  product: ProductResult
+}
+
+interface ProductVars {
+  identifier: ProductUniqueIdentifier
+}
+
+interface ProductUniqueIdentifier {
+  field: string
+  value: string
+}
 
 const messages = defineMessages({
   copyTitle: {
@@ -29,6 +52,15 @@ const messages = defineMessages({
 const IntlProductCellRenderer: React.FC<Props> = ({ cellData, intl }) => {
   const [showCopy, setShowCopy] = useState(false)
 
+  const { data } = useQuery<ProductData, ProductVars>(ProductQuery, {
+    variables: {
+      identifier: {
+        field: 'id',
+        value: cellData ? cellData.productId : '',
+      },
+    },
+  })
+
   return cellData ? (
     <ToastConsumer>
       {({ showToast }: ToastRenderProps) => (
@@ -37,9 +69,22 @@ const IntlProductCellRenderer: React.FC<Props> = ({ cellData, intl }) => {
           onMouseEnter={() => setShowCopy(true)}
           onMouseLeave={() => setShowCopy(false)}
         >
+          {data && (
+            <p className="ma0 mb3 fw6">
+              <a
+                href={'../../Site/ProdutoForm.aspx?id=' + cellData.productId}
+                className="no-underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {data.product.productName}
+              </a>{' '}
+              <IconExternalLink size={10} />
+            </p>
+          )}
           <p className="ma0 flex items-center">
-            <span className="fw6 mr2 truncate" title={cellData.productId}>
-              {cellData.productId}
+            <span className="fw4 mr2 truncate" title={cellData.productId}>
+              Product ID: {cellData.productId}
             </span>
             <Tooltip
               label={intl.formatMessage(messages.copyTitle)}
@@ -65,7 +110,7 @@ const IntlProductCellRenderer: React.FC<Props> = ({ cellData, intl }) => {
           </p>
           <p className="ma0 mt3 t-small c-muted-1">
             {cellData.sku ? (
-              <span className="truncate">{cellData.sku}</span>
+              <span className="truncate">SKU: {cellData.sku}</span>
             ) : null}
           </p>
         </div>

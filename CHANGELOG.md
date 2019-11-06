@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.0.4] - 2019-11-06
+
+### Added
+
+- Admin table now shows product name (and link to product form page) in addition to product ID
+
+### Fixed
+
+- Added "pointer" className to `StarPicker`
+
 ## [1.0.4] - 2019-11-05
 
 ### Added

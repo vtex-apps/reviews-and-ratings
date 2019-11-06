@@ -5275,37 +5275,41 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-"vtex.channels-components@http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.channels-components@4.4.0/public/@types/vtex.channels-components":
-  version "4.4.0"
-  resolved "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.channels-components@4.4.0/public/@types/vtex.channels-components#385f9d7cf26a5b2e01b153e464d3e9839f024aed"
+"vtex.channels-components@http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.channels-components@4.4.1/public/@types/vtex.channels-components":
+  version "4.4.1"
+  resolved "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.channels-components@4.4.1/public/@types/vtex.channels-components#9f6c90f67bbcf018db3406b0dd8dea88000a38ed"
 
-"vtex.paginated-table@http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.paginated-table@0.5.4/public/@types/vtex.paginated-table":
-  version "0.5.4"
-  resolved "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.paginated-table@0.5.4/public/@types/vtex.paginated-table#11e6169235bc08a64ddd2d5507a2bd7520357242"
+"vtex.paginated-table@http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.paginated-table@0.5.6/public/@types/vtex.paginated-table":
+  version "0.5.6"
+  resolved "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.paginated-table@0.5.6/public/@types/vtex.paginated-table#3d0e220cd5bc03eddd60c74d362be6a4f6386585"
 
-"vtex.product-context@http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.product-context@0.3.1/public/@types/vtex.product-context":
-  version "0.3.1"
-  resolved "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.product-context@0.3.1/public/@types/vtex.product-context#8a9294f502603774e1bb06c3ad527d8d8913af46"
+"vtex.product-context@http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.product-context@0.4.0/public/@types/vtex.product-context":
+  version "0.4.0"
+  resolved "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.product-context@0.4.0/public/@types/vtex.product-context#b7138f5ff124bf38be4e8f3fde0d7c3cd2d14abf"
 
 "vtex.product-review-interfaces@http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.product-review-interfaces@1.0.2/public/_types/react":
   version "1.0.2"
   resolved "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.product-review-interfaces@1.0.2/public/_types/react#84d1997cdae079d1401611f3d4a4619ed914673f"
 
-"vtex.product-summary@http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.product-summary@2.43.0/public/_types/react":
+"vtex.product-summary@http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.product-summary@2.43.4/public/_types/react":
   version "0.0.0"
-  resolved "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.product-summary@2.43.0/public/_types/react#fa7a0347e046eab3dd768998fc9252b2c0dd5aef"
+  resolved "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.product-summary@2.43.4/public/_types/react#fa7a0347e046eab3dd768998fc9252b2c0dd5aef"
 
-"vtex.render-runtime@http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.render-runtime@8.72.4/public/@types/vtex.render-runtime":
-  version "8.72.4"
-  resolved "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.render-runtime@8.72.4/public/@types/vtex.render-runtime#d68d043f50f0a471557252c9c16790cbabd59717"
+"vtex.render-runtime@http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.render-runtime@8.76.0/public/@types/vtex.render-runtime":
+  version "8.76.0"
+  resolved "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.render-runtime@8.76.0/public/@types/vtex.render-runtime#c9b4c81a4c84d7998c6f925dfc11ad1a21585326"
 
-"vtex.store@http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.store@2.69.0/public/_types/react":
+"vtex.search-graphql@http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.search-graphql@0.8.3/public/@types/vtex.search-graphql":
+  version "0.8.3"
+  resolved "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.search-graphql@0.8.3/public/@types/vtex.search-graphql#b4e14615bd488b99bfb4994af14c6eba5e20bd1f"
+
+"vtex.store@http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.store@2.70.2/public/_types/react":
   version "0.0.0"
-  resolved "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.store@2.69.0/public/_types/react#fa7a0347e046eab3dd768998fc9252b2c0dd5aef"
+  resolved "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.store@2.70.2/public/_types/react#fa7a0347e046eab3dd768998fc9252b2c0dd5aef"
 
-"vtex.styleguide@http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.styleguide@9.90.2/public/_types/react":
+"vtex.styleguide@http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.styleguide@9.91.3/public/_types/react":
   version "0.0.0"
-  resolved "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.styleguide@9.90.2/public/_types/react#fa7a0347e046eab3dd768998fc9252b2c0dd5aef"
+  resolved "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.styleguide@9.91.3/public/_types/react#fa7a0347e046eab3dd768998fc9252b2c0dd5aef"
 
 w3c-hr-time@^1.0.1:
   version "1.0.1"
