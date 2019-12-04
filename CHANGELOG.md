@@ -6,7 +6,26 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [1.0.4] - 2019-11-06
+## [1.0.8] - 2019-12-04
+
+### Fixed
+
+- Calls to VBASE now use account and workspace from request headers rathen than env variables
+- Infra service calls (vbase, apps) now use new `infra.io.vtex.com` domain
+
+## [1.0.7] - 2019-12-04
+
+### Fixed
+
+- Republishing app to fix empty `plugins.json`
+
+## [1.0.6] - 2019-11-27
+
+### Fixed
+
+- Republishing app to fix empty `plugins.json` (failed)
+
+## [1.0.5] - 2019-11-06
 
 ### Added
 

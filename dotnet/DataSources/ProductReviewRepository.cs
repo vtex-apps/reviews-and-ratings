@@ -16,6 +16,8 @@
         private const string REVIEWS_BUCKET = "productReviews";
         private const string LOOKUP = "productLookup";
         private const string HEADER_VTEX_CREDENTIAL = "X-Vtex-Credential";
+        private const string HEADER_VTEX_WORKSPACE = "X-Vtex-Workspace";
+        private const string HEADER_VTEX_ACCOUNT = "X-Vtex-Account";
         private const string APPLICATION_JSON = "application/json";
         private readonly IVtexEnvironmentVariableProvider _environmentVariableProvider;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -44,12 +46,12 @@
 
         public async Task<IList<Review>> GetProductReviewsAsync(string productId)
         {
-            Console.WriteLine($"GetProductReview called with {this._environmentVariableProvider.Account},{this._environmentVariableProvider.Workspace},{this._environmentVariableProvider.ApplicationName},{this._environmentVariableProvider.ApplicationVendor},{this._environmentVariableProvider.Region}");
+            Console.WriteLine($"GetProductReview called with {this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_ACCOUNT]},{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_WORKSPACE]},{this._environmentVariableProvider.ApplicationName},{this._environmentVariableProvider.ApplicationVendor},{this._environmentVariableProvider.Region}");
 
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri($"http://vbase.{this._environmentVariableProvider.Region}.vtex.io/{this._environmentVariableProvider.Account}/{this._environmentVariableProvider.Workspace}/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{productId}"),
+                RequestUri = new Uri($"http://infra.io.vtex.com/vbase/v2/{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_ACCOUNT]}/{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_WORKSPACE]}/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{productId}"),
             };
 
             string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
@@ -69,7 +71,7 @@
 
             response.EnsureSuccessStatusCode();
 
-            IList<Review> productReviews =  JsonConvert.DeserializeObject<IList<Review>>(responseContent);
+            IList<Review> productReviews = JsonConvert.DeserializeObject<IList<Review>>(responseContent);
             return productReviews;
         }
 
@@ -86,7 +88,7 @@
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Put,
-                RequestUri = new Uri($"http://vbase.{this._environmentVariableProvider.Region}.vtex.io/{this._environmentVariableProvider.Account}/{this._environmentVariableProvider.Workspace}/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{productId}"),
+                RequestUri = new Uri($"http://infra.io.vtex.com/vbase/v2/{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_ACCOUNT]}/{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_WORKSPACE]}/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{productId}"),
                 Content = new StringContent(jsonSerializedProducReviews, Encoding.UTF8, APPLICATION_JSON)
             };
 
@@ -109,7 +111,7 @@
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri($"http://vbase.{this._environmentVariableProvider.Region}.vtex.io/{this._environmentVariableProvider.Account}/{this._environmentVariableProvider.Workspace}/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{LOOKUP}"),
+                RequestUri = new Uri($"http://infra.io.vtex.com/vbase/v2/{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_ACCOUNT]}/{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_WORKSPACE]}/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{LOOKUP}"),
             };
 
             string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
@@ -145,7 +147,7 @@
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Put,
-                RequestUri = new Uri($"http://vbase.{this._environmentVariableProvider.Region}.vtex.io/{this._environmentVariableProvider.Account}/{this._environmentVariableProvider.Workspace}/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{LOOKUP}"),
+                RequestUri = new Uri($"http://infra.io.vtex.com/vbase/v2/{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_ACCOUNT]}/{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_WORKSPACE]}/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{LOOKUP}"),
                 Content = new StringContent(jsonSerializedLookup, Encoding.UTF8, APPLICATION_JSON)
             };
 

@@ -14,6 +14,8 @@
     {
         private const string APP_SETTINGS = "vtex.reviews-and-ratings";
         private const string HEADER_VTEX_CREDENTIAL = "X-Vtex-Credential";
+        private const string HEADER_VTEX_WORKSPACE = "X-Vtex-Workspace";
+        private const string HEADER_VTEX_ACCOUNT = "X-Vtex-Account";
         private const string APPLICATION_JSON = "application/json";
         private readonly IVtexEnvironmentVariableProvider _environmentVariableProvider;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -41,12 +43,12 @@
 
         public async Task<AppSettings> GetAppSettingAsync()
         {
-            Console.WriteLine($"GetAppSettingAsync called with {this._environmentVariableProvider.Account},{this._environmentVariableProvider.Workspace},{this._environmentVariableProvider.ApplicationName},{this._environmentVariableProvider.ApplicationVendor},{this._environmentVariableProvider.Region}");
+            Console.WriteLine($"GetAppSettingAsync called with {this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_ACCOUNT]},{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_WORKSPACE]},{this._environmentVariableProvider.ApplicationName},{this._environmentVariableProvider.ApplicationVendor},{this._environmentVariableProvider.Region}");
 
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri($"http://apps.{this._environmentVariableProvider.Region}.vtex.io/{this._environmentVariableProvider.Account}/{this._environmentVariableProvider.Workspace}/apps/{APP_SETTINGS}/settings"),
+                RequestUri = new Uri($"http://infra.io.vtex.com/apps/v0/{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_ACCOUNT]}/{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_WORKSPACE]}/apps/{APP_SETTINGS}/settings"),
             };
 
             string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];

@@ -1,7 +1,7 @@
 {
   "name": "reviews-and-ratings",
   "vendor": "vtex",
-  "version": "1.0.5",
+  "version": "1.0.8",
   "title": "Reviews and Ratings",
   "description": "An app for saving and retrieving product reviews and ratings.",
   "scripts": {
@@ -76,8 +76,15 @@
     {
       "name": "outbound-access",
       "attrs": {
-        "host": "apps.{{region}}.vtex.io",
-        "path": "/{{account}}/{{workspace}}/apps/*"
+        "host": "infra.io.vtex.com",
+        "path": "/vbase/*"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "infra.io.vtex.com",
+        "path": "/apps/*"
       }
     },
     {
