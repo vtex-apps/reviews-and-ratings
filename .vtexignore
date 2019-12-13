@@ -6,3 +6,4 @@ README.md
 dotnet/obj/
 dotnet/bin/
 dotnet-wrapper/
+.vs

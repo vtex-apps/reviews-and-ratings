@@ -8,6 +8,7 @@
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
     using ReviewsRatings.Models;
     using ReviewsRatings.Services;
 
@@ -71,7 +72,11 @@
 
             response.EnsureSuccessStatusCode();
 
+            responseContent = Utils.ReviewSanitizer.SantizeReviewText(responseContent);
+
+            Console.WriteLine($"Before DeserializeObject");
             IList<Review> productReviews = JsonConvert.DeserializeObject<IList<Review>>(responseContent);
+            Console.WriteLine($"productReviews.Count = {productReviews.Count}");
             return productReviews;
         }
 

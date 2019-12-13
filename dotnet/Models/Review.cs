@@ -1,4 +1,7 @@
-﻿namespace ReviewsRatings.Models
+﻿using Newtonsoft.Json;
+using ReviewsRatings.Utils;
+
+namespace ReviewsRatings.Models
 {
     /// <summary>
     ///  Id: ID!
@@ -15,6 +18,7 @@
     ///  Approved : Boolean
     ///  Location : String
     /// </summary>
+    //[JsonConverter(typeof(ReviewJsonConverter))]
     public class Review
     {
         /// <summary>
