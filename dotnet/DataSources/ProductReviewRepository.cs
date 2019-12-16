@@ -72,11 +72,20 @@
 
             response.EnsureSuccessStatusCode();
 
-            responseContent = Utils.ReviewSanitizer.SantizeReviewText(responseContent);
+            // responseContent = Utils.ReviewSanitizer.SantizeReviewText(responseContent);
 
-            Console.WriteLine($"Before DeserializeObject");
-            IList<Review> productReviews = JsonConvert.DeserializeObject<IList<Review>>(responseContent);
-            Console.WriteLine($"productReviews.Count = {productReviews.Count}");
+            //Console.WriteLine($"Before DeserializeObject");
+            IList<Review> productReviews = null;
+            try
+            {
+                productReviews = JsonConvert.DeserializeObject<IList<Review>>(responseContent);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"DeserializeObject Error: {ex.Message} ");
+            }
+
+            //Console.WriteLine($"productReviews.Count = {productReviews.Count}");
             return productReviews;
         }
 

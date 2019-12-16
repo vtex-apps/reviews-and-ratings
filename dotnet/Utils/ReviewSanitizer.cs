@@ -16,7 +16,7 @@ namespace ReviewsRatings.Utils
             {
                 int endPos = rawReviewsText.IndexOf(",\"", startPos, StringComparison.OrdinalIgnoreCase);
                 startPos = startPos + 7;
-                string rawText = rawReviewsText.Substring(startPos, endPos+ - startPos);
+                string rawText = rawReviewsText.Substring(startPos, endPos - startPos);
                 //Console.WriteLine($"rawtext is -[{rawText}]-");
                 if(!rawText.Equals("null"))
                 {
