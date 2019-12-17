@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.1.2] - 2019-12-17
+
+### Changed
+
+- Documentation updated
+
+## [1.1.1] - 2019-12-16
+
+### Fixed
+
+- App will no longer attempt to display reviews containing invalid JSON
+
 ## [1.0.8] - 2019-12-04
 
 ### Fixed
