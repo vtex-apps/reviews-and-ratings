@@ -4,6 +4,12 @@ import StarPicker from './components/StarPicker'
 import ApolloClient, { ApolloQueryResult } from 'apollo-client'
 import { NormalizedCacheObject } from 'apollo-cache-inmemory'
 import { withApollo } from 'react-apollo'
+import {
+  FormattedMessage,
+  InjectedIntlProps,
+  injectIntl,
+  defineMessages,
+} from 'react-intl'
 // eslint-disable-next-line lodash/import-scope
 import flowRight from 'lodash.flowright'
 import { path } from 'ramda'
@@ -155,8 +161,44 @@ const reducer = (state: State, action: ReducerActions) => {
   }
 }
 
-export const ReviewForm: FC<BlockClass & Props> = ({
+const messages = defineMessages({
+  reviewTitleLabel: {
+    id: 'store/reviews.form.label.reviewTitle',
+    defaultMessage: 'The bottom line',
+  },
+  requiredField: {
+    id: 'store/reviews.form.requiredField',
+    defaultMessage: 'This field is required',
+  },
+  requiredFieldEmail: {
+    id: 'store/reviews.form.requiredFieldEmail',
+    defaultMessage: 'Please enter a valid email address',
+  },
+  ratingLabel: {
+    id: 'store/reviews.form.label.rating',
+    defaultMessage: 'Rate the product from 1 to 5 stars',
+  },
+  nameLabel: {
+    id: 'store/reviews.form.label.name',
+    defaultMessage: 'Your name',
+  },
+  locationLabel: {
+    id: 'store/reviews.form.label.location',
+    defaultMessage: 'Your location',
+  },
+  emailLabel: {
+    id: 'store/reviews.form.label.email',
+    defaultMessage: 'Email address',
+  },
+  reviewLabel: {
+    id: 'store/reviews.form.label.review',
+    defaultMessage: 'Write a review',
+  },
+})
+
+export const ReviewForm: FC<BlockClass & InjectedIntlProps & Props> = ({
   blockClass,
+  intl,
   client,
   settings,
 }) => {
@@ -284,18 +326,22 @@ export const ReviewForm: FC<BlockClass & Props> = ({
   return (
     <div className={`${baseClassNames} bg-muted-5 pa5 mt2`}>
       <Card>
-        <h3>Add review</h3>
+        <h3>
+          <FormattedMessage id="store/reviews.form.title" />
+        </h3>
         {state.reviewSubmitted ? (
-          <h5>Your review has been submitted.</h5>
+          <h5>
+            <FormattedMessage id="store/reviews.form.reviewSubmitted" />
+          </h5>
         ) : state.alreadySubmitted ? (
           <div className="c-danger t-small mt3 lh-title">
-            You have already submitted a review for this product.
+            <FormattedMessage id="store/reviews.form.alreadySubmitted" />
           </div>
         ) : (
           <form>
             <div className="mv3">
               <Input
-                label="The bottom line"
+                label={intl.formatMessage(messages.reviewTitleLabel)}
                 size="large"
                 value={state.title}
                 required
@@ -309,14 +355,14 @@ export const ReviewForm: FC<BlockClass & Props> = ({
                 }
                 errorMessage={
                   state.showValidationErrors && !state.validation.hasTitle
-                    ? 'This field is required'
+                    ? intl.formatMessage(messages.requiredField)
                     : ''
                 }
               />
             </div>
             <div className="mv3">
               <StarPicker
-                label="Rate the product from 1 to 5 stars"
+                label={intl.formatMessage(messages.ratingLabel)}
                 rating={state.rating}
                 onStarClick={(_, index: number) => {
                   dispatch({
@@ -330,7 +376,7 @@ export const ReviewForm: FC<BlockClass & Props> = ({
             </div>
             <div className="mv3">
               <Input
-                label="Your name"
+                label={intl.formatMessage(messages.nameLabel)}
                 size="large"
                 value={state.reviewerName}
                 onChange={(event: React.FormEvent<HTMLInputElement>) =>
@@ -343,7 +389,7 @@ export const ReviewForm: FC<BlockClass & Props> = ({
                 }
                 errorMessage={
                   state.showValidationErrors && !state.validation.hasName
-                    ? 'This field is required'
+                    ? intl.formatMessage(messages.requiredField)
                     : ''
                 }
               />
@@ -351,7 +397,7 @@ export const ReviewForm: FC<BlockClass & Props> = ({
             {settings && settings.useLocation && (
               <div className="mv3">
                 <Input
-                  label="Your location"
+                  label={intl.formatMessage(messages.locationLabel)}
                   size="large"
                   value={state.location}
                   onChange={(event: React.FormEvent<HTMLInputElement>) =>
@@ -370,7 +416,7 @@ export const ReviewForm: FC<BlockClass & Props> = ({
               !state.userAuthenticated && (
                 <div className="mv3">
                   <Input
-                    label="Email address"
+                    label={intl.formatMessage(messages.emailLabel)}
                     size="large"
                     value={state.shopperId}
                     onChange={(event: React.FormEvent<HTMLInputElement>) =>
@@ -384,7 +430,7 @@ export const ReviewForm: FC<BlockClass & Props> = ({
                     errorMessage={
                       state.showValidationErrors &&
                       !state.validation.hasValidEmail
-                        ? 'Please enter a valid email address'
+                        ? intl.formatMessage(messages.requiredFieldEmail)
                         : ''
                     }
                   />
@@ -401,10 +447,10 @@ export const ReviewForm: FC<BlockClass & Props> = ({
                     },
                   })
                 }
-                label="Write a review"
+                label={intl.formatMessage(messages.reviewLabel)}
                 errorMessage={
                   state.showValidationErrors && !state.validation.hasText
-                    ? 'This field is required'
+                    ? intl.formatMessage(messages.requiredField)
                     : ''
                 }
               />
@@ -417,11 +463,11 @@ export const ReviewForm: FC<BlockClass & Props> = ({
                     !state.validation.hasText ||
                     !state.validation.hasValidEmail) && (
                     <div className="c-danger t-small mt3 lh-title">
-                      Your review is not valid. Please see above.
+                      <FormattedMessage id="store/reviews.form.invalid" />
                     </div>
                   )}
                 <Button variation="primary" onClick={() => submitReview()}>
-                  Submit Review
+                  <FormattedMessage id="store/reviews.form.submit" />
                 </Button>
               </Fragment>
             </div>
@@ -432,4 +478,4 @@ export const ReviewForm: FC<BlockClass & Props> = ({
   )
 }
 
-export default flowRight(withApollo)(ReviewForm)
+export default flowRight([withApollo, injectIntl])(ReviewForm)

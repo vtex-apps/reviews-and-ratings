@@ -26,6 +26,10 @@ const messages = defineMessages({
     id: 'admin/reviews.table.actions.copy.title',
     defaultMessage: 'Copy',
   },
+  anonymous: {
+    id: 'admin/reviews.table.reviewCell.anonymous',
+    defaultMessage: 'anonymous',
+  },
 })
 
 const IntlReviewCellRenderer: React.FC<Props> = ({ cellData, intl }) => {
@@ -47,7 +51,15 @@ const IntlReviewCellRenderer: React.FC<Props> = ({ cellData, intl }) => {
           </p>
           <p className="ma0 flex items-center mt3 t-small c-muted-1">
             <span className="fw6 mr2" title={cellData.shopperId}>
-              Posted by {cellData.reviewerName}{' '}
+              <FormattedMessage
+                id="admin/reviews.table.reviewCell.author"
+                values={{
+                  author:
+                    cellData.reviewerName != ''
+                      ? cellData.reviewerName
+                      : intl.formatMessage(messages.anonymous),
+                }}
+              />{' '}
               {cellData.shopperId != '' ? `(${cellData.shopperId})` : ''}
             </span>
             <Tooltip
