@@ -94,7 +94,7 @@
                     decimal totalRating = reviews.Sum(r => r.Rating);
                     averageRating = totalRating / numberOfReviews;
 
-                    Console.WriteLine($" >>>>>>>>>>>>>>>>>>>>>>>>>>>> Average Rating for {productId}: {averageRating} from {numberOfReviews} reviews.");
+                    //Console.WriteLine($" >>>>>>>>>>>>>>>>>>>>>>>>>>>> Average Rating for {productId}: {averageRating} from {numberOfReviews} reviews.");
                 }
             }
 
@@ -138,7 +138,7 @@
             if (to > 0)
             {
                 take = Math.Min((to - from) + 1, maximumReturnedRecords);
-                Console.WriteLine($"    >>>>>>>>>>>>>>>>>  Take {take} reviews {from}-{to}");
+                //Console.WriteLine($"    >>>>>>>>>>>>>>>>>  Take {take} reviews {from}-{to}");
             }
 
             reviews = reviews.Skip(from - 1).Take(take).ToList();
@@ -180,22 +180,46 @@
 
                         if (descendingOrder)
                         {
-                            reviews = reviews.OrderByDescending(x => pi.GetValue(x, null)).ToList();
+                            if (pi.Name.Equals("ReviewDateTime"))
+                            {
+                                reviews = reviews.OrderByDescending(x =>
+                                {
+                                    DateTime dt;
+                                    DateTime.TryParse(x.ReviewDateTime, out dt);
+                                    return dt;
+                                }).ToList();
+                            }
+                            else
+                            {
+                                reviews = reviews.OrderByDescending(x => pi.GetValue(x, null)).ToList();
+                            }
                         }
                         else
                         {
-                            reviews = reviews.OrderBy(x => pi.GetValue(x, null)).ToList();
+                            if (pi.Name.Equals("ReviewDateTime"))
+                            {
+                                reviews = reviews.OrderBy(x =>
+                                {
+                                    DateTime dt;
+                                    DateTime.TryParse(x.ReviewDateTime, out dt);
+                                    return dt;
+                                }).ToList();
+                            }
+                            else
+                            {
+                                reviews = reviews.OrderBy(x => pi.GetValue(x, null)).ToList();
+                            }
                         }
                     }
                     else
                     {
-                        //Console.WriteLine($"    >>>>>>>>>>>>>>>>>   Could not get {orderBy} property info.");
+                        Console.WriteLine($"    >>>>>>>>>>>>>>>>>   Could not get {orderBy} property info.");
                     }
                 }
 
                 if (!string.IsNullOrEmpty(status))
                 {
-                    Console.WriteLine($"------------||| Returning order with Approved status of {status} ||||----------------");
+                    //Console.WriteLine($"------------||| Returning order with Approved status of {status} ||||----------------");
                     reviews = reviews.Where(x => x.Approved.Equals(Boolean.Parse(status))).ToList();
                 }
             }
@@ -225,11 +249,11 @@
             }
 
             limit = Math.Min(limit, maximumReturnedRecords);
-            Console.WriteLine($"    >>>>>>>>>>>>>>>>>  GetReviewsByProductId: {productId}  offset:{offset} limit:{limit} orderBy:{orderBy}");
+            //Console.WriteLine($"    >>>>>>>>>>>>>>>>>  GetReviewsByProductId: {productId}  offset:{offset} limit:{limit} orderBy:{orderBy}");
             IList<Review> reviews = await this._productReviewRepository.GetProductReviewsAsync(productId);
             if (reviews != null && reviews.Count > 0)
             {
-                Console.WriteLine($"    >>>>>>>>>>>>>>>>>   {reviews.Count} reviews for {productId} (unfiltered)");
+                //Console.WriteLine($"    >>>>>>>>>>>>>>>>>   {reviews.Count} reviews for {productId} (unfiltered)");
                 if (!string.IsNullOrEmpty(orderBy))
                 {
                     Console.WriteLine($"    >>>>>>>>>>>>>>>>>   Order By {orderBy}");
