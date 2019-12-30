@@ -99,7 +99,12 @@ const ApproveReview = (props: ApproveReviewProps & InjectedIntlProps) => {
       <ToastProvider positioning="window">
         <div className="nh5">
           <div className="b f5 pt5 pb5">
-            {displayedReviews.length} Review(s)
+            <FormattedMessage
+              id="admin/reviews.table.modal.approveReviews.total"
+              values={{
+                total: displayedReviews.length,
+              }}
+            />
           </div>
           <Table
             density="low"

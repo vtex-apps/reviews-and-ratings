@@ -8,6 +8,14 @@ import React, {
 import ApolloClient, { ApolloQueryResult } from 'apollo-client'
 import { NormalizedCacheObject } from 'apollo-cache-inmemory'
 import { withApollo } from 'react-apollo'
+import {
+  FormattedMessage,
+  InjectedIntlProps,
+  injectIntl,
+  defineMessages,
+} from 'react-intl'
+// eslint-disable-next-line lodash/import-scope
+import flowRight from 'lodash.flowright'
 import { path } from 'ramda'
 import { ProductContext, Product } from 'vtex.product-context'
 import { Link, canUseDOM } from 'vtex.render-runtime'
@@ -109,51 +117,6 @@ type ReducerActions =
   | { type: 'SET_SETTINGS'; args: { settings: AppSettings } }
   | { type: 'SET_AUTHENTICATED'; args: { authenticated: boolean } }
 
-const options = [
-  {
-    label: 'Most Recent',
-    value: 'ReviewDateTime:desc',
-  },
-  {
-    label: 'Oldest',
-    value: 'ReviewDateTime:asc',
-  },
-  {
-    label: 'Highest Rated',
-    value: 'Rating:desc',
-  },
-  {
-    label: 'Lowest Rated',
-    value: 'Rating:asc',
-  },
-]
-
-const getTimeAgo = (time: string) => {
-  let before = new Date(time + ' UTC')
-  let now = new Date()
-  let diff = new Date(now.valueOf() - before.valueOf())
-
-  let minutes = diff.getUTCMinutes()
-  let hours = diff.getUTCHours()
-  let days = diff.getUTCDate() - 1
-  let months = diff.getUTCMonth()
-  let years = diff.getUTCFullYear() - 1970
-
-  if (years > 0) {
-    return `${years} ${years > 1 ? 'years' : 'year'} ago`
-  } else if (months > 0) {
-    return `${months} ${months > 1 ? 'months' : 'month'} ago`
-  } else if (days > 0) {
-    return `${days} ${days > 1 ? 'days' : 'day'} ago`
-  } else if (hours > 0) {
-    return `${hours} ${hours > 1 ? 'hours' : 'hour'} ago`
-  } else if (minutes > 0) {
-    return `${minutes} ${minutes > 1 ? 'minutes' : 'minute'} ago`
-  } else {
-    return `just now`
-  }
-}
-
 const initialState = {
   sort: 'ReviewDateTime:desc',
   from: 1,
@@ -237,14 +200,164 @@ const reducer = (state: State, action: ReducerActions) => {
   }
 }
 
-const Reviews: FunctionComponent<BlockClass & Props> = props => {
-  const { blockClass, client } = props
+const messages = defineMessages({
+  sortMostRecent: {
+    id: 'store/reviews.list.sortOptions.mostRecent',
+    defaultMessage: 'Most Recent',
+  },
+  sortOldest: {
+    id: 'store/reviews.list.sortOptions.oldest',
+    defaultMessage: 'Oldest',
+  },
+  sortHighestRated: {
+    id: 'store/reviews.list.sortOptions.highestRated',
+    defaultMessage: 'Highest Rated',
+  },
+  sortLowestRated: {
+    id: 'store/reviews.list.sortOptions.lowestRated',
+    defaultMessage: 'Lowest Rated',
+  },
+  timeAgo: {
+    id: 'store/reviews.list.timeAgo',
+    defaultMessage: 'ago',
+  },
+  timeAgoYear: {
+    id: 'store/reviews.list.timeAgo.year',
+    defaultMessage: 'year',
+  },
+  timeAgoYears: {
+    id: 'store/reviews.list.timeAgo.years',
+    defaultMessage: 'years',
+  },
+  timeAgoMonth: {
+    id: 'store/reviews.list.timeAgo.month',
+    defaultMessage: 'month',
+  },
+  timeAgoMonths: {
+    id: 'store/reviews.list.timeAgo.months',
+    defaultMessage: 'months',
+  },
+  timeAgoWeek: {
+    id: 'store/reviews.list.timeAgo.week',
+    defaultMessage: 'week',
+  },
+  timeAgoWeeks: {
+    id: 'store/reviews.list.timeAgo.weeks',
+    defaultMessage: 'weeks',
+  },
+  timeAgoDay: {
+    id: 'store/reviews.list.timeAgo.day',
+    defaultMessage: 'day',
+  },
+  timeAgoDays: {
+    id: 'store/reviews.list.timeAgo.days',
+    defaultMessage: 'days',
+  },
+  timeAgoHour: {
+    id: 'store/reviews.list.timeAgo.hour',
+    defaultMessage: 'hour',
+  },
+  timeAgoHours: {
+    id: 'store/reviews.list.timeAgo.hours',
+    defaultMessage: 'hours',
+  },
+  timeAgoMinute: {
+    id: 'store/reviews.list.timeAgo.minute',
+    defaultMessage: 'minute',
+  },
+  timeAgoMinutes: {
+    id: 'store/reviews.list.timeAgo.minutes',
+    defaultMessage: 'minutes',
+  },
+  timeAgoJustNow: {
+    id: 'store/reviews.list.timeAgo.justNow',
+    defaultMessage: 'just now',
+  },
+  anonymous: {
+    id: 'store/reviews.list.anonymous',
+    defaultMessage: 'Anonymous',
+  },
+  textOf: {
+    id: 'store/reviews.list.pagination.textOf',
+    defaultMessage: 'of',
+  },
+})
+
+const Reviews: FunctionComponent<
+  BlockClass & InjectedIntlProps & Props
+> = props => {
+  const { blockClass, client, intl } = props
 
   const baseClassNames = generateBlockClass(styles.container, blockClass)
   const { product }: ProductContext = useContext(ProductContext)
   const { productId }: Product = product || {}
 
   const [state, dispatch] = useReducer(reducer, initialState)
+
+  const options = [
+    {
+      label: intl.formatMessage(messages.sortMostRecent),
+      value: 'ReviewDateTime:desc',
+    },
+    {
+      label: intl.formatMessage(messages.sortOldest),
+      value: 'ReviewDateTime:asc',
+    },
+    {
+      label: intl.formatMessage(messages.sortHighestRated),
+      value: 'Rating:desc',
+    },
+    {
+      label: intl.formatMessage(messages.sortLowestRated),
+      value: 'Rating:asc',
+    },
+  ]
+
+  const getTimeAgo = (time: string) => {
+    let before = new Date(time + ' UTC')
+    let now = new Date()
+    let diff = new Date(now.valueOf() - before.valueOf())
+
+    let minutes = diff.getUTCMinutes()
+    let hours = diff.getUTCHours()
+    let days = diff.getUTCDate() - 1
+    let months = diff.getUTCMonth()
+    let years = diff.getUTCFullYear() - 1970
+
+    if (years > 0) {
+      return `${years} ${
+        years > 1
+          ? intl.formatMessage(messages.timeAgoYears)
+          : intl.formatMessage(messages.timeAgoYear)
+      } ${intl.formatMessage(messages.timeAgo)}`
+    } else if (months > 0) {
+      return `${months} ${
+        months > 1
+          ? intl.formatMessage(messages.timeAgoMonths)
+          : intl.formatMessage(messages.timeAgoMonth)
+      } ${intl.formatMessage(messages.timeAgo)}`
+    } else if (days > 0) {
+      return `${days} ${
+        days > 1
+          ? intl.formatMessage(messages.timeAgoDays)
+          : intl.formatMessage(messages.timeAgoDay)
+      } ${intl.formatMessage(messages.timeAgo)}`
+    } else if (hours > 0) {
+      return `${hours} ${
+        hours > 1
+          ? intl.formatMessage(messages.timeAgoHours)
+          : intl.formatMessage(messages.timeAgoHour)
+      } ${intl.formatMessage(messages.timeAgo)}`
+    } else if (minutes > 0) {
+      return `${minutes} ${
+        minutes > 1
+          ? intl.formatMessage(messages.timeAgoMinutes)
+          : intl.formatMessage(messages.timeAgoMinute)
+      } ${intl.formatMessage(messages.timeAgo)}`
+    } else {
+      return intl.formatMessage(messages.timeAgoJustNow)
+    }
+  }
 
   const getLocation = () =>
     canUseDOM
@@ -341,20 +454,32 @@ const Reviews: FunctionComponent<BlockClass & Props> = props => {
 
   return (
     <div className={`${baseClassNames} review mw8 center ph5`}>
-      <h3 className="review__title t-heading-3 bb b--muted-5 mb5">Reviews</h3>
+      <h3 className="review__title t-heading-3 bb b--muted-5 mb5">
+        <FormattedMessage id="store/reviews.list.title" />
+      </h3>
       <div className="review__rating">
         {!state.hasTotal || !state.hasAverage ? (
-          <Fragment>Loading summary...</Fragment>
+          <FormattedMessage id="store/reviews.list.summary.loading" />
         ) : state.total == 0 ? null : (
           <Fragment>
             <div className="t-heading-4">
               <Stars rating={state.average} />
             </div>
             <span className="review__rating--average dib v-mid">
-              {state.average} Average Rating
+              <FormattedMessage
+                id="store/reviews.list.summary.averageRating"
+                values={{
+                  average: state.average,
+                }}
+              />
             </span>{' '}
             <span className="review__rating--count dib v-mid">
-              ({state.total} Reviews)
+              <FormattedMessage
+                id="store/reviews.list.summary.totalReviews"
+                values={{
+                  total: state.total,
+                }}
+              />
             </span>
           </Fragment>
         )}
@@ -367,7 +492,7 @@ const Reviews: FunctionComponent<BlockClass & Props> = props => {
           <Collapsible
             header={
               <span className="c-action-primary hover-c-action-primary">
-                Write a review
+                <FormattedMessage id="store/reviews.list.writeReview" />
               </span>
             }
             onClick={() => {
@@ -385,13 +510,13 @@ const Reviews: FunctionComponent<BlockClass & Props> = props => {
             query={`returnUrl=${encodeURIComponent(url)}`}
             className={`h1 w2 tc flex items-center w-100-s h-100-s pa4-s`}
           >
-            Please log in to write a review.
+            <FormattedMessage id="store/reviews.list.login" />
           </Link>
         )}
       </div>
       <div className="review__comments">
         {state.reviews === null ? (
-          <Fragment>Loading reviews...</Fragment>
+          <FormattedMessage id="store/reviews.list.loading" />
         ) : state.reviews.length ? (
           <Fragment>
             <div className="flex mb7">
@@ -436,15 +561,21 @@ const Reviews: FunctionComponent<BlockClass & Props> = props => {
                     <ul className="pa0 mv2 t-small">
                       {review.verifiedPurchaser ? (
                         <li className="dib mr5">
-                          <IconSuccess /> Verified Purchaser
+                          <IconSuccess />{' '}
+                          <FormattedMessage id="store/reviews.list.verifiedPurchaser" />
                         </li>
                       ) : null}
                       <li className="dib mr2">
-                        Submitted{' '}
+                        <FormattedMessage id="store/reviews.list.submitted" />{' '}
                         <strong>{getTimeAgo(review.reviewDateTime)}</strong>
                       </li>
                       <li className="dib mr5">
-                        by <strong>{review.reviewerName}</strong>
+                        <FormattedMessage id="store/reviews.list.by" />{' '}
+                        <strong>
+                          {review.reviewerName != ''
+                            ? review.reviewerName
+                            : intl.formatMessage(messages.anonymous)}
+                        </strong>
                         {state.settings &&
                           state.settings.useLocation &&
                           review.location &&
@@ -463,7 +594,7 @@ const Reviews: FunctionComponent<BlockClass & Props> = props => {
                 textShowRows=""
                 currentItemFrom={state.from}
                 currentItemTo={state.to}
-                textOf="of"
+                textOf={intl.formatMessage(messages.textOf)}
                 totalItems={state.total}
                 onNextClick={() => {
                   dispatch({
@@ -481,7 +612,7 @@ const Reviews: FunctionComponent<BlockClass & Props> = props => {
         ) : (
           <div className="review__comment bw2 bb b--muted-5 mb5 pb4">
             <h5 className="review__comment--user lh-copy mw9 t-heading-5 mv5">
-              No reviews.
+              <FormattedMessage id="store/reviews.list.emptyState" />
             </h5>
           </div>
         )}
@@ -490,4 +621,4 @@ const Reviews: FunctionComponent<BlockClass & Props> = props => {
   )
 }
 
-export default withApollo(Reviews)
+export default flowRight([withApollo, injectIntl])(Reviews)

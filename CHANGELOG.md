@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Implemented full internationalization for admin and frontend messages
+
 ## [1.1.2] - 2019-12-17
 
 ### Changed

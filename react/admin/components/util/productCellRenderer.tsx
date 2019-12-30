@@ -84,7 +84,12 @@ const IntlProductCellRenderer: React.FC<Props> = ({ cellData, intl }) => {
           )}
           <p className="ma0 flex items-center">
             <span className="fw4 mr2 truncate" title={cellData.productId}>
-              Product ID: {cellData.productId}
+              <FormattedMessage
+                id="admin/reviews.table.productCell.productId"
+                values={{
+                  productId: cellData.productId,
+                }}
+              />
             </span>
             <Tooltip
               label={intl.formatMessage(messages.copyTitle)}
@@ -110,7 +115,14 @@ const IntlProductCellRenderer: React.FC<Props> = ({ cellData, intl }) => {
           </p>
           <p className="ma0 mt3 t-small c-muted-1">
             {cellData.sku ? (
-              <span className="truncate">SKU: {cellData.sku}</span>
+              <span className="truncate">
+                <FormattedMessage
+                  id="admin/reviews.table.productCell.SKU"
+                  values={{
+                    sku: cellData.sku,
+                  }}
+                />
+              </span>
             ) : null}
           </p>
         </div>
