@@ -132,7 +132,7 @@
             return reviews;
         }
 
-        public IList<Review> LimitReviews(IList<Review> reviews, int from, int to)
+        public async Task<IList<Review>> LimitReviews(IList<Review> reviews, int from, int to)
         {
             int take = maximumReturnedRecords;
             if (to > 0)
@@ -146,7 +146,7 @@
             return reviews;
         }
 
-        public IList<Review> FilterReviews(IList<Review> reviews, string searchTerm, string orderBy, string status)
+        public async Task<IList<Review>> FilterReviews(IList<Review> reviews, string searchTerm, string orderBy, string status)
         {
             if (reviews != null && reviews.Count > 0)
             {
@@ -231,8 +231,8 @@
         public async Task<IList<Review>> GetReviews(string searchTerm, int from, int to, string orderBy, string status)
         {
             IList<Review> reviews = await GetReviews();
-            reviews = FilterReviews(reviews, searchTerm, orderBy, status);
-            reviews = LimitReviews(reviews, from, to);
+            reviews = await FilterReviews(reviews, searchTerm, orderBy, status);
+            reviews = await LimitReviews(reviews, from, to);
             return reviews;
         }
 
