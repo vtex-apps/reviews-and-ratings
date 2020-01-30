@@ -83,6 +83,7 @@
             catch(Exception ex)
             {
                 Console.WriteLine($"DeserializeObject Error: {ex.Message} ");
+                Console.WriteLine($"{{\"__VTEX_IO_LOG\":true, \"service\":\"review\", \"error\":\"{ex.Message}\", \"productId\":\"{productId}\"}}");
             }
 
             //Console.WriteLine($"productReviews.Count = {productReviews.Count}");
