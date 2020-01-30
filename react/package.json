@@ -42,5 +42,5 @@
     "vtex.render-runtime": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.render-runtime@8.76.0/public/@types/vtex.render-runtime",
     "vtex.product-summary": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.product-summary@2.43.4/public/_types/react"
   },
-  "version": "1.2.1"
+  "version": "1.2.2"
 }
