@@ -1,7 +1,7 @@
 {
   "name": "reviews-and-ratings",
   "vendor": "vtex",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "title": "Reviews and Ratings",
   "description": "An app for saving and retrieving product reviews and ratings.",
   "scripts": {
