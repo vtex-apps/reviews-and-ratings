@@ -21,8 +21,7 @@ import { ProductContext, Product } from 'vtex.product-context'
 import { Link, canUseDOM } from 'vtex.render-runtime'
 import Stars from './components/Stars'
 import ReviewForm from './ReviewForm'
-import { generateBlockClass, BlockClass } from '@vtex/css-handles'
-import styles from './styles.css'
+import { useCssHandles } from 'vtex.css-handles'
 import AppSettings from '../graphql/appSettings.graphql'
 import ReviewsByProductId from '../graphql/reviewsByProductId.graphql'
 import AverageRatingByProductId from '../graphql/averageRatingByProductId.graphql'
@@ -67,10 +66,6 @@ interface ReviewsResult {
 interface ReviewsData {
   reviewsByProductId: ReviewsResult
 }
-
-// interface TotalData {
-//   totalReviewsByProductId: number
-// }
 
 interface AverageData {
   averageRatingByProductId: number
@@ -283,12 +278,12 @@ const messages = defineMessages({
   },
 })
 
-const Reviews: FunctionComponent<
-  BlockClass & InjectedIntlProps & Props
-> = props => {
-  const { blockClass, client, intl } = props
+const CSS_HANDLES = ['container', 'writeReviewContainer'] as const
 
-  const baseClassNames = generateBlockClass(styles.container, blockClass)
+const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
+  const { client, intl } = props
+
+  const handles = useCssHandles(CSS_HANDLES)
   const { product }: ProductContext = useContext(ProductContext)
   const { productId }: Product = product || {}
 
@@ -453,7 +448,7 @@ const Reviews: FunctionComponent<
   }, [client, productId, state.from, state.to, state.sort, state.settings])
 
   return (
-    <div className={`${baseClassNames} review mw8 center ph5`}>
+    <div className={`${handles.container} review mw8 center ph5`}>
       <h3 className="review__title t-heading-3 bb b--muted-5 mb5">
         <FormattedMessage id="store/reviews.list.title" />
       </h3>
@@ -484,7 +479,7 @@ const Reviews: FunctionComponent<
           </Fragment>
         )}
       </div>
-      <div className="mv5">
+      <div className={`${handles.writeReviewContainer} mv5`}>
         {(state.settings && state.settings.allowAnonymousReviews) ||
         (state.settings &&
           !state.settings.allowAnonymousReviews &&

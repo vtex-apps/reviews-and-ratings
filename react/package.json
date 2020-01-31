@@ -21,7 +21,8 @@
   },
   "devDependencies": {
     "@types/classnames": "^2.2.7",
-    "@types/jest": "^24.0.11",
+    "@types/graphql": "^14.5.0",
+    "@types/jest": "^25.1.1",
     "@types/lodash.flowright": "^3.5.6",
     "@types/node": "^11.13.0",
     "@types/prop-types": "^15.7.0",
@@ -29,18 +30,19 @@
     "@types/react": "^16.8.10",
     "@types/react-intl": "^2.3.17",
     "@vtex/test-tools": "^0.2.0",
+    "@vtex/tsconfig": "^0.4.3",
     "eslint": "^5.16.0",
     "eslint-config-vtex-react": "^4.1.0",
     "prettier": "^1.18.2",
-    "vtex.store": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.store@2.70.2/public/_types/react",
-    "vtex.product-review-interfaces": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.product-review-interfaces@1.0.2/public/_types/react",
-    "vtex.product-context": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.product-context@0.4.0/public/@types/vtex.product-context",
-    "vtex.search-graphql": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.search-graphql@0.8.3/public/@types/vtex.search-graphql",
-    "vtex.channels-components": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.channels-components@4.4.1/public/@types/vtex.channels-components",
-    "vtex.styleguide": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.styleguide@9.91.3/public/_types/react",
-    "vtex.paginated-table": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.paginated-table@0.5.6/public/@types/vtex.paginated-table",
-    "vtex.render-runtime": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.render-runtime@8.76.0/public/@types/vtex.render-runtime",
-    "vtex.product-summary": "http://vtex.vteximg.com.br/_v/public/typings/v1/vtex.product-summary@2.43.4/public/_types/react"
+    "vtex.channels-components": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.channels-components@4.6.1/public/@types/vtex.channels-components",
+    "vtex.paginated-table": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.paginated-table@0.7.1/public/@types/vtex.paginated-table",
+    "vtex.product-context": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.product-context@0.7.0/public/@types/vtex.product-context",
+    "vtex.product-review-interfaces": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.product-review-interfaces@1.0.2/public/_types/react",
+    "vtex.product-summary": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.product-summary@2.50.1/public/_types/react",
+    "vtex.render-runtime": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.render-runtime@8.90.2/public/@types/vtex.render-runtime",
+    "vtex.search-graphql": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.search-graphql@0.15.0/public/@types/vtex.search-graphql",
+    "vtex.store": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.store@2.85.4/public/@types/vtex.store",
+    "vtex.styleguide": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.styleguide@9.108.1/public/@types/vtex.styleguide"
   },
   "version": "1.2.2"
 }

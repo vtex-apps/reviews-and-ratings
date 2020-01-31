@@ -15,15 +15,15 @@ The Reviews and Ratings app is a VTEX native solution for product review and rat
 
 3. Once in the app's page, define the app’s configurations in the **setup** section:
 
-![setup-reviews-and-ratings](https://user-images.githubusercontent.com/52087100/71026561-4330e200-20e8-11ea-9f44-167cf0e77fc6.png) 
+![setup-reviews-and-ratings](https://user-images.githubusercontent.com/52087100/71026561-4330e200-20e8-11ea-9f44-167cf0e77fc6.png)
 
 - **Allow Anonymous Reviews**: if unchecked, only logged-in shoppers will be able to review products.
 
-- **Require Admin Approval**: Checking this box activates the review moderation system. Newly submitted reviews will not be displayed on the store website until an administrator approves them in the account's admin. 
+- **Require Admin Approval**: Checking this box activates the review moderation system. Newly submitted reviews will not be displayed on the store website until an administrator approves them in the account's admin.
 
 - **Ask For Reviewer's Location**: Checking this box activates an optional review field. Shoppers that submit reviews will be asked to fill in their current location (i.e. "Boston, MA").
 
- :warning: This app fills the standard VTEX review blocks with content using abstract interfaces from  `vtex.product-review-interfaces` . The **VTEX review blocks** are:
+:warning: This app fills the standard VTEX review blocks with content using abstract interfaces from `vtex.product-review-interfaces` . The **VTEX review blocks** are:
 
 - `"product-reviews"`: This block can be added to the product page (`store.product`). It renders a paginated list of reviews for the product being viewed, as well as a form for the shopper to add a new review.
 
@@ -31,32 +31,32 @@ The Reviews and Ratings app is a VTEX native solution for product review and rat
 
 - `"product-rating-inline"`: Similar to the previous block, but intended to be used in product shelves. The block displays the product's average rating only.
 
-## Modus Operandi 
+## Modus Operandi
 
-As said previously, the app may be configured to use a **review moderation interface** where an administrator is responsible for approving the reviews before they are displayed on the store website. 
+As said previously, the app may be configured to use a **review moderation interface** where an administrator is responsible for approving the reviews before they are displayed on the store website.
 
-To access and use the review moderation admin interface, follow the instruction below: 
+To access and use the review moderation admin interface, follow the instruction below:
 
 1. In the account's admin, navigate to **Catalog** using the admin's sidebar;
 2. Access the **Reviews** section;
-3.  You may view either  **Pending**  or  **Approved**  reviews using the tabs at the top of the page. 
+3. You may view either **Pending** or **Approved** reviews using the tabs at the top of the page.
 
 Individual pending reviews may be either approved or deleted using the Kebab Menu (3 dots button) in the right column or selecting the checkbox in the left. Multiple reviews can also be selected using the checkboxes, being approved or deleted in bulk.
 
-Approved reviews may be deleted as well, either individually or in bulk. 
+Approved reviews may be deleted as well, either individually or in bulk.
 
-## Customization 
+## Customization
 
-In order to apply CSS customizations in this and other blocks, follow the instructions given in the recipe on [Using CSS Handles for store customization](https://vtex.io/docs/recipes/style/using-css-handles-for-store-customization). 
+In order to apply CSS customizations in this and other blocks, follow the instructions given in the recipe on [Using CSS Handles for store customization](https://vtex.io/docs/recipes/style/using-css-handles-for-store-customization).
 
-| CSS Handles |
-| ----------- | 
-| `stars` | 
-| `starpicker`      | 
-| `star`     | 
-| `star--filled`  | 
-| `star--empty` |
-| `container`  | 
-| `formContainer`  | 
-| `formContainer`  | 
-| `summaryContainer` |
+| CSS Handles            |
+| ---------------------- |
+| `stars`                |
+| `starpicker`           |
+| `star`                 |
+| `star--filled`         |
+| `star--empty`          |
+| `container`            |
+| `formContainer`        |
+| `writeReviewContainer` |
+| `summaryContainer`     |

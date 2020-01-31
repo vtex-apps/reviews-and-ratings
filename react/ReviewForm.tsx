@@ -13,8 +13,7 @@ import {
 // eslint-disable-next-line lodash/import-scope
 import flowRight from 'lodash.flowright'
 import { path } from 'ramda'
-import { generateBlockClass, BlockClass } from '@vtex/css-handles'
-import styles from './styles.css'
+import { useCssHandles } from 'vtex.css-handles'
 import NewReview from '../graphql/newReview.graphql'
 import HasShopperReviewed from '../graphql/hasShopperReviewed.graphql'
 import { Card, Input, Button, Textarea } from 'vtex.styleguide'
@@ -85,9 +84,6 @@ const initialState = {
   },
   showValidationErrors: false,
 }
-
-// const convertToBool = (str: string | undefined) =>
-//   !!str && str.toLowerCase() === 'true'
 
 const reducer = (state: State, action: ReducerActions) => {
   switch (action.type) {
@@ -196,13 +192,14 @@ const messages = defineMessages({
   },
 })
 
-export const ReviewForm: FC<BlockClass & InjectedIntlProps & Props> = ({
-  blockClass,
+const CSS_HANDLES = ['formContainer'] as const
+
+export const ReviewForm: FC<InjectedIntlProps & Props> = ({
   intl,
   client,
   settings,
 }) => {
-  const baseClassNames = generateBlockClass(styles.formContainer, blockClass)
+  const handles = useCssHandles(CSS_HANDLES)
 
   const { product }: ProductContext = useContext(ProductContext)
   const { productId }: Product = product || {}
@@ -236,17 +233,9 @@ export const ReviewForm: FC<BlockClass & InjectedIntlProps & Props> = ({
       })
 
       const profile = {
-        //document: path(['document', 'value'], namespaces.profile),
         email:
           path(['email', 'value'], namespaces.profile) ||
           path(['storeUserEmail', 'value'], namespaces.authentication),
-        // firstName: path(['firstName', 'value'], namespaces.profile),
-        // id: path(['id', 'value'], namespaces.profile),
-        // isAuthenticatedAsCustomer: convertToBool(
-        //   path(['isAuthenticated', 'value'], namespaces.profile)
-        // ),
-        // lastName: path(['lastName', 'value'], namespaces.profile),
-        // phone: path(['phone', 'value'], namespaces.profile),
       }
 
       if (typeof profile.email == 'string') {
@@ -324,7 +313,7 @@ export const ReviewForm: FC<BlockClass & InjectedIntlProps & Props> = ({
   }
 
   return (
-    <div className={`${baseClassNames} bg-muted-5 pa5 mt2`}>
+    <div className={`${handles.formContainer} bg-muted-5 pa5 mt2`}>
       <Card>
         <h3>
           <FormattedMessage id="store/reviews.form.title" />

@@ -24,7 +24,8 @@
     "vtex.store": "2.x",
     "vtex.search-graphql": "0.x",
     "vtex.channels-components": "4.x",
-    "vtex.paginated-table": "0.x"
+    "vtex.paginated-table": "0.x",
+    "vtex.css-handles": "0.x"
   },
   "settingsSchema": {
     "title": "Reviews and Ratings",
