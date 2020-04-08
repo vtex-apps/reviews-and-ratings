@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added 
+
+- New feature switch to swap collapsible review text accordions for staticly displayed reviews with show more/show less links 
+
 ## [1.2.3] - 2020-01-31
 
 ### Added
