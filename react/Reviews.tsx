@@ -559,7 +559,9 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
                         <li className="dib mr5">
                           <FormattedMessage id="store/reviews.list.by" />{' '}
                           <strong>
-                            {review.reviewerName != ''
+                            {review.reviewerName != '' &&
+                            review.reviewerName != null &&
+                            review.reviewerName != undefined
                               ? review.reviewerName
                               : intl.formatMessage(messages.anonymous)}
                           </strong>
@@ -616,7 +618,9 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
                         <li className="dib mr5">
                           <FormattedMessage id="store/reviews.list.by" />{' '}
                           <strong>
-                            {review.reviewerName != ''
+                            {review.reviewerName != '' &&
+                            review.reviewerName != null &&
+                            review.reviewerName != undefined
                               ? review.reviewerName
                               : intl.formatMessage(messages.anonymous)}
                           </strong>
