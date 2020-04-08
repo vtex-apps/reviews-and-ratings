@@ -537,54 +537,40 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
                   key={i}
                   className="review__comment bw2 bb b--muted-5 mb5 pb4"
                 >
-                  <Collapsible
-                    header={
+                  {state.settings.defaultOpen ? (
+                    <div>
                       <div className="review__comment--rating t-heading-5">
                         <Stars rating={review.rating} /> {` `}
                         <span className="review__comment--user lh-copy mw9 t-heading-5 mt0 mb2">
                           {review.title}
                         </span>
                       </div>
-                    }
-                    onClick={() => {
-                      dispatch({
-                        type: 'TOGGLE_REVIEW_ACCORDION',
-                        args: {
-                          reviewNumber: i,
-                        },
-                      })
-                    }}
-                    isOpen={
-                      state.settings.defaultOpen || state.openReview === i
-                    }
-                  >
-                    <ul className="pa0 mv2 t-small">
-                      {review.verifiedPurchaser ? (
-                        <li className="dib mr5">
-                          <IconSuccess />{' '}
-                          <FormattedMessage id="store/reviews.list.verifiedPurchaser" />
+                      <ul className="pa0 mv2 t-small">
+                        {review.verifiedPurchaser ? (
+                          <li className="dib mr5">
+                            <IconSuccess />{' '}
+                            <FormattedMessage id="store/reviews.list.verifiedPurchaser" />
+                          </li>
+                        ) : null}
+                        <li className="dib mr2">
+                          <FormattedMessage id="store/reviews.list.submitted" />{' '}
+                          <strong>{getTimeAgo(review.reviewDateTime)}</strong>
                         </li>
-                      ) : null}
-                      <li className="dib mr2">
-                        <FormattedMessage id="store/reviews.list.submitted" />{' '}
-                        <strong>{getTimeAgo(review.reviewDateTime)}</strong>
-                      </li>
-                      <li className="dib mr5">
-                        <FormattedMessage id="store/reviews.list.by" />{' '}
-                        <strong>
-                          {review.reviewerName != ''
-                            ? review.reviewerName
-                            : intl.formatMessage(messages.anonymous)}
-                        </strong>
-                        {state.settings &&
-                          state.settings.useLocation &&
-                          review.location &&
-                          review.location != '' && (
-                            <span>, {review.location}</span>
-                          )}
-                      </li>
-                    </ul>
-                    {state.settings.defaultOpen ? (
+                        <li className="dib mr5">
+                          <FormattedMessage id="store/reviews.list.by" />{' '}
+                          <strong>
+                            {review.reviewerName != ''
+                              ? review.reviewerName
+                              : intl.formatMessage(messages.anonymous)}
+                          </strong>
+                          {state.settings &&
+                            state.settings.useLocation &&
+                            review.location &&
+                            review.location != '' && (
+                              <span>, {review.location}</span>
+                            )}
+                        </li>
+                      </ul>
                       <p className="t-body lh-copy mw9">
                         <ShowMore
                           lines={3}
@@ -595,10 +581,56 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
                           {review.text}
                         </ShowMore>
                       </p>
-                    ) : (
+                    </div>
+                  ) : (
+                    <Collapsible
+                      header={
+                        <div className="review__comment--rating t-heading-5">
+                          <Stars rating={review.rating} /> {` `}
+                          <span className="review__comment--user lh-copy mw9 t-heading-5 mt0 mb2">
+                            {review.title}
+                          </span>
+                        </div>
+                      }
+                      onClick={() => {
+                        dispatch({
+                          type: 'TOGGLE_REVIEW_ACCORDION',
+                          args: {
+                            reviewNumber: i,
+                          },
+                        })
+                      }}
+                      isOpen={state.openReview === i}
+                    >
+                      <ul className="pa0 mv2 t-small">
+                        {review.verifiedPurchaser ? (
+                          <li className="dib mr5">
+                            <IconSuccess />{' '}
+                            <FormattedMessage id="store/reviews.list.verifiedPurchaser" />
+                          </li>
+                        ) : null}
+                        <li className="dib mr2">
+                          <FormattedMessage id="store/reviews.list.submitted" />{' '}
+                          <strong>{getTimeAgo(review.reviewDateTime)}</strong>
+                        </li>
+                        <li className="dib mr5">
+                          <FormattedMessage id="store/reviews.list.by" />{' '}
+                          <strong>
+                            {review.reviewerName != ''
+                              ? review.reviewerName
+                              : intl.formatMessage(messages.anonymous)}
+                          </strong>
+                          {state.settings &&
+                            state.settings.useLocation &&
+                            review.location &&
+                            review.location != '' && (
+                              <span>, {review.location}</span>
+                            )}
+                        </li>
+                      </ul>
                       <p className="t-body lh-copy mw9">{review.text}</p>
-                    )}
-                  </Collapsible>
+                    </Collapsible>
+                  )}
                 </div>
               )
             })}
