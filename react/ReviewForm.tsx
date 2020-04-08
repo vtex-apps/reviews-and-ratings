@@ -22,6 +22,7 @@ interface AppSettings {
   allowAnonymousReviews: boolean
   requireApproval: boolean
   useLocation: boolean
+  defaultOpen: boolean
 }
 
 interface Props {

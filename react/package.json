@@ -4,6 +4,7 @@
     "lint": "tsc --noEmit && eslint --ext ts,tsx . --fix"
   },
   "dependencies": {
+    "@types/react-show-more": "^2.0.1",
     "@vtex/css-handles": "^1.0.0",
     "apollo-cache-inmemory": "^1.6.3",
     "apollo-client": "^2.6.4",
@@ -17,7 +18,8 @@
     "react-apollo": "^3.1.1",
     "react-dom": "^16.8.3",
     "react-intl": "^2.7.2",
-    "typescript": "3.7.3"
+    "react-show-more": "^2.0.0",
+    "typescript": "3.8.3"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.7",

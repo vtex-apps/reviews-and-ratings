@@ -48,6 +48,12 @@
         "description": "Include a field for reviewer to input their location when submitting review",
         "type": "boolean",
         "default": false
+      },
+      "defaultOpen": {
+        "title": "Default all review accordions to open",
+        "description": "All review tabs on product page will default to open with review text truncated to x characters",
+        "type": "boolean",
+        "default": true
       }
     }
   },

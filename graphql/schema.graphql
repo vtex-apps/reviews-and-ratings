@@ -45,6 +45,7 @@ type AppSettings {
   allowAnonymousReviews: Boolean
   requireApproval: Boolean
   useLocation: Boolean
+  defaultOpen: Boolean
 }
 
 type Query {
