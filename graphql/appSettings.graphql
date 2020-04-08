@@ -3,5 +3,6 @@ query AppSettings {
     allowAnonymousReviews
     requireApproval
     useLocation
+    defaultOpen
   }
 }

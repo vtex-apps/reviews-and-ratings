@@ -25,6 +25,7 @@ import { useCssHandles } from 'vtex.css-handles'
 import AppSettings from '../graphql/appSettings.graphql'
 import ReviewsByProductId from '../graphql/reviewsByProductId.graphql'
 import AverageRatingByProductId from '../graphql/averageRatingByProductId.graphql'
+import ShowMore from 'react-show-more'
 
 import {
   IconSuccess,
@@ -78,6 +79,7 @@ interface AppSettings {
   allowAnonymousReviews: boolean
   requireApproval: boolean
   useLocation: boolean
+  defaultOpen: boolean
 }
 
 interface State {
@@ -124,6 +126,7 @@ const initialState = {
   showForm: false,
   openReview: null,
   settings: {
+    defaultOpen: false,
     allowAnonymousReviews: false,
     requireApproval: true,
     useLocation: false,
@@ -551,7 +554,9 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
                         },
                       })
                     }}
-                    isOpen={state.openReview === i}
+                    isOpen={
+                      state.settings.defaultOpen || state.openReview === i
+                    }
                   >
                     <ul className="pa0 mv2 t-small">
                       {review.verifiedPurchaser ? (
@@ -579,7 +584,20 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
                           )}
                       </li>
                     </ul>
-                    <p className="t-body lh-copy mw9">{review.text}</p>
+                    {state.settings.defaultOpen ? (
+                      <p className="t-body lh-copy mw9">
+                        <ShowMore
+                          lines={3}
+                          more="Show more"
+                          less="Show less"
+                          anchorClass=""
+                        >
+                          {review.text}
+                        </ShowMore>
+                      </p>
+                    ) : (
+                      <p className="t-body lh-copy mw9">{review.text}</p>
+                    )}
                   </Collapsible>
                 </div>
               )
