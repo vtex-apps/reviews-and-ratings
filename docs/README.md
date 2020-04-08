@@ -23,6 +23,8 @@ The Reviews and Ratings app is a VTEX native solution for product review and rat
 
 - **Ask For Reviewer's Location**: Checking this box activates an optional review field. Shoppers that submit reviews will be asked to fill in their current location (i.e. "Boston, MA").
 
+- **Default all review accordions to open**: Checking this box will cause all review accordions on the product page to default to open with review text limited to 3 lines. Reviews with more than 3 lines of text will be truncated with and ellipsis and a "Show More" link that can be used to display the whole review text.
+
 :warning: This app fills the standard VTEX review blocks with content using abstract interfaces from `vtex.product-review-interfaces` . The **VTEX review blocks** are:
 
 - `"product-reviews"`: This block can be added to the product page (`store.product`). It renders a paginated list of reviews for the product being viewed, as well as a form for the shopper to add a new review.
