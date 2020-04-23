@@ -1,4 +1,4 @@
-📢 Use this project, [contribute](https://github.com/vtex-apps/breadcrumb) to it or open issues to help evolve it using [Store Discussion](https://github.com/vtex-apps/store-discussion).
+=� Use this project, [contribute](https://github.com/vtex-apps/breadcrumb) to it or open issues to help evolve it using [Store Discussion](https://github.com/vtex-apps/store-discussion).
 
 # Reviews and Ratings
 
@@ -13,7 +13,7 @@ The Reviews and Ratings app is a VTEX native solution for product review and rat
 
 ![apps-reviews-and-ratings](https://user-images.githubusercontent.com/52087100/71026670-77a49e00-20e8-11ea-9e01-0cb4dec12a56.png)
 
-3. Once in the app's page, define the app’s configurations in the **setup** section:
+3. Once in the app's page, define the apps configurations in the **setup** section:
 
 ![setup-reviews-and-ratings](https://user-images.githubusercontent.com/52087100/71026561-4330e200-20e8-11ea-9f44-167cf0e77fc6.png)
 
@@ -62,3 +62,8 @@ In order to apply CSS customizations in this and other blocks, follow the instru
 | `formContainer`        |
 | `writeReviewContainer` |
 | `summaryContainer`     |
+
+
+**Upcoming documentation:**
+
+ - [Add es locale translation](https://github.com/vtex-apps/reviews-and-ratings/pull/15)
