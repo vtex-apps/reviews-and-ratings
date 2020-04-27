@@ -1,10 +1,10 @@
 declare module 'vtex.product-summary' {
-  import { Context } from 'react'
+  import React from 'react'
 
   interface ProductSummary {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     product: any
   }
 
-  export const ProductSummaryContext = Context
+  export const ProductSummaryContext: React.Context
 }

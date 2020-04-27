@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useRuntime } from 'vtex.render-runtime'
+
 import { tuple } from '.'
 
 const useSearch = () => {

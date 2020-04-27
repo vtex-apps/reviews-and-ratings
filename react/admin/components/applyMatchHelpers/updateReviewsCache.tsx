@@ -1,4 +1,6 @@
 import { ObservableQueryFields } from 'react-apollo'
+import { DataProxy } from 'apollo-cache'
+
 import {
   SearchReviewArgs,
   SearchReviewData,
@@ -6,8 +8,6 @@ import {
   ApplyMatchData,
   // GenericActionResponse,
 } from '../../types'
-import { DataProxy } from 'apollo-cache'
-
 import reviews from '../../../../graphql/reviews.graphql'
 
 const updateCache = (
@@ -58,14 +58,12 @@ const updateCache = (
     })
 
     const listLength =
-      searchReviewsArgs &&
-      searchReviewsArgs.to &&
+      searchReviewsArgs?.to &&
       (searchReviewsArgs.from || searchReviewsArgs.from === 0)
         ? searchReviewsArgs.to - searchReviewsArgs.from
         : 0
 
-    searchReviewsArgs &&
-      searchReviewsArgs.to &&
+    searchReviewsArgs?.to &&
       listLength &&
       fetchMore &&
       fetchMore({

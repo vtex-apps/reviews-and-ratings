@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, useState, Fragment } from 'react'
 import { injectIntl, InjectedIntlProps, FormattedMessage } from 'react-intl'
-
 import { Box, ToastConsumer } from 'vtex.styleguide'
 
 import {
@@ -10,14 +9,12 @@ import {
   SearchReviewArgs,
   ToastRenderProps,
 } from './types'
-
 import {
   reviewSchema,
   reviewWithErrorSchema,
   productSchema,
   dateSchema,
 } from './schemas'
-
 import DeleteReviewsPanel from './components/DeleteReviews'
 import useBulkActionsApproved from './components/tableHelpers/useBulkActionsApproved'
 import useLineActionsApproved from './components/tableHelpers/useLineActionsApproved'
@@ -68,16 +65,16 @@ export const ApprovedReviewsTable: FC<InjectedIntlProps> = ({ intl }) => {
     return {
       date: reviewDateTime,
       product: {
-        productId: productId,
-        sku: sku,
+        productId,
+        sku,
       },
       review: {
-        id: id,
-        shopperId: shopperId,
-        reviewerName: reviewerName,
-        rating: rating,
-        title: title,
-        text: text,
+        id,
+        shopperId,
+        reviewerName,
+        rating,
+        title,
+        text,
       },
     }
   }

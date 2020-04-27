@@ -3,7 +3,6 @@
 import React, { useState } from 'react'
 import { ObservableQueryFields } from 'react-apollo'
 import { FormattedMessage, InjectedIntlProps, injectIntl } from 'react-intl'
-
 import { Alert, Button, Modal, Table, ToastProvider } from 'vtex.styleguide'
 
 import {
@@ -12,7 +11,6 @@ import {
   SearchReviewArgs,
 } from '../types'
 import { reviewSchema, reviewWithErrorSchema, productSchema } from '../schemas'
-
 import './global.css'
 import { useMatchingError } from './applyMatchHelpers/useMatchingError'
 import updateReviewsCache from './applyMatchHelpers/updateReviewsCache'
@@ -123,9 +121,7 @@ const ApproveReview = (props: ApproveReviewProps & InjectedIntlProps) => {
           <div className="w-100 nr5 nb5 flex justify-end mt5">
             <Button
               variation="tertiary"
-              onClick={() =>
-                handleCloseModal(shouldShowIndividualErrors ? true : false)
-              }
+              onClick={() => handleCloseModal(!!shouldShowIndividualErrors)}
             >
               <FormattedMessage id="admin/reviews.table.modal.approveReviews.cancel" />
             </Button>

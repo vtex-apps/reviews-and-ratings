@@ -1,11 +1,9 @@
 {
   "scripts": {
-    "test": "vtex-test-tools test",
-    "lint": "tsc --noEmit && eslint --ext ts,tsx . --fix"
+    "test": "vtex-test-tools test"
   },
   "dependencies": {
     "@types/react-show-more": "^2.0.1",
-    "@vtex/css-handles": "^1.0.0",
     "apollo-cache-inmemory": "^1.6.3",
     "apollo-client": "^2.6.4",
     "apollo-utilities": "^1.3.2",
@@ -31,20 +29,18 @@
     "@types/ramda": "^0.26.5",
     "@types/react": "^16.8.10",
     "@types/react-intl": "^2.3.17",
-    "@vtex/test-tools": "^0.2.0",
+    "@vtex/test-tools": "^3.1.0",
     "@vtex/tsconfig": "^0.4.3",
-    "eslint": "^5.16.0",
-    "eslint-config-vtex-react": "^4.1.0",
-    "prettier": "^1.18.2",
     "vtex.channels-components": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.channels-components@4.6.1/public/@types/vtex.channels-components",
-    "vtex.paginated-table": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.paginated-table@0.7.1/public/@types/vtex.paginated-table",
-    "vtex.product-context": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.product-context@0.7.0/public/@types/vtex.product-context",
+    "vtex.css-handles": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.css-handles@0.4.2/public/@types/vtex.css-handles",
+    "vtex.paginated-table": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.paginated-table@0.7.3/public/@types/vtex.paginated-table",
+    "vtex.product-context": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.product-context@0.7.1/public/@types/vtex.product-context",
     "vtex.product-review-interfaces": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.product-review-interfaces@1.0.2/public/_types/react",
-    "vtex.product-summary": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.product-summary@2.50.1/public/_types/react",
-    "vtex.render-runtime": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.render-runtime@8.90.2/public/@types/vtex.render-runtime",
-    "vtex.search-graphql": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.search-graphql@0.15.0/public/@types/vtex.search-graphql",
-    "vtex.store": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.store@2.85.4/public/@types/vtex.store",
-    "vtex.styleguide": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.styleguide@9.108.1/public/@types/vtex.styleguide"
+    "vtex.product-summary": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.product-summary@2.53.3/public/_types/react",
+    "vtex.render-runtime": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.render-runtime@8.99.1/public/@types/vtex.render-runtime",
+    "vtex.search-graphql": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.search-graphql@0.24.1/public/@types/vtex.search-graphql",
+    "vtex.store": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.store@2.95.1/public/@types/vtex.store",
+    "vtex.styleguide": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.styleguide@9.113.2/public/@types/vtex.styleguide"
   },
   "version": "1.3.0"
 }

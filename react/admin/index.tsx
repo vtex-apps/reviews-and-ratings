@@ -1,6 +1,5 @@
 import React, { FC, useState } from 'react'
 import { FormattedMessage } from 'react-intl'
-
 import {
   Layout,
   PageHeader,

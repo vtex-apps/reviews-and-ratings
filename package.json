@@ -4,7 +4,8 @@
   "license": "UNLICENSED",
   "scripts": {
     "lint": "eslint --ext js,jsx,ts,tsx .",
-    "format": "prettier --write \"**/*.{ts,js,json}\""
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json}\"",
+    "test": "yarn --cwd react test"
   },
   "husky": {
     "hooks": {
@@ -21,13 +22,12 @@
     ]
   },
   "devDependencies": {
-    "@types/node": "^13.5.3",
-    "@vtex/prettier-config": "0.1.3",
+    "@vtex/prettier-config": "^0.1.3",
     "eslint": "^6.8.0",
-    "eslint-config-vtex": "^12.0.3",
-    "eslint-config-vtex-react": "^6.0.3",
-    "husky": "4.2.0",
-    "lint-staged": "10.0.2",
+    "eslint-config-vtex": "^12.2.1",
+    "eslint-config-vtex-react": "^6.2.1",
+    "husky": "^4.2.0",
+    "lint-staged": "^10.0.2",
     "prettier": "^1.19.1",
     "typescript": "^3.7.5"
   }

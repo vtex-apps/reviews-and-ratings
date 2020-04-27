@@ -87,7 +87,7 @@ export interface QueryResults {
 export interface ApplyMatchData {
   moderateReview?: boolean
   deleteReview?: boolean
-  //actionResult: GenericActionResponse
+  // actionResult: GenericActionResponse
 }
 
 export interface ApplyMatchVariables {

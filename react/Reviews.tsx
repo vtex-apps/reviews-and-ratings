@@ -14,26 +14,30 @@ import {
   injectIntl,
   defineMessages,
 } from 'react-intl'
-// eslint-disable-next-line lodash/import-scope
 import flowRight from 'lodash.flowright'
-import { path } from 'ramda'
-import { ProductContext, Product } from 'vtex.product-context'
+import path from 'ramda/es/path'
+import { ProductContext } from 'vtex.product-context'
 import { Link, canUseDOM } from 'vtex.render-runtime'
-import Stars from './components/Stars'
-import ReviewForm from './ReviewForm'
 import { useCssHandles } from 'vtex.css-handles'
-import AppSettings from '../graphql/appSettings.graphql'
-import ReviewsByProductId from '../graphql/reviewsByProductId.graphql'
-import AverageRatingByProductId from '../graphql/averageRatingByProductId.graphql'
 import ShowMore from 'react-show-more'
-
 import {
   IconSuccess,
   Pagination,
   Collapsible,
   Dropdown,
-  //Button,
+  // Button,
 } from 'vtex.styleguide'
+
+import Stars from './components/Stars'
+import ReviewForm from './ReviewForm'
+import AppSettings from '../graphql/appSettings.graphql'
+import ReviewsByProductId from '../graphql/reviewsByProductId.graphql'
+import AverageRatingByProductId from '../graphql/averageRatingByProductId.graphql'
+
+interface Product {
+  productId: string
+  productName: string
+}
 
 interface Props {
   client: ApolloClient<NormalizedCacheObject>
@@ -97,7 +101,7 @@ interface State {
   userAuthenticated: boolean
 }
 
-declare var global: {
+declare let global: {
   __hostname__: string
   __pathname__: string
 }
@@ -157,6 +161,7 @@ const reducer = (state: State, action: ReducerActions) => {
       return {
         ...state,
         openReview:
+          // eslint-disable-next-line eqeqeq
           action.args.reviewNumber == state.openReview
             ? null
             : action.args.reviewNumber,
@@ -195,6 +200,8 @@ const reducer = (state: State, action: ReducerActions) => {
         ...state,
         userAuthenticated: action.args.authenticated,
       }
+    default:
+      return state
   }
 }
 
@@ -287,7 +294,7 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
   const { client, intl } = props
 
   const handles = useCssHandles(CSS_HANDLES)
-  const { product }: ProductContext = useContext(ProductContext)
+  const { product } = useContext(ProductContext) as any
   const { productId }: Product = product || {}
 
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -312,15 +319,15 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
   ]
 
   const getTimeAgo = (time: string) => {
-    let before = new Date(time + ' UTC')
-    let now = new Date()
-    let diff = new Date(now.valueOf() - before.valueOf())
+    const before = new Date(`${time} UTC`)
+    const now = new Date()
+    const diff = new Date(now.valueOf() - before.valueOf())
 
-    let minutes = diff.getUTCMinutes()
-    let hours = diff.getUTCHours()
-    let days = diff.getUTCDate() - 1
-    let months = diff.getUTCMonth()
-    let years = diff.getUTCFullYear() - 1970
+    const minutes = diff.getUTCMinutes()
+    const hours = diff.getUTCHours()
+    const days = diff.getUTCDate() - 1
+    const months = diff.getUTCMonth()
+    const years = diff.getUTCFullYear() - 1970
 
     if (years > 0) {
       return `${years} ${
@@ -328,33 +335,36 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
           ? intl.formatMessage(messages.timeAgoYears)
           : intl.formatMessage(messages.timeAgoYear)
       } ${intl.formatMessage(messages.timeAgo)}`
-    } else if (months > 0) {
+    }
+    if (months > 0) {
       return `${months} ${
         months > 1
           ? intl.formatMessage(messages.timeAgoMonths)
           : intl.formatMessage(messages.timeAgoMonth)
       } ${intl.formatMessage(messages.timeAgo)}`
-    } else if (days > 0) {
+    }
+    if (days > 0) {
       return `${days} ${
         days > 1
           ? intl.formatMessage(messages.timeAgoDays)
           : intl.formatMessage(messages.timeAgoDay)
       } ${intl.formatMessage(messages.timeAgo)}`
-    } else if (hours > 0) {
+    }
+    if (hours > 0) {
       return `${hours} ${
         hours > 1
           ? intl.formatMessage(messages.timeAgoHours)
           : intl.formatMessage(messages.timeAgoHour)
       } ${intl.formatMessage(messages.timeAgo)}`
-    } else if (minutes > 0) {
+    }
+    if (minutes > 0) {
       return `${minutes} ${
         minutes > 1
           ? intl.formatMessage(messages.timeAgoMinutes)
           : intl.formatMessage(messages.timeAgoMinute)
       } ${intl.formatMessage(messages.timeAgo)}`
-    } else {
-      return intl.formatMessage(messages.timeAgoJustNow)
     }
+    return intl.formatMessage(messages.timeAgoJustNow)
   }
 
   const getLocation = () =>
@@ -412,7 +422,7 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
       .query({
         query: AverageRatingByProductId,
         variables: {
-          productId: productId,
+          productId,
         },
       })
       .then((response: ApolloQueryResult<AverageData>) => {
@@ -432,7 +442,7 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
       .query({
         query: ReviewsByProductId,
         variables: {
-          productId: productId,
+          productId,
           from: state.from,
           to: state.to,
           orderBy: state.sort,
@@ -442,7 +452,7 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
       })
       .then((response: ApolloQueryResult<ReviewsData>) => {
         const reviews = response.data.reviewsByProductId.data
-        const total = response.data.reviewsByProductId.range.total
+        const { total } = response.data.reviewsByProductId.range
         dispatch({
           type: 'SET_REVIEWS',
           args: { reviews, total },
@@ -458,7 +468,7 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
       <div className="review__rating">
         {!state.hasTotal || !state.hasAverage ? (
           <FormattedMessage id="store/reviews.list.summary.loading" />
-        ) : state.total == 0 ? null : (
+        ) : !state.total ? null : (
           <Fragment>
             <div className="t-heading-4">
               <Stars rating={state.average} />
@@ -504,9 +514,9 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
           </Collapsible>
         ) : (
           <Link
-            page={'store.login'}
+            page="store.login"
             query={`returnUrl=${encodeURIComponent(url)}`}
-            className={`h1 w2 tc flex items-center w-100-s h-100-s pa4-s`}
+            className="h1 w2 tc flex items-center w-100-s h-100-s pa4-s"
           >
             <FormattedMessage id="store/reviews.list.login" />
           </Link>
@@ -564,10 +574,7 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
                           </strong>
                           {state.settings &&
                             state.settings.useLocation &&
-                            review.location &&
-                            review.location != '' && (
-                              <span>, {review.location}</span>
-                            )}
+                            review.location && <span>, {review.location}</span>}
                         </li>
                       </ul>
                       <p className="t-body lh-copy mw9">
@@ -620,10 +627,7 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
                           </strong>
                           {state.settings &&
                             state.settings.useLocation &&
-                            review.location &&
-                            review.location != '' && (
-                              <span>, {review.location}</span>
-                            )}
+                            review.location && <span>, {review.location}</span>}
                         </li>
                       </ul>
                       <p className="t-body lh-copy mw9">{review.text}</p>

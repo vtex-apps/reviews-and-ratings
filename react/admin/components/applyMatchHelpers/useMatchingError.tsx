@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { InjectedIntl } from 'react-intl'
-import { getGraphQLErrorCode } from './index'
 import { ApolloError } from 'apollo-client'
+
+import { getGraphQLErrorCode } from './index'
 
 interface GenericError extends ApolloError {
   code: number
@@ -23,7 +24,7 @@ export const useMatchingError = (intl: InjectedIntl, operation?: string) => {
   const setSingleError = (err: GenericError) => {
     const graphQLError = err.graphQLErrors && err.graphQLErrors[0]
     const applyMatchErrorCode =
-      getGraphQLErrorCode(graphQLError) || err.code || 0
+      (getGraphQLErrorCode(graphQLError) ?? err.code) || 0
     setHasError(true)
     setErrorMessage(
       intl.formatMessage({

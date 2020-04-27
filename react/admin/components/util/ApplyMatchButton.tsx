@@ -2,13 +2,14 @@
 import { MutationUpdaterFn } from 'apollo-client'
 import { Mutation } from 'react-apollo'
 import React, { useState } from 'react'
+import { Button } from 'vtex.styleguide'
+
 import reviews from '../../../../graphql/reviews.graphql'
 import {
   ApplyMatchData,
   // SingleActionResponse,
   ApplyMatchVariables,
 } from '../../types'
-import { Button } from 'vtex.styleguide'
 
 export interface SKUActionButtonProps {
   label: string | JSX.Element
@@ -96,7 +97,7 @@ const ApplyMatchButton = (props: ApplyMatchProps) => {
                     ) {
                       onSuccess()
                     } else {
-                      //const parsedErrors = parseErrors(allErrors)
+                      // const parsedErrors = parseErrors(allErrors)
                       onMixedError()
                     }
                   })

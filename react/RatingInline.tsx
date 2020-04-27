@@ -9,11 +9,16 @@ import ApolloClient, { ApolloQueryResult } from 'apollo-client'
 import { NormalizedCacheObject } from 'apollo-cache-inmemory'
 import { withApollo } from 'react-apollo'
 import { ProductSummaryContext } from 'vtex.product-summary'
-import { ProductContext, Product } from 'vtex.product-context'
-import Stars from './components/Stars'
 import { useCssHandles } from 'vtex.css-handles'
+
+import Stars from './components/Stars'
 import TotalReviewsByProductId from '../graphql/totalReviewsByProductId.graphql'
 import AverageRatingByProductId from '../graphql/averageRatingByProductId.graphql'
+
+interface Product {
+  productId: string
+  productName: string
+}
 
 interface Props {
   client: ApolloClient<NormalizedCacheObject>
@@ -59,6 +64,8 @@ const reducer = (state: State, action: ReducerActions) => {
         average: action.args.average,
         hasAverage: true,
       }
+    default:
+      return state
   }
 }
 
@@ -68,7 +75,7 @@ const RatingInline: FunctionComponent<Props> = props => {
   const { client } = props
 
   const handles = useCssHandles(CSS_HANDLES)
-  const { product }: ProductContext = useContext(ProductSummaryContext)
+  const { product } = useContext(ProductSummaryContext)
   const { productId }: Product = product || {}
 
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -82,7 +89,7 @@ const RatingInline: FunctionComponent<Props> = props => {
       .query({
         query: TotalReviewsByProductId,
         variables: {
-          productId: productId,
+          productId,
         },
       })
       .then((response: ApolloQueryResult<TotalData>) => {
@@ -97,7 +104,7 @@ const RatingInline: FunctionComponent<Props> = props => {
       .query({
         query: AverageRatingByProductId,
         variables: {
-          productId: productId,
+          productId,
         },
       })
       .then((response: ApolloQueryResult<AverageData>) => {
@@ -111,7 +118,8 @@ const RatingInline: FunctionComponent<Props> = props => {
 
   return (
     <div className={`${handles.inlineContainer} review-summary mw8 center`}>
-      {!state.hasTotal || !state.hasAverage ? null : state.total == 0 ? null : (
+      {!state.hasTotal || !state.hasAverage ? null : state.total ===
+        0 ? null : (
         <Fragment>
           <span className="t-heading-5 v-mid">
             <Stars rating={state.average} />
