@@ -120,7 +120,7 @@ const RatingSummary: FunctionComponent<Props> = props => {
     <div className={`${handles.summaryContainer} review-summary mw8 center`}>
       {!state.hasTotal || !state.hasAverage ? (
         <Fragment>Loading reviews...</Fragment>
-      ) : !state.total ? null : (
+      ) : state.total === 0 ? null : (
         <Fragment>
           <span className="t-heading-4 v-mid">
             <Stars rating={state.average} />

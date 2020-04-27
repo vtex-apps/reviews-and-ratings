@@ -118,7 +118,8 @@ const RatingInline: FunctionComponent<Props> = props => {
 
   return (
     <div className={`${handles.inlineContainer} review-summary mw8 center`}>
-      {!state.hasTotal || !state.hasAverage ? null : !state.total ? null : (
+      {!state.hasTotal || !state.hasAverage ? null : state.total ===
+        0 ? null : (
         <Fragment>
           <span className="t-heading-5 v-mid">
             <Stars rating={state.average} />

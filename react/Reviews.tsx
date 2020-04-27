@@ -17,8 +17,6 @@ import {
 import flowRight from 'lodash.flowright'
 import path from 'ramda/es/path'
 import { ProductContext } from 'vtex.product-context'
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
 import { Link, canUseDOM } from 'vtex.render-runtime'
 import { useCssHandles } from 'vtex.css-handles'
 import ShowMore from 'react-show-more'

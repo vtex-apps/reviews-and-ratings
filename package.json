@@ -5,7 +5,7 @@
   "scripts": {
     "lint": "eslint --ext js,jsx,ts,tsx .",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json}\"",
-    "test": "cd ./react && yarn test"
+    "test": "yarn --cwd react test"
   },
   "husky": {
     "hooks": {

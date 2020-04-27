@@ -72,10 +72,8 @@ export const ReviewsTable: FC<ReviewsTableProps & InjectedIntlProps> = ({
     { onSearchChange, onSearchClear, onSearchSubmit },
   ] = useSearch()
 
-  // eslint-disable-next-line radix
-  const to = query.to ? parseInt(query.to) : DEFAULT_TABLE_PAGE_TO
-  // eslint-disable-next-line radix
-  const from = query.from ? parseInt(query.from) : DEFAULT_TABLE_PAGE_FROM
+  const to = query.to ? parseInt(query.to, 10) : DEFAULT_TABLE_PAGE_TO
+  const from = query.from ? parseInt(query.from, 10) : DEFAULT_TABLE_PAGE_FROM
   const sortOrder = query.sortOrder ? query.sortOrder : DEFAULT_SORT_ORDER
   const sortBy = query.sortedBy
 
