@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from 'react'
+
 import styles from '../styles.css'
 
 const Star: FunctionComponent<StarProps> = ({ filled, onClick, index = 0 }) => {
@@ -9,9 +10,9 @@ const Star: FunctionComponent<StarProps> = ({ filled, onClick, index = 0 }) => {
     event:
       | React.KeyboardEvent<HTMLSpanElement>
       | React.MouseEvent<HTMLSpanElement>,
-    index: number
+    idx: number
   ) => {
-    onClick && onClick(event, index)
+    onClick?.(event, idx)
   }
 
   return (

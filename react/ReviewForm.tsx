@@ -1,6 +1,5 @@
 import React, { FC, Fragment, useContext, useEffect, useReducer } from 'react'
-import { ProductContext, Product } from 'vtex.product-context'
-import StarPicker from './components/StarPicker'
+import { ProductContext } from 'vtex.product-context'
 import ApolloClient, { ApolloQueryResult } from 'apollo-client'
 import { NormalizedCacheObject } from 'apollo-cache-inmemory'
 import { withApollo } from 'react-apollo'
@@ -10,13 +9,19 @@ import {
   injectIntl,
   defineMessages,
 } from 'react-intl'
-// eslint-disable-next-line lodash/import-scope
 import flowRight from 'lodash.flowright'
-import { path } from 'ramda'
+import path from 'ramda/es/path'
 import { useCssHandles } from 'vtex.css-handles'
+import { Card, Input, Button, Textarea } from 'vtex.styleguide'
+
 import NewReview from '../graphql/newReview.graphql'
 import HasShopperReviewed from '../graphql/hasShopperReviewed.graphql'
-import { Card, Input, Button, Textarea } from 'vtex.styleguide'
+import StarPicker from './components/StarPicker'
+
+interface Product {
+  productId: string
+  productName: string
+}
 
 interface AppSettings {
   allowAnonymousReviews: boolean
@@ -99,7 +104,7 @@ const reducer = (state: State, action: ReducerActions) => {
         title: action.args.title,
         validation: {
           ...state.validation,
-          hasTitle: action.args.title != '',
+          hasTitle: action.args.title !== '',
         },
       }
     case 'SET_TEXT':
@@ -108,7 +113,7 @@ const reducer = (state: State, action: ReducerActions) => {
         text: action.args.text,
         validation: {
           ...state.validation,
-          hasText: action.args.text != '',
+          hasText: action.args.text !== '',
         },
       }
     case 'SET_LOCATION':
@@ -122,7 +127,7 @@ const reducer = (state: State, action: ReducerActions) => {
         reviewerName: action.args.name,
         validation: {
           ...state.validation,
-          hasName: action.args.name != '',
+          hasName: action.args.name !== '',
         },
       }
     case 'SET_ID':
@@ -155,6 +160,8 @@ const reducer = (state: State, action: ReducerActions) => {
         ...state,
         showValidationErrors: true,
       }
+    default:
+      return state
   }
 }
 
@@ -202,7 +209,7 @@ export const ReviewForm: FC<InjectedIntlProps & Props> = ({
 }) => {
   const handles = useCssHandles(CSS_HANDLES)
 
-  const { product }: ProductContext = useContext(ProductContext)
+  const { product } = useContext(ProductContext) as any
   const { productId }: Product = product || {}
 
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -239,28 +246,29 @@ export const ReviewForm: FC<InjectedIntlProps & Props> = ({
           path(['storeUserEmail', 'value'], namespaces.authentication),
       }
 
-      if (typeof profile.email == 'string') {
-        dispatch({
-          type: 'SET_ID',
-          args: {
-            id: profile.email,
-          },
-        })
-
-        client
-          .query({
-            query: HasShopperReviewed,
-            variables: { shopperId: profile.email, productId: productId },
-          })
-          .then((result: ApolloQueryResult<HasShopperReviewedData>) => {
-            if (result.data.hasShopperReviewed) {
-              dispatch({
-                type: 'SET_ALREADY_SUBMITTED',
-              })
-              return
-            }
-          })
+      if (typeof profile.email !== 'string') {
+        return
       }
+
+      dispatch({
+        type: 'SET_ID',
+        args: {
+          id: profile.email,
+        },
+      })
+
+      client
+        .query({
+          query: HasShopperReviewed,
+          variables: { shopperId: profile.email, productId },
+        })
+        .then((result: ApolloQueryResult<HasShopperReviewedData>) => {
+          if (result.data.hasShopperReviewed) {
+            dispatch({
+              type: 'SET_ALREADY_SUBMITTED',
+            })
+          }
+        })
     })
   }, [client, productId])
 
@@ -269,14 +277,13 @@ export const ReviewForm: FC<InjectedIntlProps & Props> = ({
       client
         .query({
           query: HasShopperReviewed,
-          variables: { shopperId: state.shopperId, productId: productId },
+          variables: { shopperId: state.shopperId, productId },
         })
         .then((result: ApolloQueryResult<HasShopperReviewedData>) => {
           if (result.data.hasShopperReviewed) {
             dispatch({
               type: 'SET_ALREADY_SUBMITTED',
             })
-            return
           }
         })
     }
@@ -291,7 +298,7 @@ export const ReviewForm: FC<InjectedIntlProps & Props> = ({
           mutation: NewReview,
           variables: {
             review: {
-              productId: productId,
+              productId,
               rating: state.rating,
               title: state.title,
               text: state.text,
@@ -384,7 +391,7 @@ export const ReviewForm: FC<InjectedIntlProps & Props> = ({
                 }
               />
             </div>
-            {settings && settings.useLocation && (
+            {settings?.useLocation && (
               <div className="mv3">
                 <Input
                   label={intl.formatMessage(messages.locationLabel)}
@@ -401,31 +408,29 @@ export const ReviewForm: FC<InjectedIntlProps & Props> = ({
                 />
               </div>
             )}
-            {settings &&
-              settings.allowAnonymousReviews &&
-              !state.userAuthenticated && (
-                <div className="mv3">
-                  <Input
-                    label={intl.formatMessage(messages.emailLabel)}
-                    size="large"
-                    value={state.shopperId}
-                    onChange={(event: React.FormEvent<HTMLInputElement>) =>
-                      dispatch({
-                        type: 'SET_ID',
-                        args: {
-                          id: event.currentTarget.value,
-                        },
-                      })
-                    }
-                    errorMessage={
-                      state.showValidationErrors &&
-                      !state.validation.hasValidEmail
-                        ? intl.formatMessage(messages.requiredFieldEmail)
-                        : ''
-                    }
-                  />
-                </div>
-              )}
+            {settings?.allowAnonymousReviews && !state.userAuthenticated && (
+              <div className="mv3">
+                <Input
+                  label={intl.formatMessage(messages.emailLabel)}
+                  size="large"
+                  value={state.shopperId}
+                  onChange={(event: React.FormEvent<HTMLInputElement>) =>
+                    dispatch({
+                      type: 'SET_ID',
+                      args: {
+                        id: event.currentTarget.value,
+                      },
+                    })
+                  }
+                  errorMessage={
+                    state.showValidationErrors &&
+                    !state.validation.hasValidEmail
+                      ? intl.formatMessage(messages.requiredFieldEmail)
+                      : ''
+                  }
+                />
+              </div>
+            )}
             <div className="mv3">
               <Textarea
                 value={state.text}

@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react'
 import { InjectedIntl } from 'react-intl'
-import { getGraphQLErrorCode } from './index'
 import { ApolloError } from 'apollo-client'
+
+import { getGraphQLErrorCode } from './index'
 
 interface GenericError extends ApolloError {
   code: number
@@ -13,7 +14,6 @@ export const useIndividualErrorMapping = (intl: InjectedIntl) => {
   const [shouldShowIndividualErrors, setShouldShowIndividualErrors] = useState(
     false
   )
-  // eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
   const [allErrorsMap, setAllErrorsMap] = useState({} as Record<string, any>)
 
   const setAllErrors = (errors: [GenericError]) => {
@@ -24,7 +24,7 @@ export const useIndividualErrorMapping = (intl: InjectedIntl) => {
       errors.reduce((acc, error) => {
         const graphQLError = error.graphQLErrors && error.graphQLErrors[0]
         const applyMatchErrorCode =
-          getGraphQLErrorCode(graphQLError) || error.code || 0
+          (getGraphQLErrorCode(graphQLError) ?? error.code) || 0
 
         const message = intl.formatMessage({
           id: `admin/reviews.table.applyMatch.error.${applyMatchErrorCode}`,

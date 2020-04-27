@@ -1,4 +1,5 @@
 import React, { FunctionComponent, useMemo } from 'react'
+
 import Star from './Star'
 import styles from '../styles.css'
 
@@ -35,7 +36,7 @@ const StarPicker: FunctionComponent<StarPickerProps> = ({
   //   marginLeft: -9999,
   // }
 
-  let labelClasses = 'vtex-input__label db mb3 w-100 c-on-base '
+  const labelClasses = 'vtex-input__label db mb3 w-100 c-on-base '
 
   return (
     <label className={`${styles.starpicker} c-action-primary`}>
@@ -62,7 +63,7 @@ const StarPicker: FunctionComponent<StarPickerProps> = ({
 
 interface StarPickerProps {
   label?: string
-  //onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  // onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   rating: number
   onStarClick: (
     event:

@@ -2,12 +2,10 @@
 import React, { FC, useState } from 'react'
 import { ObservableQueryFields } from 'react-apollo'
 import { Button, Modal, Alert } from 'vtex.styleguide'
-
 import { FormattedMessage, injectIntl, InjectedIntlProps } from 'react-intl'
 
 import { useMatchingError } from './applyMatchHelpers/useMatchingError'
 import updateReviewsCache from './applyMatchHelpers/updateReviewsCache'
-
 import {
   ReviewTableRowData,
   SearchReviewArgs,

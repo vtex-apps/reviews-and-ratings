@@ -5061,9 +5061,9 @@ verror@1.10.0:
   version "0.4.2"
   resolved "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.css-handles@0.4.2/public/@types/vtex.css-handles#62ee61d1bb9efdc919e5cf4bb44fabcf9050d255"
 
-"vtex.paginated-table@http://vtex.vtexassets.com/_v/public/typings/v1/vtex.paginated-table@0.7.1/public/@types/vtex.paginated-table":
-  version "0.7.1"
-  resolved "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.paginated-table@0.7.1/public/@types/vtex.paginated-table#8f5d02e8f83a8a8f968661ab4d51a6101201981f"
+"vtex.paginated-table@http://vtex.vtexassets.com/_v/public/typings/v1/vtex.paginated-table@0.7.3/public/@types/vtex.paginated-table":
+  version "0.7.3"
+  resolved "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.paginated-table@0.7.3/public/@types/vtex.paginated-table#62151a52b034dc626fd659059ecac0c7d297f47d"
 
 "vtex.product-context@http://vtex.vtexassets.com/_v/public/typings/v1/vtex.product-context@0.7.1/public/@types/vtex.product-context":
   version "0.7.1"

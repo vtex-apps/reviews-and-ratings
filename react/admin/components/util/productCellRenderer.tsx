@@ -9,13 +9,13 @@ import {
   InjectedIntlProps,
 } from 'react-intl'
 import { useQuery } from 'react-apollo'
-
 import {
   IconCopy,
   IconExternalLink,
   ToastConsumer,
   Tooltip,
 } from 'vtex.styleguide'
+
 import ProductQuery from '../../graphql/ProductQuery.graphql'
 import { Product, ToastRenderProps } from '../../types'
 
@@ -72,7 +72,7 @@ const IntlProductCellRenderer: React.FC<Props> = ({ cellData, intl }) => {
           {data && (
             <p className="ma0 mb3 fw6">
               <a
-                href={'../../Site/ProdutoForm.aspx?id=' + cellData.productId}
+                href={`../../Site/ProdutoForm.aspx?id=${cellData.productId}`}
                 className="no-underline"
                 target="_blank"
                 rel="noopener noreferrer"

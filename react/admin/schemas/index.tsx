@@ -1,6 +1,8 @@
 /* eslint-disable react/display-name */
-import { Product, ReviewTableRowData } from '../types'
 import React from 'react'
+import { FormattedMessage, InjectedIntl } from 'react-intl'
+
+import { Product, ReviewTableRowData } from '../types'
 import ProductCellRenderer from '../components/util/productCellRenderer'
 import ReviewCellRenderer from '../components/util/reviewCellRenderer'
 import {
@@ -8,7 +10,6 @@ import {
   REVIEW_COLUMN_WIDTH_PX,
   DATE_COLUMN_WIDTH_PX,
 } from '../utils'
-import { FormattedMessage, InjectedIntl } from 'react-intl'
 import { reviewSchemaMessages } from '../utils/messages'
 import toRightCellRenderer from '../components/util/toRightCellRenderer'
 

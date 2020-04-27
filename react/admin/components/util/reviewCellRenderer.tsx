@@ -8,10 +8,9 @@ import {
   injectIntl,
   InjectedIntlProps,
 } from 'react-intl'
-
 import { IconCopy, ToastConsumer, Tooltip } from 'vtex.styleguide'
-import Stars from '../../../components/Stars'
 
+import Stars from '../../../components/Stars'
 import { ToastRenderProps } from '../../types'
 import { ReviewSummary } from '../../schemas'
 
@@ -54,13 +53,12 @@ const IntlReviewCellRenderer: React.FC<Props> = ({ cellData, intl }) => {
               <FormattedMessage
                 id="admin/reviews.table.reviewCell.author"
                 values={{
-                  author:
-                    cellData.reviewerName != ''
-                      ? cellData.reviewerName
-                      : intl.formatMessage(messages.anonymous),
+                  author: cellData.reviewerName
+                    ? cellData.reviewerName
+                    : intl.formatMessage(messages.anonymous),
                 }}
               />{' '}
-              {cellData.shopperId != '' ? `(${cellData.shopperId})` : ''}
+              {cellData.shopperId ? `(${cellData.shopperId})` : ''}
             </span>
             <Tooltip
               label={intl.formatMessage(messages.copyTitle)}
@@ -72,7 +70,7 @@ const IntlReviewCellRenderer: React.FC<Props> = ({ cellData, intl }) => {
                   e.preventDefault()
                   e.stopPropagation()
                   copy(
-                    cellData.shopperId != ''
+                    cellData.shopperId
                       ? cellData.shopperId
                       : cellData.reviewerName
                   )

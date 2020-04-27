@@ -1,6 +1,6 @@
 import React from 'react'
-import ApplyMatchButton, { SKUActionButtonProps } from './ApplyMatchButton'
 
+import ApplyMatchButton, { SKUActionButtonProps } from './ApplyMatchButton'
 import moderateReview from '../../../../graphql/moderateReview.graphql'
 import deleteReview from '../../../../graphql/deleteReview.graphql'
 

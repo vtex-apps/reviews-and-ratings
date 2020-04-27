@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, useState, useEffect, Fragment } from 'react'
 import { injectIntl, InjectedIntlProps, FormattedMessage } from 'react-intl'
-import { Query } from 'react-apollo'
+import { Query, ObservableQueryFields } from 'react-apollo'
 import { Button, EmptyState } from 'vtex.styleguide'
+import { PersistedPaginatedTable } from 'vtex.paginated-table'
+import { useRuntime } from 'vtex.render-runtime'
+
 import { Review, SearchReviewArgs, SearchReviewData } from '../types'
 import reviews from '../../../graphql/reviews.graphql'
-import { PersistedPaginatedTable } from 'vtex.paginated-table'
 import { tableQueryMessages, tableSearchMessages } from '../utils/messages'
 import useSearch from './tableHelpers/useSearch'
-import { useRuntime } from 'vtex.render-runtime'
-import { ObservableQueryFields } from 'react-apollo'
 
 const NETWORK_REFETCHING_STATUS = 4
 const DEFAULT_TABLE_PAGE_TO = 15
@@ -72,7 +72,9 @@ export const ReviewsTable: FC<ReviewsTableProps & InjectedIntlProps> = ({
     { onSearchChange, onSearchClear, onSearchSubmit },
   ] = useSearch()
 
+  // eslint-disable-next-line radix
   const to = query.to ? parseInt(query.to) : DEFAULT_TABLE_PAGE_TO
+  // eslint-disable-next-line radix
   const from = query.from ? parseInt(query.from) : DEFAULT_TABLE_PAGE_FROM
   const sortOrder = query.sortOrder ? query.sortOrder : DEFAULT_SORT_ORDER
   const sortBy = query.sortedBy
@@ -114,15 +116,15 @@ export const ReviewsTable: FC<ReviewsTableProps & InjectedIntlProps> = ({
         from,
         to,
         orderBy: sortBy
-          ? orderByMap[sortBy] + ':' + sortOrder
+          ? `${orderByMap[sortBy]}:${sortOrder}`
           : 'ReviewDateTime:desc',
       }}
       notifyOnNetworkStatusChange
       fetchPolicy="cache-and-network"
     >
       {({ loading, error, data, fetchMore, networkStatus, variables }) => {
-        if (data && data.reviews && data.reviews.range) {
-          setTotal && setTotal(data.reviews.range.total)
+        if (data?.reviews?.range) {
+          setTotal?.(data.reviews.range.total)
         }
 
         const errorState = (
@@ -148,9 +150,7 @@ export const ReviewsTable: FC<ReviewsTableProps & InjectedIntlProps> = ({
           ) : (
             <PersistedPaginatedTable
               items={
-                data && data.reviews && data.reviews.data
-                  ? data.reviews.data.map(toRowData)
-                  : []
+                data?.reviews?.data ? data.reviews.data.map(toRowData) : []
               }
               loading={
                 (loading && networkStatus !== NETWORK_REFETCHING_STATUS) ||
@@ -171,11 +171,7 @@ export const ReviewsTable: FC<ReviewsTableProps & InjectedIntlProps> = ({
                 },
               }}
               onRowClick={() => {}}
-              total={
-                data && data.reviews && data.reviews.range
-                  ? data.reviews.range.total
-                  : 0
-              }
+              total={data?.reviews?.range ? data.reviews.range.total : 0}
               updatePaginationKey={watchedVariablesString}
               defaultElementsPerPage={DEFAULT_TABLE_PAGE_TO}
               defaultSortOrder={DEFAULT_SORT_ORDER}
@@ -188,9 +184,8 @@ export const ReviewsTable: FC<ReviewsTableProps & InjectedIntlProps> = ({
 
         if (children && typeof children === 'function') {
           return children({ fetchMore, variables, table })
-        } else {
-          return table
         }
+        return table
       }}
     </Query>
   )
