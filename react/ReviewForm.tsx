@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { FC, Fragment, useContext, useEffect, useReducer } from 'react'
 import { ProductContext } from 'vtex.product-context'
 import ApolloClient, { ApolloQueryResult } from 'apollo-client'
@@ -14,6 +15,7 @@ import path from 'ramda/es/path'
 import { useCssHandles } from 'vtex.css-handles'
 import { Card, Input, Button, Textarea } from 'vtex.styleguide'
 
+import getOrders from './queries/orders.gql'
 import NewReview from '../graphql/newReview.graphql'
 import HasShopperReviewed from '../graphql/hasShopperReviewed.graphql'
 import StarPicker from './components/StarPicker'
@@ -49,6 +51,7 @@ interface State {
   reviewSubmitted: boolean
   userAuthenticated: boolean
   alreadySubmitted: boolean
+  verifiedPurchaser: boolean
   validation: Validation
   showValidationErrors: boolean
 }
@@ -68,6 +71,7 @@ type ReducerActions =
   | { type: 'SET_NAME'; args: { name: string } }
   | { type: 'SET_ID'; args: { id: string } }
   | { type: 'SET_AUTHENTICATED'; args: { authenticated: boolean } }
+  | { type: 'SET_VERIFIED' }
   | { type: 'SET_ALREADY_SUBMITTED' }
   | { type: 'SET_SUBMITTED' }
   | { type: 'SHOW_VALIDATION' }
@@ -81,6 +85,7 @@ const initialState = {
   shopperId: null,
   reviewSubmitted: false,
   alreadySubmitted: false,
+  verifiedPurchaser: false,
   userAuthenticated: false,
   validation: {
     hasTitle: false,
@@ -149,6 +154,11 @@ const reducer = (state: State, action: ReducerActions) => {
       return {
         ...state,
         userAuthenticated: true,
+      }
+    case 'SET_VERIFIED':
+      return {
+        ...state,
+        verifiedPurchaser: true,
       }
     case 'SET_ALREADY_SUBMITTED':
       return {
@@ -270,6 +280,29 @@ export const ReviewForm: FC<InjectedIntlProps & Props> = ({
           }
         })
     })
+    client
+      .query({
+        query: getOrders,
+        variables: null,
+      })
+      .then((res: any) => {
+        // eslint-disable-next-line vtex/prefer-early-return
+        if (res?.data?.orders && res.data.orders.length) {
+          const hasItem = !!res.data.orders.find((order: any) => {
+            return (
+              !!order.isCompleted &&
+              !!order.items.find((item: any) => {
+                return item.productId === productId
+              })
+            )
+          })
+          if (hasItem) {
+            dispatch({
+              type: 'SET_VERIFIED',
+            })
+          }
+        }
+      })
   }, [client, productId])
 
   async function submitReview() {
@@ -304,7 +337,7 @@ export const ReviewForm: FC<InjectedIntlProps & Props> = ({
               text: state.text,
               reviewerName: state.reviewerName,
               shopperId: state.shopperId,
-              verifiedPurchaser: false,
+              verifiedPurchaser: state.verifiedPurchaser,
             },
           },
         })

@@ -21,13 +21,19 @@ export const useMatchingError = (intl: InjectedIntl, operation?: string) => {
     partialErrorMessageId = 'generic'
   }
 
+  const translateMessage = (
+    message: ReactIntl.FormattedMessage.MessageDescriptor
+  ) => {
+    return intl.formatMessage(message)
+  }
+
   const setSingleError = (err: GenericError) => {
     const graphQLError = err.graphQLErrors && err.graphQLErrors[0]
     const applyMatchErrorCode =
       (getGraphQLErrorCode(graphQLError) ?? err.code) || 0
     setHasError(true)
     setErrorMessage(
-      intl.formatMessage({
+      translateMessage({
         id: `admin/reviews.table.applyMatch.error.${applyMatchErrorCode}`,
       })
     )
@@ -37,12 +43,9 @@ export const useMatchingError = (intl: InjectedIntl, operation?: string) => {
     setHasError(true)
     const pluralCode = err.length > 1 ? 'plural' : 'singular'
     setErrorMessage(
-      intl.formatMessage(
-        {
-          id: `admin/reviews.table.applyMatch.error.partial.${partialErrorMessageId}.${pluralCode}`,
-        },
-        { errorQuant: err.length }
-      )
+      translateMessage({
+        id: `admin/reviews.table.applyMatch.error.partial.${partialErrorMessageId}.${pluralCode}`,
+      })
     )
   }
 

@@ -16,6 +16,12 @@ export const useIndividualErrorMapping = (intl: InjectedIntl) => {
   )
   const [allErrorsMap, setAllErrorsMap] = useState({} as Record<string, any>)
 
+  const translateMessage = (
+    message: ReactIntl.FormattedMessage.MessageDescriptor
+  ) => {
+    return intl.formatMessage(message)
+  }
+
   const setAllErrors = (errors: [GenericError]) => {
     if (errors.length > 0) {
       setShouldShowIndividualErrors(true)
@@ -26,7 +32,7 @@ export const useIndividualErrorMapping = (intl: InjectedIntl) => {
         const applyMatchErrorCode =
           (getGraphQLErrorCode(graphQLError) ?? error.code) || 0
 
-        const message = intl.formatMessage({
+        const message = translateMessage({
           id: `admin/reviews.table.applyMatch.error.${applyMatchErrorCode}`,
         })
 

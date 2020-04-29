@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Check if user is a "Verified Purchaser"
+
 ## [1.4.1] - 2020-04-27
 
 ### Security
