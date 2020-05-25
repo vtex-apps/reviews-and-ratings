@@ -54,17 +54,19 @@ Approved reviews may be deleted as well, either individually or in bulk.
 
 In order to apply CSS customizations in this and other blocks, follow the instructions given in the recipe on [Using CSS Handles for store customization](https://vtex.io/docs/recipes/style/using-css-handles-for-store-customization).
 
-| CSS Handles            |
-| ---------------------- |
-| `stars`                |
-| `starpicker`           |
-| `star`                 |
-| `star--filled`         |
-| `star--empty`          |
-| `container`            |
-| `formContainer`        |
-| `writeReviewContainer` |
-| `summaryContainer`     |
+| CSS Handles               |
+| ------------------------- |
+| `container`               |
+| `formContainer`           |
+| `reviewCommentsContainer` | 
+| `reviewsHeading`          |
+| `star--empty`             |
+| `star--filled`            |
+| `star`                    |
+| `starpicker`              |
+| `stars`                   |
+| `summaryContainer`        |
+| `writeReviewContainer`    |
 
 
 **Upcoming documentation:**

@@ -288,7 +288,12 @@ const messages = defineMessages({
   },
 })
 
-const CSS_HANDLES = ['container', 'writeReviewContainer'] as const
+const CSS_HANDLES = [
+  'container',
+  'writeReviewContainer',
+  'reviewsHeading',
+  'reviewCommentsContainer',
+] as const
 
 const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
   const { client, intl } = props
@@ -462,7 +467,9 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
 
   return (
     <div className={`${handles.container} review mw8 center ph5`}>
-      <h3 className="review__title t-heading-3 bb b--muted-5 mb5">
+      <h3
+        className={`${handles.reviewsHeading} review__title t-heading-3 bb b--muted-5 mb5`}
+      >
         <FormattedMessage id="store/reviews.list.title" />
       </h3>
       <div className="review__rating">
@@ -522,7 +529,7 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
           </Link>
         )}
       </div>
-      <div className="review__comments">
+      <div className={`${handles.reviewCommentsContainer} review__comments`}>
         {state.reviews === null ? (
           <FormattedMessage id="store/reviews.list.loading" />
         ) : state.reviews.length ? (
