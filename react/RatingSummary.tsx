@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useReducer,
 } from 'react'
+import { Helmet } from 'react-helmet'
 import ApolloClient, { ApolloQueryResult } from 'apollo-client'
 import { NormalizedCacheObject } from 'apollo-cache-inmemory'
 import { withApollo } from 'react-apollo'
@@ -76,7 +77,7 @@ const RatingSummary: FunctionComponent<Props> = props => {
 
   const handles = useCssHandles(CSS_HANDLES)
   const { product } = useContext(ProductContext) as any
-  const { productId }: Product = product || {}
+  const { productId, productName }: Product = product || {}
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
@@ -122,6 +123,18 @@ const RatingSummary: FunctionComponent<Props> = props => {
         <Fragment>Loading reviews...</Fragment>
       ) : state.total === 0 ? null : (
         <Fragment>
+          <Helmet>
+            <script type="application/ld+json">{`{
+              '@context': 'http://schema.org',
+              '@type': 'Product',
+              'aggregateRating': {
+                '@type': 'AggregateRating',
+                'ratingValue': '${state.average}',
+                'reviewCount': '${state.total}',
+              },
+              'name': '${productName}',
+            },`}</script>
+          </Helmet>
           <span className="t-heading-4 v-mid">
             <Stars rating={state.average} />
           </span>{' '}

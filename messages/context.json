@@ -88,6 +88,7 @@
   "store/reviews.list.timeAgo.hour": "store/reviews.list.timeAgo.hour",
   "store/reviews.list.timeAgo.minutes": "store/reviews.list.timeAgo.minutes",
   "store/reviews.list.timeAgo.minute": "store/reviews.list.timeAgo.minute",
+  "store/reviews.list.sortOptions.placeholder": "store/reviews.list.sortOptions.placeholder",
   "store/reviews.list.sortOptions.mostRecent": "store/reviews.list.sortOptions.mostRecent",
   "store/reviews.list.sortOptions.oldest": "store/reviews.list.sortOptions.oldest",
   "store/reviews.list.sortOptions.highestRated": "store/reviews.list.sortOptions.highestRated",
