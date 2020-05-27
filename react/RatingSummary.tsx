@@ -130,10 +130,10 @@ const RatingSummary: FunctionComponent<Props> = props => {
               'aggregateRating': {
                 '@type': 'AggregateRating',
                 'ratingValue': '${state.average}',
-                'reviewCount': '${state.total}',
+                'reviewCount': '${state.total}'
               },
-              'name': '${productName}',
-            },`}</script>
+              'name': '${productName}'
+            }`}</script>
           </Helmet>
           <span className="t-heading-4 v-mid">
             <Stars rating={state.average} />

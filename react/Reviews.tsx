@@ -576,10 +576,10 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
                                 intl.formatMessage(messages.anonymous)}"
                             },
                             'datePublished': '${review.reviewDateTime}',
-                            'reviewBody': ${JSON.stringify(review.text)},
+                            'reviewBody': ${JSON.stringify(review.text)}
                           },
-                          'name': '${productName}',
-                        },`}</script>
+                          'name': '${productName}'
+                        }`}</script>
                   </Helmet>
                   {state.settings.defaultOpen ? (
                     <div>
