@@ -125,14 +125,14 @@ const RatingSummary: FunctionComponent<Props> = props => {
         <Fragment>
           <Helmet>
             <script type="application/ld+json">{`{
-              '@context': 'http://schema.org',
-              '@type': 'Product',
-              'aggregateRating': {
-                '@type': 'AggregateRating',
-                'ratingValue': '${state.average}',
-                'reviewCount': '${state.total}'
+              "@context": "http://schema.org",
+              "@type": "Product",
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "${state.average}",
+                "reviewCount": "${state.total}"
               },
-              'name': '${productName}'
+              "name": "${productName}"
             }`}</script>
           </Helmet>
           <span className="t-heading-4 v-mid">

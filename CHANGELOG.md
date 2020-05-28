@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Single quotes in LD+JSON replaced with double quotes
+
 ## [1.6.0] - 2020-05-28
 
 ### Added

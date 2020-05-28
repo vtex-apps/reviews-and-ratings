@@ -562,23 +562,23 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
                 >
                   <Helmet>
                     <script type="application/ld+json">{`{
-                          '@context': 'http://schema.org',
-                          '@type': 'Product',
-                          'review': {
-                            '@type': 'Review',
-                            'reviewRating': {
-                              'ratingValue': '${review.rating}',
-                              'bestRating': '5'
+                          "@context": "http://schema.org",
+                          "@type": "Product",
+                          "review": {
+                            "@type": "Review",
+                            "reviewRating": {
+                              "ratingValue": "${review.rating}",
+                              "bestRating": "5"
                             },
-                            'author': {
-                              '@type': 'Person',
-                              'name': "${review.reviewerName ||
+                            "author": {
+                              "@type": "Person",
+                              "name": "${review.reviewerName ||
                                 intl.formatMessage(messages.anonymous)}"
                             },
-                            'datePublished': '${review.reviewDateTime}',
-                            'reviewBody': ${JSON.stringify(review.text)}
+                            "datePublished": "${review.reviewDateTime}",
+                            "reviewBody": ${JSON.stringify(review.text)}
                           },
-                          'name': '${productName}'
+                          "name": "${productName}"
                         }`}</script>
                   </Helmet>
                   {state.settings.defaultOpen ? (
