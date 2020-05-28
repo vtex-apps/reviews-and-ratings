@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useReducer,
 } from 'react'
+import { Helmet } from 'react-helmet'
 import ApolloClient, { ApolloQueryResult } from 'apollo-client'
 import { NormalizedCacheObject } from 'apollo-cache-inmemory'
 import { withApollo } from 'react-apollo'
@@ -206,6 +207,10 @@ const reducer = (state: State, action: ReducerActions) => {
 }
 
 const messages = defineMessages({
+  sortPlaceholder: {
+    id: 'store/reviews.list.sortOptions.placeholder',
+    defaultMessage: 'Sort by:',
+  },
   sortMostRecent: {
     id: 'store/reviews.list.sortOptions.mostRecent',
     defaultMessage: 'Most Recent',
@@ -300,7 +305,7 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
 
   const handles = useCssHandles(CSS_HANDLES)
   const { product } = useContext(ProductContext) as any
-  const { productId }: Product = product || {}
+  const { productId, productName }: Product = product || {}
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
@@ -538,6 +543,7 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
               <div className="mr4">
                 <Dropdown
                   options={options}
+                  placeholder={intl.formatMessage(messages.sortPlaceholder)}
                   onChange={(event: React.FormEvent<HTMLSelectElement>) => {
                     dispatch({
                       type: 'SET_SELECTED_SORT',
@@ -554,6 +560,27 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
                   key={i}
                   className="review__comment bw2 bb b--muted-5 mb5 pb4"
                 >
+                  <Helmet>
+                    <script type="application/ld+json">{`{
+                          '@context': 'http://schema.org',
+                          '@type': 'Product',
+                          'review': {
+                            '@type': 'Review',
+                            'reviewRating': {
+                              'ratingValue': '${review.rating}',
+                              'bestRating': '5'
+                            },
+                            'author': {
+                              '@type': 'Person',
+                              'name': "${review.reviewerName ||
+                                intl.formatMessage(messages.anonymous)}"
+                            },
+                            'datePublished': '${review.reviewDateTime}',
+                            'reviewBody': ${JSON.stringify(review.text)}
+                          },
+                          'name': '${productName}'
+                        }`}</script>
+                  </Helmet>
                   {state.settings.defaultOpen ? (
                     <div>
                       <div className="review__comment--rating t-heading-5">

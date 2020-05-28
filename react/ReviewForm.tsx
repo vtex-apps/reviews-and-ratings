@@ -15,7 +15,7 @@ import path from 'ramda/es/path'
 import { useCssHandles } from 'vtex.css-handles'
 import { Card, Input, Button, Textarea } from 'vtex.styleguide'
 
-import getOrders from './queries/orders.gql'
+import getOrders from './queries/orders.graphql'
 import NewReview from '../graphql/newReview.graphql'
 import HasShopperReviewed from '../graphql/hasShopperReviewed.graphql'
 import StarPicker from './components/StarPicker'
@@ -80,7 +80,7 @@ const initialState = {
   rating: 3,
   title: '',
   text: '',
-  location: null,
+  location: '',
   reviewerName: '',
   shopperId: null,
   reviewSubmitted: false,
@@ -337,6 +337,7 @@ export const ReviewForm: FC<InjectedIntlProps & Props> = ({
               text: state.text,
               reviewerName: state.reviewerName,
               shopperId: state.shopperId,
+              location: state.location,
               verifiedPurchaser: state.verifiedPurchaser,
             },
           },
