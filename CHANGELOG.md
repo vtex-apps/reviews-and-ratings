@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- CSS handle for login link
+
 ### Fixed
 
 - Single quotes in LD+JSON replaced with double quotes

@@ -296,6 +296,7 @@ const messages = defineMessages({
 const CSS_HANDLES = [
   'container',
   'writeReviewContainer',
+  'loginLink',
   'reviewsHeading',
   'reviewCommentsContainer',
 ] as const
@@ -528,7 +529,7 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
           <Link
             page="store.login"
             query={`returnUrl=${encodeURIComponent(url)}`}
-            className="h1 w2 tc flex items-center w-100-s h-100-s pa4-s"
+            className={`${handles.loginLink} h1 w2 tc flex items-center w-100-s h-100-s pa4-s`}
           >
             <FormattedMessage id="store/reviews.list.login" />
           </Link>

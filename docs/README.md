@@ -1,6 +1,9 @@
 📢 Use this project, [contribute](https://github.com/vtex-apps/breadcrumb) to it or open issues to help evolve it using [Store Discussion](https://github.com/vtex-apps/store-discussion).
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-0-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # Reviews and Ratings
@@ -58,7 +61,8 @@ In order to apply CSS customizations in this and other blocks, follow the instru
 | ------------------------- |
 | `container`               |
 | `formContainer`           |
-| `reviewCommentsContainer` | 
+| `loginLink`               |
+| `reviewCommentsContainer` |
 | `reviewsHeading`          |
 | `star--empty`             |
 | `star--filled`            |
@@ -68,10 +72,10 @@ In order to apply CSS customizations in this and other blocks, follow the instru
 | `summaryContainer`        |
 | `writeReviewContainer`    |
 
-
 **Upcoming documentation:**
 
- - [Add es locale translation](https://github.com/vtex-apps/reviews-and-ratings/pull/15)
+- [Add es locale translation](https://github.com/vtex-apps/reviews-and-ratings/pull/15)
+
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
@@ -81,6 +85,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
