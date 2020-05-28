@@ -562,25 +562,28 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
                   className="review__comment bw2 bb b--muted-5 mb5 pb4"
                 >
                   <Helmet>
-                    <script type="application/ld+json">{`{
-                          "@context": "http://schema.org",
-                          "@type": "Product",
-                          "review": {
-                            "@type": "Review",
-                            "reviewRating": {
-                              "ratingValue": "${review.rating}",
-                              "bestRating": "5"
-                            },
-                            "author": {
-                              "@type": "Person",
-                              "name": "${review.reviewerName ||
-                                intl.formatMessage(messages.anonymous)}"
-                            },
-                            "datePublished": "${review.reviewDateTime}",
-                            "reviewBody": ${JSON.stringify(review.text)}
+                    <script type="application/ld+json">
+                      {JSON.stringify({
+                        '@context': 'http://schema.org',
+                        '@type': 'Product',
+                        review: {
+                          '@type': 'Review',
+                          reviewRating: {
+                            ratingValue: review.rating.toString(),
+                            bestRating: '5',
                           },
-                          "name": "${productName}"
-                        }`}</script>
+                          author: {
+                            '@type': 'Person',
+                            name:
+                              review.reviewerName ||
+                              intl.formatMessage(messages.anonymous),
+                          },
+                          datePublished: review.reviewDateTime,
+                          reviewBody: review.text,
+                        },
+                        name: productName,
+                      })}
+                    </script>
                   </Helmet>
                   {state.settings.defaultOpen ? (
                     <div>

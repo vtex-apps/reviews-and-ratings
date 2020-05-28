@@ -124,16 +124,18 @@ const RatingSummary: FunctionComponent<Props> = props => {
       ) : state.total === 0 ? null : (
         <Fragment>
           <Helmet>
-            <script type="application/ld+json">{`{
-              "@context": "http://schema.org",
-              "@type": "Product",
-              "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": "${state.average}",
-                "reviewCount": "${state.total}"
-              },
-              "name": "${productName}"
-            }`}</script>
+            <script type="application/ld+json">
+              {JSON.stringify({
+                '@context': 'http://schema.org',
+                '@type': 'Product',
+                aggregateRating: {
+                  '@type': 'AggregateRating',
+                  ratingValue: state.average.toString(),
+                  reviewCount: state.total.toString(),
+                },
+                name: productName,
+              })}
+            </script>
           </Helmet>
           <span className="t-heading-4 v-mid">
             <Stars rating={state.average} />

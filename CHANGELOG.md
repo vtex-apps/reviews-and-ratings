@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-- Single quotes in LD+JSON replaced with double quotes
+- Implement JSON.stringify to ensure LD+JSON is valid
 
 ## [1.6.0] - 2020-05-28
 
