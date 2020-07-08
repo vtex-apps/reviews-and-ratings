@@ -447,7 +447,7 @@ export const ReviewForm: FC<InjectedIntlProps & Props> = ({
                 <Input
                   label={intl.formatMessage(messages.emailLabel)}
                   size="large"
-                  value={state.shopperId}
+                  value={state.shopperId || ''}
                   onChange={(event: React.FormEvent<HTMLInputElement>) =>
                     dispatch({
                       type: 'SET_ID',
