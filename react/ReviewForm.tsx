@@ -82,7 +82,7 @@ const initialState = {
   text: '',
   location: '',
   reviewerName: '',
-  shopperId: null,
+  shopperId: '',
   reviewSubmitted: false,
   alreadySubmitted: false,
   verifiedPurchaser: false,
@@ -447,7 +447,7 @@ export const ReviewForm: FC<InjectedIntlProps & Props> = ({
                 <Input
                   label={intl.formatMessage(messages.emailLabel)}
                   size="large"
-                  value={state.shopperId || ''}
+                  value={state.shopperId}
                   onChange={(event: React.FormEvent<HTMLInputElement>) =>
                     dispatch({
                       type: 'SET_ID',
