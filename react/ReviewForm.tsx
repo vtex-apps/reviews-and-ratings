@@ -82,7 +82,7 @@ const initialState = {
   text: '',
   location: '',
   reviewerName: '',
-  shopperId: null,
+  shopperId: '',
   reviewSubmitted: false,
   alreadySubmitted: false,
   verifiedPurchaser: false,
