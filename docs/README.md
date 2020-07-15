@@ -14,9 +14,9 @@ Reviews & Ratings is a VTEX IO native solution allowing shoppers to submit and v
 
 ## Configuration
 
-1. [Install](https://vtex.io/docs/recipes/store/installing-an-app) `vtex.reviews-and-ratings` in the desired account;
+1. [Install](https://vtex.io/docs/recipes/store/installing-an-app) `vtex.reviews-and-ratings@2.x` in the desired VTEX account;
 
-2. In the admin dashboard, access `Apps > My Apps` and then click the box for `Reviews and Ratings`;
+2. In the account's admin dashboard, access `Apps > My Apps` and then click the box for `Reviews and Ratings`;
 
 ![apps-reviews-and-ratings](https://user-images.githubusercontent.com/52087100/71026670-77a49e00-20e8-11ea-9e01-0cb4dec12a56.png)
 
