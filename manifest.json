@@ -1,7 +1,7 @@
 {
   "name": "reviews-and-ratings",
   "vendor": "vtex",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "title": "Reviews and Ratings",
   "description": "An app for saving and retrieving product reviews and ratings.",
   "builders": {
@@ -32,7 +32,9 @@
     },
     "free": true,
     "type": "free",
-    "availableCountries": ["*"]
+    "availableCountries": [
+      "*"
+    ]
   },
   "settingsSchema": {
     "title": "Reviews and Ratings",
