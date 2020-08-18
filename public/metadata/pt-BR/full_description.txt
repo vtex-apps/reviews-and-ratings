@@ -1,0 +1,9 @@
+## Sobre
+
+Este aplicativo melhora a página do produto e as prateleiras de produtos com avaliações e comentários dos clientes. Permita que os clientes tomem decisões mais inteligentes com base no feedback de outros compradores e compartilhem seus comentários sobre os produtos que compraram.
+
+## Funcionalidades
+
+- Exiba as avaliações médias por estrelas nas prateleiras de produtos e os comentários completos nas páginas de detalhes dos produtos
+- Moderação dos comentários: aprove os novos comentários antes de que sejam exibidos na página do produto
+- Configure sua loja para permitir comentários anônimos

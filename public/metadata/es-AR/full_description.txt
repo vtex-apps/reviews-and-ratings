@@ -1,0 +1,9 @@
+## Sobre
+
+Esta aplicación mejora la página y los estantes de sus productos con las calificaciones y reseñas de los clientes. Permite que los clientes tomen decisiones más inteligentes basándose en los comentarios de otros consumidores y que compartan sus opiniones sobre los productos que compran. 
+
+## Características
+
+- Muestra las calificaciones promedio de estrellas en los estantes de los productos y las reseñas completas en la página de detalles del producto.
+- Moderación de reseñas: aprobar las reseñas de los productos nuevos antes de que se muestren en la página del producto.
+- Configura su tienda para permitir reseñas anónimas.
