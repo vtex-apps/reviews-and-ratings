@@ -1,14 +1,14 @@
-## Overview
+## Sobre
 
-This app improves your product page and product shelves with customer ratings and reviews. Allow customers to make smarter decisions based on other shoppers' feedback, and share their feedback for the products they purchase. 
+Este aplicativo melhora a página do produto e as prateleiras de produtos com avaliações e comentários dos clientes. Permita que os clientes tomem decisões mais inteligentes com base no feedback de outros compradores e compartilhem seus comentários sobre os produtos que compraram.
 
-## Features
+## Funcionalidades
 
-- Display average star ratings on product shelves and full text reviews on the PDP
-- Review moderation: approve new product reviews before they are displayed in the product page
-- Configure your store to allow anonymous reviews
+- Exiba as avaliações médias por estrelas nas prateleiras de produtos e os comentários completos nas páginas de detalhes dos produtos
+- Moderação dos comentários: aprove os novos comentários antes de que sejam exibidos na página do produto
+- Configure sua loja para permitir comentários anônimos
 
-## Setup
+## Configuração
 
 1. Install the app from the VTEX App Store.
 
@@ -32,7 +32,7 @@ This app improves your product page and product shelves with customer ratings an
 
 `"product-rating-inline"`: Similar to the previous block, but intended to be used in product shelves. The block displays the product's average rating only.
 
-### Moderation
+### Moderação
 
 As described above, the app may be configured to use a **review moderation interface** where an administrator is responsible for approving new product reviews before they are displayed on the store website.
 

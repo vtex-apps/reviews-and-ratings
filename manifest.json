@@ -30,7 +30,9 @@
     "support": {
       "url": "https://support.vtex.com/hc/requests"
     },
-    "free": true
+    "free": true,
+    "type": "free",
+    "availableCountries": ["*"]
   },
   "settingsSchema": {
     "title": "Reviews and Ratings",

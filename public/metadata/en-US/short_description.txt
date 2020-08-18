@@ -1,1 +1,1 @@
-VTEX IO native solution for product reviews and ratings.
+Native solution for product reviews and ratings.
