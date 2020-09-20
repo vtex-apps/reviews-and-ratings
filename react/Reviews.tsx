@@ -485,7 +485,7 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
       >
         <FormattedMessage id="store/reviews.list.title" />
       </h3>
-      <div className="review__rating">
+      <div className={`${handles.reviewsRating} review__rating`}>
         {!state.hasTotal || !state.hasAverage ? (
           <FormattedMessage id="store/reviews.list.summary.loading" />
         ) : !state.total ? null : (
