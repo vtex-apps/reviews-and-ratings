@@ -108,16 +108,16 @@ declare let global: {
 }
 
 type ReducerActions =
-    | { type: 'SET_NEXT_PAGE' }
-    | { type: 'SET_PREV_PAGE' }
-    | { type: 'TOGGLE_REVIEW_FORM' }
-    | { type: 'TOGGLE_REVIEW_ACCORDION'; args: { reviewNumber: number } }
-    | { type: 'SET_SELECTED_SORT'; args: { sort: string } }
-    | { type: 'SET_REVIEWS'; args: { reviews: Review[]; total: number } }
-    | { type: 'SET_TOTAL'; args: { total: number } }
-    | { type: 'SET_AVERAGE'; args: { average: number } }
-    | { type: 'SET_SETTINGS'; args: { settings: AppSettings } }
-    | { type: 'SET_AUTHENTICATED'; args: { authenticated: boolean } }
+  | { type: 'SET_NEXT_PAGE' }
+  | { type: 'SET_PREV_PAGE' }
+  | { type: 'TOGGLE_REVIEW_FORM' }
+  | { type: 'TOGGLE_REVIEW_ACCORDION'; args: { reviewNumber: number } }
+  | { type: 'SET_SELECTED_SORT'; args: { sort: string } }
+  | { type: 'SET_REVIEWS'; args: { reviews: Review[]; total: number } }
+  | { type: 'SET_TOTAL'; args: { total: number } }
+  | { type: 'SET_AVERAGE'; args: { average: number } }
+  | { type: 'SET_SETTINGS'; args: { settings: AppSettings } }
+  | { type: 'SET_AUTHENTICATED'; args: { authenticated: boolean } }
 
 const initialState = {
   sort: 'ReviewDateTime:desc',
@@ -162,10 +162,10 @@ const reducer = (state: State, action: ReducerActions) => {
       return {
         ...state,
         openReview:
-        // eslint-disable-next-line eqeqeq
-            action.args.reviewNumber == state.openReview
-                ? null
-                : action.args.reviewNumber,
+          // eslint-disable-next-line eqeqeq
+          action.args.reviewNumber == state.openReview
+            ? null
+            : action.args.reviewNumber,
       }
     case 'SET_SELECTED_SORT':
       return {
@@ -349,49 +349,49 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
 
     if (years > 0) {
       return `${years} ${
-          years > 1
-              ? intl.formatMessage(messages.timeAgoYears)
-              : intl.formatMessage(messages.timeAgoYear)
+        years > 1
+          ? intl.formatMessage(messages.timeAgoYears)
+          : intl.formatMessage(messages.timeAgoYear)
       } ${intl.formatMessage(messages.timeAgo)}`
     }
     if (months > 0) {
       return `${months} ${
-          months > 1
-              ? intl.formatMessage(messages.timeAgoMonths)
-              : intl.formatMessage(messages.timeAgoMonth)
+        months > 1
+          ? intl.formatMessage(messages.timeAgoMonths)
+          : intl.formatMessage(messages.timeAgoMonth)
       } ${intl.formatMessage(messages.timeAgo)}`
     }
     if (days > 0) {
       return `${days} ${
-          days > 1
-              ? intl.formatMessage(messages.timeAgoDays)
-              : intl.formatMessage(messages.timeAgoDay)
+        days > 1
+          ? intl.formatMessage(messages.timeAgoDays)
+          : intl.formatMessage(messages.timeAgoDay)
       } ${intl.formatMessage(messages.timeAgo)}`
     }
     if (hours > 0) {
       return `${hours} ${
-          hours > 1
-              ? intl.formatMessage(messages.timeAgoHours)
-              : intl.formatMessage(messages.timeAgoHour)
+        hours > 1
+          ? intl.formatMessage(messages.timeAgoHours)
+          : intl.formatMessage(messages.timeAgoHour)
       } ${intl.formatMessage(messages.timeAgo)}`
     }
     if (minutes > 0) {
       return `${minutes} ${
-          minutes > 1
-              ? intl.formatMessage(messages.timeAgoMinutes)
-              : intl.formatMessage(messages.timeAgoMinute)
+        minutes > 1
+          ? intl.formatMessage(messages.timeAgoMinutes)
+          : intl.formatMessage(messages.timeAgoMinute)
       } ${intl.formatMessage(messages.timeAgo)}`
     }
     return intl.formatMessage(messages.timeAgoJustNow)
   }
 
   const getLocation = () =>
-      canUseDOM
-          ? {
-            url: window.location.pathname + window.location.hash,
-            pathName: window.location.pathname,
-          }
-          : { url: global.__pathname__, pathName: global.__pathname__ }
+    canUseDOM
+      ? {
+          url: window.location.pathname + window.location.hash,
+          pathName: window.location.pathname,
+        }
+      : { url: global.__pathname__, pathName: global.__pathname__ }
 
   const { url } = getLocation()
   useEffect(() => {
@@ -404,8 +404,8 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
 
       const { namespaces } = sessionRespose
       const storeUserId = path(
-          ['authentication', 'storeUserId', 'value'],
-          namespaces
+        ['authentication', 'storeUserId', 'value'],
+        namespaces
       )
       if (!storeUserId) {
         return
@@ -419,16 +419,16 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
 
   useEffect(() => {
     client
-        .query({
-          query: AppSettings,
+      .query({
+        query: AppSettings,
+      })
+      .then((response: ApolloQueryResult<SettingsData>) => {
+        const settings = response.data.appSettings
+        dispatch({
+          type: 'SET_SETTINGS',
+          args: { settings },
         })
-        .then((response: ApolloQueryResult<SettingsData>) => {
-          const settings = response.data.appSettings
-          dispatch({
-            type: 'SET_SETTINGS',
-            args: { settings },
-          })
-        })
+      })
   }, [client])
 
   useEffect(() => {
@@ -437,19 +437,19 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
     }
 
     client
-        .query({
-          query: AverageRatingByProductId,
-          variables: {
-            productId,
-          },
+      .query({
+        query: AverageRatingByProductId,
+        variables: {
+          productId,
+        },
+      })
+      .then((response: ApolloQueryResult<AverageData>) => {
+        const average = response.data.averageRatingByProductId
+        dispatch({
+          type: 'SET_AVERAGE',
+          args: { average },
         })
-        .then((response: ApolloQueryResult<AverageData>) => {
-          const average = response.data.averageRatingByProductId
-          dispatch({
-            type: 'SET_AVERAGE',
-            args: { average },
-          })
-        })
+      })
   }, [client, productId])
 
   useEffect(() => {
@@ -457,259 +457,259 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
       return
     }
     client
-        .query({
-          query: ReviewsByProductId,
-          variables: {
-            productId,
-            from: state.from,
-            to: state.to,
-            orderBy: state.sort,
-            status:
-                state.settings && !state.settings.requireApproval ? '' : 'true',
-          },
+      .query({
+        query: ReviewsByProductId,
+        variables: {
+          productId,
+          from: state.from,
+          to: state.to,
+          orderBy: state.sort,
+          status:
+            state.settings && !state.settings.requireApproval ? '' : 'true',
+        },
+      })
+      .then((response: ApolloQueryResult<ReviewsData>) => {
+        const reviews = response.data.reviewsByProductId.data
+        const { total } = response.data.reviewsByProductId.range
+        dispatch({
+          type: 'SET_REVIEWS',
+          args: { reviews, total },
         })
-        .then((response: ApolloQueryResult<ReviewsData>) => {
-          const reviews = response.data.reviewsByProductId.data
-          const { total } = response.data.reviewsByProductId.range
-          dispatch({
-            type: 'SET_REVIEWS',
-            args: { reviews, total },
-          })
-        })
+      })
   }, [client, productId, state.from, state.to, state.sort, state.settings])
 
   return (
-      <div className={`${handles.container} review mw8 center ph5`}>
-        <h3
-            className={`${handles.reviewsHeading} review__title t-heading-3 bb b--muted-5 mb5`}
-        >
-          <FormattedMessage id="store/reviews.list.title" />
-        </h3>
-        <div className={`${handles.reviewsRating} review__rating`}>
-          {!state.hasTotal || !state.hasAverage ? (
-              <FormattedMessage id="store/reviews.list.summary.loading" />
-          ) : !state.total ? null : (
-              <Fragment>
-                <div className={`${handles.starsContainer} t-heading-4`}>
-                  <Stars rating={state.average} />
-                </div>
-                <span className={`${handles.reviewsRatingAverage} review__rating--average dib v-mid`}>
+    <div className={`${handles.container} review mw8 center ph5`}>
+      <h3
+        className={`${handles.reviewsHeading} review__title t-heading-3 bb b--muted-5 mb5`}
+      >
+        <FormattedMessage id="store/reviews.list.title" />
+      </h3>
+      <div className="review__rating">
+        {!state.hasTotal || !state.hasAverage ? (
+          <FormattedMessage id="store/reviews.list.summary.loading" />
+        ) : !state.total ? null : (
+          <Fragment>
+            <div className={`${handles.starsContainer} t-heading-4`}>
+              <Stars rating={state.average} />
+            </div>
+            <span className={`${handles.reviewsRatingAverage} review__rating--average dib v-mid`}>
               <FormattedMessage
-                  id="store/reviews.list.summary.averageRating"
-                  values={{
-                    average: state.average,
-                  }}
+                id="store/reviews.list.summary.averageRating"
+                values={{
+                  average: state.average,
+                }}
               />
             </span>{' '}
-                <span className={`${handles.reviewsRatingCount} review__rating--count dib v-mid`}>
+            <span className={`${handles.reviewsRatingCount} review__rating--count dib v-mid`}>
               <FormattedMessage
-                  id="store/reviews.list.summary.totalReviews"
-                  values={{
-                    total: state.total,
-                  }}
+                id="store/reviews.list.summary.totalReviews"
+                values={{
+                  total: state.total,
+                }}
               />
             </span>
-              </Fragment>
-          )}
-        </div>
-        <div className={`${handles.writeReviewContainer} mv5`}>
-          {(state.settings && state.settings.allowAnonymousReviews) ||
-          (state.settings &&
-              !state.settings.allowAnonymousReviews &&
-              state.userAuthenticated) ? (
-              <Collapsible
-                  header={
-                    <span className="c-action-primary hover-c-action-primary">
+          </Fragment>
+        )}
+      </div>
+      <div className={`${handles.writeReviewContainer} mv5`}>
+        {(state.settings && state.settings.allowAnonymousReviews) ||
+        (state.settings &&
+          !state.settings.allowAnonymousReviews &&
+          state.userAuthenticated) ? (
+          <Collapsible
+            header={
+              <span className="c-action-primary hover-c-action-primary">
                 <FormattedMessage id="store/reviews.list.writeReview" />
               </span>
-                  }
-                  onClick={() => {
+            }
+            onClick={() => {
+              dispatch({
+                type: 'TOGGLE_REVIEW_FORM',
+              })
+            }}
+            isOpen={state.showForm}
+          >
+            <ReviewForm settings={state.settings} />
+          </Collapsible>
+        ) : (
+          <Link
+            page="store.login"
+            query={`returnUrl=${encodeURIComponent(url)}`}
+            className={`${handles.loginLink} h1 w2 tc flex items-center w-100-s h-100-s pa4-s`}
+          >
+            <FormattedMessage id="store/reviews.list.login" />
+          </Link>
+        )}
+      </div>
+      <div className={`${handles.reviewCommentsContainer} review__comments`}>
+        {state.reviews === null ? (
+          <FormattedMessage id="store/reviews.list.loading" />
+        ) : state.reviews.length ? (
+          <Fragment>
+            <div className="flex mb7">
+              <div className="mr4">
+                <Dropdown
+                  options={options}
+                  placeholder={intl.formatMessage(messages.sortPlaceholder)}
+                  onChange={(event: React.FormEvent<HTMLSelectElement>) => {
                     dispatch({
-                      type: 'TOGGLE_REVIEW_FORM',
+                      type: 'SET_SELECTED_SORT',
+                      args: { sort: event.currentTarget.value },
                     })
                   }}
-                  isOpen={state.showForm}
-              >
-                <ReviewForm settings={state.settings} />
-              </Collapsible>
-          ) : (
-              <Link
-                  page="store.login"
-                  query={`returnUrl=${encodeURIComponent(url)}`}
-                  className={`${handles.loginLink} h1 w2 tc flex items-center w-100-s h-100-s pa4-s`}
-              >
-                <FormattedMessage id="store/reviews.list.login" />
-              </Link>
-          )}
-        </div>
-        <div className={`${handles.reviewCommentsContainer} review__comments`}>
-          {state.reviews === null ? (
-              <FormattedMessage id="store/reviews.list.loading" />
-          ) : state.reviews.length ? (
-              <Fragment>
-                <div className="flex mb7">
-                  <div className="mr4">
-                    <Dropdown
-                        options={options}
-                        placeholder={intl.formatMessage(messages.sortPlaceholder)}
-                        onChange={(event: React.FormEvent<HTMLSelectElement>) => {
-                          dispatch({
-                            type: 'SET_SELECTED_SORT',
-                            args: { sort: event.currentTarget.value },
-                          })
-                        }}
-                        value={state.sort}
-                    />
-                  </div>
-                </div>
-                {state.reviews.map((review: Review, i: number) => {
-                  return (
-                      <div
-                          key={i}
-                          className={`${handles.reviewComment} review__comment bw2 bb b--muted-5 mb5 pb4`}
-                      >
-                        <Helmet>
-                          <script type="application/ld+json">
-                            {JSON.stringify({
-                              '@context': 'http://schema.org',
-                              '@type': 'Product',
-                              review: {
-                                '@type': 'Review',
-                                reviewRating: {
-                                  ratingValue: review.rating.toString(),
-                                  bestRating: '5',
-                                },
-                                author: {
-                                  '@type': 'Person',
-                                  name:
-                                      review.reviewerName ||
-                                      intl.formatMessage(messages.anonymous),
-                                },
-                                datePublished: review.reviewDateTime,
-                                reviewBody: review.text,
-                              },
-                              name: productName,
-                            })}
-                          </script>
-                        </Helmet>
-                        {state.settings.defaultOpen ? (
-                            <div>
-                              <div className={`${handles.reviewCommentRating} review__comment--rating t-heading-5`}>
-                                <Stars rating={review.rating} /> {` `}
-                                <span className={`${handles.reviewCommentUser} review__comment--user lh-copy mw9 t-heading-5 mt0 mb2`}>
+                  value={state.sort}
+                />
+              </div>
+            </div>
+            {state.reviews.map((review: Review, i: number) => {
+              return (
+                <div
+                  key={i}
+                  className={`${handles.reviewComment} review__comment bw2 bb b--muted-5 mb5 pb4`}
+                >
+                  <Helmet>
+                    <script type="application/ld+json">
+                      {JSON.stringify({
+                        '@context': 'http://schema.org',
+                        '@type': 'Product',
+                        review: {
+                          '@type': 'Review',
+                          reviewRating: {
+                            ratingValue: review.rating.toString(),
+                            bestRating: '5',
+                          },
+                          author: {
+                            '@type': 'Person',
+                            name:
+                              review.reviewerName ||
+                              intl.formatMessage(messages.anonymous),
+                          },
+                          datePublished: review.reviewDateTime,
+                          reviewBody: review.text,
+                        },
+                        name: productName,
+                      })}
+                    </script>
+                  </Helmet>
+                  {state.settings.defaultOpen ? (
+                    <div>
+                      <div className={`${handles.reviewCommentRating} review__comment--rating t-heading-5`}>
+                        <Stars rating={review.rating} /> {` `}
+                        <span className={`${handles.reviewCommentUser} review__comment--user lh-copy mw9 t-heading-5 mt0 mb2`}>
                           {review.title}
                         </span>
-                              </div>
-                              <ul className="pa0 mv2 t-small">
-                                {review.verifiedPurchaser ? (
-                                    <li className="dib mr5">
-                                      <IconSuccess />{' '}
-                                      <FormattedMessage id="store/reviews.list.verifiedPurchaser" />
-                                    </li>
-                                ) : null}
-                                <li className="dib mr2">
-                                  <FormattedMessage id="store/reviews.list.submitted" />{' '}
-                                  <strong>{getTimeAgo(review.reviewDateTime)}</strong>
-                                </li>
-                                <li className="dib mr5">
-                                  <FormattedMessage id="store/reviews.list.by" />{' '}
-                                  <strong>
-                                    {review.reviewerName ||
-                                    intl.formatMessage(messages.anonymous)}
-                                  </strong>
-                                  {state.settings &&
-                                  state.settings.useLocation &&
-                                  review.location && <span>, {review.location}</span>}
-                                </li>
-                              </ul>
-                              <p className="t-body lh-copy mw9">
-                                <ShowMore
-                                    lines={3}
-                                    more="Show more"
-                                    less="Show less"
-                                    anchorClass=""
-                                >
-                                  {review.text}
-                                </ShowMore>
-                              </p>
-                            </div>
-                        ) : (
-                            <Collapsible
-                                header={
-                                  <div className={`${handles.reviewCommentRating} review__comment--rating t-heading-5`}>
-                                    <Stars rating={review.rating} /> {` `}
-                                    <span className={`${handles.reviewCommentUser} review__comment--user lh-copy mw9 t-heading-5 mt0 mb2`}>
+                      </div>
+                      <ul className="pa0 mv2 t-small">
+                        {review.verifiedPurchaser ? (
+                          <li className="dib mr5">
+                            <IconSuccess />{' '}
+                            <FormattedMessage id="store/reviews.list.verifiedPurchaser" />
+                          </li>
+                        ) : null}
+                        <li className="dib mr2">
+                          <FormattedMessage id="store/reviews.list.submitted" />{' '}
+                          <strong>{getTimeAgo(review.reviewDateTime)}</strong>
+                        </li>
+                        <li className="dib mr5">
+                          <FormattedMessage id="store/reviews.list.by" />{' '}
+                          <strong>
+                            {review.reviewerName ||
+                              intl.formatMessage(messages.anonymous)}
+                          </strong>
+                          {state.settings &&
+                            state.settings.useLocation &&
+                            review.location && <span>, {review.location}</span>}
+                        </li>
+                      </ul>
+                      <p className="t-body lh-copy mw9">
+                        <ShowMore
+                          lines={3}
+                          more="Show more"
+                          less="Show less"
+                          anchorClass=""
+                        >
+                          {review.text}
+                        </ShowMore>
+                      </p>
+                    </div>
+                  ) : (
+                    <Collapsible
+                      header={
+                        <div className={`${handles.reviewCommentRating} review__comment--rating t-heading-5`}>
+                          <Stars rating={review.rating} /> {` `}
+                          <span className={`${handles.reviewCommentUser} review__comment--user lh-copy mw9 t-heading-5 mt0 mb2`}>
                             {review.title}
                           </span>
-                                  </div>
-                                }
-                                onClick={() => {
-                                  dispatch({
-                                    type: 'TOGGLE_REVIEW_ACCORDION',
-                                    args: {
-                                      reviewNumber: i,
-                                    },
-                                  })
-                                }}
-                                isOpen={state.openReview === i}
-                            >
-                              <ul className="pa0 mv2 t-small">
-                                {review.verifiedPurchaser ? (
-                                    <li className="dib mr5">
-                                      <IconSuccess />{' '}
-                                      <FormattedMessage id="store/reviews.list.verifiedPurchaser" />
-                                    </li>
-                                ) : null}
-                                <li className="dib mr2">
-                                  <FormattedMessage id="store/reviews.list.submitted" />{' '}
-                                  <strong>{getTimeAgo(review.reviewDateTime)}</strong>
-                                </li>
-                                <li className="dib mr5">
-                                  <FormattedMessage id="store/reviews.list.by" />{' '}
-                                  <strong>
-                                    {review.reviewerName ||
-                                    intl.formatMessage(messages.anonymous)}
-                                  </strong>
-                                  {state.settings &&
-                                  state.settings.useLocation &&
-                                  review.location && <span>, {review.location}</span>}
-                                </li>
-                              </ul>
-                              <p className="t-body lh-copy mw9">{review.text}</p>
-                            </Collapsible>
-                        )}
-                      </div>
-                  )
-                })}
-                <div className="review__paging">
-                  <Pagination
-                      textShowRows=""
-                      currentItemFrom={state.from}
-                      currentItemTo={state.to}
-                      textOf={intl.formatMessage(messages.textOf)}
-                      totalItems={state.total}
-                      onNextClick={() => {
+                        </div>
+                      }
+                      onClick={() => {
                         dispatch({
-                          type: 'SET_NEXT_PAGE',
+                          type: 'TOGGLE_REVIEW_ACCORDION',
+                          args: {
+                            reviewNumber: i,
+                          },
                         })
                       }}
-                      onPrevClick={() => {
-                        dispatch({
-                          type: 'SET_PREV_PAGE',
-                        })
-                      }}
-                  />
+                      isOpen={state.openReview === i}
+                    >
+                      <ul className="pa0 mv2 t-small">
+                        {review.verifiedPurchaser ? (
+                          <li className="dib mr5">
+                            <IconSuccess />{' '}
+                            <FormattedMessage id="store/reviews.list.verifiedPurchaser" />
+                          </li>
+                        ) : null}
+                        <li className="dib mr2">
+                          <FormattedMessage id="store/reviews.list.submitted" />{' '}
+                          <strong>{getTimeAgo(review.reviewDateTime)}</strong>
+                        </li>
+                        <li className="dib mr5">
+                          <FormattedMessage id="store/reviews.list.by" />{' '}
+                          <strong>
+                            {review.reviewerName ||
+                              intl.formatMessage(messages.anonymous)}
+                          </strong>
+                          {state.settings &&
+                            state.settings.useLocation &&
+                            review.location && <span>, {review.location}</span>}
+                        </li>
+                      </ul>
+                      <p className="t-body lh-copy mw9">{review.text}</p>
+                    </Collapsible>
+                  )}
                 </div>
-              </Fragment>
-          ) : (
-              <div className="review__comment bw2 bb b--muted-5 mb5 pb4">
-                <h5 className="review__comment--user lh-copy mw9 t-heading-5 mv5">
-                  <FormattedMessage id="store/reviews.list.emptyState" />
-                </h5>
-              </div>
-          )}
-        </div>
+              )
+            })}
+            <div className="review__paging">
+              <Pagination
+                textShowRows=""
+                currentItemFrom={state.from}
+                currentItemTo={state.to}
+                textOf={intl.formatMessage(messages.textOf)}
+                totalItems={state.total}
+                onNextClick={() => {
+                  dispatch({
+                    type: 'SET_NEXT_PAGE',
+                  })
+                }}
+                onPrevClick={() => {
+                  dispatch({
+                    type: 'SET_PREV_PAGE',
+                  })
+                }}
+              />
+            </div>
+          </Fragment>
+        ) : (
+          <div className="review__comment bw2 bb b--muted-5 mb5 pb4">
+            <h5 className="review__comment--user lh-copy mw9 t-heading-5 mv5">
+              <FormattedMessage id="store/reviews.list.emptyState" />
+            </h5>
+          </div>
+        )}
       </div>
+    </div>
   )
 }
 
