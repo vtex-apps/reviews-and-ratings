@@ -68,18 +68,18 @@ In order to apply CSS customizations in this and other blocks, follow the instru
 
 | CSS Handles               |
 | ------------------------- |
-| `container`               |
-| `formContainer`           |
-| `loginLink`               |
-| `reviewCommentsContainer` |
-| `reviewsHeading`          |
-| `star--empty`             |
-| `star--filled`            |
-| `star`                    |
-| `starpicker`              |
-| `stars`                   |
-| `summaryContainer`        |
-| `writeReviewContainer`    |
+| 'container'               |
+| 'writeReviewContainer'    |
+| 'loginLink'               |
+| 'reviewsRating'           |
+| 'starsContainer'          |
+| 'reviewsHeading'          |
+| 'reviewsRatingAverage'    |
+| 'reviewsRatingCount'      |
+| 'reviewCommentsContainer' |
+| 'reviewComment'           |
+| 'reviewCommentRating'     |
+| 'reviewCommentUser'       |
 
 <!-- DOCS-IGNORE:start -->
 
