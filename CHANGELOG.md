@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+- App Store Assets - new format. New folders: messages, licenses and images.
+
 ## [2.0.3] - 2020-09-16
 ### Fixed
 
