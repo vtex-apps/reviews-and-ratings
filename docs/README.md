@@ -69,6 +69,7 @@ In order to apply CSS customizations in this and other blocks, follow the instru
 | CSS Handles               |
 | ------------------------- |
 | `container`               |
+| `formContainer`           |
 | `loginLink`               |
 | `reviewComment`           |
 | `reviewCommentRating`     |
