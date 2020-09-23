@@ -4,5 +4,6 @@ query AppSettings {
     requireApproval
     useLocation
     defaultOpen
+    defaultOpenCount
   }
 }
