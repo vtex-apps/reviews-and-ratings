@@ -36,6 +36,8 @@ Once in the app's settings page, define the following settings:
 
 - **Default all review accordions to open**: Checking this box will cause all review accordions on the product page to default to open with review text limited to 3 lines. Reviews with more than 3 lines of text will be truncated with an ellipsis and a "Show More" link that can be used to display the whole review text.
 
+- **Number of open review accordions**: Select the number of review accordions on the product page to default to open. If the default all review accordions to open is active, this option is ignored.
+
 ### Step 3 - Declaring the app's blocks in your store theme
 
 Once the app is configured, it is time to place the following blocks in your Store Theme app:
