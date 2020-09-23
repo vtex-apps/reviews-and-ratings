@@ -279,30 +279,31 @@ export const ReviewForm: FC<InjectedIntlProps & Props> = ({
             })
           }
         })
-    })
-    client
-      .query({
-        query: getOrders,
-        variables: null,
-      })
-      .then((res: any) => {
-        // eslint-disable-next-line vtex/prefer-early-return
-        if (res?.data?.orders && res.data.orders.length) {
-          const hasItem = !!res.data.orders.find((order: any) => {
-            return (
-              !!order.isCompleted &&
-              !!order.items.find((item: any) => {
-                return item.productId === productId
-              })
-            )
-          })
-          if (hasItem) {
-            dispatch({
-              type: 'SET_VERIFIED',
+
+      client
+        .query({
+          query: getOrders,
+          variables: null,
+        })
+        .then((res: any) => {
+          // eslint-disable-next-line vtex/prefer-early-return
+          if (res?.data?.orders && res.data.orders.length) {
+            const hasItem = !!res.data.orders.find((order: any) => {
+              return (
+                !!order.isCompleted &&
+                !!order.items.find((item: any) => {
+                  return item.productId === productId
+                })
+              )
             })
+            if (hasItem) {
+              dispatch({
+                type: 'SET_VERIFIED',
+              })
+            }
           }
-        }
-      })
+        })
+    })
   }, [client, productId])
 
   async function submitReview() {
