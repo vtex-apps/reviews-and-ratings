@@ -297,8 +297,15 @@ const CSS_HANDLES = [
   'container',
   'writeReviewContainer',
   'loginLink',
+  'reviewsRating',
+  'starsContainer',
   'reviewsHeading',
+  'reviewsRatingAverage',
+  'reviewsRatingCount',
   'reviewCommentsContainer',
+  'reviewComment',
+  'reviewCommentRating',
+  'reviewCommentUser',
 ] as const
 
 const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
@@ -478,15 +485,17 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
       >
         <FormattedMessage id="store/reviews.list.title" />
       </h3>
-      <div className="review__rating">
+      <div className={`${handles.reviewsRating} review__rating`}>
         {!state.hasTotal || !state.hasAverage ? (
           <FormattedMessage id="store/reviews.list.summary.loading" />
         ) : !state.total ? null : (
           <Fragment>
-            <div className="t-heading-4">
+            <div className={`${handles.starsContainer} t-heading-4`}>
               <Stars rating={state.average} />
             </div>
-            <span className="review__rating--average dib v-mid">
+            <span
+              className={`${handles.reviewsRatingAverage} review__rating--average dib v-mid`}
+            >
               <FormattedMessage
                 id="store/reviews.list.summary.averageRating"
                 values={{
@@ -494,7 +503,9 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
                 }}
               />
             </span>{' '}
-            <span className="review__rating--count dib v-mid">
+            <span
+              className={`${handles.reviewsRatingCount} review__rating--count dib v-mid`}
+            >
               <FormattedMessage
                 id="store/reviews.list.summary.totalReviews"
                 values={{
@@ -559,7 +570,7 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
               return (
                 <div
                   key={i}
-                  className="review__comment bw2 bb b--muted-5 mb5 pb4"
+                  className={`${handles.reviewComment} review__comment bw2 bb b--muted-5 mb5 pb4`}
                 >
                   <Helmet>
                     <script type="application/ld+json">
@@ -587,9 +598,13 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
                   </Helmet>
                   {state.settings.defaultOpen ? (
                     <div>
-                      <div className="review__comment--rating t-heading-5">
+                      <div
+                        className={`${handles.reviewCommentRating} review__comment--rating t-heading-5`}
+                      >
                         <Stars rating={review.rating} /> {` `}
-                        <span className="review__comment--user lh-copy mw9 t-heading-5 mt0 mb2">
+                        <span
+                          className={`${handles.reviewCommentUser} review__comment--user lh-copy mw9 t-heading-5 mt0 mb2`}
+                        >
                           {review.title}
                         </span>
                       </div>
@@ -629,9 +644,13 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
                   ) : (
                     <Collapsible
                       header={
-                        <div className="review__comment--rating t-heading-5">
+                        <div
+                          className={`${handles.reviewCommentRating} review__comment--rating t-heading-5`}
+                        >
                           <Stars rating={review.rating} /> {` `}
-                          <span className="review__comment--user lh-copy mw9 t-heading-5 mt0 mb2">
+                          <span
+                            className={`${handles.reviewCommentUser} review__comment--user lh-copy mw9 t-heading-5 mt0 mb2`}
+                          >
                             {review.title}
                           </span>
                         </div>

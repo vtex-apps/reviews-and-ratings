@@ -71,13 +71,20 @@ In order to apply CSS customizations in this and other blocks, follow the instru
 | `container`               |
 | `formContainer`           |
 | `loginLink`               |
+| `reviewComment`           |
+| `reviewCommentRating`     |
 | `reviewCommentsContainer` |
+| `reviewCommentUser`       |
 | `reviewsHeading`          |
+| `reviewsRating`           |
+| `reviewsRatingAverage`    |
+| `reviewsRatingCount`      |
 | `star--empty`             |
 | `star--filled`            |
 | `star`                    |
 | `starpicker`              |
 | `stars`                   |
+| `starsContainer`          |
 | `summaryContainer`        |
 | `writeReviewContainer`    |
 
