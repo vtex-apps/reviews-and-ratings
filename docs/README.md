@@ -26,17 +26,17 @@ In the account's admin dashboard, access `Apps > My Apps` and then click on th
 
 Once in the app's settings page, define the following settings:
 
-![setup-reviews-and-ratings](https://user-images.githubusercontent.com/52087100/71026561-4330e200-20e8-11ea-9f44-167cf0e77fc6.png)
+![reviews-and-ratings](https://user-images.githubusercontent.com/52087100/94868792-3df41800-041a-11eb-89a1-630cc31219cc.png)
 
-- **Allow Anonymous Reviews**: if unchecked, only logged-in shoppers will be able to review products.
+- **Allow Anonymous Reviews** - If unchecked, only logged-in shoppers will be able to review products.
 
-- **Require Admin Approval**: Checking this box activates the review moderation system. Newly submitted reviews will not be displayed on the store website until an administrator approves them in the account's admin. For more details on this, access the Modus Operandi section below.
+- **Require Admin Approval** - Checking this box activates the review moderation system. Newly submitted reviews will not be displayed on the store website until an administrator approves them in the account's admin. For more details on this, access the Modus Operandi section below.
 
-- **Ask For Reviewer's Location**: Checking this box activates an optional review field. Shoppers that submit reviews will be asked to fill in their current location (i.e. "Boston, MA").
+- **Ask For Reviewer's Location** - Checking this box activates an optional review field. Shoppers that submit reviews will be asked to fill in their current location (i.e. "Boston, MA").
 
-- **Default all review accordions to open**: Checking this box will cause all review accordions on the product page to default to open with review text limited to 3 lines. Reviews with more than 3 lines of text will be truncated with an ellipsis and a "Show More" link that can be used to display the whole review text.
+- **Default all review accordions to open** -  The app displays a paginated list with 10 reviews inside a collapsible accordion. Checking this box will cause *all* review accordions on the product page to default to open with review text limited to 3 lines. Reviews with more than 3 lines of text will be truncated with an ellipsis and a `Show More` link that can be used to display the whole review text.
 
-- **Number of open review accordions**: Select the number of review accordions on the product page to default to open. If the default all review accordions to open is active, this option is ignored.
+- **Number of open review accordions** - Checking this box allows you to set a specific number of review accordions (instead of all of them) to automatically open when the page is loaded, displaying all the review text. If the `Default all review accordions to open` is actived, this option is ignored.
 
 ### Step 3 - Declaring the app's blocks in your store theme
 
