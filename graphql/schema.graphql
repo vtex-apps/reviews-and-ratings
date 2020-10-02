@@ -46,6 +46,7 @@ type AppSettings {
   requireApproval: Boolean
   useLocation: Boolean
   defaultOpen: Boolean
+  defaultOpenCount: Int
 }
 
 type Query {

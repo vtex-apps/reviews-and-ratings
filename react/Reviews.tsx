@@ -85,6 +85,7 @@ interface AppSettings {
   requireApproval: boolean
   useLocation: boolean
   defaultOpen: boolean
+  defaultOpenCount: number
 }
 
 interface State {
@@ -97,7 +98,7 @@ interface State {
   hasTotal: boolean
   hasAverage: boolean
   showForm: boolean
-  openReview: number | null
+  openReviews: number[]
   settings: AppSettings
   userAuthenticated: boolean
 }
@@ -112,6 +113,7 @@ type ReducerActions =
   | { type: 'SET_PREV_PAGE' }
   | { type: 'TOGGLE_REVIEW_FORM' }
   | { type: 'TOGGLE_REVIEW_ACCORDION'; args: { reviewNumber: number } }
+  | { type: 'SET_OPEN_REVIEWS'; args: { reviewNumbers: number[] } }
   | { type: 'SET_SELECTED_SORT'; args: { sort: string } }
   | { type: 'SET_REVIEWS'; args: { reviews: Review[]; total: number } }
   | { type: 'SET_TOTAL'; args: { total: number } }
@@ -129,9 +131,10 @@ const initialState = {
   hasTotal: false,
   hasAverage: false,
   showForm: false,
-  openReview: null,
+  openReviews: [],
   settings: {
     defaultOpen: false,
+    defaultOpenCount: 0,
     allowAnonymousReviews: false,
     requireApproval: true,
     useLocation: false,
@@ -161,11 +164,14 @@ const reducer = (state: State, action: ReducerActions) => {
     case 'TOGGLE_REVIEW_ACCORDION':
       return {
         ...state,
-        openReview:
-          // eslint-disable-next-line eqeqeq
-          action.args.reviewNumber == state.openReview
-            ? null
-            : action.args.reviewNumber,
+        openReviews: state.openReviews.includes(action.args.reviewNumber)
+          ? state.openReviews.filter(i => i !== action.args.reviewNumber)
+          : [...state.openReviews, action.args.reviewNumber],
+      }
+    case 'SET_OPEN_REVIEWS':
+      return {
+        ...state,
+        openReviews: action.args.reviewNumbers,
       }
     case 'SET_SELECTED_SORT':
       return {
@@ -475,6 +481,17 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
           type: 'SET_REVIEWS',
           args: { reviews, total },
         })
+
+        const defaultOpenCount = Math.min(
+          state.settings.defaultOpenCount,
+          total
+        )
+        dispatch({
+          type: 'SET_OPEN_REVIEWS',
+          args: {
+            reviewNumbers: [...Array(defaultOpenCount).keys()],
+          },
+        })
       })
   }, [client, productId, state.from, state.to, state.sort, state.settings])
 
@@ -663,7 +680,7 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
                           },
                         })
                       }}
-                      isOpen={state.openReview === i}
+                      isOpen={state.openReviews.includes(i)}
                     >
                       <ul className="pa0 mv2 t-small">
                         {review.verifiedPurchaser ? (

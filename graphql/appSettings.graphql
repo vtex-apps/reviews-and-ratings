@@ -1,8 +1,9 @@
 query AppSettings {
-  appSettings {
+  appSettings @context(provider: "vtex.reviews-and-ratings") {
     allowAnonymousReviews
     requireApproval
     useLocation
     defaultOpen
+    defaultOpenCount
   }
 }

@@ -10,6 +10,7 @@
     /// requireApproval: Boolean
     /// useLocation: Boolean
     /// defaultOpen: Boolean
+    /// defaultOpenCount: Integer
     /// }
     /// </summary>
     public class AppSettings
@@ -18,5 +19,6 @@
         public bool RequireApproval { get; set; }
         public bool UseLocation { get; set; }
         public bool defaultOpen { get; set;}
+        public int defaultOpenCount { get; set;}
     }
 }
