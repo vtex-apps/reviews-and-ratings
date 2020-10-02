@@ -34,9 +34,9 @@ Once in the app's settings page, define the following settings:
 
 - **Ask For Reviewer's Location** - Checking this box activates an optional review field. Shoppers that submit reviews will be asked to fill in their current location (i.e. "Boston, MA").
 
-- **Default all review accordions to open** -  The app displays a paginated list with 10 reviews inside a collapsible accordion. Checking this box will cause *all* review accordions on the product page to default to open with review text limited to 3 lines. Reviews with more than 3 lines of text will be truncated with an ellipsis and a `Show More` link that can be used to display the whole review text.
+- **Default all review accordions to open** -  The app displays reviews on the product page inside collapsible accordions. Checking this box will cause *all* review accordions to default to open when the page is loaded, with review text limited to 3 lines. Reviews with more than 3 lines of text will be truncated with an ellipsis and a `Show More` link that can be used to display the whole review text.
 
-- **Number of open review accordions** - Checking this box allows you to set a specific number of review accordions (instead of all of them) to automatically open when the page is loaded, displaying all the review text. If the `Default all review accordions to open` is actived, this option is ignored.
+- **Number of open review accordions** - Checking this box allows you to set a specific number of review accordions (instead of all of them) to automatically open when the page is loaded, displaying all the review text. If the `Default all review accordions to open` setting is active, this option is ignored.
 
 ### Step 3 - Declaring the app's blocks in your store theme
 
