@@ -42,7 +42,7 @@ interface Product {
 
 interface Props {
   client: ApolloClient<NormalizedCacheObject>
-  shoeGraphBar: boolean | false
+  showGraphBar: boolean | false
 }
 
 interface Review {
