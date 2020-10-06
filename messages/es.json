@@ -94,5 +94,7 @@
   "store/reviews.list.sortOptions.highestRated": "Calificación más alta",
   "store/reviews.list.sortOptions.lowestRated": "Calificación más baja",
   "store/reviews.list.anonymous": "Anónimo",
-  "store/reviews.list.pagination.textOf": "de"
+  "store/reviews.list.pagination.textOf": "de",
+  "store/reviews.list.graph.stars": "Extrellas",
+  "store/reviews.list.graph.star": "Extrella"
 }

@@ -20,6 +20,7 @@ import ReviewForm from './ReviewForm'
 import AppSettings from '../graphql/appSettings.graphql'
 import ReviewsByProductId from '../graphql/reviewsByProductId.graphql'
 import AverageRatingByProductId from '../graphql/averageRatingByProductId.graphql'
+import ReviewsGraph from './ReviewsGraph'
 
 interface Review {
   id: number
@@ -63,6 +64,7 @@ interface AppSettings {
   useLocation: boolean
   defaultOpen: boolean
   defaultOpenCount: number
+  showGraph: boolean
 }
 
 interface State {
@@ -78,6 +80,7 @@ interface State {
   openReviews: number[]
   settings: AppSettings
   userAuthenticated: boolean
+  reviewsStats: number[]
 }
 
 declare let global: {
@@ -92,7 +95,10 @@ type ReducerActions =
   | { type: 'TOGGLE_REVIEW_ACCORDION'; args: { reviewNumber: number } }
   | { type: 'SET_OPEN_REVIEWS'; args: { reviewNumbers: number[] } }
   | { type: 'SET_SELECTED_SORT'; args: { sort: string } }
-  | { type: 'SET_REVIEWS'; args: { reviews: Review[]; total: number } }
+  | {
+      type: 'SET_REVIEWS'
+      args: { reviews: Review[]; total: number; graphArray: number[] }
+    }
   | { type: 'SET_TOTAL'; args: { total: number } }
   | { type: 'SET_AVERAGE'; args: { average: number } }
   | { type: 'SET_SETTINGS'; args: { settings: AppSettings } }
@@ -115,8 +121,10 @@ const initialState = {
     allowAnonymousReviews: false,
     requireApproval: true,
     useLocation: false,
+    showGraph: false,
   },
   userAuthenticated: false,
+  reviewsStats: [],
 }
 
 const reducer = (state: State, action: ReducerActions) => {
@@ -160,6 +168,7 @@ const reducer = (state: State, action: ReducerActions) => {
         ...state,
         reviews: action.args.reviews || [],
         total: action.args.total,
+        reviewsStats: action.args.graphArray || [],
         hasTotal: true,
       }
     case 'SET_TOTAL':
@@ -289,13 +298,20 @@ const CSS_HANDLES = [
   'reviewComment',
   'reviewCommentRating',
   'reviewCommentUser',
+  'graphContent',
+  'graphContainer',
+  'graphText',
+  'graphTextLabel',
+  'graphBarContainer',
+  'graphBar',
+  'graphBarPercent',
 ] as const
 
 function Reviews() {
   const client = useApolloClient()
   const intl = useIntl()
   const handles = useCssHandles(CSS_HANDLES)
-  const { product } = useProduct() ?? {}
+  const { product }: any = useProduct() ?? {}
   const { productId, productName } = product ?? {}
 
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -367,7 +383,6 @@ function Reviews() {
     }
     return intl.formatMessage(messages.timeAgoJustNow)
   }
-
   const getLocation = () =>
     canUseDOM
       ? {
@@ -452,9 +467,18 @@ function Reviews() {
       .then((response: ApolloQueryResult<ReviewsData>) => {
         const reviews = response.data.reviewsByProductId.data
         const { total } = response.data.reviewsByProductId.range
+        const graphArray = [0, 0, 0, 0, 0, 0]
+        graphArray[0] = total
+        if (reviews) {
+          // eslint-disable-next-line array-callback-return
+          reviews.map((review: Review) => {
+            const thisRating = review.rating
+            graphArray[thisRating] += 1
+          })
+        }
         dispatch({
           type: 'SET_REVIEWS',
-          args: { reviews, total },
+          args: { reviews, total, graphArray },
         })
 
         const defaultOpenCount = Math.min(
@@ -508,6 +532,9 @@ function Reviews() {
           </Fragment>
         )}
       </div>
+      {state.settings.showGraph ? (
+        <ReviewsGraph reviewsStats={state.reviewsStats} />
+      ) : null}
       <div className={`${handles.writeReviewContainer} mv5`}>
         {(state.settings && state.settings.allowAnonymousReviews) ||
         (state.settings &&
