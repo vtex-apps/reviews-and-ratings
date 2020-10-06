@@ -42,6 +42,7 @@ interface Product {
 
 interface Props {
   client: ApolloClient<NormalizedCacheObject>
+  shoeGraphBar: boolean | false
 }
 
 interface Review {
@@ -101,6 +102,7 @@ interface State {
   openReviews: number[]
   settings: AppSettings
   userAuthenticated: boolean
+  reviewsStats: number[]
 }
 
 declare let global: {
@@ -115,7 +117,10 @@ type ReducerActions =
   | { type: 'TOGGLE_REVIEW_ACCORDION'; args: { reviewNumber: number } }
   | { type: 'SET_OPEN_REVIEWS'; args: { reviewNumbers: number[] } }
   | { type: 'SET_SELECTED_SORT'; args: { sort: string } }
-  | { type: 'SET_REVIEWS'; args: { reviews: Review[]; total: number } }
+  | {
+      type: 'SET_REVIEWS'
+      args: { reviews: Review[]; total: number; graphArray: number[] }
+    }
   | { type: 'SET_TOTAL'; args: { total: number } }
   | { type: 'SET_AVERAGE'; args: { average: number } }
   | { type: 'SET_SETTINGS'; args: { settings: AppSettings } }
@@ -140,6 +145,7 @@ const initialState = {
     useLocation: false,
   },
   userAuthenticated: false,
+  reviewsStats: [],
 }
 
 const reducer = (state: State, action: ReducerActions) => {
@@ -183,6 +189,7 @@ const reducer = (state: State, action: ReducerActions) => {
         ...state,
         reviews: action.args.reviews || [],
         total: action.args.total,
+        reviewsStats: action.args.graphArray || [],
         hasTotal: true,
       }
     case 'SET_TOTAL':
@@ -312,11 +319,17 @@ const CSS_HANDLES = [
   'reviewComment',
   'reviewCommentRating',
   'reviewCommentUser',
+  'graphContent',
+  'graphContainer',
+  'graphText',
+  'graphTextLabel',
+  'graphBarContainer',
+  'graphBar',
+  'graphBarPercent',
 ] as const
 
 const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
   const { client, intl } = props
-
   const handles = useCssHandles(CSS_HANDLES)
   const { product } = useContext(ProductContext) as any
   const { productId, productName }: Product = product || {}
@@ -390,7 +403,6 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
     }
     return intl.formatMessage(messages.timeAgoJustNow)
   }
-
   const getLocation = () =>
     canUseDOM
       ? {
@@ -477,9 +489,18 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
       .then((response: ApolloQueryResult<ReviewsData>) => {
         const reviews = response.data.reviewsByProductId.data
         const { total } = response.data.reviewsByProductId.range
+        const graphArray = [0, 0, 0, 0, 0, 0]
+        graphArray[0] = total
+        if (reviews) {
+          // eslint-disable-next-line array-callback-return
+          reviews.map((review: Review) => {
+            const thisRating = review.rating
+            graphArray[thisRating] += 1
+          })
+        }
         dispatch({
           type: 'SET_REVIEWS',
-          args: { reviews, total },
+          args: { reviews, total, graphArray },
         })
 
         const defaultOpenCount = Math.min(
@@ -533,6 +554,170 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
           </Fragment>
         )}
       </div>
+      {state.reviews ? (
+        <div className={`${handles.graphContent} mv5`}>
+          <div className={`${handles.graphContainer} mv5 flex`}>
+            <div className={`${handles.graphText} mr5`}>
+              <span className={`${handles.graphTextLabel}`}>
+                <FormattedMessage
+                  id="store/reviews.list.graph.stars"
+                  values={{
+                    value: 5,
+                  }}
+                />
+              </span>
+            </div>
+            <div className={`${handles.graphBarContainer}`}>
+              <span className={`${handles.graphBarPercent}`}>
+                {state.reviewsStats[0]
+                  ? `${((state.reviewsStats[5] / state.reviewsStats[0]) * 100)
+                      .toFixed(0)
+                      .toString()}%`
+                  : '0%'}
+              </span>
+              <div
+                className={`${handles.graphBar} h-100`}
+                style={{
+                  width: state.reviewsStats[0]
+                    ? `${(
+                        (state.reviewsStats[5] / state.reviewsStats[0]) *
+                        100
+                      ).toString()}%`
+                    : '0%',
+                }}
+              />
+            </div>
+          </div>
+          <div className={`${handles.graphContainer} mv5 flex`}>
+            <div className={`${handles.graphText} mr5`}>
+              <span className={`${handles.graphTextLabel}`}>
+                <FormattedMessage
+                  id="store/reviews.list.graph.stars"
+                  values={{
+                    value: 4,
+                  }}
+                />
+              </span>
+            </div>
+            <div className={`${handles.graphBarContainer}`}>
+              <span className={`${handles.graphBarPercent}`}>
+                {state.reviewsStats[0]
+                  ? `${((state.reviewsStats[4] / state.reviewsStats[0]) * 100)
+                      .toFixed(0)
+                      .toString()}%`
+                  : '0%'}
+              </span>
+              <div
+                className={`${handles.graphBar} h-100`}
+                style={{
+                  width: state.reviewsStats[0]
+                    ? `${(
+                        (state.reviewsStats[4] / state.reviewsStats[0]) *
+                        100
+                      ).toString()}%`
+                    : '0%',
+                }}
+              />
+            </div>
+          </div>
+          <div className={`${handles.graphContainer} mv5 flex`}>
+            <div className={`${handles.graphText} mr5`}>
+              <span className={`${handles.graphTextLabel}`}>
+                <FormattedMessage
+                  id="store/reviews.list.graph.stars"
+                  values={{
+                    value: 3,
+                  }}
+                />
+              </span>
+            </div>
+            <div className={`${handles.graphBarContainer}`}>
+              <span className={`${handles.graphBarPercent}`}>
+                {state.reviewsStats[0]
+                  ? `${((state.reviewsStats[3] / state.reviewsStats[0]) * 100)
+                      .toFixed(0)
+                      .toString()}%`
+                  : '0%'}
+              </span>
+              <div
+                className={`${handles.graphBar} h-100`}
+                style={{
+                  width: state.reviewsStats[0]
+                    ? `${(
+                        (state.reviewsStats[3] / state.reviewsStats[0]) *
+                        100
+                      ).toString()}%`
+                    : '0%',
+                }}
+              />
+            </div>
+          </div>
+          <div className={`${handles.graphContainer} mv5 flex`}>
+            <div className={`${handles.graphText} mr5`}>
+              <span className={`${handles.graphTextLabel}`}>
+                <FormattedMessage
+                  id="store/reviews.list.graph.stars"
+                  values={{
+                    value: 2,
+                  }}
+                />
+              </span>
+            </div>
+            <div className={`${handles.graphBarContainer}`}>
+              <span className={`${handles.graphBarPercent}`}>
+                {state.reviewsStats[0]
+                  ? `${((state.reviewsStats[2] / state.reviewsStats[0]) * 100)
+                      .toFixed(0)
+                      .toString()}%`
+                  : '0%'}
+              </span>
+              <div
+                className={`${handles.graphBar} h-100`}
+                style={{
+                  width: state.reviewsStats[0]
+                    ? `${(
+                        (state.reviewsStats[2] / state.reviewsStats[0]) *
+                        100
+                      ).toString()}%`
+                    : '0%',
+                }}
+              />
+            </div>
+          </div>
+          <div className={`${handles.graphContainer} mv5 flex`}>
+            <div className={`${handles.graphText} mr5`}>
+              <span className={`${handles.graphTextLabel}`}>
+                <FormattedMessage
+                  id="store/reviews.list.graph.star"
+                  values={{
+                    value: 1,
+                  }}
+                />
+              </span>
+            </div>
+            <div className={`${handles.graphBarContainer}`}>
+              <span className={`${handles.graphBarPercent}`}>
+                {state.reviewsStats[0]
+                  ? `${((state.reviewsStats[1] / state.reviewsStats[0]) * 100)
+                      .toFixed(0)
+                      .toString()}%`
+                  : '0%'}
+              </span>
+              <div
+                className={`${handles.graphBar} h-100`}
+                style={{
+                  width: state.reviewsStats[0]
+                    ? `${(
+                        (state.reviewsStats[1] / state.reviewsStats[0]) *
+                        100
+                      ).toString()}%`
+                    : '0%',
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      ) : null}
       <div className={`${handles.writeReviewContainer} mv5`}>
         {(state.settings && state.settings.allowAnonymousReviews) ||
         (state.settings &&

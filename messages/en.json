@@ -94,5 +94,7 @@
   "store/reviews.list.sortOptions.highestRated": "Highest Rated",
   "store/reviews.list.sortOptions.lowestRated": "Lowest Rated",
   "store/reviews.list.anonymous": "Anonymous",
-  "store/reviews.list.pagination.textOf": "of"
+  "store/reviews.list.pagination.textOf": "of",
+  "store/reviews.list.graph.stars": "{value} stars",
+  "store/reviews.list.graph.star": "{value} star"
 }

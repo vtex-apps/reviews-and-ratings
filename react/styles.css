@@ -8,3 +8,25 @@
 }
 .star--empty {
 }
+
+.graphContent {}
+.graphContainer {
+    align-items: center;
+}
+.graphText {}
+.graphTextLabel {}
+.graphBarContainer {
+    flex: 1;
+    height: 34px;
+    background: #fff;
+    position: relative;
+}
+.graphBar {
+    background: #ffc300
+}
+.graphBarPercent {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+}
