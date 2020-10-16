@@ -66,7 +66,7 @@
   "store/reviews.list.title": "Comentarios",
   "store/reviews.list.summary.loading": "Cargando...",
   "store/reviews.list.summary.averageRating": "{average} Calificación promedio",
-  "store/reviews.list.summary.totalReviews": "({total} Comentario(s)",
+  "store/reviews.list.summary.totalReviews": "({total} Comentario(s))",
   "store/reviews.list.writeReview": "Escribir un comentario",
   "store/reviews.list.login": "Por favor, inicie sesión para escribir un comentario",
   "store/reviews.list.loading": "Cargando comentarios...",
