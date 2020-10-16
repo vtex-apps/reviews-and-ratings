@@ -66,7 +66,7 @@
   "store/reviews.list.title": "Reviews",
   "store/reviews.list.summary.loading": "Loading summary…",
   "store/reviews.list.summary.averageRating": "{average} Average Rating",
-  "store/reviews.list.summary.totalReviews": "({total} Review(s))",
+  "store/reviews.list.summary.totalReviews": "({total} {total, plural, =1 {review} other {reviews}})",
   "store/reviews.list.writeReview": "Write a review",
   "store/reviews.list.login": "Please log in to write a review.",
   "store/reviews.list.loading": "Loading reviews…",
