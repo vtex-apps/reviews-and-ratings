@@ -42,7 +42,6 @@ interface Product {
 
 interface Props {
   client: ApolloClient<NormalizedCacheObject>
-  showGraphBar: boolean | false
 }
 
 interface Review {
@@ -87,6 +86,7 @@ interface AppSettings {
   useLocation: boolean
   defaultOpen: boolean
   defaultOpenCount: number
+  showGraph: boolean
 }
 
 interface State {
@@ -143,6 +143,7 @@ const initialState = {
     allowAnonymousReviews: false,
     requireApproval: true,
     useLocation: false,
+    showGraph: false,
   },
   userAuthenticated: false,
   reviewsStats: [],
@@ -554,7 +555,7 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
           </Fragment>
         )}
       </div>
-      {state.reviews ? (
+      {state.settings.showGraph ? (
         <div className={`${handles.graphContent} mv5`}>
           <div className={`${handles.graphContainer} mv5 flex`}>
             <div className={`${handles.graphText} mr5`}>

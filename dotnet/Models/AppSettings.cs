@@ -11,6 +11,7 @@
     /// useLocation: Boolean
     /// defaultOpen: Boolean
     /// defaultOpenCount: Integer
+    /// showGraph: Boolean
     /// }
     /// </summary>
     public class AppSettings
@@ -20,5 +21,6 @@
         public bool UseLocation { get; set; }
         public bool defaultOpen { get; set;}
         public int defaultOpenCount { get; set;}
+        public bool showGraph { get; set;}
     }
 }

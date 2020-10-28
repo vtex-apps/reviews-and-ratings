@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+- Display graph option in app settings
+
+## [2.2.1] - 2020-10-27
+### Fixed
+- Missing parenthesis in translation message.
+
 ## [2.2.0] - 2020-10-02
 
 ### Added

@@ -1,7 +1,7 @@
 📢 Use this project, [contribute](https://github.com/vtex-apps/reviews-and-ratings) to it or open issues to help evolve it using [Store Discussion](https://github.com/vtex-apps/store-discussion).
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # Reviews and Ratings
@@ -26,7 +26,7 @@ In the account's admin dashboard, access `Apps > My Apps` and then click on th
 
 Once in the app's settings page, define the following settings:
 
-![reviews-and-ratings](https://user-images.githubusercontent.com/52087100/94868792-3df41800-041a-11eb-89a1-630cc31219cc.png)
+![reviews-settings](https://user-images.githubusercontent.com/43498488/97418081-0e4d0880-1911-11eb-9b80-47b92bbdef93.jpg)
 
 - **Allow Anonymous Reviews** - If unchecked, only logged-in shoppers will be able to review products.
 
@@ -37,6 +37,8 @@ Once in the app's settings page, define the following settings:
 - **Default all review accordions to open** -  The app displays reviews on the product page inside collapsible accordions. Checking this box will cause *all* review accordions to default to open when the page is loaded, with review text limited to 3 lines. Reviews with more than 3 lines of text will be truncated with an ellipsis and a `Show More` link that can be used to display the whole review text.
 
 - **Number of open review accordions** - Checking this box allows you to set a specific number of review accordions (instead of all of them) to automatically open when the page is loaded, displaying all the review text. If the `Default all review accordions to open` setting is active, this option is ignored.
+
+- **Display graph** - Checking this box allows you to display the reviews graph on the product page
 
 ### Step 3 - Declaring the app's blocks in your store theme
 
@@ -87,6 +89,13 @@ In order to apply CSS customizations in this and other blocks, follow the instru
 | `starsContainer`          |
 | `summaryContainer`        |
 | `writeReviewContainer`    |
+| `graphContent`            |
+| `graphContainer`          |
+| `graphText`               |
+| `graphTextLabel`          |
+| `graphBarContainer`       |
+| `graphBar`                |
+| `graphBarPercent`         |
 
 <!-- DOCS-IGNORE:start -->
 
@@ -100,6 +109,7 @@ Thanks goes to these wonderful people:
 <table>
   <tr>
     <td align="center"><a href="https://github.com/khrizzcristian"><img src="https://avatars1.githubusercontent.com/u/43498488?v=4" width="100px;" alt=""/><br /><sub><b>khrizzcristian</b></sub></a><br /><a href="https://github.com/vtex-apps/reviews-and-ratings/commits?author=khrizzcristian" title="Code">💻</a></td>
+    <td align="center"><a href="https://juliomoreira.pro"><img src="https://avatars2.githubusercontent.com/u/1207017?v=4" width="100px;" alt=""/><br /><sub><b>Julio Moreira</b></sub></a><br /><a href="https://github.com/vtex-apps/reviews-and-ratings/commits?author=juliomoreira" title="Code">💻</a></td>
   </tr>
 </table>
 
