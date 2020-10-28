@@ -47,6 +47,7 @@ type AppSettings {
   useLocation: Boolean
   defaultOpen: Boolean
   defaultOpenCount: Int
+  showGraph: Boolean
 }
 
 type Query {
