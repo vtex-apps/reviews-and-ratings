@@ -38,7 +38,7 @@ Once in the app's settings page, define the following settings:
 
 - **Number of open review accordions** - Checking this box allows you to set a specific number of review accordions (instead of all of them) to automatically open when the page is loaded, displaying all the review text. If the `Default all review accordions to open` setting is active, this option is ignored.
 
-- **Display graph** - Checking this box allows you to display the reviews graph on the product page
+- **Display graph** - Checking this box allows you to display the reviews graph on the product page.
 
 ### Step 3 - Declaring the app's blocks in your store theme
 
