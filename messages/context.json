@@ -38,6 +38,8 @@
   "admin/reviews.table.empty-state.check-spelling": "admin/reviews.table.empty-state.check-spelling",
   "admin/reviews.table.empty-state.pending": "admin/reviews.table.empty-state.pending",
   "admin/reviews.cancel": "admin/reviews.cancel",
+  "admin/reviews.reply.label": "admin/reviews.reply.label",
+  "admin/reviews.reply.button": "admin/reviews.reply.button",
   "admin/reviews.table.empty-state.approved": "admin/reviews.table.empty-state.approved",
   "admin/reviews.table.applyMatch.error.0": "admin/reviews.table.applyMatch.error.0",
   "admin/reviews.table.applyMatch.error.partial.delete.plural": "admin/reviews.table.applyMatch.error.partial.delete.plural",

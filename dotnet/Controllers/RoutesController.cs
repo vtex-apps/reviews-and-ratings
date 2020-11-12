@@ -13,11 +13,6 @@ namespace ReviewsRatings.Controllers
             this._productReviewsService = productReviewsService ?? throw new ArgumentNullException(nameof(productReviewsService));
         }
 
-        public string PrintHelloWorld()
-        {
-            return "Hello, IO!";
-        }
-
         public void ClearData()
         {
             _productReviewsService.ClearData();

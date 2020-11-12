@@ -50,6 +50,8 @@
   "admin/reviews.table.productCell.SKU": "SKU: {sku}",
   "admin/reviews.table.reviewCell.author": "Posted by {author}",
   "admin/reviews.table.reviewCell.anonymous": "anonymous",
+  "admin/reviews.reply.label": "Reply",
+  "admin/reviews.reply.button": "Send",
   "store/reviews.form.title": "Add review",
   "store/reviews.form.reviewSubmitted": "Your review has been submitted.",
   "store/reviews.form.alreadySubmitted": "You have already submitted a review for this product.",

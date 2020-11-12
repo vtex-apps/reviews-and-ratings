@@ -4,10 +4,6 @@
   "runtimeArgs": [
   ],
   "routes": {
-    "printHelloWorld": {
-      "path": "/_v/vtex/hello",
-      "public": true
-    },
     "clearData": {
       "path": "/reviews/clear",
       "public": false
