@@ -13,5 +13,8 @@ query Review($id: ID!) {
     verifiedPurchaser
     sku
     approved
+	responseMessage
+	authorEmail
+	author
   }
 }

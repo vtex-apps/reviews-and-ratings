@@ -13,5 +13,7 @@
         Task<IDictionary<int, string>> LoadLookupAsync();
 
         Task SaveLookupAsync(IDictionary<int, string> lookupDictionary);
+
+        Task<UserData> GetUserData(string userId);
     }
 }

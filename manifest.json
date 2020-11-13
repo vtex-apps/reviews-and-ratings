@@ -122,6 +122,13 @@
         "path": "/apps/*"
       }
     },
+	{
+      "name": "outbound-access",
+      "attrs": {
+        "host": "{{account}}.vtexcommercestable.com.br",
+        "path": "/api/license-manager/users/*"
+      }
+    },
     {
       "name": "vbase-read-write"
     }

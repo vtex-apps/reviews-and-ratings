@@ -57,11 +57,23 @@
             return retval;
         }
 
-        public async Task<Review> EditReview(Review review)
+        public async Task<Review> EditReview(Review review, string reply, string userId)
         {
             string productId = await this.LookupProductById(review.Id);
             if (!string.IsNullOrEmpty(productId))
             {
+                if(!string.IsNullOrEmpty(reply) && !string.IsNullOrEmpty(userId))
+                {
+                    // Lookup the author information
+                    UserData userData = await _productReviewRepository.GetUserData(userId);
+                    if(userData != null)
+                    {
+                        review.Author = userData.Name;
+                        review.AuthorEmail = userData.Email;
+                        review.ResponseMessage = reply;
+                    }
+                }
+
                 IList<Review> reviews = await this._productReviewRepository.GetProductReviewsAsync(productId);
                 // Remove the old version
                 Review reviewToRemove = reviews.Where(r => r.Id == review.Id).FirstOrDefault();

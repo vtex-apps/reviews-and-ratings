@@ -12,5 +12,7 @@ mutation EditReview($id: ID!, $review: ReviewInput!) {
     reviewDateTime
     verifiedPurchaser
     sku
+	reply
+	adminUserId
   }
 }

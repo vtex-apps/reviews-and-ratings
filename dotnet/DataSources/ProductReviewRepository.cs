@@ -20,6 +20,8 @@
         private const string HEADER_VTEX_WORKSPACE = "X-Vtex-Workspace";
         private const string HEADER_VTEX_ACCOUNT = "X-Vtex-Account";
         private const string APPLICATION_JSON = "application/json";
+        private const string USE_HTTPS_HEADER_NAME = "X-Vtex-Use-Https";
+        private const string VTEX_ACCOUNT_HEADER_NAME = "X-Vtex-Account";
         private readonly IVtexEnvironmentVariableProvider _environmentVariableProvider;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IHttpClientFactory _clientFactory;
@@ -176,6 +178,37 @@
             var response = await client.SendAsync(request);
 
             response.EnsureSuccessStatusCode();
+        }
+
+        public async Task<UserData> GetUserData(string userId)
+        {
+            UserData userData = null;
+
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/license-manager/users/{userId}"),
+            };
+
+            request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
+            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+            if (authToken != null)
+            {
+                request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
+            }
+
+            var client = _clientFactory.CreateClient();
+            var response = await client.SendAsync(request);
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            Console.WriteLine($"GetUserData '{userId}' [{response.StatusCode}] {responseContent}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                userData = JsonConvert.DeserializeObject<UserData>(responseContent);
+            }
+
+            return userData;
         }
     }
 }
