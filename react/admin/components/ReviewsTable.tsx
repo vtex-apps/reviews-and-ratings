@@ -2,13 +2,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, useState, Fragment } from 'react'
 import { injectIntl, InjectedIntlProps, FormattedMessage } from 'react-intl'
-import { Query, ObservableQueryFields } from 'react-apollo'
+import { Query, ObservableQueryFields, useMutation } from 'react-apollo'
 import { Button, EmptyState } from 'vtex.styleguide'
 import { PersistedPaginatedTable } from 'vtex.paginated-table'
 import { useRuntime } from 'vtex.render-runtime'
 
 import { Review, SearchReviewArgs, SearchReviewData } from '../types'
 import reviews from '../../../graphql/reviews.graphql'
+import Reply from '../graphql/reply.graphql'
 import { tableQueryMessages, tableSearchMessages } from '../utils/messages'
 import useSearch from './tableHelpers/useSearch'
 import ReplyModal from './ReplyModal'
@@ -53,7 +54,6 @@ export const ReviewsTable: FC<ReviewsTableProps & InjectedIntlProps> = ({
   bulkActions,
   lineActions,
   setTotal,
-  // filterOptionsLists = {},
   children,
   emptyStateText,
 }) => {
@@ -62,19 +62,17 @@ export const ReviewsTable: FC<ReviewsTableProps & InjectedIntlProps> = ({
   const [state, setState] = useState({
     currSelection: null,
   })
-  //   const [
-  //     filterSchema,
-  //     brandFilter,
-  //     sellerFilter,
-  //     categoryFilter,
-  //   ] = usePersistedFilters({
-  //     intl,
-  //     ...filterOptionsLists,
-  //   })
+
   const [
     { displayValue, searchValue },
     { onSearchChange, onSearchClear, onSearchSubmit },
   ] = useSearch()
+
+  const [reply, { loading: loadingReply }] = useMutation(Reply, {
+    onCompleted: (res: any) => {
+      console.log('Reply response =>', res)
+    },
+  })
 
   const openReply = (rowData: any) => {
     console.log('openReply =>', rowData)
@@ -90,10 +88,6 @@ export const ReviewsTable: FC<ReviewsTableProps & InjectedIntlProps> = ({
   const sortOrder = query.sortOrder ? query.sortOrder : DEFAULT_SORT_ORDER
   const sortBy = query.sortedBy
 
-  // useEffect(() => {
-  //  setState({...state})
-  // }, [to, from, sortOrder, sortBy])
-
   const initialQueryVariables: SearchReviewArgs = {
     status: reviewStatus,
   }
@@ -102,6 +96,26 @@ export const ReviewsTable: FC<ReviewsTableProps & InjectedIntlProps> = ({
 
   const onReplyHandler = (data: any) => {
     console.log('onReplyHandler =>', data)
+    const { id, rating, reviewerName, shopperId, text, title } = data.review
+    const { productId, sku } = data.product
+    reply({
+      variables: {
+        id,
+        review: {
+          productId,
+          sku,
+          rating,
+          reviewerName,
+          shopperId,
+          text,
+          title,
+          reviewDateTime: new Date().toISOString(),
+          approved: true,
+        },
+        reply: data.reply.message,
+        adminUserId: data.reply.adminUserId,
+      },
+    })
 
     console.log('Has answer =>', !!data?.reply.message)
 
@@ -180,7 +194,8 @@ export const ReviewsTable: FC<ReviewsTableProps & InjectedIntlProps> = ({
                 }
                 loading={
                   (loading && networkStatus !== NETWORK_REFETCHING_STATUS) ||
-                  !data
+                  !data ||
+                  loadingReply
                 }
                 schema={schema}
                 emptyStateLabel=""

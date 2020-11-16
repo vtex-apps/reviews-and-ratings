@@ -1,7 +1,9 @@
 📢 Use this project, [contribute](https://github.com/vtex-apps/reviews-and-ratings) to it or open issues to help evolve it using [Store Discussion](https://github.com/vtex-apps/store-discussion).
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # Reviews and Ratings
@@ -14,7 +16,7 @@ Reviews & Ratings is a VTEX IO native solution that allows shoppers to submit re
 
 ### Step 1 - Installing the Reviews and Ratings app
 
-Using your terminal, log in to the desired VTEX account and run the following command: 
+Using your terminal, log in to the desired VTEX account and run the following command:
 
 `vtex install vtex.reviews-and-ratings@2.x`
 
@@ -34,7 +36,7 @@ Once in the app's settings page, define the following settings:
 
 - **Ask For Reviewer's Location** - Checking this box activates an optional review field. Shoppers that submit reviews will be asked to fill in their current location (i.e. "Boston, MA").
 
-- **Default all review accordions to open** -  The app displays reviews on the product page inside collapsible accordions. Checking this box will cause *all* review accordions to default to open when the page is loaded, with review text limited to 3 lines. Reviews with more than 3 lines of text will be truncated with an ellipsis and a `Show More` link that can be used to display the whole review text.
+- **Default all review accordions to open** - The app displays reviews on the product page inside collapsible accordions. Checking this box will cause _all_ review accordions to default to open when the page is loaded, with review text limited to 3 lines. Reviews with more than 3 lines of text will be truncated with an ellipsis and a `Show More` link that can be used to display the whole review text.
 
 - **Number of open review accordions** - Checking this box allows you to set a specific number of review accordions (instead of all of them) to automatically open when the page is loaded, displaying all the review text. If the `Default all review accordions to open` setting is active, this option is ignored.
 
@@ -87,6 +89,9 @@ In order to apply CSS customizations in this and other blocks, follow the instru
 | `starsContainer`          |
 | `summaryContainer`        |
 | `writeReviewContainer`    |
+| `reviewReply`             |
+| `reviewReplyAuthor`       |
+| `reviewReplyMessage`      |
 
 <!-- DOCS-IGNORE:start -->
 
@@ -106,6 +111,7 @@ Thanks goes to these wonderful people:
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

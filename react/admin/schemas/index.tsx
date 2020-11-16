@@ -78,7 +78,7 @@ export const dateSchema = (intl: InjectedIntl) => ({
       sortable: true,
       headerRight: true,
       cellRenderer: ({ cellData }: CellRendererArgs<string>) =>
-        toRightCellRenderer(<div className="t-body">{cellData}</div>),
+        toRightCellRenderer(<div className="t-body">A{cellData}</div>),
     },
   },
 })

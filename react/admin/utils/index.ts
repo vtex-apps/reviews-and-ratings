@@ -1,3 +1,4 @@
+
 export const TOAST_DURATION_MS = 10000
 export const REVIEW_COLUMN_WIDTH_PX = 202
 export const PRODUCT_COLUMN_WIDTH_PX = 174
@@ -12,6 +13,10 @@ export const displayLoading = () => {
 
 export const stopLoading = () => {
   window.postMessage({ action: { type: 'STOP_LOADING' } }, '*')
+}
+
+export const getUserInfo = () => {
+  return window.fetch('/api/vtexid/user/info?scope=').then(res => res.json())
 }
 
 declare global {

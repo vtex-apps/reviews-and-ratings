@@ -1,0 +1,6 @@
+mutation Reply($id: ID!, $review: ReviewInput!, $reply: String, $adminUserId: String) {
+  editReview(id: $id, review: $review, reply: $reply, adminUserId: $adminUserId) {
+    id
+    reviewerName
+  }
+}
