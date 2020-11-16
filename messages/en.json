@@ -52,6 +52,7 @@
   "admin/reviews.table.reviewCell.anonymous": "anonymous",
   "admin/reviews.reply.label": "Reply",
   "admin/reviews.reply.button": "Send",
+  "admin/reviews.reply.info": "This reply will be visible publicly",
   "store/reviews.form.title": "Add review",
   "store/reviews.form.reviewSubmitted": "Your review has been submitted.",
   "store/reviews.form.alreadySubmitted": "You have already submitted a review for this product.",

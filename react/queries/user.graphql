@@ -1,0 +1,8 @@
+query {
+  account @context(provider: "vtex.myuser-io") {
+    user {
+      name
+      email
+    }
+  }
+}

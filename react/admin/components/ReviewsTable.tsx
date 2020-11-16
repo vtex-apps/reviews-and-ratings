@@ -100,10 +100,10 @@ export const ReviewsTable: FC<ReviewsTableProps & InjectedIntlProps> = ({
 
   const refreshPage = () => window.location.reload()
 
-  const onReplyHandler = (reply: any) => {
-    console.log('onReplyHandler =>', reply)
+  const onReplyHandler = (data: any) => {
+    console.log('onReplyHandler =>', data)
 
-    console.log('Has answer =>', !!reply)
+    console.log('Has answer =>', !!data?.reply.message)
 
     setState({
       currSelection: null,

@@ -40,6 +40,7 @@
   "admin/reviews.cancel": "Cancelar",
   "admin/reviews.reply.label": "Respuesta",
   "admin/reviews.reply.button": "Enviar",
+  "admin/reviews.reply.info": "Esta respuesta será visible públicamente",
   "admin/reviews.table.empty-state.approved": "No hay comentarios aprobados.",
   "admin/reviews.table.applyMatch.error.0": "Error no especificado. Inténtelo nuevamente.",
   "admin/reviews.table.applyMatch.error.partial.delete.plural": "{errorQuant} los comentarios no se eliminaron por un error desconocido",

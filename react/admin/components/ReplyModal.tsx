@@ -1,9 +1,11 @@
 /* eslint-disable no-console */
 import React, { FC, useState } from 'react'
 import { defineMessages, WrappedComponentProps, injectIntl } from 'react-intl'
+import { useQuery } from 'react-apollo'
 import { Modal, Textarea, Button, Divider } from 'vtex.styleguide'
 import ReviewCellRenderer from './util/reviewCellRenderer'
 import ProductCellRenderer from './util/productCellRenderer'
+import sessionQuery from '../../queries/user.graphql'
 
 const messages = defineMessages({
   label: {
@@ -14,6 +16,10 @@ const messages = defineMessages({
     id: 'admin/reviews.reply.button',
     defaultMessage: 'Send',
   },
+  info: {
+    id: 'admin/reviews.reply.info',
+    defaultMessage: 'This reply will be visible publicly',
+  },
 })
 
 const ReplyModal: FC<WrappedComponentProps> = ({
@@ -22,12 +28,31 @@ const ReplyModal: FC<WrappedComponentProps> = ({
   intl,
 }) => {
   const [state, setState] = useState({
-    reply: '',
+    reply: {
+      message: '',
+      author: '',
+      email: '',
+    },
   })
-
-  const changeHandler = (reply: any) => {
+  const { loading } = useQuery(sessionQuery, {
+    skip: !!state.reply.author,
+    onCompleted: (response: any) => {
+      console.log('Session =>', response)
+      setState({
+        reply: {
+          ...state.reply,
+          author: response?.account?.user?.name,
+          email: response?.account?.user?.email,
+        },
+      })
+    },
+  })
+  const changeHandler = (message: string) => {
     setState({
-      reply,
+      reply: {
+        ...state.reply,
+        message,
+      },
     })
   }
   const replyHandler = () => {
@@ -37,16 +62,24 @@ const ReplyModal: FC<WrappedComponentProps> = ({
       reply,
     })
     setState({
-      reply: '',
+      reply: {
+        ...state.reply,
+        message: '',
+      },
     })
   }
 
   const closeHandler = () => {
     onReply()
     setState({
-      reply: '',
+      reply: {
+        ...state.reply,
+        message: '',
+      },
     })
   }
+
+  console.log('Modal State =>', state)
 
   return (
     <Modal
@@ -57,6 +90,7 @@ const ReplyModal: FC<WrappedComponentProps> = ({
       bottomBar={
         <div className="nowrap">
           <Button
+            disabled={loading}
             onClick={() => {
               replyHandler()
             }}
@@ -86,7 +120,8 @@ const ReplyModal: FC<WrappedComponentProps> = ({
           <Textarea
             size="large"
             rows={10}
-            value={state.reply}
+            value={state.reply.message}
+            helpText={intl.formatMessage(messages.info)}
             onChange={(e: any) => changeHandler(e.target.value)}
             label={intl.formatMessage(messages.label)}
           />

@@ -23,7 +23,8 @@
     "vtex.store-graphql": "2.x",
     "vtex.channels-components": "4.x",
     "vtex.paginated-table": "0.x",
-    "vtex.css-handles": "0.x"
+    "vtex.css-handles": "0.x",
+    "vtex.myuser-io": "2.x"
   },
   "billingOptions": {
     "termsURL": "https://compliance.vtex.com/gdpr/policies/vtex-privacy-policy",
