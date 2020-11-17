@@ -56,6 +56,7 @@ interface Review {
   shopperId: string
   reviewDateTime: string
   verifiedPurchaser: boolean
+  responseMessage: string
 }
 
 interface Range {
@@ -312,6 +313,9 @@ const CSS_HANDLES = [
   'reviewComment',
   'reviewCommentRating',
   'reviewCommentUser',
+  'reviewReply',
+  'reviewReplyAuthor',
+  'reviewReplyMessage',
 ] as const
 
 const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
@@ -705,6 +709,18 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
                         </li>
                       </ul>
                       <p className="t-body lh-copy mw9">{review.text}</p>
+                      {review.reviewerName && review.responseMessage && (
+                        <p
+                          className={`bg-black-05 pa5 ml3 ${handles.reviewReply}`}
+                        >
+                          <span className={`b ${handles.reviewReplyAuthor}`}>
+                            {review.reviewerName}:
+                          </span>
+                          <span className={`ml2 ${handles.reviewReplyMessage}`}>
+                            {review.responseMessage}
+                          </span>
+                        </p>
+                      )}
                     </Collapsible>
                   )}
                 </div>

@@ -1,11 +1,10 @@
 /* eslint-disable no-console */
-import React, { FC, useState } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import { defineMessages, WrappedComponentProps, injectIntl } from 'react-intl'
-import { useQuery } from 'react-apollo'
 import { Modal, Textarea, Button, Divider } from 'vtex.styleguide'
 import ReviewCellRenderer from './util/reviewCellRenderer'
 import ProductCellRenderer from './util/productCellRenderer'
-import sessionQuery from '../../queries/user.graphql'
+import { getUserInfo } from '../utils'
 
 const messages = defineMessages({
   label: {
@@ -21,6 +20,21 @@ const messages = defineMessages({
     defaultMessage: 'This reply will be visible publicly',
   },
 })
+const sessionPromise = getUserInfo()
+const useSessionResponse = () => {
+  const [session, setSession] = useState()
+  useEffect(() => {
+    if (!sessionPromise) {
+      return
+    }
+    sessionPromise.then(sessionResponse => {
+      const response: any = sessionResponse
+      setSession(response)
+    })
+  }, [])
+
+  return session
+}
 
 const ReplyModal: FC<WrappedComponentProps> = ({
   activeReview,
@@ -30,23 +44,21 @@ const ReplyModal: FC<WrappedComponentProps> = ({
   const [state, setState] = useState({
     reply: {
       message: '',
-      author: '',
-      email: '',
+      adminUserId: '',
     },
   })
-  const { loading } = useQuery(sessionQuery, {
-    skip: !!state.reply.author,
-    onCompleted: (response: any) => {
-      console.log('Session =>', response)
-      setState({
-        reply: {
-          ...state.reply,
-          author: response?.account?.user?.name,
-          email: response?.account?.user?.email,
-        },
-      })
-    },
-  })
+
+  const sessionResponse: any = useSessionResponse()
+
+  if (!state.reply?.adminUserId && sessionResponse) {
+    setState({
+      reply: {
+        ...state.reply,
+        adminUserId: sessionResponse.id,
+      },
+    })
+  }
+
   const changeHandler = (message: string) => {
     setState({
       reply: {
@@ -90,7 +102,7 @@ const ReplyModal: FC<WrappedComponentProps> = ({
       bottomBar={
         <div className="nowrap">
           <Button
-            disabled={loading}
+            disabled={!sessionResponse}
             onClick={() => {
               replyHandler()
             }}
