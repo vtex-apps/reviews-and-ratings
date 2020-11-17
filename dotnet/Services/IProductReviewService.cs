@@ -20,7 +20,9 @@
 
         Task<Review> NewReview(Review review);
 
-        Task<Review> EditReview(Review review, string reply, string userId);
+        Task<Review> EditReview(Review review);
+
+        Task<bool> AddResponse(int reviewId, string reply, string userId);
 
         Task<bool> DeleteReview(int[] ids);
 

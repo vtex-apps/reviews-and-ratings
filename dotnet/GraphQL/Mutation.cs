@@ -28,18 +28,29 @@ namespace ReviewsRatings.GraphQL
                 "editReview",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IdGraphType>> {Name = "id"},
-                    new QueryArgument<NonNullGraphType<ReviewInputType>> {Name = "review"},
+                    new QueryArgument<NonNullGraphType<ReviewInputType>> {Name = "review"}
+                ),
+                resolve: context =>
+                {
+                    var id = context.GetArgument<int>("id");
+                    var review = context.GetArgument<Review>("review");
+                    review.Id = id;
+                    return productReviewService.EditReview(review);
+                });
+
+            Field<BooleanGraphType>(
+                "addResponse",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" },
                     new QueryArgument<StringGraphType> { Name = "reply" },
                     new QueryArgument<StringGraphType> { Name = "adminUserId" }
                 ),
                 resolve: context =>
                 {
                     var id = context.GetArgument<int>("id");
-                    var review = context.GetArgument<Review>("review");
                     var reply = context.GetArgument<string>("reply");
                     var adminUserId = context.GetArgument<string>("adminUserId");
-                    review.Id = id;
-                    return productReviewService.EditReview(review, reply, adminUserId);
+                    return productReviewService.AddResponse(id, reply, adminUserId);
                 });
 
             Field<BooleanGraphType>(

@@ -57,23 +57,11 @@
             return retval;
         }
 
-        public async Task<Review> EditReview(Review review, string reply, string userId)
+        public async Task<Review> EditReview(Review review)
         {
             string productId = await this.LookupProductById(review.Id);
             if (!string.IsNullOrEmpty(productId))
             {
-                if(!string.IsNullOrEmpty(reply) && !string.IsNullOrEmpty(userId))
-                {
-                    // Lookup the author information
-                    UserData userData = await _productReviewRepository.GetUserData(userId);
-                    if(userData != null)
-                    {
-                        review.Author = userData.Name;
-                        review.AuthorEmail = userData.Email;
-                        review.ResponseMessage = reply;
-                    }
-                }
-
                 IList<Review> reviews = await this._productReviewRepository.GetProductReviewsAsync(productId);
                 // Remove the old version
                 Review reviewToRemove = reviews.Where(r => r.Id == review.Id).FirstOrDefault();
@@ -86,6 +74,39 @@
             }
 
             return review;
+        }
+
+        public async Task<bool> AddResponse(int reviewId, string reply, string userId)
+        {
+            bool saved = false;
+            if (!string.IsNullOrEmpty(reply) && !string.IsNullOrEmpty(userId))
+            {
+                string productId = await this.LookupProductById(reviewId);
+                if (!string.IsNullOrEmpty(productId))
+                {
+                    IList<Review> reviews = await this._productReviewRepository.GetProductReviewsAsync(productId);
+                    // Remove the old version
+                    Review review = reviews.Where(r => r.Id == reviewId).FirstOrDefault();
+                    if (review != null && reviews.Remove(review))
+                    {
+                        // Lookup the author information
+                        UserData userData = await _productReviewRepository.GetUserData(userId);
+                        if (userData != null)
+                        {
+                            review.Author = userData.Name;
+                            review.AuthorEmail = userData.Email;
+                            review.ResponseMessage = reply;
+                        }
+
+                        // Add and save the new version
+                        reviews.Add(review);
+                        await this._productReviewRepository.SaveProductReviewsAsync(productId, reviews);
+                        saved = true;
+                    }
+                }
+            }
+
+            return saved;
         }
 
         public async Task<decimal> GetAverageRatingByProductId(string productId)
