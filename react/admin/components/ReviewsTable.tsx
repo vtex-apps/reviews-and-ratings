@@ -68,20 +68,13 @@ export const ReviewsTable: FC<ReviewsTableProps & InjectedIntlProps> = ({
     { onSearchChange, onSearchClear, onSearchSubmit },
   ] = useSearch()
 
-  const [reply, { loading: loadingReply }] = useMutation(Reply, {
-    onCompleted: (res: any) => {
-      console.log('Reply response =>', res)
-    },
-  })
+  const [reply, { loading: loadingReply }] = useMutation(Reply)
 
   const openReply = (rowData: any) => {
-    console.log('openReply =>', rowData)
     setState({
       currSelection: rowData,
     })
   }
-
-  console.log('ReviewsTable state =>', state)
 
   const to = query.to ? parseInt(query.to, 10) : DEFAULT_TABLE_PAGE_TO
   const from = query.from ? parseInt(query.from, 10) : DEFAULT_TABLE_PAGE_FROM
@@ -95,29 +88,15 @@ export const ReviewsTable: FC<ReviewsTableProps & InjectedIntlProps> = ({
   const refreshPage = () => window.location.reload()
 
   const onReplyHandler = (data: any) => {
-    console.log('onReplyHandler =>', data)
-    const { id, rating, reviewerName, shopperId, text, title } = data.review
-    const { productId, sku } = data.product
-    reply({
-      variables: {
-        id,
-        review: {
-          productId,
-          sku,
-          rating,
-          reviewerName,
-          shopperId,
-          text,
-          title,
-          reviewDateTime: new Date().toISOString(),
-          approved: true,
+    if (data?.reply.message && data.reply.adminUserId) {
+      reply({
+        variables: {
+          id: data.review.id,
+          reply: data.reply.message,
+          adminUserId: data.reply.adminUserId,
         },
-        reply: data.reply.message,
-        adminUserId: data.reply.adminUserId,
-      },
-    })
-
-    console.log('Has answer =>', !!data?.reply.message)
+      })
+    }
 
     setState({
       currSelection: null,

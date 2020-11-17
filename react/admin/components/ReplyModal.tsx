@@ -36,6 +36,8 @@ const useSessionResponse = () => {
   return session
 }
 
+let isOpen = false
+
 const ReplyModal: FC<WrappedComponentProps> = ({
   activeReview,
   onReply,
@@ -59,6 +61,16 @@ const ReplyModal: FC<WrappedComponentProps> = ({
     })
   }
 
+  if (!!activeReview && !isOpen) {
+    isOpen = true
+    setState({
+      reply: {
+        ...state.reply,
+        message: activeReview?.review?.responseMessage ?? '',
+      },
+    })
+  }
+
   const changeHandler = (message: string) => {
     setState({
       reply: {
@@ -67,6 +79,7 @@ const ReplyModal: FC<WrappedComponentProps> = ({
       },
     })
   }
+
   const replyHandler = () => {
     const { reply } = state
     onReply({
@@ -79,6 +92,7 @@ const ReplyModal: FC<WrappedComponentProps> = ({
         message: '',
       },
     })
+    isOpen = false
   }
 
   const closeHandler = () => {
@@ -89,9 +103,8 @@ const ReplyModal: FC<WrappedComponentProps> = ({
         message: '',
       },
     })
+    isOpen = false
   }
-
-  console.log('Modal State =>', state)
 
   return (
     <Modal

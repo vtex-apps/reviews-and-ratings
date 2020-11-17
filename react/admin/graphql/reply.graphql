@@ -1,6 +1,3 @@
-mutation Reply($id: ID!, $review: ReviewInput!, $reply: String, $adminUserId: String) {
-  editReview(id: $id, review: $review, reply: $reply, adminUserId: $adminUserId) {
-    id
-    reviewerName
-  }
+mutation AddResponse($id: ID!, $reply: String!, $adminUserId:String!) {
+  addResponse(id: $id, reply: $reply, adminUserId: $adminUserId)
 }

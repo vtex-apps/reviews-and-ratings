@@ -11,6 +11,7 @@ query Review($id: ID!) {
     shopperId
     reviewDateTime
     verifiedPurchaser
+    responseMessage
     sku
     approved
 	responseMessage
