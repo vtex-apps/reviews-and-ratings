@@ -1,12 +1,27 @@
-{
-  "icon": "extensions-ic",
-  "id": "98",
-  "section": "products",
-  "subSection": "catalog",
-  "subSectionItems": [
-    {
-      "labelId": "admin/reviews.title",
-      "path": "/admin/reviews-ratings/pending"
-    }
-  ]
-}
+[
+  {
+    "icon": "extensions-ic",
+    "id": "98",
+    "section": "products",
+    "subSection": "catalog",
+    "subSectionItems": [
+      {
+        "labelId": "admin/reviews.title",
+        "path": "/admin/reviews-ratings/pending"
+      }
+    ]
+  },
+  {
+    "section": "products",
+    "subSection": "catalog",
+    "LMProductId": "2",
+    "adminVersion": 4,
+    "subSectionItems": [
+      {
+        "labelId": "admin/reviews.title",
+        "path": "/admin/reviews-ratings/pending",
+        "id": "98"
+      }
+    ]
+  }
+]
