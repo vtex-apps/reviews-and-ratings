@@ -74,6 +74,21 @@
         "description": "Display the reviews graph on product page",
         "type": "boolean",
         "default": false
+      },
+      "displaySummaryIfNone": {
+        "title": "Display stars in product-rating-summary if there are no reviews",
+        "type": "boolean",
+        "default": false
+      },
+      "displaySummaryTotalReviews": {
+        "title": "Display total reviews number on product-rating-summary block",
+        "type": "boolean",
+        "default": true
+      },
+      "displaySummaryAddButton": {
+        "title": "Display `Add review` button on product-rating-summary block",
+        "type": "boolean",
+        "default": false
       }
     }
   },

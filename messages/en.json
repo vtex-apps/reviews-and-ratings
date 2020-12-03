@@ -96,5 +96,7 @@
   "store/reviews.list.anonymous": "Anonymous",
   "store/reviews.list.pagination.textOf": "of",
   "store/reviews.list.graph.stars": "{value} stars",
-  "store/reviews.list.graph.star": "{value} star"
+  "store/reviews.list.graph.star": "{value} star",
+  "store/reviews.summary.add.login": "Please log in to write a review.",
+  "store/reviews.summary.add.title": "Add review"
 }
