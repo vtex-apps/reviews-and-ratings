@@ -18,6 +18,9 @@ namespace ReviewsRatings.GraphQL.Types
             Field(b => b.defaultOpen).Description("Indicates whether reviews should expand by default");
             Field(b => b.defaultOpenCount).Description("Indicates number of reviews to be expanded by default");
             Field(b => b.showGraph).Description("Show the reviews graph on product page");
+            Field(b => b.displaySummaryIfNone).Description("Display stars in product-rating-summary if there are no reviews");
+            Field(b => b.displaySummaryTotalReviews).Description("Display total reviews number on product-rating-summary block");
+            Field(b => b.displaySummaryAddButton).Description("Display `Add review` button on product-rating-summary block");
         }
     }
 }

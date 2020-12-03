@@ -48,6 +48,9 @@ type AppSettings {
   defaultOpen: Boolean
   defaultOpenCount: Int
   showGraph: Boolean
+  displaySummaryIfNone: Boolean
+  displaySummaryTotalReviews: Boolean
+  displaySummaryAddButton: Boolean
 }
 
 type Query {

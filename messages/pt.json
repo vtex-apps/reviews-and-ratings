@@ -96,5 +96,7 @@
   "store/reviews.list.anonymous": "Anônimo",
   "store/reviews.list.pagination.textOf": "de",
   "store/reviews.list.graph.stars": "Estrelas",
-  "store/reviews.list.graph.star": "Estrela"
+  "store/reviews.list.graph.star": "Estrela",
+  "store/reviews.summary.add.login": "Por favor faça login para escrever avaliação",
+  "store/reviews.summary.add.title": "Adicionar avaliação"
 }

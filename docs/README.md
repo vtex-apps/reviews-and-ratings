@@ -40,6 +40,10 @@ Once in the app's settings page, define the following settings:
 
 - **Display graph** - Checking this box allows you to display the reviews graph on the product page.
 
+- **Display stars in product-rating-summary if there are no reviews** - Checking this box allows you to display empty stars if the product has no reviews
+- **Display total reviews number on product-rating-summary block** - Checking this box allows you to display the total number of product reviews.
+- **Display `Add review` button on product-rating-summary block** - Checking this box allows you to display an Add review button under the stars.
+
 ### Step 3 - Declaring the app's blocks in your store theme
 
 Once the app is configured, it is time to place the following blocks in your Store Theme app:
@@ -96,6 +100,7 @@ In order to apply CSS customizations in this and other blocks, follow the instru
 | `graphBarContainer`       |
 | `graphBar`                |
 | `graphBarPercent`         |
+| `summaryButtonContainer`  |
 
 <!-- DOCS-IGNORE:start -->
 

@@ -6,5 +6,8 @@ query AppSettings {
     defaultOpen
     defaultOpenCount
     showGraph
+    displaySummaryIfNone
+    displaySummaryTotalReviews
+    displaySummaryAddButton
   }
 }

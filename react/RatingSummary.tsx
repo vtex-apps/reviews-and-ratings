@@ -11,7 +11,12 @@ import { NormalizedCacheObject } from 'apollo-cache-inmemory'
 import { withApollo } from 'react-apollo'
 import { ProductContext } from 'vtex.product-context'
 import { useCssHandles } from 'vtex.css-handles'
+import { FormattedMessage } from 'react-intl'
+import { Link, canUseDOM } from 'vtex.render-runtime'
+import path from 'ramda/es/path'
+import { Button } from 'vtex.styleguide'
 
+import AppSettings from '../graphql/appSettings.graphql'
 import Stars from './components/Stars'
 import TotalReviewsByProductId from '../graphql/totalReviewsByProductId.graphql'
 import AverageRatingByProductId from '../graphql/averageRatingByProductId.graphql'
@@ -33,22 +38,59 @@ interface AverageData {
   averageRatingByProductId: number
 }
 
+interface SettingsData {
+  appSettings: AppSettings
+}
+
+interface AppSettings {
+  allowAnonymousReviews: boolean
+  requireApproval: boolean
+  useLocation: boolean
+  defaultOpen: boolean
+  defaultOpenCount: number
+  showGraph: boolean
+  displaySummaryIfNone: boolean
+  displaySummaryTotalReviews: boolean
+  displaySummaryAddButton: boolean
+}
+
 interface State {
   total: number
   average: number
   hasTotal: boolean
   hasAverage: boolean
+  settings: AppSettings
+  userAuthenticated: boolean
+}
+
+declare let global: {
+  __hostname__: string
+  __pathname__: string
 }
 
 type ReducerActions =
   | { type: 'SET_TOTAL'; args: { total: number } }
   | { type: 'SET_AVERAGE'; args: { average: number } }
+  | { type: 'SET_SETTINGS'; args: { settings: AppSettings } }
+  | { type: 'SET_AUTHENTICATED'; args: { authenticated: boolean } }
 
 const initialState = {
   total: 0,
   average: 0,
   hasTotal: false,
   hasAverage: false,
+  settings: {
+    defaultOpen: false,
+    defaultOpenCount: 0,
+    allowAnonymousReviews: false,
+    requireApproval: true,
+    useLocation: false,
+    showGraph: false,
+    displaySummaryIfNone: false,
+    displaySummaryTotalReviews: true,
+    displaySummaryAddButton: false,
+  },
+  userAuthenticated: false,
 }
 
 const reducer = (state: State, action: ReducerActions) => {
@@ -65,12 +107,26 @@ const reducer = (state: State, action: ReducerActions) => {
         average: action.args.average,
         hasAverage: true,
       }
+    case 'SET_SETTINGS':
+      return {
+        ...state,
+        settings: action.args.settings,
+      }
+    case 'SET_AUTHENTICATED':
+      return {
+        ...state,
+        userAuthenticated: action.args.authenticated,
+      }
     default:
       return state
   }
 }
 
-const CSS_HANDLES = ['summaryContainer'] as const
+const CSS_HANDLES = [
+  'summaryContainer',
+  'loginLink',
+  'summaryButtonContainer',
+] as const
 
 const RatingSummary: FunctionComponent<Props> = props => {
   const { client } = props
@@ -80,6 +136,16 @@ const RatingSummary: FunctionComponent<Props> = props => {
   const { productId, productName }: Product = product || {}
 
   const [state, dispatch] = useReducer(reducer, initialState)
+
+  const getLocation = () =>
+    canUseDOM
+      ? {
+          url: window.location.pathname + window.location.hash,
+          pathName: window.location.pathname,
+        }
+      : { url: global.__pathname__, pathName: global.__pathname__ }
+
+  const { url } = getLocation()
 
   useEffect(() => {
     if (!productId) {
@@ -115,13 +181,53 @@ const RatingSummary: FunctionComponent<Props> = props => {
           args: { average },
         })
       })
+
+    client
+      .query({
+        query: AppSettings,
+      })
+      .then((response: ApolloQueryResult<SettingsData>) => {
+        const settings = response.data.appSettings
+        dispatch({
+          type: 'SET_SETTINGS',
+          args: { settings },
+        })
+      })
   }, [client, productId])
+
+  useEffect(() => {
+    window.__RENDER_8_SESSION__.sessionPromise.then((data: any) => {
+      const sessionRespose = data.response
+
+      if (!sessionRespose || !sessionRespose.namespaces) {
+        return
+      }
+
+      const { namespaces } = sessionRespose
+      const storeUserId = path(
+        ['authentication', 'storeUserId', 'value'],
+        namespaces
+      )
+      if (!storeUserId) {
+        return
+      }
+      dispatch({
+        type: 'SET_AUTHENTICATED',
+        args: { authenticated: true },
+      })
+    })
+  }, [])
+
+  const scrollToForm = () => {
+    const reviewsContainer = document.getElementById('reviews-main-container')
+    if (reviewsContainer) reviewsContainer.scrollIntoView()
+  }
 
   return (
     <div className={`${handles.summaryContainer} review-summary mw8 center`}>
       {!state.hasTotal || !state.hasAverage ? (
         <Fragment>Loading reviews...</Fragment>
-      ) : state.total === 0 ? null : (
+      ) : state.total === 0 && !state.settings.displaySummaryIfNone ? null : (
         <Fragment>
           <Helmet>
             <script type="application/ld+json">
@@ -140,9 +246,37 @@ const RatingSummary: FunctionComponent<Props> = props => {
           <span className="t-heading-4 v-mid">
             <Stars rating={state.average} />
           </span>{' '}
-          <span className="review__rating--count dib v-mid">
-            ({state.total})
-          </span>
+          {state.settings.displaySummaryTotalReviews ? (
+            <span className="review__rating--count dib v-mid">
+              ({state.total})
+            </span>
+          ) : null}
+          {state.settings.displaySummaryAddButton ? (
+            (state.settings && state.settings.allowAnonymousReviews) ||
+            (state.settings &&
+              !state.settings.allowAnonymousReviews &&
+              state.userAuthenticated) ? (
+              <div className={`${handles.summaryButtonContainer}`}>
+                <Button
+                  onClick={() => {
+                    scrollToForm()
+                  }}
+                >
+                  <FormattedMessage id="store/reviews.list.writeReview" />
+                </Button>
+              </div>
+            ) : (
+              <div className={`${handles.summaryButtonContainer}`}>
+                <Link
+                  page="store.login"
+                  query={`returnUrl=${encodeURIComponent(url)}`}
+                  className={`${handles.loginLink} h1 w2 tc flex items-center w-100-s h-100-s pa4-s`}
+                >
+                  <FormattedMessage id="store/reviews.list.login" />
+                </Link>
+              </div>
+            )
+          ) : null}
         </Fragment>
       )}
     </div>

@@ -518,7 +518,10 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
   }, [client, productId, state.from, state.to, state.sort, state.settings])
 
   return (
-    <div className={`${handles.container} review mw8 center ph5`}>
+    <div
+      className={`${handles.container} review mw8 center ph5`}
+      id="reviews-main-container"
+    >
       <h3
         className={`${handles.reviewsHeading} review__title t-heading-3 bb b--muted-5 mb5`}
       >
