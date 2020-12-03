@@ -5,46 +5,61 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
 ### Added
+
 - Display graph option in app settings
 - New settings to display stars even if the product has no reviews
 - New settings to hide the total number of reviews in product-rating-summary block
 - New settings to add `Add Review` button under the stars in product-rating-summary block
 
 ## [2.3.2] - 2020-12-21
+
 ### Fixed
+
 - App types.
 - DOM hierarchy.
 
 ### Changed
+
 - Use Apollo and React Intl hooks instead of HOCs.
 
 ## [2.3.1] - 2020-12-14
 
 ### Security
+
 - Setting infrastructure `replica` parameters
 
 ## [2.3.0] - 2020-12-10
+
 ### Added
+
 - Navigation setup for admin v4.
 
-
 ## [2.2.1] - 2020-10-27
+
 ### Fixed
+
 - Missing parenthesis in translation message.
 
 ### Added
+
 - Display graph option in app settings
 
 ## [2.2.1] - 2020-10-27
+
 ### Fixed
+
 - Missing parenthesis in translation message.
 
 ### Added
+
 - Display graph option in app settings
 
 ## [2.2.1] - 2020-10-27
+
 ### Fixed
+
 - Missing parenthesis in translation message.
 
 ## [2.2.0] - 2020-10-02
@@ -56,9 +71,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [2.1.0] - 2020-09-30
 
 ### Added
+
 - Missing CSS Handles
 
 ## [2.0.3] - 2020-09-16
+
 ### Fixed
 
 - App documentation (`readme.md` file)
