@@ -470,7 +470,6 @@ function Reviews() {
         const graphArray = [0, 0, 0, 0, 0, 0]
         graphArray[0] = total
         if (reviews) {
-          // eslint-disable-next-line array-callback-return
           reviews.map((review: Review) => {
             const thisRating = review.rating
             graphArray[thisRating] += 1
