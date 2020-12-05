@@ -13,7 +13,6 @@ import { ProductContext } from 'vtex.product-context'
 import { useCssHandles } from 'vtex.css-handles'
 import { FormattedMessage } from 'react-intl'
 import { Link, canUseDOM } from 'vtex.render-runtime'
-import { path } from 'ramda'
 import { Button } from 'vtex.styleguide'
 
 import AppSettings from '../graphql/appSettings.graphql'
