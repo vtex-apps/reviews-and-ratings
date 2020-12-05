@@ -5,13 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-New features: 
-1. Ability to display stars even if the product has no reviews
-2. Ability to hide the total number of reviews in product-rating-summary block
-3. Ability to add `Add Review` button under the stars in product-rating-summary block
-
 ### Added
 - Display graph option in app settings
+- New settings to display stars even if the product has no reviews
+- New settings to hide the total number of reviews in product-rating-summary block
+- New settings to add `Add Review` button under the stars in product-rating-summary block
 
 ## [2.3.2] - 2020-12-21
 ### Fixed
