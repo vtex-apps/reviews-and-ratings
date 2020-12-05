@@ -187,10 +187,7 @@ function RatingSummary() {
       }
 
       const { namespaces } = sessionRespose
-      const storeUserId = path(
-        ['authentication', 'storeUserId', 'value'],
-        namespaces
-      )
+      const storeUserId = namespaces?.authentication?.storeUserId?.value
       if (!storeUserId) {
         return
       }
