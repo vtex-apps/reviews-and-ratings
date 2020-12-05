@@ -691,7 +691,7 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
             <div className={`${handles.graphText} mr5`}>
               <span className={`${handles.graphTextLabel}`}>
                 <FormattedMessage
-                  id="store/reviews.list.graph.star"
+                  id="store/reviews.list.graph.stars"
                   values={{
                     value: 1,
                   }}
