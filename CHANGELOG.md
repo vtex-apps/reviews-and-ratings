@@ -55,6 +55,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - Display graph option in app settings
+- New settings to display stars even if the product has no reviews
+- New settings to hide the total number of reviews in product-rating-summary block
+- New settings to add `Add Review` button under the stars in product-rating-summary block
 
 ## [2.2.1] - 2020-10-27
 
