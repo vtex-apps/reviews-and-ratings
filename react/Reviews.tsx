@@ -470,7 +470,7 @@ function Reviews() {
         const graphArray = [0, 0, 0, 0, 0, 0]
         graphArray[0] = total
         if (reviews) {
-          reviews.map((review: Review) => {
+          reviews.forEach((review: Review) => {
             const thisRating = review.rating
             graphArray[thisRating] += 1
           })
