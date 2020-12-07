@@ -52,9 +52,11 @@ _When using the admin v4_
 
 - **Display `Add review` button on `product-rating-summary` block** - Checking this box allows you to display an `Add review` button under the stars.
 
-- **Display stars in product-rating-summary if there are no reviews** - Checking this box allows you to display empty stars if the product has no reviews
-- **Display total reviews number on product-rating-summary block** - Checking this box allows you to display the total number of product reviews.
-- **Display `Add review` button on product-rating-summary block** - Checking this box allows you to display an Add review button under the stars.
+- **Display stars in `product-rating-summary` if there are no reviews** - Checking this box allows you to display empty stars even if the product still has no reviews.
+
+- **Display total reviews number on `product-rating-summary` block** - Checking this box allows you to display the total number of reviews for a product.
+
+- **Display `Add review` button on `product-rating-summary` block** - Checking this box allows you to display an `Add review` button under the stars.
 
 ### Step 3 - Declaring the app's blocks in your store theme
 
