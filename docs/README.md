@@ -42,11 +42,13 @@ Using your terminal, log in to the desired VTEX account and run the following co
 
 - **Number of open review accordions** - Checking this box allows you to set a specific number of review accordions (instead of all of them) to automatically open when the page is loaded, displaying all the review text. If the `Default all review accordions to open` setting is active, this option is ignored.
 
-- **Display graph** - Checking this box allows you to display the reviews graph on the product page.
+- **Display graph** - Checking this box allows you to display the reviews graph on the product details page.
 
-- **Display stars in product-rating-summary if there are no reviews** - Checking this box allows you to display empty stars if the product has no reviews
-- **Display total reviews number on product-rating-summary block** - Checking this box allows you to display the total number of product reviews.
-- **Display `Add review` button on product-rating-summary block** - Checking this box allows you to display an Add review button under the stars.
+- **Display stars in `product-rating-summary` if there are no reviews** - Checking this box allows you to display empty stars even if the product still has no reviews.
+
+- **Display total reviews number on `product-rating-summary` block** - Checking this box allows you to display the total number of reviews for a product.
+
+- **Display `Add review` button on `product-rating-summary` block** - Checking this box allows you to display an `Add review` button under the stars.
 
 ### Step 3 - Declaring the app's blocks in your store theme
 
