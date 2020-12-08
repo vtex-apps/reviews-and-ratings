@@ -76,6 +76,13 @@ In order to apply CSS customizations in this and other blocks, follow the instru
 | ------------------------- |
 | `container`               |
 | `formContainer`           |
+| `graphBar`                |
+| `graphBarContainer`       |
+| `graphBarPercent`         |
+| `graphContent`            |
+| `graphContainer`          |
+| `graphText`               |
+| `graphTextLabel`          |
 | `loginLink`               |
 | `reviewComment`           |
 | `reviewCommentRating`     |
@@ -92,15 +99,8 @@ In order to apply CSS customizations in this and other blocks, follow the instru
 | `stars`                   |
 | `starsContainer`          |
 | `summaryContainer`        |
-| `writeReviewContainer`    |
-| `graphContent`            |
-| `graphContainer`          |
-| `graphText`               |
-| `graphTextLabel`          |
-| `graphBarContainer`       |
-| `graphBar`                |
-| `graphBarPercent`         |
 | `summaryButtonContainer`  |
+| `writeReviewContainer`    |
 
 <!-- DOCS-IGNORE:start -->
 
