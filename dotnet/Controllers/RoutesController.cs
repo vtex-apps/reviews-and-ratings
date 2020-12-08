@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ReviewsRatings.Services;
 using System;
+using System.Threading.Tasks;
 
 namespace ReviewsRatings.Controllers
 {
@@ -16,6 +17,11 @@ namespace ReviewsRatings.Controllers
         public void ClearData()
         {
             _productReviewsService.ClearData();
+        }
+
+        public async Task<IActionResult> GetUserData()
+        {
+            return Json(await _productReviewsService.GetUserData());
         }
     }
 }

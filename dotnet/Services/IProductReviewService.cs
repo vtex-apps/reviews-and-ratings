@@ -39,5 +39,7 @@
         Task<IList<Review>> FilterReviews(IList<Review> reviews, string searchTerm, string orderBy, string status);
 
         Task<IList<Review>> LimitReviews(IList<Review> reviews, int from, int to);
+
+        Task<UserData> GetUserData();
     }
 }

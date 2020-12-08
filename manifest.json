@@ -131,6 +131,20 @@
       }
     },
     {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "{{account}}.myvtex.com",
+        "path": "/api/vtexid/credential/validate"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "{{account}}.myvtex.com",
+        "path": "/api/license-manager/pvt/users/*"
+      }
+    },
+    {
       "name": "vbase-read-write"
     }
   ],

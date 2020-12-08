@@ -22,6 +22,8 @@
         private const string APPLICATION_JSON = "application/json";
         private const string USE_HTTPS_HEADER_NAME = "X-Vtex-Use-Https";
         private const string VTEX_ACCOUNT_HEADER_NAME = "X-Vtex-Account";
+        public const string PROXY_AUTHORIZATION_HEADER_NAME = "Proxy-Authorization";
+        public const string VtexIdCookie = "VtexIdclientAutCookie";
         private readonly IVtexEnvironmentVariableProvider _environmentVariableProvider;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IHttpClientFactory _clientFactory;
@@ -206,6 +208,73 @@
             if (response.IsSuccessStatusCode)
             {
                 userData = JsonConvert.DeserializeObject<UserData>(responseContent);
+            }
+
+            return userData;
+        }
+
+        public async Task<UserData> GetUserData()
+        {
+            UserData userData = null;
+            string jsonSerializedToken;
+            VtexToken vtexToken = new VtexToken();
+            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+            if (authToken != null)
+            {
+                vtexToken.Token = authToken;
+            }
+
+            jsonSerializedToken = JsonConvert.SerializeObject(vtexToken);
+
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.myvtex.com/api/vtexid/credential/validate"),
+                Content = new StringContent(jsonSerializedToken, Encoding.UTF8, APPLICATION_JSON)
+            };
+
+            request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
+            if (authToken != null)
+            {
+                request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
+            }
+
+            var client = _clientFactory.CreateClient();
+            var response = await client.SendAsync(request);
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            Console.WriteLine($"     ----------> validate [{response.StatusCode}] {responseContent}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                UserCredential userCredential = JsonConvert.DeserializeObject<UserCredential>(responseContent);
+                if(!string.IsNullOrEmpty(userCredential.Id))
+                {
+                    request = new HttpRequestMessage
+                    {
+                        Method = HttpMethod.Get,
+                        RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.myvtex.com/api/license-manager/pvt/users/{userCredential.Id}"),
+                    };
+
+                    request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
+                    if (authToken != null)
+                    {
+                        request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
+                        request.Headers.Add("Cookie", $"{VtexIdCookie}={authToken}");
+                        request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, authToken);
+                    }
+
+                    client = _clientFactory.CreateClient();
+                    response = await client.SendAsync(request);
+                    responseContent = await response.Content.ReadAsStringAsync();
+
+                    Console.WriteLine($"     ----------> users '{userCredential.Id}' [{response.StatusCode}] {responseContent}");
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        userData = JsonConvert.DeserializeObject<UserData>(responseContent);
+                    }
+                }
             }
 
             return userData;

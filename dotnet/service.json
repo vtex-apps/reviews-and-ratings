@@ -1,6 +1,6 @@
 {
   "stack": "dotnet",
-  "memory": 256,
+  "memory": 512,
   "runtimeArgs": [
   ],
   "routes": {
@@ -12,7 +12,7 @@
   "events": {
     "onAppsLinked": {
       "sender": "apps",
-      "keys": ["linked"]
+      "keys": [ "linked" ]
     }
   }
 }

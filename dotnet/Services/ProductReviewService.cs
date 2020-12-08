@@ -94,7 +94,7 @@
                         if (userData != null)
                         {
                             review.Author = userData.Name;
-                            review.AuthorEmail = userData.Email;
+                            review.AuthorEmail = userData.Login;
                             review.ResponseMessage = reply;
                         }
 
@@ -489,6 +489,11 @@
         public async Task<AppSettings> GetAppSettings()
         {
             return await this._appSettingsRepository.GetAppSettingAsync();
+        }
+
+        public async Task<UserData> GetUserData()
+        {
+            return await _productReviewRepository.GetUserData();
         }
     }
 }
