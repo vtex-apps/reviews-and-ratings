@@ -121,6 +121,7 @@ In order to apply CSS customizations in this and other blocks, follow the instru
 | `graphBar`                |
 | `graphBarPercent`         |
 | `summaryButtonContainer`  |
+| `writeReviewContainer`    |
 
 <!-- DOCS-IGNORE:start -->
 
