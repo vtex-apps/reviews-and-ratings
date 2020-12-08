@@ -22,6 +22,8 @@
 
         Task<Review> EditReview(Review review);
 
+        Task<bool> AddResponse(int reviewId, string reply, string userId);
+
         Task<bool> DeleteReview(int[] ids);
 
         Task<IList<Review>> GetReviewsByShopperId(string shopperId);
@@ -37,5 +39,7 @@
         Task<IList<Review>> FilterReviews(IList<Review> reviews, string searchTerm, string orderBy, string status);
 
         Task<IList<Review>> LimitReviews(IList<Review> reviews, int from, int to);
+
+        Task<UserData> GetUserData();
     }
 }

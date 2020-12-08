@@ -39,6 +39,21 @@ namespace ReviewsRatings.GraphQL
                 });
 
             Field<BooleanGraphType>(
+                "addResponse",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" },
+                    new QueryArgument<StringGraphType> { Name = "reply" },
+                    new QueryArgument<StringGraphType> { Name = "adminUserId" }
+                ),
+                resolve: context =>
+                {
+                    var id = context.GetArgument<int>("id");
+                    var reply = context.GetArgument<string>("reply");
+                    var adminUserId = context.GetArgument<string>("adminUserId");
+                    return productReviewService.AddResponse(id, reply, adminUserId);
+                });
+
+            Field<BooleanGraphType>(
                 "deleteReview",
                 arguments: new QueryArguments(
                     new QueryArgument<ListGraphType<IdGraphType>> { Name = "ids"}

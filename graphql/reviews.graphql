@@ -24,6 +24,7 @@ query Reviews(
       shopperId
       reviewDateTime
       verifiedPurchaser
+      responseMessage
       sku
       approved
     }

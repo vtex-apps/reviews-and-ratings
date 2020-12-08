@@ -12,6 +12,7 @@ export interface Review {
   location: string
   reviewDateTime: string
   verifiedPurchaser: boolean
+  responseMessage: string
   sku: string
   approved: boolean
 }
@@ -23,6 +24,7 @@ interface ReviewCellData {
   rating: number
   title: string
   text: string
+  responseMessage: string
 }
 
 export interface ReviewTableRowData {

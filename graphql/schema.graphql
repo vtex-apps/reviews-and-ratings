@@ -12,6 +12,9 @@ type Review {
   verifiedPurchaser: Boolean
   sku: String
   approved: Boolean
+  responseMessage: String
+  authorEmail: String
+  author: String
 }
 
 type ReviewsResult {
@@ -100,6 +103,7 @@ input ReviewInput {
 type Mutation {
   newReview(review: ReviewInput!): Review
   editReview(id: ID!, review: ReviewInput!): Review
+  addResponse(id:ID!, reply:String, adminUserId:String): Boolean
   deleteReview(ids: [ID!]): Boolean
   moderateReview(ids: [ID!], approved: Boolean!): Boolean
 }

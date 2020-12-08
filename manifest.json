@@ -23,7 +23,8 @@
     "vtex.store-graphql": "2.x",
     "vtex.channels-components": "4.x",
     "vtex.paginated-table": "0.x",
-    "vtex.css-handles": "0.x"
+    "vtex.css-handles": "0.x",
+    "vtex.myuser-io": "2.x"
   },
   "billingOptions": {
     "termsURL": "https://compliance.vtex.com/gdpr/policies/vtex-privacy-policy",
@@ -120,6 +121,27 @@
       "attrs": {
         "host": "infra.io.vtex.com",
         "path": "/apps/*"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "{{account}}.vtexcommercestable.com.br",
+        "path": "/api/license-manager/users/*"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "{{account}}.myvtex.com",
+        "path": "/api/vtexid/credential/validate"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "{{account}}.myvtex.com",
+        "path": "/api/license-manager/pvt/users/*"
       }
     },
     {

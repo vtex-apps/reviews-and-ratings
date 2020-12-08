@@ -85,5 +85,20 @@ namespace ReviewsRatings.Models
         /// Reviewer location
         /// </summary>
         public string Location { get; set; }
+
+        /// <summary>
+        /// The text of a response to a review
+        /// </summary>
+        public string ResponseMessage { get; set; }
+
+        /// <summary>
+        /// The name of the response author
+        /// </summary>
+        public string Author { get; set; }
+
+        /// <summary>
+        /// The email of the response author
+        /// </summary>
+        public string AuthorEmail { get; set; }
     }
 }

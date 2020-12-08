@@ -1,0 +1,3 @@
+mutation AddResponse($id: ID!, $response: String!, $adminUserId:String!) {
+  addResponse(id: $id, response: $response, adminUserId: $adminUserId)
+}

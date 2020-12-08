@@ -59,6 +59,7 @@ export const ApprovedReviewsTable: FC<InjectedIntlProps> = ({ intl }) => {
       productId,
       shopperId,
       rating,
+      responseMessage,
       sku,
     } = review
 
@@ -75,6 +76,7 @@ export const ApprovedReviewsTable: FC<InjectedIntlProps> = ({ intl }) => {
         rating,
         title,
         text,
+        responseMessage,
       },
     }
   }
