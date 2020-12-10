@@ -20,11 +20,15 @@ Using your terminal, log in to the desired VTEX account and run the following co
 
 ### Step 2 - Defining the app settings
 
-In the account's admin dashboard, access `Apps > My Apps` and then click on the box for `Reviews and Ratings`;
+1. In the account's admin dashboard, access `Apps > My Apps` and then click on the box for `Reviews and Ratings`:
 
 ![apps-reviews-and-ratings](https://user-images.githubusercontent.com/52087100/71026670-77a49e00-20e8-11ea-9e01-0cb4dec12a56.png)
+*When using the admin v3*
 
-Once in the app's settings page, define the following settings:
+![apps-reviews-and-ratings](https://user-images.githubusercontent.com/26655596/99747634-b772c300-2ab9-11eb-927b-cd03e89421af.png)
+*When using the admin v4*
+
+2. Once in the app's settings page, define the following settings according to the desired scenario:
 
 ![reviews-and-ratings](https://user-images.githubusercontent.com/52087100/94868792-3df41800-041a-11eb-89a1-630cc31219cc.png)
 
