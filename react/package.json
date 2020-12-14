@@ -44,5 +44,5 @@
     "vtex.store": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.store@2.95.1/public/@types/vtex.store",
     "vtex.styleguide": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.styleguide@9.113.2/public/@types/vtex.styleguide"
   },
-  "version": "1.6.2"
+  "version": "1.6.3"
 }
