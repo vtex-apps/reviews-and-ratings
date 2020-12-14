@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Updated
+- Setting infrastructure `replica` parameters
+
 ## [2.3.0] - 2020-12-10
 ### Added
 - Navigation setup for admin v4.
