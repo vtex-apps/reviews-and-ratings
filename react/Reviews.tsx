@@ -633,7 +633,7 @@ function Reviews() {
                             review.location && <span>, {review.location}</span>}
                         </li>
                       </ul>
-                      <p className="t-body lh-copy mw9">
+                      <div className="t-body lh-copy mw9">
                         <ShowMore
                           lines={3}
                           more="Show more"
@@ -642,7 +642,7 @@ function Reviews() {
                         >
                           {review.text}
                         </ShowMore>
-                      </p>
+                      </div>
                     </div>
                   ) : (
                     <Collapsible
