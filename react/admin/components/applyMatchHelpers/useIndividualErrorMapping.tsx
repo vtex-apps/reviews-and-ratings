@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react'
-import { InjectedIntl } from 'react-intl'
+import { IntlShape, MessageDescriptor } from 'react-intl'
 import { ApolloError } from 'apollo-client'
 
 import { getGraphQLErrorCode } from './index'
@@ -10,14 +10,14 @@ interface GenericError extends ApolloError {
   reviewId: string
 }
 
-export const useIndividualErrorMapping = (intl: InjectedIntl) => {
+export const useIndividualErrorMapping = (intl: IntlShape) => {
   const [shouldShowIndividualErrors, setShouldShowIndividualErrors] = useState(
     false
   )
   const [allErrorsMap, setAllErrorsMap] = useState({} as Record<string, any>)
 
   const translateMessage = (
-    message: ReactIntl.FormattedMessage.MessageDescriptor
+    message: MessageDescriptor
   ) => {
     return intl.formatMessage(message)
   }

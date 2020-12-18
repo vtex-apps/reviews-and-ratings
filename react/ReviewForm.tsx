@@ -1,17 +1,14 @@
 /* eslint-disable no-console */
-import React, { FC, Fragment, useContext, useEffect, useReducer } from 'react'
-import { ProductContext } from 'vtex.product-context'
-import ApolloClient, { ApolloQueryResult } from 'apollo-client'
-import { NormalizedCacheObject } from 'apollo-cache-inmemory'
-import { withApollo } from 'react-apollo'
+import React, { Fragment, useEffect, useReducer } from 'react'
+import { useProduct } from 'vtex.product-context'
+import { ApolloQueryResult } from 'apollo-client'
+import { useApolloClient } from 'react-apollo'
 import {
   FormattedMessage,
-  InjectedIntlProps,
-  injectIntl,
   defineMessages,
+  useIntl,
 } from 'react-intl'
-import flowRight from 'lodash.flowright'
-import path from 'ramda/es/path'
+import { path } from 'ramda'
 import { useCssHandles } from 'vtex.css-handles'
 import { Card, Input, Button, Textarea } from 'vtex.styleguide'
 
@@ -20,21 +17,11 @@ import NewReview from '../graphql/newReview.graphql'
 import HasShopperReviewed from '../graphql/hasShopperReviewed.graphql'
 import StarPicker from './components/StarPicker'
 
-interface Product {
-  productId: string
-  productName: string
-}
-
 interface AppSettings {
   allowAnonymousReviews: boolean
   requireApproval: boolean
   useLocation: boolean
   defaultOpen: boolean
-}
-
-interface Props {
-  client: ApolloClient<NormalizedCacheObject>
-  settings?: AppSettings
 }
 
 interface HasShopperReviewedData {
@@ -212,15 +199,14 @@ const messages = defineMessages({
 
 const CSS_HANDLES = ['formContainer'] as const
 
-export const ReviewForm: FC<InjectedIntlProps & Props> = ({
-  intl,
-  client,
-  settings,
-}) => {
+export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
+  const client = useApolloClient()
+  const intl = useIntl()
+
   const handles = useCssHandles(CSS_HANDLES)
 
-  const { product } = useContext(ProductContext) as any
-  const { productId }: Product = product || {}
+  const { product } = useProduct() ?? {}
+  const { productId } = product || {}
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
@@ -508,4 +494,4 @@ export const ReviewForm: FC<InjectedIntlProps & Props> = ({
   )
 }
 
-export default flowRight([withApollo, injectIntl])(ReviewForm)
+export default ReviewForm

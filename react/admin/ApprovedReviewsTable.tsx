@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, useState, Fragment } from 'react'
-import { injectIntl, InjectedIntlProps, FormattedMessage } from 'react-intl'
+import { FormattedMessage, IntlShape, useIntl } from 'react-intl'
 import { Box, ToastConsumer } from 'vtex.styleguide'
 
 import {
@@ -21,7 +21,7 @@ import useLineActionsApproved from './components/tableHelpers/useLineActionsAppr
 import ReviewsTable from './components/ReviewsTable'
 import { TOAST_DURATION_MS } from './utils'
 
-const schema = (intl: ReactIntl.InjectedIntl) => ({
+const schema = (intl: IntlShape) => ({
   properties: {
     ...reviewSchema.properties,
     ...reviewWithErrorSchema,
@@ -30,7 +30,8 @@ const schema = (intl: ReactIntl.InjectedIntl) => ({
   },
 })
 
-export const ApprovedReviewsTable: FC<InjectedIntlProps> = ({ intl }) => {
+export const ApprovedReviewsTable: FC = () => {
+  const intl = useIntl()
   const [selected, setSelected] = useState<ReviewTableRowData[]>([])
 
   const [isDeletingReviews, setIsDeletingReviews] = useState(false)
@@ -151,4 +152,4 @@ export const ApprovedReviewsTable: FC<InjectedIntlProps> = ({ intl }) => {
   )
 }
 
-export default injectIntl(ApprovedReviewsTable)
+export default ApprovedReviewsTable

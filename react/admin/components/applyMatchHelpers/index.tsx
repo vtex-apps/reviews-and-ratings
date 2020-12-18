@@ -1,4 +1,4 @@
-import path from 'ramda/es/path'
+import { path } from 'ramda'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getGraphQLErrorCode = (graphQLError: any): number | undefined =>

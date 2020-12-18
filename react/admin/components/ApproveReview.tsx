@@ -2,7 +2,7 @@
 /* eslint-disable react/display-name */
 import React, { useState } from 'react'
 import { ObservableQueryFields } from 'react-apollo'
-import { FormattedMessage, InjectedIntlProps, injectIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { Alert, Button, Modal, Table, ToastProvider } from 'vtex.styleguide'
 
 import {
@@ -37,9 +37,10 @@ const schema = () => ({
   },
 })
 
-const ApproveReview = (props: ApproveReviewProps & InjectedIntlProps) => {
+const ApproveReview = (props: ApproveReviewProps) => {
+  const intl = useIntl()
   const { hasError, errorMessage, setMainError, clearError } = useMatchingError(
-    props.intl,
+    intl,
     'APPROVE'
   )
 
@@ -49,7 +50,7 @@ const ApproveReview = (props: ApproveReviewProps & InjectedIntlProps) => {
     getReviewError,
     // setAllErrors,
     shouldShowIndividualErrors,
-  } = useIndividualErrorMapping(props.intl)
+  } = useIndividualErrorMapping(intl)
 
   const { isLoaded } = useModalCustomStyles()
 
@@ -156,4 +157,4 @@ const ApproveReview = (props: ApproveReviewProps & InjectedIntlProps) => {
   )
 }
 
-export default injectIntl(ApproveReview)
+export default ApproveReview

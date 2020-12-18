@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { InjectedIntl } from 'react-intl'
+import { IntlShape, MessageDescriptor } from 'react-intl'
 import { ApolloError } from 'apollo-client'
 
 import { getGraphQLErrorCode } from './index'
@@ -8,7 +8,7 @@ interface GenericError extends ApolloError {
   code: number
 }
 
-export const useMatchingError = (intl: InjectedIntl, operation?: string) => {
+export const useMatchingError = (intl: IntlShape, operation?: string) => {
   const [hasError, setHasError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   let partialErrorMessageId: string
@@ -22,7 +22,7 @@ export const useMatchingError = (intl: InjectedIntl, operation?: string) => {
   }
 
   const translateMessage = (
-    message: ReactIntl.FormattedMessage.MessageDescriptor
+    message: MessageDescriptor
   ) => {
     return intl.formatMessage(message)
   }

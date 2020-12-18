@@ -5,8 +5,7 @@ import copy from 'copy-to-clipboard'
 import {
   FormattedMessage,
   defineMessages,
-  injectIntl,
-  InjectedIntlProps,
+  useIntl,
 } from 'react-intl'
 import { IconCopy, ToastConsumer, Tooltip } from 'vtex.styleguide'
 
@@ -18,7 +17,7 @@ const DEFAULT_TOAST_DURATION_MS = 1500
 
 type Props = {
   cellData: ReviewSummary
-} & InjectedIntlProps
+}
 
 const messages = defineMessages({
   copyTitle: {
@@ -31,8 +30,9 @@ const messages = defineMessages({
   },
 })
 
-const IntlReviewCellRenderer: React.FC<Props> = ({ cellData, intl }) => {
+const ReviewCellRenderer: React.FC<Props> = ({ cellData }) => {
   const [showCopy, setShowCopy] = useState(false)
+  const intl = useIntl()
 
   return cellData ? (
     <ToastConsumer>
@@ -94,7 +94,5 @@ const IntlReviewCellRenderer: React.FC<Props> = ({ cellData, intl }) => {
     </ToastConsumer>
   ) : null
 }
-
-const ReviewCellRenderer = injectIntl(IntlReviewCellRenderer)
 
 export default ReviewCellRenderer

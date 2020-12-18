@@ -6,7 +6,7 @@ import { tuple } from '.'
 const useSearch = () => {
   const { query, setQuery } = useRuntime()
 
-  const [displayValue, setDisplayValue] = useState(query.search)
+  const [displayValue, setDisplayValue] = useState(query?.search)
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDisplayValue(e.target.value)
@@ -24,7 +24,7 @@ const useSearch = () => {
   }
 
   return tuple([
-    { displayValue: displayValue || '', searchValue: query.search },
+    { displayValue: displayValue || '', searchValue: query?.search },
     {
       onSearchChange: handleSearchChange,
       onSearchClear: handleSearchClear,
