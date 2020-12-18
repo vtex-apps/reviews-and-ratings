@@ -1,16 +1,12 @@
-import React, {
-  Fragment,
-  useEffect,
-  useReducer,
-} from 'react'
+import React, { Fragment, useEffect, useReducer } from 'react'
 import { ApolloQueryResult } from 'apollo-client'
 import { useApolloClient } from 'react-apollo'
 import { useCssHandles } from 'vtex.css-handles'
+import { useProduct } from 'vtex.product-context'
 
 import Stars from './components/Stars'
 import TotalReviewsByProductId from '../graphql/totalReviewsByProductId.graphql'
 import AverageRatingByProductId from '../graphql/averageRatingByProductId.graphql'
-import { useProduct } from 'vtex.product-context'
 
 interface TotalData {
   totalReviewsByProductId: number
@@ -63,7 +59,7 @@ function RatingInline() {
   const client = useApolloClient()
   const handles = useCssHandles(CSS_HANDLES)
   const { product } = useProduct() ?? {}
-  const { productId } = product || {}
+  const { productId } = product ?? {}
 
   const [state, dispatch] = useReducer(reducer, initialState)
 

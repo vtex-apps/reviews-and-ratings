@@ -16,9 +16,7 @@ export const useIndividualErrorMapping = (intl: IntlShape) => {
   )
   const [allErrorsMap, setAllErrorsMap] = useState({} as Record<string, any>)
 
-  const translateMessage = (
-    message: MessageDescriptor
-  ) => {
+  const translateMessage = (message: MessageDescriptor) => {
     return intl.formatMessage(message)
   }
 

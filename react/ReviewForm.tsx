@@ -206,7 +206,7 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
   const handles = useCssHandles(CSS_HANDLES)
 
   const { product } = useProduct() ?? {}
-  const { productId } = product || {}
+  const { productId } = product ?? {}
 
   const [state, dispatch] = useReducer(reducer, initialState)
 

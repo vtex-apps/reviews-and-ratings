@@ -190,4 +190,3 @@ export const ReviewsTable: FC<ReviewsTableProps> = ({
 }
 
 export default ReviewsTable
-

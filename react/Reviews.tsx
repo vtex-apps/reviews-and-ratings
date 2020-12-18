@@ -305,7 +305,7 @@ function Reviews() {
   const intl = useIntl()
   const handles = useCssHandles(CSS_HANDLES)
   const { product } = useProduct() ?? {}
-  const { productId, productName } = product || {}
+  const { productId, productName } = product ?? {}
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
@@ -729,4 +729,3 @@ function Reviews() {
 }
 
 export default Reviews
-

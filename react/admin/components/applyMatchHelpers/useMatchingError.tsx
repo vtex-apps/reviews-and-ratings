@@ -21,9 +21,7 @@ export const useMatchingError = (intl: IntlShape, operation?: string) => {
     partialErrorMessageId = 'generic'
   }
 
-  const translateMessage = (
-    message: MessageDescriptor
-  ) => {
+  const translateMessage = (message: MessageDescriptor) => {
     return intl.formatMessage(message)
   }
 

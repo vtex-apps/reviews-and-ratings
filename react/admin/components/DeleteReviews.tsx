@@ -132,4 +132,3 @@ export const DeleteReviewsPanel: FC<DeleteReviewsPanelProps> = props => {
 }
 
 export default DeleteReviewsPanel
-

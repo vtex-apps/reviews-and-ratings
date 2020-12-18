@@ -2,11 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState } from 'react'
 import copy from 'copy-to-clipboard'
-import {
-  FormattedMessage,
-  defineMessages,
-  useIntl,
-} from 'react-intl'
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 import { IconCopy, ToastConsumer, Tooltip } from 'vtex.styleguide'
 
 import Stars from '../../../components/Stars'

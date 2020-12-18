@@ -1,8 +1,4 @@
-import React, {
-  Fragment,
-  useEffect,
-  useReducer,
-} from 'react'
+import React, { Fragment, useEffect, useReducer } from 'react'
 import { Helmet } from 'react-helmet'
 import { ApolloQueryResult } from 'apollo-client'
 import { useApolloClient } from 'react-apollo'
@@ -64,7 +60,7 @@ function RatingSummary() {
   const client = useApolloClient()
   const handles = useCssHandles(CSS_HANDLES)
   const { product } = useProduct() ?? {}
-  const { productId, productName } = product || {}
+  const { productId, productName } = product ?? {}
 
   const [state, dispatch] = useReducer(reducer, initialState)
 

@@ -24,7 +24,7 @@ const useSearch = () => {
   }
 
   return tuple([
-    { displayValue: displayValue || '', searchValue: query?.search },
+    { displayValue: displayValue ?? '', searchValue: query?.search },
     {
       onSearchChange: handleSearchChange,
       onSearchClear: handleSearchClear,
