@@ -3,12 +3,7 @@ import React, { Fragment, useEffect, useReducer } from 'react'
 import { useProduct } from 'vtex.product-context'
 import { ApolloQueryResult } from 'apollo-client'
 import { useApolloClient } from 'react-apollo'
-import {
-  FormattedMessage,
-  defineMessages,
-  useIntl,
-} from 'react-intl'
-import { path } from 'ramda'
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 import { useCssHandles } from 'vtex.css-handles'
 import { Card, Input, Button, Textarea } from 'vtex.styleguide'
 
@@ -223,10 +218,8 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
       }
 
       const { namespaces } = sessionRespose
-      const storeUserId = path(
-        ['authentication', 'storeUserId', 'value'],
-        namespaces
-      )
+      const storeUserId = namespaces?.authentication?.storeUserId?.value
+
       if (!storeUserId) {
         return
       }
@@ -238,8 +231,8 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
 
       const profile = {
         email:
-          path(['email', 'value'], namespaces.profile) ||
-          path(['storeUserEmail', 'value'], namespaces.authentication),
+          namespaces.profile?.email?.value ??
+          namespaces.authentication?.storeUserEmail?.value,
       }
 
       if (typeof profile.email !== 'string') {

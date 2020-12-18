@@ -1,17 +1,8 @@
-import React, {
-  Fragment,
-  useEffect,
-  useReducer,
-} from 'react'
+import React, { Fragment, useEffect, useReducer } from 'react'
 import { Helmet } from 'react-helmet'
 import { ApolloQueryResult } from 'apollo-client'
 import { useApolloClient } from 'react-apollo'
-import {
-  FormattedMessage,
-  defineMessages,
-  useIntl,
-} from 'react-intl'
-import { path } from 'ramda'
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 import { useProduct } from 'vtex.product-context'
 import { Link, canUseDOM } from 'vtex.render-runtime'
 import { useCssHandles } from 'vtex.css-handles'
@@ -395,10 +386,8 @@ function Reviews() {
       }
 
       const { namespaces } = sessionRespose
-      const storeUserId = path(
-        ['authentication', 'storeUserId', 'value'],
-        namespaces
-      )
+      const storeUserId = namespaces?.authentication?.storeUserId?.value
+
       if (!storeUserId) {
         return
       }

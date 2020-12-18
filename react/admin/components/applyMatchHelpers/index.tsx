@@ -1,8 +1,7 @@
-import { path } from 'ramda'
+import { GraphQLError } from 'graphql'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getGraphQLErrorCode = (graphQLError: any): number | undefined =>
-  path(
-    ['extensions', 'exception', 'response', 'data', 'Error', 'Code'],
-    graphQLError
-  )
+export const getGraphQLErrorCode = (
+  graphQLError: GraphQLError
+): number | undefined => {
+  return graphQLError?.extensions?.exception?.response?.data?.Error?.Code
+}
