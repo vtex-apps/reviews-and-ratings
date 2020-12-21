@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 import React from 'react'
-import { FormattedMessage, InjectedIntl } from 'react-intl'
+import { FormattedMessage, IntlShape } from 'react-intl'
 
 import { Product, ReviewTableRowData } from '../types'
 import ProductCellRenderer from '../components/util/productCellRenderer'
@@ -69,7 +69,7 @@ export const productSchema = {
   },
 }
 
-export const dateSchema = (intl: InjectedIntl) => ({
+export const dateSchema = (intl: IntlShape) => ({
   properties: {
     date: {
       type: 'string',

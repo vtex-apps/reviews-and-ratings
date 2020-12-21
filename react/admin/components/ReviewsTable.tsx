@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, useState, useEffect, Fragment } from 'react'
-import { injectIntl, InjectedIntlProps, FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { Query, ObservableQueryFields } from 'react-apollo'
 import { Button, EmptyState } from 'vtex.styleguide'
 import { PersistedPaginatedTable } from 'vtex.paginated-table'
@@ -43,8 +43,7 @@ interface ReviewsTableProps {
   }) => JSX.Element
 }
 
-export const ReviewsTable: FC<ReviewsTableProps & InjectedIntlProps> = ({
-  intl,
+export const ReviewsTable: FC<ReviewsTableProps> = ({
   reviewStatus,
   toRowData,
   schema,
@@ -55,9 +54,10 @@ export const ReviewsTable: FC<ReviewsTableProps & InjectedIntlProps> = ({
   children,
   emptyStateText,
 }) => {
+  const intl = useIntl()
   const { query } = useRuntime()
 
-  const [, forceUpdate] = useState()
+  const [, forceUpdate] = useState<any>()
   //   const [
   //     filterSchema,
   //     brandFilter,
@@ -72,10 +72,10 @@ export const ReviewsTable: FC<ReviewsTableProps & InjectedIntlProps> = ({
     { onSearchChange, onSearchClear, onSearchSubmit },
   ] = useSearch()
 
-  const to = query.to ? parseInt(query.to, 10) : DEFAULT_TABLE_PAGE_TO
-  const from = query.from ? parseInt(query.from, 10) : DEFAULT_TABLE_PAGE_FROM
-  const sortOrder = query.sortOrder ? query.sortOrder : DEFAULT_SORT_ORDER
-  const sortBy = query.sortedBy
+  const to = query?.to ? parseInt(query.to, 10) : DEFAULT_TABLE_PAGE_TO
+  const from = query?.from ? parseInt(query.from, 10) : DEFAULT_TABLE_PAGE_FROM
+  const sortOrder = query?.sortOrder ? query.sortOrder : DEFAULT_SORT_ORDER
+  const sortBy = query?.sortedBy
 
   useEffect(() => {
     forceUpdate({})
@@ -189,4 +189,4 @@ export const ReviewsTable: FC<ReviewsTableProps & InjectedIntlProps> = ({
   )
 }
 
-export default injectIntl(ReviewsTable)
+export default ReviewsTable

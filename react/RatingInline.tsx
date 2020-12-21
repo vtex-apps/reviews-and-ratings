@@ -1,28 +1,12 @@
-import React, {
-  FunctionComponent,
-  Fragment,
-  useContext,
-  useEffect,
-  useReducer,
-} from 'react'
-import ApolloClient, { ApolloQueryResult } from 'apollo-client'
-import { NormalizedCacheObject } from 'apollo-cache-inmemory'
-import { withApollo } from 'react-apollo'
-import { ProductSummaryContext } from 'vtex.product-summary'
+import React, { Fragment, useEffect, useReducer } from 'react'
+import { ApolloQueryResult } from 'apollo-client'
+import { useApolloClient } from 'react-apollo'
 import { useCssHandles } from 'vtex.css-handles'
+import { useProduct } from 'vtex.product-context'
 
 import Stars from './components/Stars'
 import TotalReviewsByProductId from '../graphql/totalReviewsByProductId.graphql'
 import AverageRatingByProductId from '../graphql/averageRatingByProductId.graphql'
-
-interface Product {
-  productId: string
-  productName: string
-}
-
-interface Props {
-  client: ApolloClient<NormalizedCacheObject>
-}
 
 interface TotalData {
   totalReviewsByProductId: number
@@ -71,12 +55,11 @@ const reducer = (state: State, action: ReducerActions) => {
 
 const CSS_HANDLES = ['inlineContainer'] as const
 
-const RatingInline: FunctionComponent<Props> = props => {
-  const { client } = props
-
+function RatingInline() {
+  const client = useApolloClient()
   const handles = useCssHandles(CSS_HANDLES)
-  const { product } = useContext(ProductSummaryContext)
-  const { productId }: Product = product || {}
+  const { product } = useProduct() ?? {}
+  const { productId } = product ?? {}
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
@@ -130,4 +113,4 @@ const RatingInline: FunctionComponent<Props> = props => {
   )
 }
 
-export default withApollo(RatingInline)
+export default RatingInline

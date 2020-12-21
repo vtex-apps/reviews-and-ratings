@@ -2,7 +2,7 @@
 import React, { FC, useState } from 'react'
 import { ObservableQueryFields } from 'react-apollo'
 import { Button, Modal, Alert } from 'vtex.styleguide'
-import { FormattedMessage, injectIntl, InjectedIntlProps } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { useMatchingError } from './applyMatchHelpers/useMatchingError'
 import updateReviewsCache from './applyMatchHelpers/updateReviewsCache'
@@ -27,14 +27,15 @@ type DeleteReviewsPanelProps = {
     SearchReviewData,
     SearchReviewArgs
   >['fetchMore']
-} & InjectedIntlProps
+}
 
 export const DeleteReviewsPanel: FC<DeleteReviewsPanelProps> = props => {
+  const intl = useIntl()
   const [isModalOpen, setIsModalOpen] = useState(true)
   const [displayedReviews] = useState(props.selectedReviews)
 
   const { hasError, errorMessage, setMainError, clearError } = useMatchingError(
-    props.intl,
+    intl,
     'DELETE'
   )
 
@@ -130,4 +131,4 @@ export const DeleteReviewsPanel: FC<DeleteReviewsPanelProps> = props => {
   )
 }
 
-export default injectIntl(DeleteReviewsPanel)
+export default DeleteReviewsPanel

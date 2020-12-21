@@ -1,23 +1,9 @@
-import React, {
-  FunctionComponent,
-  Fragment,
-  useContext,
-  useEffect,
-  useReducer,
-} from 'react'
+import React, { Fragment, useEffect, useReducer } from 'react'
 import { Helmet } from 'react-helmet'
-import ApolloClient, { ApolloQueryResult } from 'apollo-client'
-import { NormalizedCacheObject } from 'apollo-cache-inmemory'
-import { withApollo } from 'react-apollo'
-import {
-  FormattedMessage,
-  InjectedIntlProps,
-  injectIntl,
-  defineMessages,
-} from 'react-intl'
-import flowRight from 'lodash.flowright'
-import path from 'ramda/es/path'
-import { ProductContext } from 'vtex.product-context'
+import { ApolloQueryResult } from 'apollo-client'
+import { useApolloClient } from 'react-apollo'
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
+import { useProduct } from 'vtex.product-context'
 import { Link, canUseDOM } from 'vtex.render-runtime'
 import { useCssHandles } from 'vtex.css-handles'
 import ShowMore from 'react-show-more'
@@ -34,15 +20,6 @@ import ReviewForm from './ReviewForm'
 import AppSettings from '../graphql/appSettings.graphql'
 import ReviewsByProductId from '../graphql/reviewsByProductId.graphql'
 import AverageRatingByProductId from '../graphql/averageRatingByProductId.graphql'
-
-interface Product {
-  productId: string
-  productName: string
-}
-
-interface Props {
-  client: ApolloClient<NormalizedCacheObject>
-}
 
 interface Review {
   id: number
@@ -314,12 +291,12 @@ const CSS_HANDLES = [
   'reviewCommentUser',
 ] as const
 
-const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
-  const { client, intl } = props
-
+function Reviews() {
+  const client = useApolloClient()
+  const intl = useIntl()
   const handles = useCssHandles(CSS_HANDLES)
-  const { product } = useContext(ProductContext) as any
-  const { productId, productName }: Product = product || {}
+  const { product } = useProduct() ?? {}
+  const { productId, productName } = product ?? {}
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
@@ -409,10 +386,8 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
       }
 
       const { namespaces } = sessionRespose
-      const storeUserId = path(
-        ['authentication', 'storeUserId', 'value'],
-        namespaces
-      )
+      const storeUserId = namespaces?.authentication?.storeUserId?.value
+
       if (!storeUserId) {
         return
       }
@@ -647,7 +622,7 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
                             review.location && <span>, {review.location}</span>}
                         </li>
                       </ul>
-                      <p className="t-body lh-copy mw9">
+                      <div className="t-body lh-copy mw9">
                         <ShowMore
                           lines={3}
                           more="Show more"
@@ -656,7 +631,7 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
                         >
                           {review.text}
                         </ShowMore>
-                      </p>
+                      </div>
                     </div>
                   ) : (
                     <Collapsible
@@ -742,4 +717,4 @@ const Reviews: FunctionComponent<InjectedIntlProps & Props> = props => {
   )
 }
 
-export default flowRight([withApollo, injectIntl])(Reviews)
+export default Reviews

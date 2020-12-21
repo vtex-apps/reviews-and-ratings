@@ -2,12 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState } from 'react'
 import copy from 'copy-to-clipboard'
-import {
-  FormattedMessage,
-  defineMessages,
-  injectIntl,
-  InjectedIntlProps,
-} from 'react-intl'
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 import { useQuery } from 'react-apollo'
 import {
   IconCopy,
@@ -23,7 +18,7 @@ const DEFAULT_TOAST_DURATION_MS = 1500
 
 type Props = {
   cellData: Product
-} & InjectedIntlProps
+}
 
 interface ProductResult {
   productName: string
@@ -49,7 +44,8 @@ const messages = defineMessages({
   },
 })
 
-const IntlProductCellRenderer: React.FC<Props> = ({ cellData, intl }) => {
+const ProductCellRenderer: React.FC<Props> = ({ cellData }) => {
+  const intl = useIntl()
   const [showCopy, setShowCopy] = useState(false)
 
   const { data } = useQuery<ProductData, ProductVars>(ProductQuery, {
@@ -130,7 +126,5 @@ const IntlProductCellRenderer: React.FC<Props> = ({ cellData, intl }) => {
     </ToastConsumer>
   ) : null
 }
-
-const ProductCellRenderer = injectIntl(IntlProductCellRenderer)
 
 export default ProductCellRenderer

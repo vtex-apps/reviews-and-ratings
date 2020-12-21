@@ -8,7 +8,7 @@ import {
   ToastProvider,
   IconArrowBack,
 } from 'vtex.styleguide'
-import { useRuntime } from 'vtex.render-runtime'
+import { RenderContext, useRuntime } from 'vtex.render-runtime'
 
 import { PENDING_REVIEWS_PAGE, APPROVED_REVIEWS_PAGE } from './utils'
 import { adminReviewMessages, layoutHeaderMessage } from './utils/messages'
@@ -29,7 +29,7 @@ const IconArrowForward: FC = () => (
 // }
 
 const ReviewIndex: FC = props => {
-  const { navigate, route } = useRuntime()
+  const { navigate, route } = useRuntime() as RenderContext.RenderContext
   const [activeTab, setActiveTab] = useState(route.id)
 
   const setActiveSection = (section: string) => () => {
