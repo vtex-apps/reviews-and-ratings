@@ -114,7 +114,7 @@ const CSS_HANDLES = [
 function RatingSummary() {
   const client = useApolloClient()
   const handles = useCssHandles(CSS_HANDLES)
-  const { product } = useProduct() ?? {}
+  const { product }: any = useProduct() ?? {}
   const { productId, productName } = product ?? {}
 
   const [state, dispatch] = useReducer(reducer, initialState)
