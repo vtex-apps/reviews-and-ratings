@@ -83,14 +83,9 @@
         ],
         "default": "0"
       },
-      "username": {
-        "title": "API Username",
-        "description": "Username to authenticate API requests.",
-        "type": "string"
-      },
-      "password": {
-        "title": "API Password",
-        "description": "Password to authenticate API requests.",
+      "merchantKey": {
+        "title": "API Merchant Key",
+        "description": "Key to authenticate API requests.",
         "type": "string"
       }
     }
