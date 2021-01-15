@@ -27,5 +27,6 @@
         public bool showGraph { get; set; }
         public bool displaySummaryIfNone { get; set; }
         public bool displaySummaryTotalReviews { get; set; }
+        public bool displaySummaryAddButton { get; set; }
     }
 }
