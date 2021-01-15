@@ -32,9 +32,7 @@
     },
     "free": true,
     "type": "free",
-    "availableCountries": [
-      "*"
-    ]
+    "availableCountries": ["*"]
   },
   "settingsSchema": {
     "title": "Reviews and Ratings",
@@ -68,20 +66,29 @@
         "title": "Number of open review accordions",
         "description": "Specified number of review tabs on product page will default to open",
         "type": "string",
-        "enum": [
-          "0",
-          "1",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10"
-        ],
+        "enum": ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
         "default": "0"
+      },
+      "showGraph": {
+        "title": "Display graph",
+        "description": "Display the reviews graph on product page",
+        "type": "boolean",
+        "default": false
+      },
+      "displaySummaryIfNone": {
+        "title": "Display stars in product-rating-summary if there are no reviews",
+        "type": "boolean",
+        "default": false
+      },
+      "displaySummaryTotalReviews": {
+        "title": "Display total reviews number on product-rating-summary block",
+        "type": "boolean",
+        "default": true
+      },
+      "displaySummaryAddButton": {
+        "title": "Display `Add review` button on product-rating-summary block",
+        "type": "boolean",
+        "default": false
       }
     }
   },

@@ -94,5 +94,9 @@
   "store/reviews.list.sortOptions.highestRated": "store/reviews.list.sortOptions.highestRated",
   "store/reviews.list.sortOptions.lowestRated": "store/reviews.list.sortOptions.lowestRated",
   "store/reviews.list.anonymous": "store/reviews.list.anonymous",
-  "store/reviews.list.pagination.textOf": "store/reviews.list.pagination.textOf"
+  "store/reviews.list.pagination.textOf": "store/reviews.list.pagination.textOf",
+  "store/reviews.list.graph.stars": "store/reviews.list.graph.stars",
+  "store/reviews.summary.add.login": "store/reviews.summary.add.login",
+  "store/reviews.summary.add.title": "store/reviews.summary.add.title",
+  "store/reviews.list.graph.star": "store/reviews.list.graph.star"
 }
