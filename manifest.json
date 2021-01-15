@@ -82,6 +82,16 @@
           "10"
         ],
         "default": "0"
+      },
+      "username": {
+        "title": "API Username",
+        "description": "Username to authenticate API requests.",
+        "type": "string"
+      },
+      "password": {
+        "title": "API Password",
+        "description": "Password to authenticate API requests.",
+        "type": "string"
       }
     }
   },
