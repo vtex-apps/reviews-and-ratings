@@ -114,8 +114,8 @@ namespace ReviewsRatings.Controllers
                 var queryString = HttpContext.Request.Query;
                 var id = queryString["id"];
                 var searchTerm = queryString["search_term"];
-                var from = queryString["from"];
-                var to = queryString["to"];
+                var fromParam = queryString["from"];
+                var toParam = queryString["to"];
                 var orderBy = queryString["order_by"];
                 var status = queryString["status"];
                 var productId = queryString["product_id"];
@@ -134,27 +134,51 @@ namespace ReviewsRatings.Controllers
                         break;
                     case REVIEWS:
                         IList<Review> reviews;
-                        if (string.IsNullOrEmpty(from))
+                        if (string.IsNullOrEmpty(fromParam))
                         {
-                            from = "0";
+                            fromParam = "0";
                         }
 
-                        if (string.IsNullOrEmpty(to))
+                        if (string.IsNullOrEmpty(toParam))
                         {
-                            to = "3";
+                            toParam = "3";
                         }
+
+                        int from = int.Parse(fromParam);
+                        int to = int.Parse(toParam);
+
+
+                        //if (!string.IsNullOrEmpty(productId))
+                        //{
+                        //    reviews = await this._productReviewsService.GetReviewsByProductId(productId, int.Parse(from), int.Parse(to) - int.Parse(from), orderBy);
+                        //}
+                        //else
+                        //{
+                        //    reviews = await this._productReviewsService.GetReviews(searchTerm, int.Parse(from), int.Parse(to), orderBy, status);
+                        //}
+
+                        IList<Review> searchResult = null;
 
                         if (!string.IsNullOrEmpty(productId))
                         {
-                            reviews = await this._productReviewsService.GetReviewsByProductId(productId, int.Parse(from), int.Parse(to) - int.Parse(from), orderBy);
+                            searchResult = await _productReviewsService.GetReviewsByProductId(productId);
                         }
                         else
                         {
-                            reviews = await this._productReviewsService.GetReviews(searchTerm, int.Parse(from), int.Parse(to), orderBy, status);
+                            searchResult = await _productReviewsService.GetReviews();
                         }
 
+                        IList<Review> searchData = await _productReviewsService.FilterReviews(searchResult, searchTerm, orderBy, status);
+                        int totalCount = searchData.Count;
+                        searchData = await _productReviewsService.LimitReviews(searchData, from, to);
+
+                        SearchResponse searchResponse = new SearchResponse
+                        {
+                            Data = new DataElement { data = searchData },
+                            Range = new SearchRange { From = from, To = to, Total = totalCount }
+                        };
                         //responseString = JsonConvert.SerializeObject(reviews);
-                        return Json(reviews);
+                        return Json(searchResponse);
                         break;
                 }
             }
