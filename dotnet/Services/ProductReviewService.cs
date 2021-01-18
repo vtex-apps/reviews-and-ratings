@@ -164,7 +164,7 @@
                 //Console.WriteLine($"    >>>>>>>>>>>>>>>>>   {reviews.Count} reviews (unfiltered)");
                 if (!string.IsNullOrEmpty(orderBy))
                 {
-                    //Console.WriteLine($"    >>>>>>>>>>>>>>>>>   Order By {orderBy}");
+                    Console.WriteLine($"    >>>>>>>>>>>>>>>>>   Order By {orderBy}");
                     string[] orderByArray = orderBy.Split(DELIMITER);
                     PropertyInfo pi = typeof(Review).GetProperty(orderByArray[0]);
                     if (pi != null)

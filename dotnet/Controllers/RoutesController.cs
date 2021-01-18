@@ -76,15 +76,20 @@ namespace ReviewsRatings.Controllers
             }
             else if("delete".Equals(HttpContext.Request.Method, StringComparison.OrdinalIgnoreCase))
             {
-                int[] ids = null;
+                int[] ids;
                 switch (requestedAction)
                 {
                     case REVIEW:
-                            var queryString = HttpContext.Request.Query;
-                            var id = queryString["id"];
-                            ids = new int[1];
-                            ids[0] = int.Parse(id);
-                            return Json(await this._productReviewsService.DeleteReview(ids));
+                        var queryString = HttpContext.Request.Query;
+                        var id = queryString["id"];
+                        if (string.IsNullOrEmpty(id))
+                        {
+                            return BadRequest("Missing parameter.");
+                        }
+
+                        ids = new int[1];
+                        ids[0] = int.Parse(id);
+                        return Json(await this._productReviewsService.DeleteReview(ids));
                         break;
                     case REVIEWS:
                         string bodyAsText = await new System.IO.StreamReader(HttpContext.Request.Body).ReadToEndAsync();
@@ -113,16 +118,41 @@ namespace ReviewsRatings.Controllers
                 var to = queryString["to"];
                 var orderBy = queryString["order_by"];
                 var status = queryString["status"];
+                var productId = queryString["product_id"];
                 //Console.WriteLine($"query id ======== {id} ");
                 switch (requestedAction)
                 {
                     case REVIEW:
+                        if(string.IsNullOrEmpty(id))
+                        {
+                            return BadRequest("Missing parameter.");
+                        }
+
                         Review review = await this._productReviewsService.GetReview(int.Parse(id));
                         //responseString = JsonConvert.SerializeObject(review);
                         return Json(review);
                         break;
                     case REVIEWS:
-                        var reviews = await this._productReviewsService.GetReviews(searchTerm, int.Parse(from), int.Parse(to), orderBy, status);
+                        IList<Review> reviews;
+                        if (string.IsNullOrEmpty(from))
+                        {
+                            from = "0";
+                        }
+
+                        if (string.IsNullOrEmpty(to))
+                        {
+                            to = "3";
+                        }
+
+                        if (!string.IsNullOrEmpty(productId))
+                        {
+                            reviews = await this._productReviewsService.GetReviewsByProductId(productId, int.Parse(from), int.Parse(to) - int.Parse(from), orderBy);
+                        }
+                        else
+                        {
+                            reviews = await this._productReviewsService.GetReviews(searchTerm, int.Parse(from), int.Parse(to), orderBy, status);
+                        }
+
                         //responseString = JsonConvert.SerializeObject(reviews);
                         return Json(reviews);
                         break;
