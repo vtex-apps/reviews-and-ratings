@@ -79,7 +79,7 @@ namespace ReviewsRatings.Controllers
                 switch (requestedAction)
                 {
                     case REVIEW:
-                        if (!userValidated)
+                        if (!userValidated && !keyAndTokenValid)
                         {
                             return Unauthorized("Invalid User");
                         }
@@ -130,7 +130,7 @@ namespace ReviewsRatings.Controllers
                 switch (requestedAction)
                 {
                     case REVIEW:
-                        if (!userValidated)
+                        if (!userValidated && !keyAndTokenValid)
                         {
                             return Json("Invalid User");
                         }
@@ -163,6 +163,11 @@ namespace ReviewsRatings.Controllers
                 switch (requestedAction)
                 {
                     case REVIEW:
+                        if (!userValidated && !keyAndTokenValid)
+                        {
+                            return Json("Invalid User");
+                        }
+
                         string bodyAsText = await new System.IO.StreamReader(HttpContext.Request.Body).ReadToEndAsync();
                         Review review = JsonConvert.DeserializeObject<Review>(bodyAsText);
                         return Json(await this._productReviewsService.EditReview(review));
