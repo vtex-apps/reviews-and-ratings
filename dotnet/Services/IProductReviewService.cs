@@ -37,5 +37,11 @@
         Task<IList<Review>> FilterReviews(IList<Review> reviews, string searchTerm, string orderBy, string status);
 
         Task<IList<Review>> LimitReviews(IList<Review> reviews, int from, int to);
+
+        Task<ValidatedUser> ValidateUserToken(string token);
+
+        Task<bool> ValidateKeyAndToken(string key, string token, string baseUrl);
+
+        Task<bool> ShopperHasPurchasedProduct(string shopperId, string productId);
     }
 }

@@ -20,6 +20,5 @@
         public bool UseLocation { get; set; }
         public bool defaultOpen { get; set;}
         public int defaultOpenCount { get; set;}
-        public string merchantKey { get; set; }
     }
 }

@@ -15,7 +15,11 @@ namespace ReviewsRatings.Controllers
 
         private const string REVIEW = "review";
         private const string REVIEWS = "reviews";
-        private const string HEADER_KEY = "key";
+        private const string RATING = "rating";
+        private const string HEADER_VTEX_COOKIE = "VtexIdclientAutCookie";
+        private const string AUTH_SUCCESS = "Success";
+        private const string HEADER_VTEX_APP_KEY = "X-VTEX-API-AppKey";
+        private const string HEADER_VTEX_APP_TOKEN = "X-VTEX-API-AppToken";
 
         public RoutesController(IProductReviewService productReviewsService)
         {
@@ -24,34 +28,49 @@ namespace ReviewsRatings.Controllers
 
         public async Task<IActionResult> ReviewApiAction(string requestedAction)
         {
+            var queryString = HttpContext.Request.Query;
+            var id = queryString["id"];
+            return await ProcessReviewApiAction(requestedAction, id);
+        }
+
+        public async Task<IActionResult> ReviewApiActionId(string requestedAction, string id)
+        {
+            return await ProcessReviewApiAction(requestedAction, id);
+        }
+
+        public async Task<IActionResult> ProcessReviewApiAction(string requestedAction, string id)
+        {
             Response.Headers.Add("Cache-Control", "no-cache");
             string responseString = string.Empty;
-            string key = HttpContext.Request.Headers[HEADER_KEY];
-            if(string.IsNullOrEmpty(key))
+            string vtexCookie = HttpContext.Request.Headers[HEADER_VTEX_COOKIE];
+            ValidatedUser validatedUser = null;
+            bool userValidated = false;
+            bool keyAndTokenValid = false;
+            string vtexAppKey = HttpContext.Request.Headers[HEADER_VTEX_APP_KEY];
+            string vtexAppToken = HttpContext.Request.Headers[HEADER_VTEX_APP_TOKEN];
+            if (!string.IsNullOrEmpty(vtexCookie))
             {
-                return Unauthorized("10");
-            }
-            else
-            {
-                AppSettings appSettings = await this._productReviewsService.GetAppSettings();
-                Console.WriteLine($"AppSettings = {JsonConvert.SerializeObject(appSettings)}");
-                if(appSettings != null && appSettings.merchantKey != null)
+                validatedUser = await this._productReviewsService.ValidateUserToken(vtexCookie);
+                if(validatedUser != null)
                 {
-                    if(!appSettings.merchantKey.Equals(key))
+                    if (validatedUser.AuthStatus.Equals(AUTH_SUCCESS))
                     {
-                        return Unauthorized("11");
+                        userValidated = true;
                     }
                 }
-                else
-                {
-                    //DEBUG!!
-                    //return Unauthorized("12");
-                }
+            }
+
+            if(!string.IsNullOrEmpty(vtexAppKey) && !string.IsNullOrEmpty(vtexAppToken))
+            {
+                //string baseUrl = Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/";
+                string baseUrl = HttpContext.Request.Host.Host;
+                Console.WriteLine($"BASE URL = {baseUrl}");
+                keyAndTokenValid = await this._productReviewsService.ValidateKeyAndToken(vtexAppKey, vtexAppToken, baseUrl);
             }
 
             if(string.IsNullOrEmpty(requestedAction))
             {
-                return BadRequest("20");
+                return BadRequest("Missing parameter");
             }
 
             if ("post".Equals(HttpContext.Request.Method, StringComparison.OrdinalIgnoreCase))
@@ -60,17 +79,48 @@ namespace ReviewsRatings.Controllers
                 switch (requestedAction)
                 {
                     case REVIEW:
+                        if (!userValidated)
+                        {
+                            return Unauthorized("Invalid User");
+                        }
+
                         Review newReview = JsonConvert.DeserializeObject<Review>(bodyAsText);
-                        var reviewResponse = await this._productReviewsService.NewReview(newReview);
-                        return Json(reviewResponse);
+                        bool hasShopperReviewed = await _productReviewsService.HasShopperReviewed(validatedUser.User, newReview.ProductId);
+                        if (hasShopperReviewed)
+                        {
+                            return Json("Duplicate Review");
+                        }
+
+                        bool hasShopperPurchased = await _productReviewsService.ShopperHasPurchasedProduct(validatedUser.User, newReview.ProductId);
+
+                        Review reviewToSave = new Review
+                        {
+                            ProductId = newReview.ProductId,
+                            Rating = newReview.Rating,
+                            ShopperId = validatedUser.User,
+                            Title = newReview.Title,
+                            Text = newReview.Text,
+                            VerifiedPurchaser = hasShopperPurchased
+                        };
+
+                        var reviewResponse = await this._productReviewsService.NewReview(reviewToSave);
+                        return Json(reviewResponse.Id);
                         break;
                     case REVIEWS:
+                        if(!keyAndTokenValid)
+                        {
+                            return Unauthorized();
+                        }
+
                         IList<Review> reviews = JsonConvert.DeserializeObject<IList<Review>>(bodyAsText);
+                        List<int> ids = new List<int>();
                         foreach(Review review in reviews)
                         {
                             var reviewsResponse = await this._productReviewsService.NewReview(review);
+                            ids.Add(reviewsResponse.Id);
                         }
 
+                        return Json(ids);
                         break;
                 }
             }
@@ -80,8 +130,13 @@ namespace ReviewsRatings.Controllers
                 switch (requestedAction)
                 {
                     case REVIEW:
-                        var queryString = HttpContext.Request.Query;
-                        var id = queryString["id"];
+                        if (!userValidated)
+                        {
+                            return Json("Invalid User");
+                        }
+
+                        //var queryString = HttpContext.Request.Query;
+                        //var id = queryString["id"];
                         if (string.IsNullOrEmpty(id))
                         {
                             return BadRequest("Missing parameter.");
@@ -92,6 +147,11 @@ namespace ReviewsRatings.Controllers
                         return Json(await this._productReviewsService.DeleteReview(ids));
                         break;
                     case REVIEWS:
+                        if (!keyAndTokenValid)
+                        {
+                            return Unauthorized();
+                        }
+
                         string bodyAsText = await new System.IO.StreamReader(HttpContext.Request.Body).ReadToEndAsync();
                         ids = JsonConvert.DeserializeObject<int[]>(bodyAsText);
                         return Json(await this._productReviewsService.DeleteReview(ids));
@@ -112,7 +172,7 @@ namespace ReviewsRatings.Controllers
             else if("get".Equals(HttpContext.Request.Method, StringComparison.OrdinalIgnoreCase))
             {
                 var queryString = HttpContext.Request.Query;
-                var id = queryString["id"];
+                //var id = queryString["id"];
                 var searchTerm = queryString["search_term"];
                 var fromParam = queryString["from"];
                 var toParam = queryString["to"];
@@ -158,6 +218,7 @@ namespace ReviewsRatings.Controllers
                         //}
 
                         IList<Review> searchResult = null;
+                        int totalCount = 0;
 
                         if (!string.IsNullOrEmpty(productId))
                         {
@@ -169,7 +230,7 @@ namespace ReviewsRatings.Controllers
                         }
 
                         IList<Review> searchData = await _productReviewsService.FilterReviews(searchResult, searchTerm, orderBy, status);
-                        int totalCount = searchData.Count;
+                        totalCount = searchData.Count;
                         searchData = await _productReviewsService.LimitReviews(searchData, from, to);
 
                         SearchResponse searchResponse = new SearchResponse
@@ -180,6 +241,13 @@ namespace ReviewsRatings.Controllers
                         //responseString = JsonConvert.SerializeObject(reviews);
                         return Json(searchResponse);
                         break;
+                    case RATING:
+                        decimal average = await _productReviewsService.GetAverageRatingByProductId(id);
+                        searchResult = await _productReviewsService.GetReviewsByProductId(id);
+                        totalCount = searchResult.Count;
+                        var returnObj = JsonConvert.DeserializeObject( $"{{ \"average\": {average}, \"totalCount\": {totalCount} }}");
+                        return Json(returnObj);
+                        //return Json(await _productReviewsService.GetAverageRatingByProductId(productId));
                 }
             }
 

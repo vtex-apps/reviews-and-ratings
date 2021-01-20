@@ -9,6 +9,10 @@
     "reviewApiAction": {
       "path": "/reviews-and-ratings/api/:requestedAction",
       "public": true
+    },
+    "reviewApiActionId": {
+      "path": "/reviews-and-ratings/api/:requestedAction/:id",
+      "public": true
     }
   },
   "events": {

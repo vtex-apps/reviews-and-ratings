@@ -6,6 +6,7 @@
     using System.Reflection;
     using System.Threading.Tasks;
     using Models;
+    using Newtonsoft.Json;
     using ReviewsRatings.DataSources;
 
     /// <summary>
@@ -298,6 +299,7 @@
 
         public async Task<Review> NewReview(Review review)
         {
+            // TODO: Check if user has already submitted a review for this product
             if (review != null)
             {
                 IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
@@ -324,6 +326,7 @@
 
                 if (string.IsNullOrWhiteSpace(review.ReviewDateTime))
                 {
+                    // TODO: Check timezone for store
                     review.ReviewDateTime = DateTime.Now.ToString();
                 }
 
@@ -456,6 +459,36 @@
         public async Task<AppSettings> GetAppSettings()
         {
             return await this._appSettingsRepository.GetAppSettingAsync();
+        }
+
+        public async Task<ValidatedUser> ValidateUserToken(string token)
+        {
+            return await this._productReviewRepository.ValidateUserToken(token);
+        }
+
+        public async Task<bool> ValidateKeyAndToken(string key, string token, string baseUrl)
+        {
+            return await this._productReviewRepository.ValidateKeyAndToken(key, token, baseUrl);
+        }
+
+        public async Task<bool> ShopperHasPurchasedProduct(string shopperId, string productId)
+        {
+            bool hasPurchased = false;
+            VtexOrderList vtexOrderList = await this._productReviewRepository.ListOrders($"q={shopperId}");
+            var orderIds = vtexOrderList.List.Select(o => o.OrderId);
+            foreach(string orderId in orderIds)
+            {
+                VtexOrder vtexOrder = await this._productReviewRepository.GetOrderInformation(orderId);
+                var productIds = vtexOrder.Items.Select(i => i.ProductId);
+                //Console.WriteLine($"productIds = [ {JsonConvert.SerializeObject(productIds)} ]");
+                hasPurchased = productIds.Contains(productId);
+                if(hasPurchased)
+                {
+                    break;
+                }
+            }
+
+            return hasPurchased;
         }
     }
 }

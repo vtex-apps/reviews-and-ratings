@@ -82,11 +82,6 @@
           "10"
         ],
         "default": "0"
-      },
-      "merchantKey": {
-        "title": "API Merchant Key",
-        "description": "Key to authenticate API requests.",
-        "type": "string"
       }
     }
   },
@@ -105,6 +100,12 @@
     },
     {
       "name": "ADMIN_DS"
+    },
+    {
+      "name": "AcessaTodosPedidos"
+    },
+    {
+      "name": "OMSViewer"
     },
     {
       "name": "outbound-access",
