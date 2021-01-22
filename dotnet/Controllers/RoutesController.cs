@@ -20,6 +20,7 @@ namespace ReviewsRatings.Controllers
         private const string AUTH_SUCCESS = "Success";
         private const string HEADER_VTEX_APP_KEY = "X-VTEX-API-AppKey";
         private const string HEADER_VTEX_APP_TOKEN = "X-VTEX-API-AppToken";
+        private const string FORWARDED_HOST = "X-Forwarded-Host";
 
         public RoutesController(IProductReviewService productReviewsService)
         {
@@ -63,8 +64,9 @@ namespace ReviewsRatings.Controllers
             if(!string.IsNullOrEmpty(vtexAppKey) && !string.IsNullOrEmpty(vtexAppToken))
             {
                 //string baseUrl = Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/";
-                string baseUrl = HttpContext.Request.Host.Host;
-                Console.WriteLine($"BASE URL = {baseUrl}");
+                //string baseUrl = HttpContext.Request.Host.Host;
+                string baseUrl = HttpContext.Request.Headers[FORWARDED_HOST];
+                //Console.WriteLine($"BASE URL = BASE URL = BASE URL = BASE URL = BASE URL = [ {baseUrl} ]");
                 keyAndTokenValid = await this._productReviewsService.ValidateKeyAndToken(vtexAppKey, vtexAppToken, baseUrl);
             }
 
