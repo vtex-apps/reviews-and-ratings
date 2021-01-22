@@ -63,10 +63,7 @@ namespace ReviewsRatings.Controllers
 
             if(!string.IsNullOrEmpty(vtexAppKey) && !string.IsNullOrEmpty(vtexAppToken))
             {
-                //string baseUrl = Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/";
-                //string baseUrl = HttpContext.Request.Host.Host;
                 string baseUrl = HttpContext.Request.Headers[FORWARDED_HOST];
-                //Console.WriteLine($"BASE URL = BASE URL = BASE URL = BASE URL = BASE URL = [ {baseUrl} ]");
                 keyAndTokenValid = await this._productReviewsService.ValidateKeyAndToken(vtexAppKey, vtexAppToken, baseUrl);
             }
 
@@ -136,9 +133,7 @@ namespace ReviewsRatings.Controllers
                         {
                             return Json("Invalid User");
                         }
-
-                        //var queryString = HttpContext.Request.Query;
-                        //var id = queryString["id"];
+                        
                         if (string.IsNullOrEmpty(id))
                         {
                             return BadRequest("Missing parameter.");
@@ -179,14 +174,12 @@ namespace ReviewsRatings.Controllers
             else if("get".Equals(HttpContext.Request.Method, StringComparison.OrdinalIgnoreCase))
             {
                 var queryString = HttpContext.Request.Query;
-                //var id = queryString["id"];
                 var searchTerm = queryString["search_term"];
                 var fromParam = queryString["from"];
                 var toParam = queryString["to"];
                 var orderBy = queryString["order_by"];
                 var status = queryString["status"];
                 var productId = queryString["product_id"];
-                //Console.WriteLine($"query id ======== {id} ");
                 switch (requestedAction)
                 {
                     case REVIEW:
@@ -196,7 +189,6 @@ namespace ReviewsRatings.Controllers
                         }
 
                         Review review = await this._productReviewsService.GetReview(int.Parse(id));
-                        //responseString = JsonConvert.SerializeObject(review);
                         return Json(review);
                         break;
                     case REVIEWS:
@@ -213,17 +205,6 @@ namespace ReviewsRatings.Controllers
 
                         int from = int.Parse(fromParam);
                         int to = int.Parse(toParam);
-
-
-                        //if (!string.IsNullOrEmpty(productId))
-                        //{
-                        //    reviews = await this._productReviewsService.GetReviewsByProductId(productId, int.Parse(from), int.Parse(to) - int.Parse(from), orderBy);
-                        //}
-                        //else
-                        //{
-                        //    reviews = await this._productReviewsService.GetReviews(searchTerm, int.Parse(from), int.Parse(to), orderBy, status);
-                        //}
-
                         IList<Review> searchResult = null;
                         int totalCount = 0;
 
@@ -245,7 +226,7 @@ namespace ReviewsRatings.Controllers
                             Data = new DataElement { data = searchData },
                             Range = new SearchRange { From = from, To = to, Total = totalCount }
                         };
-                        //responseString = JsonConvert.SerializeObject(reviews);
+                        
                         return Json(searchResponse);
                         break;
                     case RATING:
@@ -254,7 +235,6 @@ namespace ReviewsRatings.Controllers
                         totalCount = searchResult.Count;
                         var returnObj = JsonConvert.DeserializeObject( $"{{ \"average\": {average}, \"totalCount\": {totalCount} }}");
                         return Json(returnObj);
-                        //return Json(await _productReviewsService.GetAverageRatingByProductId(productId));
                 }
             }
 
