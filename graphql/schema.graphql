@@ -47,6 +47,10 @@ type AppSettings {
   useLocation: Boolean
   defaultOpen: Boolean
   defaultOpenCount: Int
+  showGraph: Boolean
+  displaySummaryIfNone: Boolean
+  displaySummaryTotalReviews: Boolean
+  displaySummaryAddButton: Boolean
 }
 
 type Query {

@@ -94,5 +94,8 @@
   "store/reviews.list.sortOptions.highestRated": "Classificação mais alta",
   "store/reviews.list.sortOptions.lowestRated": "Classificação mais baixa",
   "store/reviews.list.anonymous": "Anônimo",
-  "store/reviews.list.pagination.textOf": "de"
+  "store/reviews.list.pagination.textOf": "de",
+  "store/reviews.list.graph.stars": "{value, plural, =0{0 estrelas} =1{1 estrela} other{# estrelas}}",
+  "store/reviews.summary.add.login": "Por favor faça login para escrever avaliação",
+  "store/reviews.summary.add.title": "Adicionar avaliação"
 }
