@@ -123,6 +123,12 @@
       "name": "ADMIN_DS"
     },
     {
+      "name": "AcessaTodosPedidos"
+    },
+    {
+      "name": "OMSViewer"
+    },
+    {
       "name": "outbound-access",
       "attrs": {
         "host": "{{account}}.vtexcommercestable.com.br",

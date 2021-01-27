@@ -6,13 +6,13 @@
   "runtimeArgs": [
   ],
   "routes": {
-    "printHelloWorld": {
-      "path": "/_v/vtex/hello",
+    "reviewApiAction": {
+      "path": "/reviews-and-ratings/api/:requestedAction",
       "public": true
     },
-    "clearData": {
-      "path": "/reviews/clear",
-      "public": false
+    "reviewApiActionId": {
+      "path": "/reviews-and-ratings/api/:requestedAction/:id",
+      "public": true
     }
   },
   "events": {
