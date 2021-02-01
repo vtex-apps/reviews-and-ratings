@@ -6,9 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## Added
+## [2.6.0] - 2021-02-01
 
-### [2.6.0] - 2021-02-01
+### Added
 
 - Added prop position to v4 navigation item object in `admin/navigation.json`
 
