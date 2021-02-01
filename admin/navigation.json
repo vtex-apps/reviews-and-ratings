@@ -20,7 +20,11 @@
       {
         "labelId": "admin/reviews.title",
         "path": "/admin/reviews-ratings/pending",
-        "id": "98"
+        "id": "98",
+        "position": {
+          "index": 8,
+          "operation": "add"
+        }
       }
     ]
   }
