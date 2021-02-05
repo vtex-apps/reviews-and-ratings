@@ -8,6 +8,7 @@
     using Models;
     using Newtonsoft.Json;
     using ReviewsRatings.DataSources;
+    using Vtex.Api.Context;
 
     /// <summary>
     /// Business logic 
@@ -16,15 +17,18 @@
     {
         private readonly IProductReviewRepository _productReviewRepository;
         private readonly IAppSettingsRepository _appSettingsRepository;
+        private readonly IIOServiceContext _context;
         private const int maximumReturnedRecords = 999;
         private const string DELIMITER = ":";
 
-        public ProductReviewService(IProductReviewRepository productReviewRepository, IAppSettingsRepository appSettingsRepository)
+        public ProductReviewService(IProductReviewRepository productReviewRepository, IAppSettingsRepository appSettingsRepository, IIOServiceContext context)
         {
             this._productReviewRepository = productReviewRepository ??
                                             throw new ArgumentNullException(nameof(productReviewRepository));
             this._appSettingsRepository = appSettingsRepository ??
                                             throw new ArgumentNullException(nameof(appSettingsRepository));
+            this._context = context ??
+                            throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<bool> DeleteReview(int[] ids)
@@ -394,14 +398,21 @@
         public async Task<bool> HasShopperReviewed(string shopperId, string productId)
         {
             bool retval = false;
-            IList<Review> reviews = await this._productReviewRepository.GetProductReviewsAsync(productId);
-            if (reviews != null && reviews.Count > 0)
+            try
             {
-                reviews = reviews.Where(r => r.ShopperId == shopperId).ToList();
+                IList<Review> reviews = await this._productReviewRepository.GetProductReviewsAsync(productId);
                 if (reviews != null && reviews.Count > 0)
                 {
-                    retval = true;
+                    reviews = reviews.Where(r => r.ShopperId == shopperId).ToList();
+                    if (reviews != null && reviews.Count > 0)
+                    {
+                        retval = true;
+                    }
                 }
+            }
+            catch(Exception ex)
+            {
+                _context.Vtex.Logger.Error("HasShopperReviewed", null, "Request Error", ex);
             }
 
             return retval;
@@ -425,17 +436,24 @@
         public async Task<bool> ShopperHasPurchasedProduct(string shopperId, string productId)
         {
             bool hasPurchased = false;
-            VtexOrderList vtexOrderList = await this._productReviewRepository.ListOrders($"q={shopperId}");
-            var orderIds = vtexOrderList.List.Select(o => o.OrderId);
-            foreach(string orderId in orderIds)
+            try
             {
-                VtexOrder vtexOrder = await this._productReviewRepository.GetOrderInformation(orderId);
-                var productIds = vtexOrder.Items.Select(i => i.ProductId);
-                hasPurchased = productIds.Contains(productId);
-                if(hasPurchased)
+                VtexOrderList vtexOrderList = await this._productReviewRepository.ListOrders($"q={shopperId}");
+                var orderIds = vtexOrderList.List.Select(o => o.OrderId);
+                foreach (string orderId in orderIds)
                 {
-                    break;
+                    VtexOrder vtexOrder = await this._productReviewRepository.GetOrderInformation(orderId);
+                    var productIds = vtexOrder.Items.Select(i => i.ProductId);
+                    hasPurchased = productIds.Contains(productId);
+                    if (hasPurchased)
+                    {
+                        break;
+                    }
                 }
+            }
+            catch(Exception ex)
+            {
+                _context.Vtex.Logger.Error("ShopperHasPurchasedProduct", null, "Request Error", ex);
             }
 
             return hasPurchased;

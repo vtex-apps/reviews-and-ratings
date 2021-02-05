@@ -13,7 +13,7 @@ namespace Vtex
     {
         // This method is called inside Startup's constructor
         // You can use it to build a custom configuration
-        public void ExtendConstructor(IConfiguration config, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void ExtendConstructor(IConfiguration config, IWebHostEnvironment env)
         {
 
         }
@@ -31,14 +31,20 @@ namespace Vtex
             services.AddHttpClient();
         }
 
-        // This method is called inside Startup.Configure() before calling app.UseMvc()
-        public void ExtendConfigureBeforeMvc(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        // This method is called inside Startup.Configure() before calling app.UseRouting()
+        public void ExtendConfigureBeforeRouting(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
         }
 
-        // This method is called inside Startup.Configure() after calling app.UseMvc()
-        public void ExtendConfigureAfterMvc(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        // This method is called inside Startup.Configure() before calling app.UseEndpoint()
+        public void ExtendConfigureBeforeEndpoint(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+
+        }
+
+        // This method is called inside Startup.Configure() after calling app.UseEndpoint()
+        public void ExtendConfigureAfterEndpoint(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
         }
