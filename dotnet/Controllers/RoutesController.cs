@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using ReviewsRatings.DataSources;
 using ReviewsRatings.Models;
 using ReviewsRatings.Services;
 using System;
@@ -233,8 +232,13 @@ namespace ReviewsRatings.Controllers
                         decimal average = await _productReviewsService.GetAverageRatingByProductId(id);
                         searchResult = await _productReviewsService.GetReviewsByProductId(id);
                         totalCount = searchResult.Count;
-                        var returnObj = JsonConvert.DeserializeObject( $"{{ \"average\": {average}, \"totalCount\": {totalCount} }}");
-                        return Json(returnObj);
+                        RatingResponse ratingResponse = new RatingResponse
+                        {
+                            Average = average,
+                            TotalCount = totalCount
+                        };
+                        
+                        return Json(ratingResponse);
                 }
             }
 

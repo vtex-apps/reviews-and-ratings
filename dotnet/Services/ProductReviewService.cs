@@ -6,7 +6,6 @@
     using System.Reflection;
     using System.Threading.Tasks;
     using Models;
-    using Newtonsoft.Json;
     using ReviewsRatings.DataSources;
     using Vtex.Api.Context;
 

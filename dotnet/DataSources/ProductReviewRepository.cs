@@ -8,7 +8,6 @@
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using ReviewsRatings.Models;
     using ReviewsRatings.Services;
     using Vtex.Api.Context;
