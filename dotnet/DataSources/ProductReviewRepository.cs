@@ -8,9 +8,9 @@
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using ReviewsRatings.Models;
     using ReviewsRatings.Services;
+    using Vtex.Api.Context;
 
     public class ProductReviewRepository : IProductReviewRepository
     {
@@ -23,6 +23,7 @@
         private readonly IVtexEnvironmentVariableProvider _environmentVariableProvider;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IHttpClientFactory _clientFactory;
+        private readonly IIOServiceContext _context;
         private readonly string _applicationName;
         private string AUTHORIZATION_HEADER_NAME;
         private const string HEADER_VTEX_APP_KEY = "X-VTEX-API-AppKey";
@@ -34,7 +35,7 @@
         private const string ENVIRONMENT = "vtexcommercestable";
         private const string VTEX_ACCOUNT_HEADER_NAME = "X-Vtex-Account";
 
-        public ProductReviewRepository(IVtexEnvironmentVariableProvider environmentVariableProvider, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory)
+        public ProductReviewRepository(IVtexEnvironmentVariableProvider environmentVariableProvider, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, IIOServiceContext context)
         {
             this._environmentVariableProvider = environmentVariableProvider ??
                                                 throw new ArgumentNullException(nameof(environmentVariableProvider));
@@ -47,6 +48,9 @@
 
             this._applicationName =
                 $"{this._environmentVariableProvider.ApplicationVendor}.{this._environmentVariableProvider.ApplicationName}";
+
+            this._context = context ??
+                            throw new ArgumentNullException(nameof(context));
 
             AUTHORIZATION_HEADER_NAME = "Authorization";
         }
@@ -66,16 +70,23 @@
                 request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
             }
 
-            var client = _clientFactory.CreateClient();
-            var response = await client.SendAsync(request);
-            string responseContent = await response.Content.ReadAsStringAsync();
-
-            if (response.StatusCode == HttpStatusCode.NotFound)
+            string responseContent = string.Empty;
+            try
             {
-                return null;
+                var client = _clientFactory.CreateClient();
+                var response = await client.SendAsync(request);
+                responseContent = await response.Content.ReadAsStringAsync();
+                _context.Vtex.Logger.Info("GetProductReviewsAsync", null, $"[{response.StatusCode}] {responseContent}");
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+            }
+            catch(Exception ex)
+            {
+                _context.Vtex.Logger.Error("GetProductReviewsAsync", null, "Request Error", ex);
             }
 
-            response.EnsureSuccessStatusCode();
             IList<Review> productReviews = null;
             try
             {
@@ -84,7 +95,7 @@
             catch(Exception ex)
             {
                 Console.WriteLine($"DeserializeObject Error: {ex.Message} ");
-                Console.WriteLine($"{{\"__VTEX_IO_LOG\":true, \"service\":\"review\", \"error\":\"{ex.Message}\", \"productId\":\"{productId}\"}}");
+                _context.Vtex.Logger.Error("GetProductReviewsAsync", null, "DeserializeObject Error", ex);
             }
             
             return productReviews;
@@ -111,10 +122,17 @@
                 request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
             }
 
-            var client = _clientFactory.CreateClient();
-            var response = await client.SendAsync(request);
-
-            response.EnsureSuccessStatusCode();
+            try
+            {
+                var client = _clientFactory.CreateClient();
+                var response = await client.SendAsync(request);
+                string responseContent = await response.Content.ReadAsStringAsync();
+                _context.Vtex.Logger.Info("SaveProductReviewsAsync", null, $"[{response.StatusCode}] {responseContent}");
+            }
+            catch(Exception ex)
+            {
+                _context.Vtex.Logger.Error("SaveProductReviewsAsync", null, "Request Error", ex);
+            }
         }
 
         public async Task<IDictionary<int, string>> LoadLookupAsync()
@@ -131,18 +149,34 @@
                 request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
             }
 
-            var client = _clientFactory.CreateClient();
-            var response = await client.SendAsync(request);
-            string responseContent = await response.Content.ReadAsStringAsync();
+            string responseContent = string.Empty;
 
-            if (response.StatusCode == HttpStatusCode.NotFound)
+            try
             {
-                return null;
+                var client = _clientFactory.CreateClient();
+                var response = await client.SendAsync(request);
+                responseContent = await response.Content.ReadAsStringAsync();
+                _context.Vtex.Logger.Info("LoadLookupAsync", null, $"[{response.StatusCode}] {responseContent}");
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                _context.Vtex.Logger.Error("LoadLookupAsync", null, "Request Error", ex);
             }
 
-            response.EnsureSuccessStatusCode();
-
-            IDictionary<int, string> lookupDictionary = JsonConvert.DeserializeObject<IDictionary<int, string>>(responseContent);
+            IDictionary<int, string> lookupDictionary = null;
+            try
+            {
+                lookupDictionary = JsonConvert.DeserializeObject<IDictionary<int, string>>(responseContent);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"DeserializeObject Error: {ex.Message} ");
+                _context.Vtex.Logger.Error("LoadLookupAsync", null, "DeserializeObject Error", ex);
+            }
 
             return lookupDictionary;
         }
@@ -168,10 +202,17 @@
                 request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
             }
 
-            var client = _clientFactory.CreateClient();
-            var response = await client.SendAsync(request);
-
-            response.EnsureSuccessStatusCode();
+            try
+            {
+                var client = _clientFactory.CreateClient();
+                var response = await client.SendAsync(request);
+                string responseContent = await response.Content.ReadAsStringAsync();
+                _context.Vtex.Logger.Info("SaveLookupAsync", null, $"[{response.StatusCode}] {responseContent}");
+            }
+            catch (Exception ex)
+            {
+                _context.Vtex.Logger.Error("SaveLookupAsync", null, "Request Error", ex);
+            }
         }
 
         public async Task<ValidatedUser> ValidateUserToken(string token)
@@ -197,11 +238,19 @@
             }
 
             var client = _clientFactory.CreateClient();
-            var response = await client.SendAsync(request);
-            string responseContent = await response.Content.ReadAsStringAsync();
-            if (response.IsSuccessStatusCode)
+            try
             {
-                validatedUser = JsonConvert.DeserializeObject<ValidatedUser>(responseContent);
+                var response = await client.SendAsync(request);
+                string responseContent = await response.Content.ReadAsStringAsync();
+                _context.Vtex.Logger.Info("ValidateUserToken", null, $"[{response.StatusCode}] {responseContent}");
+                if (response.IsSuccessStatusCode)
+                {
+                    validatedUser = JsonConvert.DeserializeObject<ValidatedUser>(responseContent);
+                }
+            }
+            catch(Exception ex)
+            {
+                _context.Vtex.Logger.Error("ValidateUserToken", null, $"Error validating user token '{token}'", ex);
             }
 
             return validatedUser;
@@ -209,6 +258,8 @@
 
         public async Task<bool> ValidateKeyAndToken(string key, string token, string baseUrl)
         {
+            bool validated = false;
+
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
@@ -231,11 +282,20 @@
                 request.Headers.Add(HEADER_VTEX_APP_TOKEN, token);
             }
 
-            var client = _clientFactory.CreateClient();
-            var response = await client.SendAsync(request);
-            string responseContent = await response.Content.ReadAsStringAsync();
+            try
+            {
+                var client = _clientFactory.CreateClient();
+                var response = await client.SendAsync(request);
+                string responseContent = await response.Content.ReadAsStringAsync();
+                _context.Vtex.Logger.Info("ValidateKeyAndToken", null, $"[{response.StatusCode}] {responseContent}");
+                validated = response.IsSuccessStatusCode;
+            }
+            catch(Exception ex)
+            {
+                _context.Vtex.Logger.Error("ValidateKeyAndToken", null, $"Error validating key and token '{key}' '{token}'", ex);
+            }
 
-            return response.IsSuccessStatusCode;
+            return validated;
         }
 
         public async Task<VtexOrder> GetOrderInformation(string orderId)
@@ -262,7 +322,7 @@
                 var client = _clientFactory.CreateClient();
                 var response = await client.SendAsync(request);
                 string responseContent = await response.Content.ReadAsStringAsync();
-
+                _context.Vtex.Logger.Info("GetOrderInformation", null, $"[{response.StatusCode}] {responseContent}");
                 if (response.IsSuccessStatusCode)
                 {
                     vtexOrder = JsonConvert.DeserializeObject<VtexOrder>(responseContent);
@@ -271,7 +331,7 @@
             }
             catch (Exception ex)
             {
-                
+                _context.Vtex.Logger.Error("GetOrderInformation", null, "Request Error", ex);
             }
 
             return vtexOrder;
@@ -300,20 +360,20 @@
                 var client = _clientFactory.CreateClient();
                 var response = await client.SendAsync(request);
                 string responseContent = await response.Content.ReadAsStringAsync();
-
+                _context.Vtex.Logger.Info("ListOrders", null, $"[{response.StatusCode}] {responseContent}");
                 if (response.IsSuccessStatusCode)
                 {
                     vtexOrderList = JsonConvert.DeserializeObject<VtexOrderList>(responseContent);
-                    Console.WriteLine($"ListOrders: [{response.StatusCode}] ");
+                    //Console.WriteLine($"ListOrders: [{response.StatusCode}] ");
                 }
                 else
                 {
-                    Console.WriteLine($"ListOrders: [{response.StatusCode}] '{responseContent}'");
+                    //Console.WriteLine($"ListOrders: [{response.StatusCode}] '{responseContent}'");
                 }
             }
             catch (Exception ex)
             {
-                
+                _context.Vtex.Logger.Error("ListOrders", null, "Request Error", ex);
             }
 
             return vtexOrderList;
