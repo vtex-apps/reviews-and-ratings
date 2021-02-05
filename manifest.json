@@ -138,6 +138,20 @@
     {
       "name": "outbound-access",
       "attrs": {
+        "host": "{{account}}.vtexcommercestable.com.br",
+        "path": "/api/vtexid/credential/validate"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "licensemanager.vtexcommercestable.com.br",
+        "path": "/license-manager/pvt/accounts/hosts/*"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
         "host": "infra.io.vtex.com",
         "path": "/vbase/*"
       }
