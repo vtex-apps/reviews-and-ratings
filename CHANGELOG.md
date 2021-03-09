@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.7.3] - 2021-03-09
+
 ### Added
 
 - Added CPU request to service.json
