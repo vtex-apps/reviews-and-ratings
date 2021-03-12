@@ -134,7 +134,7 @@ type ReducerActions =
   | { type: 'TOGGLE_REVIEW_ACCORDION'; args: { reviewNumber: number } }
   | { type: 'SET_OPEN_REVIEWS'; args: { reviewNumbers: number[] } }
   | { type: 'SET_SELECTED_SORT'; args: { sort: string } }
-  | { type: 'SET_REVIEWS'; args: { reviews: Review[]; total: number; total5: number; total4: number; total3: number; total2: number; total1: number } }
+  | { type: 'SET_REVIEWS'; args: { reviews: Review[]; total: number; graphArray: number[]; total5: number; total4: number; total3: number; total2: number; total1: number } }
   | { type: 'SET_TOTAL'; args: { total: number } }
   | { type: 'SET_TOTAL_5'; args: { total5: number } }
   | { type: 'SET_TOTAL_4'; args: { total4: number } }
