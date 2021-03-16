@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.9.1] - 2021-03-16
+
 ### Fixed
 - CPU factor by `80`
 ## [2.9.0] - 2021-03-10
