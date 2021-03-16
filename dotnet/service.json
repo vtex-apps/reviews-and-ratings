@@ -3,7 +3,7 @@
   "memory": 256,
   "cpu": {
     "type": "shared",
-    "value": 250
+    "value": 25
   },
   "minReplicas": 8,
   "maxReplicas": 80,
