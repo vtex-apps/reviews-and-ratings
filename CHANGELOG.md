@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.9.2] - 2021-04-14
+
 ### Fixed
 - Added an `id` property to structered data
 
