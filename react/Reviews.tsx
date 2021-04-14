@@ -598,6 +598,7 @@ function Reviews() {
                       {JSON.stringify({
                         '@context': 'http://schema.org',
                         '@type': 'Product',
+                        '@id': product.link,
                         review: {
                           '@type': 'Review',
                           reviewRating: {

@@ -201,7 +201,7 @@ function RatingSummary() {
     const reviewsContainer = document.getElementById('reviews-main-container')
     if (reviewsContainer) reviewsContainer.scrollIntoView()
   }
-
+  
   return (
     <div className={`${handles.summaryContainer} review-summary mw8 center`}>
       {!state.hasTotal || !state.hasAverage ? (
@@ -213,6 +213,7 @@ function RatingSummary() {
               {JSON.stringify({
                 '@context': 'http://schema.org',
                 '@type': 'Product',
+                '@id': product?.link || '',
                 aggregateRating: {
                   '@type': 'AggregateRating',
                   ratingValue: state.average.toString(),
