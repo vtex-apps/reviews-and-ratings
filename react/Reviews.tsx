@@ -312,7 +312,7 @@ function Reviews() {
   const intl = useIntl()
   const handles = useCssHandles(CSS_HANDLES)
   const { product }: any = useProduct() ?? {}
-  const { productId, productName } = product ?? {}
+  const { productId, productName, link } = product ?? {}
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
@@ -598,7 +598,7 @@ function Reviews() {
                       {JSON.stringify({
                         '@context': 'http://schema.org',
                         '@type': 'Product',
-                        '@id': product.link,
+                        '@id': link,
                         review: {
                           '@type': 'Review',
                           reviewRating: {
