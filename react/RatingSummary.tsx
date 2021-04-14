@@ -115,7 +115,7 @@ function RatingSummary() {
   const client = useApolloClient()
   const handles = useCssHandles(CSS_HANDLES)
   const { product } = useProduct() ?? {}
-  const { productId, productName } = product ?? {}
+  const { productId, productName, link } = product ?? {}
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
@@ -213,6 +213,7 @@ function RatingSummary() {
               {JSON.stringify({
                 '@context': 'http://schema.org',
                 '@type': 'Product',
+                '@id': link,
                 aggregateRating: {
                   '@type': 'AggregateRating',
                   ratingValue: state.average.toString(),
