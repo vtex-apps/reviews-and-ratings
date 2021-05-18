@@ -6,7 +6,6 @@ type Review {
   title: String
   text: String
   reviewerName: String
-  shopperId: String
   location: String
   reviewDateTime: String
   verifiedPurchaser: Boolean
