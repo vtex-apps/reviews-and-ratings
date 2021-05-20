@@ -7,10 +7,7 @@ mutation NewReview($review: ReviewInput!) {
     title
     text
     reviewerName
-    shopperId
-    location
     reviewDateTime
-    verifiedPurchaser
     sku
   }
 }

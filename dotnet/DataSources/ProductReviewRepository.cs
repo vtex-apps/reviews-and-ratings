@@ -322,7 +322,7 @@
                 var client = _clientFactory.CreateClient();
                 var response = await client.SendAsync(request);
                 string responseContent = await response.Content.ReadAsStringAsync();
-                _context.Vtex.Logger.Info("GetOrderInformation", null, $"[{response.StatusCode}] {responseContent}");
+                //_context.Vtex.Logger.Info("GetOrderInformation", null, $"[{response.StatusCode}] {responseContent}");
                 if (response.IsSuccessStatusCode)
                 {
                     vtexOrder = JsonConvert.DeserializeObject<VtexOrder>(responseContent);
@@ -360,7 +360,7 @@
                 var client = _clientFactory.CreateClient();
                 var response = await client.SendAsync(request);
                 string responseContent = await response.Content.ReadAsStringAsync();
-                _context.Vtex.Logger.Info("ListOrders", null, $"[{response.StatusCode}] {responseContent}");
+                //_context.Vtex.Logger.Info("ListOrders", null, $"[{response.StatusCode}] {responseContent}");
                 if (response.IsSuccessStatusCode)
                 {
                     vtexOrderList = JsonConvert.DeserializeObject<VtexOrderList>(responseContent);
