@@ -316,9 +316,6 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
               title: state.title,
               text: state.text,
               reviewerName: state.reviewerName,
-              shopperId: state.shopperId,
-              location: state.location,
-              verifiedPurchaser: state.verifiedPurchaser,
             },
           },
         })

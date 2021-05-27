@@ -6,7 +6,6 @@ type Review {
   title: String
   text: String
   reviewerName: String
-  shopperId: String
   location: String
   reviewDateTime: String
   verifiedPurchaser: Boolean
@@ -94,10 +93,7 @@ input ReviewInput {
   title: String
   text: String
   reviewerName: String
-  location: String
-  shopperId: String!
   reviewDateTime: String
-  verifiedPurchaser: Boolean!
   sku: String
 }
 

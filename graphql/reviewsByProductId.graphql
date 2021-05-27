@@ -21,7 +21,6 @@ query ReviewsByProductId(
       text
       reviewerName
       location
-      shopperId
       reviewDateTime
       verifiedPurchaser
       sku

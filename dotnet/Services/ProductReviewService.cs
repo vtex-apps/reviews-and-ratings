@@ -283,9 +283,31 @@
 
         public async Task<Review> NewReview(Review review)
         {
-            // TODO: Check if user has already submitted a review for this product
             if (review != null)
             {
+                bool userValidated = false;
+                ValidatedUser validatedUser = await this.ValidateUserToken(_context.Vtex.StoreUserAuthToken);
+                
+                if(validatedUser != null)
+                {
+                    if (validatedUser.AuthStatus.Equals("Success"))
+                    {
+                        userValidated = true;
+                    }
+                }
+
+                bool hasShopperReviewed = await this.HasShopperReviewed(validatedUser.User, review.ProductId);
+                if (hasShopperReviewed)
+                {
+                    return null;
+                }
+
+                bool hasShopperPurchased = await this.ShopperHasPurchasedProduct(validatedUser.User, review.ProductId);
+                review.ShopperId = validatedUser.User;
+                review.VerifiedPurchaser = hasShopperPurchased;
+
+                Console.WriteLine($"{validatedUser.User} {userValidated} {hasShopperPurchased}");
+
                 IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
 
                 int maxKeyValue = 0;

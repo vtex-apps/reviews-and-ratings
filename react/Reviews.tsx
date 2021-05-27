@@ -31,7 +31,6 @@ interface Review {
   text: string
   location: string | null
   reviewerName: string
-  shopperId: string
   reviewDateTime: string
   verifiedPurchaser: boolean
 }
