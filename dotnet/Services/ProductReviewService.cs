@@ -286,7 +286,18 @@
             if (review != null)
             {
                 bool userValidated = false;
-                ValidatedUser validatedUser = await this.ValidateUserToken(_context.Vtex.StoreUserAuthToken);
+                bool hasShopperReviewed = false;
+                bool hasShopperPurchased = false;
+                string userId = string.Empty;
+                ValidatedUser validatedUser = null;
+                try
+                {
+                    validatedUser = await this.ValidateUserToken(_context.Vtex.StoreUserAuthToken);
+                }
+                catch(Exception ex)
+                {
+                    _context.Vtex.Logger.Error("NewReview", null, "Error Validating User", ex);
+                }
                 
                 if(validatedUser != null)
                 {
@@ -296,17 +307,20 @@
                     }
                 }
 
-                bool hasShopperReviewed = await this.HasShopperReviewed(validatedUser.User, review.ProductId);
-                if (hasShopperReviewed)
+                if(userValidated)
                 {
-                    return null;
+                    userId = validatedUser.User;
+                    hasShopperReviewed = await this.HasShopperReviewed(userId, review.ProductId);
+                    if (hasShopperReviewed)
+                    {
+                        return null;
+                    }
+
+                    hasShopperPurchased = await this.ShopperHasPurchasedProduct(userId, review.ProductId);
                 }
 
-                bool hasShopperPurchased = await this.ShopperHasPurchasedProduct(validatedUser.User, review.ProductId);
-                review.ShopperId = validatedUser.User;
+                review.ShopperId = userId;
                 review.VerifiedPurchaser = hasShopperPurchased;
-
-                Console.WriteLine($"{validatedUser.User} {userValidated} {hasShopperPurchased}");
 
                 IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
 
