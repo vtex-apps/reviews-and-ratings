@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix for anonymous review submission
+
 ## [2.10.1] - 2021-05-27
 ### Security
 - Showing sensitive information
