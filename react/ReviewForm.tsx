@@ -192,7 +192,18 @@ const messages = defineMessages({
   },
 })
 
-const CSS_HANDLES = ['formContainer'] as const
+const CSS_HANDLES = [
+  'formContainer',
+  'formSection',
+  'formBottomLine',
+  'formRating',
+  'formName',
+  'formLocation',
+  'formEmail',
+  'formReview',
+  'formSubmit',
+  'formInvalidMessage',
+] as const
 
 export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
   const client = useApolloClient()
@@ -347,7 +358,7 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
           </div>
         ) : (
           <form>
-            <div className="mv3">
+            <div className={`${handles.formSection} ${handles.formBottomLine} mv3`}>
               <Input
                 label={intl.formatMessage(messages.reviewTitleLabel)}
                 size="large"
@@ -368,7 +379,7 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
                 }
               />
             </div>
-            <div className="mv3">
+            <div className={`${handles.formSection} ${handles.formRating} mv3`}>
               <StarPicker
                 label={intl.formatMessage(messages.ratingLabel)}
                 rating={state.rating}
@@ -382,7 +393,7 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
                 }}
               />
             </div>
-            <div className="mv3">
+            <div className={`${handles.formSection} ${handles.formName} mv3`}>
               <Input
                 label={intl.formatMessage(messages.nameLabel)}
                 size="large"
@@ -403,7 +414,7 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
               />
             </div>
             {settings?.useLocation && (
-              <div className="mv3">
+              <div className={`${handles.formSection} ${handles.formLocation} mv3`}>
                 <Input
                   label={intl.formatMessage(messages.locationLabel)}
                   size="large"
@@ -420,7 +431,7 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
               </div>
             )}
             {settings?.allowAnonymousReviews && !state.userAuthenticated && (
-              <div className="mv3">
+              <div className={`${handles.formSection} ${handles.formEmail} mv3`}>
                 <Input
                   label={intl.formatMessage(messages.emailLabel)}
                   size="large"
@@ -442,7 +453,7 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
                 />
               </div>
             )}
-            <div className="mv3">
+            <div className={`${handles.formSection} ${handles.formReview} mv3`}>
               <Textarea
                 value={state.text}
                 onChange={(event: React.FormEvent<HTMLTextAreaElement>) =>
@@ -461,14 +472,14 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
                 }
               />
             </div>
-            <div className="mv3">
+            <div className={`${handles.formSection} ${handles.formSubmit} mv3`}>
               <Fragment>
                 {state.showValidationErrors &&
                   (!state.validation.hasName ||
                     !state.validation.hasTitle ||
                     !state.validation.hasText ||
                     !state.validation.hasValidEmail) && (
-                    <div className="c-danger t-small mt3 lh-title">
+                    <div className={`${handles.formInvalidMessage} "c-danger t-small mt3 lh-title"`}>
                       <FormattedMessage id="store/reviews.form.invalid" />
                     </div>
                   )}

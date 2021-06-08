@@ -287,6 +287,7 @@ const messages = defineMessages({
 const CSS_HANDLES = [
   'container',
   'writeReviewContainer',
+  'writeReviewButton',
   'loginLink',
   'reviewsRating',
   'starsContainer',
@@ -294,9 +295,19 @@ const CSS_HANDLES = [
   'reviewsRatingAverage',
   'reviewsRatingCount',
   'reviewCommentsContainer',
+  'reviewsOrderBy',
   'reviewComment',
+  'reviewCommentMessage',
   'reviewCommentRating',
   'reviewCommentUser',
+  'reviewInfo',
+  'reviewVerifiedPurchase',
+  'reviewDate',
+  'reviewDateSubmitted',
+  'reviewDateValue',
+  'reviewAuthor',
+  'reviewAuthorBy',
+  'reviewAuthorName',
   'graphContent',
   'graphContainer',
   'graphText',
@@ -543,7 +554,7 @@ function Reviews() {
           state.userAuthenticated) ? (
           <Collapsible
             header={
-              <span className="c-action-primary hover-c-action-primary">
+              <span className={`${handles.writeReviewButton} c-action-primary hover-c-action-primary`}>
                 <FormattedMessage id="store/reviews.list.writeReview" />
               </span>
             }
@@ -571,7 +582,7 @@ function Reviews() {
           <FormattedMessage id="store/reviews.list.loading" />
         ) : state.reviews.length ? (
           <Fragment>
-            <div className="flex mb7">
+            <div className={`${handles.reviewsOrderBy} flex mb7`}>
               <div className="mr4">
                 <Dropdown
                   options={options}
@@ -629,29 +640,35 @@ function Reviews() {
                           {review.title}
                         </span>
                       </div>
-                      <ul className="pa0 mv2 t-small">
+                      <div className={`${handles.reviewInfo} pa0 mv2 t-small`}>
                         {review.verifiedPurchaser ? (
-                          <li className="dib mr5">
+                          <span className={`${handles.reviewVerifiedPurchase} dib mr5`}>
                             <IconSuccess />{' '}
                             <FormattedMessage id="store/reviews.list.verifiedPurchaser" />
-                          </li>
+                          </span>
                         ) : null}
-                        <li className="dib mr2">
-                          <FormattedMessage id="store/reviews.list.submitted" />{' '}
-                          <strong>{getTimeAgo(review.reviewDateTime)}</strong>
-                        </li>
-                        <li className="dib mr5">
-                          <FormattedMessage id="store/reviews.list.by" />{' '}
-                          <strong>
+                        <span className={`${handles.reviewDate} dib mr2`}>
+                          <span className={`${handles.reviewDateSubmitted} dib mr2`}>
+                            <FormattedMessage id="store/reviews.list.submitted" />
+                          </span>
+                          <strong className={handles.reviewDateValue}>
+                            {getTimeAgo(review.reviewDateTime)}
+                          </strong>
+                        </span>
+                        <span className={`${handles.reviewAuthor} dib mr5`}>
+                          <span className={`${handles.reviewAuthorBy} dib mr2`}>
+                            <FormattedMessage id="store/reviews.list.by" />
+                          </span>
+                          <strong className={handles.reviewAuthorName}>
                             {review.reviewerName ||
                               intl.formatMessage(messages.anonymous)}
                           </strong>
                           {state.settings &&
                             state.settings.useLocation &&
                             review.location && <span>, {review.location}</span>}
-                        </li>
-                      </ul>
-                      <div className="t-body lh-copy mw9">
+                        </span>
+                      </div>
+                      <div className={`${handles.reviewCommentMessage}"t-body lh-copy mw9"`}>
                         <ShowMore
                           lines={3}
                           more="Show more"
