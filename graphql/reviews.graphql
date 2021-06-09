@@ -32,5 +32,12 @@ query Reviews(
       from
       to
     }
+    totals {
+      total5
+      total4
+      total3
+      total2
+      total1
+    }
   }
 }

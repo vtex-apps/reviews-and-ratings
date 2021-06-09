@@ -1,0 +1,3 @@
+query TotalReviewsByProductId5($productId: String!) {
+    totalReviewsByProductId5(productId: $productId) 
+}

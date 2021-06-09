@@ -16,6 +16,7 @@ namespace ReviewsRatings.GraphQL.Types
             Name = "SearchResponse";
             Field(b => b.Data, type: typeof(ListGraphType<ReviewType>)).Description("List of Reviews.");
             Field(b => b.Range, type: typeof(RangeType)).Description("Pagination values.");
+            Field(b => b.Totals, type: typeof(TotalsType)).Description("Total values.");
             //Field<ListGraphType<ReviewType>>("data");
             //Field<RangeType>("range");
         }

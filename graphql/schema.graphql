@@ -34,6 +34,14 @@ type Data {
   approved: Boolean
 }
 
+type Totals {
+  total5: Int
+  total4: Int
+  total3: Int
+  total2: Int
+  total1: Int
+}
+
 type Range {
   total: Int
   from: Int
@@ -71,6 +79,11 @@ type Query {
   averageRatingByProductId(productId: String!): Float
     @cacheControl(scope: PRIVATE)
   totalReviewsByProductId(productId: String!): Int @cacheControl(scope: PRIVATE)
+  totalReviewsByProductId5(productId: String!): Int @cacheControl(scope: PRIVATE)
+  totalReviewsByProductId4(productId: String!): Int @cacheControl(scope: PRIVATE)
+  totalReviewsByProductId3(productId: String!): Int @cacheControl(scope: PRIVATE)
+  totalReviewsByProductId2(productId: String!): Int @cacheControl(scope: PRIVATE)
+  totalReviewsByProductId1(productId: String!): Int @cacheControl(scope: PRIVATE)
   reviewsByShopperId(
     shopperId: String!
     from: Int

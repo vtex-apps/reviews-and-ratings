@@ -20,6 +20,11 @@ import ReviewForm from './ReviewForm'
 import AppSettings from '../graphql/appSettings.graphql'
 import ReviewsByProductId from '../graphql/reviewsByProductId.graphql'
 import AverageRatingByProductId from '../graphql/averageRatingByProductId.graphql'
+import TotalReviewsByProductId5 from '../graphql/totalReviewsByProductId5.graphql'
+import TotalReviewsByProductId4 from '../graphql/totalReviewsByProductId4.graphql'
+import TotalReviewsByProductId3 from '../graphql/totalReviewsByProductId3.graphql'
+import TotalReviewsByProductId2 from '../graphql/totalReviewsByProductId2.graphql'
+import TotalReviewsByProductId1 from '../graphql/totalReviewsByProductId1.graphql'
 import ReviewsGraph from './ReviewsGraph'
 
 interface Review {
@@ -35,6 +40,34 @@ interface Review {
   verifiedPurchaser: boolean
 }
 
+interface TotalData5 {
+  totalReviewsByProductId5: number
+}
+
+interface TotalData4 {
+  totalReviewsByProductId4: number
+}
+
+interface TotalData3 {
+  totalReviewsByProductId3: number
+}
+
+interface TotalData2 {
+  totalReviewsByProductId2: number
+}
+
+interface TotalData1 {
+  totalReviewsByProductId1: number
+}
+
+interface Totals {
+  total5: number
+  total4: number
+  total3: number
+  total2: number
+  total1: number
+}
+
 interface Range {
   total: number
   from: number
@@ -44,6 +77,7 @@ interface Range {
 interface ReviewsResult {
   data: Review[]
   range: Range
+  totals: Totals
 }
 
 interface ReviewsData {
@@ -72,6 +106,11 @@ interface State {
   to: number
   reviews: Review[] | null
   total: number
+  total5: number
+  total4: number
+  total3: number
+  total2: number
+  total1: number
   average: number
   hasTotal: boolean
   hasAverage: boolean
@@ -94,11 +133,13 @@ type ReducerActions =
   | { type: 'TOGGLE_REVIEW_ACCORDION'; args: { reviewNumber: number } }
   | { type: 'SET_OPEN_REVIEWS'; args: { reviewNumbers: number[] } }
   | { type: 'SET_SELECTED_SORT'; args: { sort: string } }
-  | {
-      type: 'SET_REVIEWS'
-      args: { reviews: Review[]; total: number; graphArray: number[] }
-    }
+  | { type: 'SET_REVIEWS'; args: { reviews: Review[]; total: number; graphArray: number[]; total5: number; total4: number; total3: number; total2: number; total1: number } }
   | { type: 'SET_TOTAL'; args: { total: number } }
+  | { type: 'SET_TOTAL_5'; args: { total5: number } }
+  | { type: 'SET_TOTAL_4'; args: { total4: number } }
+  | { type: 'SET_TOTAL_3'; args: { total3: number } }
+  | { type: 'SET_TOTAL_2'; args: { total2: number } }
+  | { type: 'SET_TOTAL_1'; args: { total1: number } }
   | { type: 'SET_AVERAGE'; args: { average: number } }
   | { type: 'SET_SETTINGS'; args: { settings: AppSettings } }
   | { type: 'SET_AUTHENTICATED'; args: { authenticated: boolean } }
@@ -109,6 +150,11 @@ const initialState = {
   to: 10,
   reviews: null,
   total: 0,
+  total5: 0,
+  total4: 0,
+  total3: 0,
+  total2: 0,
+  total1: 0,
   average: 0,
   hasTotal: false,
   hasAverage: false,
@@ -167,6 +213,11 @@ const reducer = (state: State, action: ReducerActions) => {
         ...state,
         reviews: action.args.reviews || [],
         total: action.args.total,
+        total5: action.args.total5,
+        total4: action.args.total4,
+        total3: action.args.total3,
+        total2: action.args.total2,
+        total1: action.args.total1,
         reviewsStats: action.args.graphArray || [],
         hasTotal: true,
       }
@@ -174,6 +225,36 @@ const reducer = (state: State, action: ReducerActions) => {
       return {
         ...state,
         total: action.args.total,
+        hasTotal: true,
+      }
+    case 'SET_TOTAL_5':
+      return {
+        ...state,
+        total5: action.args.total5,
+        hasTotal: true,
+      }
+    case 'SET_TOTAL_4':
+      return {
+        ...state,
+        total4: action.args.total4,
+        hasTotal: true,
+      }
+    case 'SET_TOTAL_3':
+      return {
+        ...state,
+        total3: action.args.total3,
+        hasTotal: true,
+      }
+    case 'SET_TOTAL_2':
+      return {
+        ...state,
+        total2: action.args.total2,
+        hasTotal: true,
+      }
+    case 'SET_TOTAL_1':
+      return {
+        ...state,
+        total1: action.args.total1,
         hasTotal: true,
       }
     case 'SET_AVERAGE':
@@ -297,6 +378,22 @@ const CSS_HANDLES = [
   'reviewComment',
   'reviewCommentRating',
   'reviewCommentUser',
+  'reviewsHeader',
+  'reviewUsername',
+  'reviewDate',
+  'reviewText',
+  'reviewBar',
+  'reviewBarStar',
+  'reviewBarBack',
+  'reviewBarFront',
+  'reviewBarContainer',
+  'writeReviewButton',
+  'writeReviewSubheading',
+  'writeReviewHeading',
+  'writeReviewFlex',
+  'reviewBarCount',
+  'noReviews',
+  'noReviewsText',
   'graphContent',
   'graphContainer',
   'graphText',
@@ -433,6 +530,81 @@ function Reviews() {
 
     client
       .query({
+        query: TotalReviewsByProductId5,
+        variables: {
+          productId,
+        },
+      })
+      .then((response: ApolloQueryResult<TotalData5>) => {
+        const total5 = response.data.totalReviewsByProductId5
+        dispatch({
+          type: 'SET_TOTAL_5',
+          args: { total5 },
+        })
+      })
+
+    client
+      .query({
+        query: TotalReviewsByProductId4,
+        variables: {
+          productId,
+        },
+      })
+      .then((response: ApolloQueryResult<TotalData4>) => {
+        const total4 = response.data.totalReviewsByProductId4
+        dispatch({
+          type: 'SET_TOTAL_4',
+          args: { total4 },
+        })
+      })
+
+    client
+      .query({
+        query: TotalReviewsByProductId3,
+        variables: {
+          productId,
+        },
+      })
+      .then((response: ApolloQueryResult<TotalData3>) => {
+        const total3 = response.data.totalReviewsByProductId3
+        dispatch({
+          type: 'SET_TOTAL_3',
+          args: { total3},
+        })
+      })
+
+    client
+      .query({
+        query: TotalReviewsByProductId2,
+        variables: {
+          productId,
+        },
+      })
+      .then((response: ApolloQueryResult<TotalData2>) => {
+        const total2 = response.data.totalReviewsByProductId2
+        dispatch({
+          type: 'SET_TOTAL_2',
+          args: { total2 },
+        })
+      })
+
+    client
+      .query({
+        query: TotalReviewsByProductId1,
+        variables: {
+          productId,
+        },
+      })
+      .then((response: ApolloQueryResult<TotalData1>) => {
+        const total1 = response.data.totalReviewsByProductId1
+        dispatch({
+          type: 'SET_TOTAL_1',
+          args: { total1 },
+        })
+      })
+      
+    client
+      .query({
         query: AverageRatingByProductId,
         variables: {
           productId,
@@ -466,6 +638,7 @@ function Reviews() {
       .then((response: ApolloQueryResult<ReviewsData>) => {
         const reviews = response.data.reviewsByProductId.data
         const { total } = response.data.reviewsByProductId.range
+        const { total5, total4, total3, total2, total1 } = response.data.reviewsByProductId.totals
         const graphArray = [0, 0, 0, 0, 0, 0]
         graphArray[0] = total
         if (reviews) {
@@ -476,7 +649,7 @@ function Reviews() {
         }
         dispatch({
           type: 'SET_REVIEWS',
-          args: { reviews, total, graphArray },
+          args: { reviews, total, graphArray, total5, total4, total3, total2, total1 },
         })
 
         const defaultOpenCount = Math.min(
@@ -491,6 +664,22 @@ function Reviews() {
         })
       })
   }, [client, productId, state.from, state.to, state.sort, state.settings])
+
+  const style5 = {
+    width: (state.total5 / state.total) * 100 + "%"
+  }
+  const style4 = {
+    width: (state.total4 / state.total) * 100 + "%"
+  }
+  const style3 = {
+    width: (state.total3 / state.total) * 100 + "%"
+  }
+  const style2 = {
+    width: (state.total2 / state.total) * 100 + "%"
+  }
+  const style1 = {
+    width: (state.total1 / state.total) * 100 + "%"
+  }
 
   return (
     <div
@@ -507,29 +696,88 @@ function Reviews() {
           <FormattedMessage id="store/reviews.list.summary.loading" />
         ) : !state.total ? null : (
           <Fragment>
-            <div className={`${handles.starsContainer} t-heading-4`}>
-              <Stars rating={state.average} />
+            <div>
+              <span className={`${handles.reviewsRatingAverage} review__rating--average dib v-mid`} >
+                {state.average}
+              </span>
+              <div className={`${handles.starsContainer} t-heading-4`}>
+                <Stars rating={state.average} />
+              </div>
+              <span className={`${handles.reviewsRatingCount} review__rating--count dib v-mid`} >
+                ({state.total} reviews)
+              </span>
             </div>
-            <span
-              className={`${handles.reviewsRatingAverage} review__rating--average dib v-mid`}
-            >
-              <FormattedMessage
-                id="store/reviews.list.summary.averageRating"
-                values={{
-                  average: state.average,
-                }}
-              />
-            </span>{' '}
-            <span
-              className={`${handles.reviewsRatingCount} review__rating--count dib v-mid`}
-            >
-              <FormattedMessage
-                id="store/reviews.list.summary.totalReviews"
-                values={{
-                  total: state.total,
-                }}
-              />
-            </span>
+            <div className={`${handles.reviewBarContainer}`} >
+              <div className={`${handles.reviewBar}`}>
+                <span className={`${handles.reviewBarStar}`}>5</span>
+                <div className={`${handles.reviewBarBack}`}>
+                  <div className={`${handles.reviewBarFront}`} style={style5} ></div>
+                </div>
+                <span className={`${handles.reviewBarCount}`}>{state.total5}</span>
+              </div>
+              <div className={`${handles.reviewBar}`}>
+                <span className={`${handles.reviewBarStar}`}>4</span>
+                <div className={`${handles.reviewBarBack}`}>
+                  <div className={`${handles.reviewBarFront}`} style={style4} ></div>
+                </div>
+                <span className={`${handles.reviewBarCount}`}>{state.total4}</span>
+              </div>
+              <div className={`${handles.reviewBar}`}>
+                <span className={`${handles.reviewBarStar}`}>3</span>
+                <div className={`${handles.reviewBarBack}`}>
+                  <div className={`${handles.reviewBarFront}`} style={style3} ></div>
+                </div>
+                <span className={`${handles.reviewBarCount}`}>{state.total3}</span>
+              </div>
+              <div className={`${handles.reviewBar}`}>
+                <span className={`${handles.reviewBarStar}`}>2</span>
+                <div className={`${handles.reviewBarBack}`}>
+                  <div className={`${handles.reviewBarFront}`} style={style2} ></div>
+                </div>
+                <span className={`${handles.reviewBarCount}`}>{state.total2}</span>
+              </div>
+              <div className={`${handles.reviewBar}`}>
+                <span className={`${handles.reviewBarStar}`}>1</span>
+                <div className={`${handles.reviewBarBack}`}>
+                  <div className={`${handles.reviewBarFront}`} style={style1} ></div>
+                </div>
+                <span className={`${handles.reviewBarCount}`}>{state.total1}</span>
+              </div>
+            </div>
+            <div className={`${handles.writeReviewFlex}`} >
+              <h3 className={`${handles.writeReviewHeading}`} >You have something to say about this product?</h3>
+              <h5 className={`${handles.writeReviewSubheading}`} >Do not hesitate to tell us what you really think. From 1 to 5 how would you rate it?</h5>
+              <div className={`${handles.writeReviewContainer}`} >
+                {(state.settings && state.settings.allowAnonymousReviews) ||
+                (state.settings &&
+                  !state.settings.allowAnonymousReviews &&
+                  state.userAuthenticated) ? (
+                  <Collapsible
+                    header={
+                      <span className={`${handles.writeReviewButton}`} >
+                        <FormattedMessage id="store/reviews.list.writeReview" />
+                      </span>
+                    }
+                    onClick={() => {
+                      dispatch({
+                        type: 'TOGGLE_REVIEW_FORM',
+                      })
+                    }}
+                    isOpen={state.showForm}
+                  >
+                    <ReviewForm settings={state.settings} />
+                  </Collapsible>
+                ) : (
+                  <Link
+                    page="store.login"
+                    query={`returnUrl=${encodeURIComponent(url)}`}
+                    className={`${handles.loginLink} h1 w2 tc flex items-center w-100-s h-100-s pa4-s`}
+                  >
+                    <FormattedMessage id="store/reviews.list.login" />
+                  </Link>
+                )}
+              </div>
+            </div>
           </Fragment>
         )}
       </div>

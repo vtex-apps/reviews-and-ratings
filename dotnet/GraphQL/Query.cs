@@ -49,12 +49,44 @@ namespace ReviewsRatings.GraphQL
                     var searchResult = productReviewService.GetReviews();
                     IList<Review> searchData = await productReviewService.FilterReviews(searchResult.Result, searchTerm, orderBy, status);
                     int totalCount = searchData.Count;
+
+                    int total5 = 0;
+                    int total4 = 0;
+                    int total3 = 0;
+                    int total2 = 0;
+                    int total1 = 0;
+                    for (int i = 0; i < searchData.Count; i++)
+                    {
+                        if (searchData[i].Rating == 5)
+                        {
+                            total5++;
+                        }
+                        else if (searchData[i].Rating == 4)
+                        {
+                            total4++;
+                        }
+                        else if (searchData[i].Rating == 3)
+                        {
+                            total3++;
+                        }
+                        else if (searchData[i].Rating == 2)
+                        {
+                            total2++;
+                        }
+                        else if (searchData[i].Rating == 1)
+                        {
+                            total1++;
+                        }
+                    }
+                    Console.WriteLine($"total3 = {total3}");
+
                     searchData = await productReviewService.LimitReviews(searchData, from, to);
                     Console.WriteLine($"totalCount = {totalCount} : Filtered to {searchData.Count}");
                     SearchResponse searchResponse = new SearchResponse
                     {
                         Data = new DataElement { data = searchData },
-                        Range = new SearchRange { From = from, To = to, Total = totalCount }
+                        Range = new SearchRange { From = from, To = to, Total = totalCount },
+                        Totals = new Totals { Total5 = total5, Total4 = total4, Total3 = total3, Total2 = total2, Total1 = total1 }
                     };
 
                     return searchResponse;
@@ -83,12 +115,44 @@ namespace ReviewsRatings.GraphQL
                     var searchResult = await productReviewService.GetReviewsByProductId(productId);
                     IList<Review> searchData = await productReviewService.FilterReviews(searchResult, searchTerm, orderBy, status);
                     int totalCount = searchData.Count;
+
+                    int total5 = 0;
+                    int total4 = 0;
+                    int total3 = 0;
+                    int total2 = 0;
+                    int total1 = 0;
+                    for (int i = 0; i < searchData.Count; i++) 
+                    {
+                        if (searchData[i].Rating == 5)
+                        {
+                            total5++;
+                        }
+                        else if (searchData[i].Rating == 4)
+                        {
+                            total4++;
+                        }
+                        else if (searchData[i].Rating == 3)
+                        {
+                            total3++;
+                        }
+                        else if (searchData[i].Rating == 2)
+                        {
+                            total2++;
+                        }
+                        else if (searchData[i].Rating == 1)
+                        {
+                            total1++;
+                        }
+                    }
+                    Console.WriteLine($"total3 = {total3}");
+
                     searchData = await productReviewService.LimitReviews(searchData, from, to);
                     Console.WriteLine($"totalCount = {totalCount} : Filtered to {searchData.Count}");
                     SearchResponse searchResponse = new SearchResponse
                     {
                         Data = new DataElement { data = searchData },
-                        Range = new SearchRange { From = from, To = to, Total = totalCount }
+                        Range = new SearchRange { From = from, To = to, Total = totalCount },
+                        Totals = new Totals { Total5 = total5, Total4 = total4, Total3 = total3, Total2 = total2, Total1 = total1 }
                     };
 
                     return searchResponse;
@@ -130,6 +194,130 @@ namespace ReviewsRatings.GraphQL
                 }
             );
 
+            FieldAsync<IntGraphType>(
+                "totalReviewsByProductId5",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "productId", Description = "Product Id" }
+                    ),
+                resolve: async context =>
+                {
+                    int count = 0;
+                    var searchResult = await productReviewService.GetReviewsByProductId(context.GetArgument<string>("productId"));
+
+                    if (searchResult != null && searchResult.Count > 0)
+                    {
+                        for (int i = 0; i < searchResult.Count; i++) {
+                            if (searchResult[i].Rating == 5)
+                            {
+                                count++;
+                            }
+                        }
+                    }
+
+                    return count;
+                }
+            );
+
+            FieldAsync<IntGraphType>(
+                "totalReviewsByProductId4",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "productId", Description = "Product Id" }
+                    ),
+                resolve: async context =>
+                {
+                    int count = 0;
+                    var searchResult = await productReviewService.GetReviewsByProductId(context.GetArgument<string>("productId"));
+
+                    if (searchResult != null && searchResult.Count > 0)
+                    {
+                        for (int i = 0; i < searchResult.Count; i++)
+                        {
+                            if (searchResult[i].Rating == 4)
+                            {
+                                count++;
+                            }
+                        }
+                    }
+
+                    return count;
+                }
+            );
+
+            FieldAsync<IntGraphType>(
+                "totalReviewsByProductId3",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "productId", Description = "Product Id" }
+                    ),
+                resolve: async context =>
+                {
+                    int count = 0;
+                    var searchResult = await productReviewService.GetReviewsByProductId(context.GetArgument<string>("productId"));
+
+                    if (searchResult != null && searchResult.Count > 0)
+                    {
+                        for (int i = 0; i < searchResult.Count; i++)
+                        {
+                            if (searchResult[i].Rating == 3)
+                            {
+                                count++;
+                            }
+                        }
+                    }
+
+                    return count;
+                }
+            );
+
+            FieldAsync<IntGraphType>(
+                "totalReviewsByProductId2",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "productId", Description = "Product Id" }
+                    ),
+                resolve: async context =>
+                {
+                    int count = 0;
+                    var searchResult = await productReviewService.GetReviewsByProductId(context.GetArgument<string>("productId"));
+
+                    if (searchResult != null && searchResult.Count > 0)
+                    {
+                        for (int i = 0; i < searchResult.Count; i++)
+                        {
+                            if (searchResult[i].Rating == 2)
+                            {
+                                count++;
+                            }
+                        }
+                    }
+
+                    return count;
+                }
+            );
+
+            FieldAsync<IntGraphType>(
+                "totalReviewsByProductId1",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "productId", Description = "Product Id" }
+                    ),
+                resolve: async context =>
+                {
+                    int count = 1;
+                    var searchResult = await productReviewService.GetReviewsByProductId(context.GetArgument<string>("productId"));
+
+                    if (searchResult != null && searchResult.Count > 0)
+                    {
+                        for (int i = 0; i < searchResult.Count; i++)
+                        {
+                            if (searchResult[i].Rating == 1)
+                            {
+                                count++;
+                            }
+                        }
+                    }
+
+                    return count;
+                }
+            );
+
             FieldAsync<SearchResponseType>(
                 "reviewsByShopperId",
                 arguments: new QueryArguments(
@@ -152,12 +340,44 @@ namespace ReviewsRatings.GraphQL
                     var searchResult = productReviewService.GetReviewsByShopperId(shopperId);
                     IList<Review> searchData = await productReviewService.FilterReviews(searchResult.Result, searchTerm, orderBy, status);
                     int totalCount = searchData.Count;
+
+                    int total5 = 0;
+                    int total4 = 0;
+                    int total3 = 0;
+                    int total2 = 0;
+                    int total1 = 0;
+                    for (int i = 0; i < searchData.Count; i++) 
+                    {
+                        if (searchData[i].Rating == 5)
+                        {
+                            total5++;
+                        }
+                        else if (searchData[i].Rating == 4)
+                        {
+                            total4++;
+                        }
+                        else if (searchData[i].Rating == 3)
+                        {
+                            total3++;
+                        }
+                        else if (searchData[i].Rating == 2)
+                        {
+                            total2++;
+                        }
+                        else if (searchData[i].Rating == 1)
+                        {
+                            total1++;
+                        }
+                    }
+                    Console.WriteLine($"total3 = {total3}");
+
                     searchData = await productReviewService.LimitReviews(searchData, from, to);
                     Console.WriteLine($"totalCount = {totalCount} : Filtered to {searchData.Count}");
                     SearchResponse searchResponse = new SearchResponse
                     {
                         Data = new DataElement { data = searchData },
-                        Range = new SearchRange { From = from, To = to, Total = totalCount }
+                        Range = new SearchRange { From = from, To = to, Total = totalCount },
+                        Totals = new Totals { Total5 = total5, Total4 = total4, Total3 = total3, Total2 = total2, Total1 = total1 }
                     };
 
                     return searchResponse;
