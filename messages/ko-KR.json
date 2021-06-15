@@ -5,7 +5,7 @@
   "admin/reviews.tab.approved": "승인됨",
   "admin/reviews.reviewSchema.review": "리뷰",
   "admin/reviews.reviewSchema.product": "제품",
-  "admin/reviews.reviewSchema.date": "일",
+  "admin/reviews.reviewSchema.date": "날짜",
   "admin/reviews.mutations.approvalFeedback": "성공적으로 승인된 리뷰.",
   "admin/reviews.table.actions.approveReview": "리뷰 승인",
   "admin/reviews.table.actions.deleteReview": "리뷰 삭제",
