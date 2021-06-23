@@ -668,7 +668,7 @@ function Reviews() {
                             review.location && <span>, {review.location}</span>}
                         </span>
                       </div>
-                      <div className={`${handles.reviewCommentMessage}"t-body lh-copy mw9"`}>
+                      <div className={`${handles.reviewCommentMessage} t-body lh-copy mw9`}>
                         <ShowMore
                           lines={3}
                           more="Show more"
