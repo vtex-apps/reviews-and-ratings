@@ -479,7 +479,7 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
                     !state.validation.hasTitle ||
                     !state.validation.hasText ||
                     !state.validation.hasValidEmail) && (
-                    <div className={`${handles.formInvalidMessage} "c-danger t-small mt3 lh-title"`}>
+                    <div className={`${handles.formInvalidMessage} c-danger t-small mt3 lh-title`}>
                       <FormattedMessage id="store/reviews.form.invalid" />
                     </div>
                   )}
