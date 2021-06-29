@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 - Fix for anonymous review submission
+- Review details structure (author and date) from using `ul` to `div` and `span`s.
 
 ## [2.10.1] - 2021-05-27
 ### Security
