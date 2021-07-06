@@ -358,7 +358,9 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
           </div>
         ) : (
           <form>
-            <div className={`${handles.formSection} ${handles.formBottomLine} mv3`}>
+            <div
+              className={`${handles.formSection} ${handles.formBottomLine} mv3`}
+            >
               <Input
                 label={intl.formatMessage(messages.reviewTitleLabel)}
                 size="large"
@@ -414,7 +416,9 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
               />
             </div>
             {settings?.useLocation && (
-              <div className={`${handles.formSection} ${handles.formLocation} mv3`}>
+              <div
+                className={`${handles.formSection} ${handles.formLocation} mv3`}
+              >
                 <Input
                   label={intl.formatMessage(messages.locationLabel)}
                   size="large"
@@ -431,7 +435,9 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
               </div>
             )}
             {settings?.allowAnonymousReviews && !state.userAuthenticated && (
-              <div className={`${handles.formSection} ${handles.formEmail} mv3`}>
+              <div
+                className={`${handles.formSection} ${handles.formEmail} mv3`}
+              >
                 <Input
                   label={intl.formatMessage(messages.emailLabel)}
                   size="large"
@@ -479,7 +485,9 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
                     !state.validation.hasTitle ||
                     !state.validation.hasText ||
                     !state.validation.hasValidEmail) && (
-                    <div className={`${handles.formInvalidMessage} c-danger t-small mt3 lh-title`}>
+                    <div
+                      className={`${handles.formInvalidMessage} c-danger t-small mt3 lh-title`}
+                    >
                       <FormattedMessage id="store/reviews.form.invalid" />
                     </div>
                   )}

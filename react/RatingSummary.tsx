@@ -228,7 +228,9 @@ function RatingSummary() {
             <Stars rating={state.average} />
           </span>{' '}
           {state.settings.displaySummaryTotalReviews ? (
-            <span className={`${handles.summaryTotalReviews} review__rating--count dib v-mid`}>
+            <span
+              className={`${handles.summaryTotalReviews} review__rating--count dib v-mid`}
+            >
               ({state.total})
             </span>
           ) : null}

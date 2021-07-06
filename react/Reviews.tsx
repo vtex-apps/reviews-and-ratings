@@ -554,7 +554,9 @@ function Reviews() {
           state.userAuthenticated) ? (
           <Collapsible
             header={
-              <span className={`${handles.writeReviewButton} c-action-primary hover-c-action-primary`}>
+              <span
+                className={`${handles.writeReviewButton} c-action-primary hover-c-action-primary`}
+              >
                 <FormattedMessage id="store/reviews.list.writeReview" />
               </span>
             }
@@ -642,13 +644,17 @@ function Reviews() {
                       </div>
                       <div className={`${handles.reviewInfo} pa0 mv2 t-small`}>
                         {review.verifiedPurchaser ? (
-                          <span className={`${handles.reviewVerifiedPurchase} dib mr5`}>
+                          <span
+                            className={`${handles.reviewVerifiedPurchase} dib mr5`}
+                          >
                             <IconSuccess />{' '}
                             <FormattedMessage id="store/reviews.list.verifiedPurchaser" />
                           </span>
                         ) : null}
                         <span className={`${handles.reviewDate} dib mr2`}>
-                          <span className={`${handles.reviewDateSubmitted} dib mr2`}>
+                          <span
+                            className={`${handles.reviewDateSubmitted} dib mr2`}
+                          >
                             <FormattedMessage id="store/reviews.list.submitted" />
                           </span>
                           <strong className={handles.reviewDateValue}>
@@ -668,7 +674,9 @@ function Reviews() {
                             review.location && <span>, {review.location}</span>}
                         </span>
                       </div>
-                      <div className={`${handles.reviewCommentMessage} t-body lh-copy mw9`}>
+                      <div
+                        className={`${handles.reviewCommentMessage} t-body lh-copy mw9`}
+                      >
                         <ShowMore
                           lines={3}
                           more="Show more"
