@@ -5,11 +5,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+
+- `formSection`, `formBottomLine`, `formRating`, `formName`, `formLocation`, `formEmail`, `formReview`, `formSubmit`, `formInvalidMessage`, `reviewCommentMessage`, `reviewsOrderBy`, `reviewInfo`, `reviewVerifiedPurchase`, `reviewDate`, `reviewDateSubmitted`, `reviewDateValue`, `reviewAuthor`, `reviewAuthorBy`, `reviewAuthorName`, `summaryTotalReviews` and `writeReviewButton` CSS handles.
+### Changed
+- Review details structure (author and date) from using `ul` to `div` and `span`s.
 
 ## [2.10.2] - 2021-06-02
 
 ### Fixed
-
 - Fix for anonymous review submission
 
 ## [2.10.1] - 2021-05-27

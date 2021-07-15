@@ -109,6 +109,7 @@ const CSS_HANDLES = [
   'summaryContainer',
   'loginLink',
   'summaryButtonContainer',
+  'summaryTotalReviews',
 ] as const
 
 function RatingSummary() {
@@ -227,7 +228,9 @@ function RatingSummary() {
             <Stars rating={state.average} />
           </span>{' '}
           {state.settings.displaySummaryTotalReviews ? (
-            <span className="review__rating--count dib v-mid">
+            <span
+              className={`${handles.summaryTotalReviews} review__rating--count dib v-mid`}
+            >
               ({state.total})
             </span>
           ) : null}

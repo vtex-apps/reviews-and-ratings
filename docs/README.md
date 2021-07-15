@@ -90,6 +90,15 @@ In order to apply CSS customizations in this and other blocks, follow the instru
 | ------------------------- |
 | `container`               |
 | `formContainer`           |
+| `formSection`             |
+| `formBottomLine`          |
+| `formRating`              |
+| `formName`                |
+| `formLocation`            |
+| `formEmail`               |
+| `formReview`              |
+| `formSubmit`              |
+| `formInvalidMessage`      |
 | `graphBar`                |
 | `graphBarContainer`       |
 | `graphBarPercent`         |
@@ -99,6 +108,7 @@ In order to apply CSS customizations in this and other blocks, follow the instru
 | `graphTextLabel`          |
 | `loginLink`               |
 | `reviewComment`           |
+| `reviewCommentMessage`    |
 | `reviewCommentRating`     |
 | `reviewCommentsContainer` |
 | `reviewCommentUser`       |
@@ -106,6 +116,15 @@ In order to apply CSS customizations in this and other blocks, follow the instru
 | `reviewsRating`           |
 | `reviewsRatingAverage`    |
 | `reviewsRatingCount`      |
+| `reviewsOrderBy`          |
+| `reviewInfo`              |
+| `reviewVerifiedPurchase`  |
+| `reviewDate`              |
+| `reviewDateSubmitted`     |
+| `reviewDateValue`         |
+| `reviewAuthor`            |
+| `reviewAuthorBy`          |
+| `reviewAuthorName`        |
 | `star--empty`             |
 | `star--filled`            |
 | `star`                    |
@@ -123,7 +142,9 @@ In order to apply CSS customizations in this and other blocks, follow the instru
 | `graphBar`                |
 | `graphBarPercent`         |
 | `summaryButtonContainer`  |
+| `summaryTotalReviews`     |
 | `writeReviewContainer`    |
+| `writeReviewButton`       |
 
 <!-- DOCS-IGNORE:start -->
 
