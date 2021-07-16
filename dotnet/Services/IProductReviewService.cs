@@ -18,7 +18,7 @@
 
         Task<decimal> GetAverageRatingByProductId(string productId);
 
-        Task<Review> NewReview(Review review);
+        Task<Review> NewReview(Review review, bool doValidation);
 
         Task<Review> EditReview(Review review);
 

@@ -21,7 +21,7 @@ namespace ReviewsRatings.GraphQL
                 resolve: context =>
                 {
                     var review = context.GetArgument<Review>("review");
-                    return productReviewService.NewReview(review);
+                    return productReviewService.NewReview(review, true);
                 });
 
             Field<ReviewType>(

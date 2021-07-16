@@ -101,7 +101,7 @@ namespace ReviewsRatings.Controllers
                             VerifiedPurchaser = hasShopperPurchased
                         };
 
-                        var reviewResponse = await this._productReviewsService.NewReview(reviewToSave);
+                        var reviewResponse = await this._productReviewsService.NewReview(reviewToSave, false);
                         return Json(reviewResponse.Id);
                         break;
                     case REVIEWS:
@@ -114,7 +114,7 @@ namespace ReviewsRatings.Controllers
                         List<int> ids = new List<int>();
                         foreach(Review review in reviews)
                         {
-                            var reviewsResponse = await this._productReviewsService.NewReview(review);
+                            var reviewsResponse = await this._productReviewsService.NewReview(review, false);
                             ids.Add(reviewsResponse.Id);
                         }
 
