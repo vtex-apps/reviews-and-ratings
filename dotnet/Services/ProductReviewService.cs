@@ -281,46 +281,49 @@
             return reviews;
         }
 
-        public async Task<Review> NewReview(Review review)
+        public async Task<Review> NewReview(Review review, bool doValidation)
         {
             if (review != null)
             {
-                bool userValidated = false;
-                bool hasShopperReviewed = false;
-                bool hasShopperPurchased = false;
-                string userId = string.Empty;
-                ValidatedUser validatedUser = null;
-                try
+                if (doValidation)
                 {
-                    validatedUser = await this.ValidateUserToken(_context.Vtex.StoreUserAuthToken);
-                }
-                catch(Exception ex)
-                {
-                    _context.Vtex.Logger.Error("NewReview", null, "Error Validating User", ex);
-                }
-                
-                if(validatedUser != null)
-                {
-                    if (validatedUser.AuthStatus.Equals("Success"))
+                    bool userValidated = false;
+                    bool hasShopperReviewed = false;
+                    bool hasShopperPurchased = false;
+                    string userId = string.Empty;
+                    ValidatedUser validatedUser = null;
+                    try
                     {
-                        userValidated = true;
+                        validatedUser = await this.ValidateUserToken(_context.Vtex.StoreUserAuthToken);
                     }
-                }
-
-                if(userValidated)
-                {
-                    userId = validatedUser.User;
-                    hasShopperReviewed = await this.HasShopperReviewed(userId, review.ProductId);
-                    if (hasShopperReviewed)
+                    catch (Exception ex)
                     {
-                        return null;
+                        _context.Vtex.Logger.Error("NewReview", null, "Error Validating User", ex);
                     }
 
-                    hasShopperPurchased = await this.ShopperHasPurchasedProduct(userId, review.ProductId);
-                }
+                    if (validatedUser != null)
+                    {
+                        if (validatedUser.AuthStatus.Equals("Success"))
+                        {
+                            userValidated = true;
+                        }
+                    }
 
-                review.ShopperId = userId;
-                review.VerifiedPurchaser = hasShopperPurchased;
+                    if (userValidated)
+                    {
+                        userId = validatedUser.User;
+                        hasShopperReviewed = await this.HasShopperReviewed(userId, review.ProductId);
+                        if (hasShopperReviewed)
+                        {
+                            return null;
+                        }
+
+                        hasShopperPurchased = await this.ShopperHasPurchasedProduct(userId, review.ProductId);
+                    }
+
+                    review.ShopperId = userId;
+                    review.VerifiedPurchaser = hasShopperPurchased;
+                }
 
                 IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
 
