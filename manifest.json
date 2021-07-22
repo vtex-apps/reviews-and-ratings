@@ -146,7 +146,7 @@
       "name": "outbound-access",
       "attrs": {
         "host": "licensemanager.vtexcommercestable.com.br",
-        "path": "/license-manager/pvt/accounts/hosts/*"
+        "path": "/api/license-manager/pvt/accounts/hosts/*"
       }
     },
     {
