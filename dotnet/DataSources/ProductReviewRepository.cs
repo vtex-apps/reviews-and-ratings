@@ -262,8 +262,8 @@
 
             var request = new HttpRequestMessage
             {
-                Method = HttpMethod.Post,
-                RequestUri = new Uri($"http://licensemanager.vtexcommercestable.com.br/license-manager/pvt/accounts/hosts/{baseUrl}")
+                Method = HttpMethod.Get,
+                RequestUri = new Uri($"http://licensemanager.vtexcommercestable.com.br/api/license-manager/pvt/accounts/hosts/{baseUrl}")
             };
 
             string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
