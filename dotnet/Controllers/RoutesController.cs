@@ -51,7 +51,7 @@ namespace ReviewsRatings.Controllers
             if (!string.IsNullOrEmpty(vtexCookie))
             {
                 validatedUser = await this._productReviewsService.ValidateUserToken(vtexCookie);
-                if(validatedUser != null)
+                if (validatedUser != null)
                 {
                     if (validatedUser.AuthStatus.Equals(AUTH_SUCCESS))
                     {
@@ -60,13 +60,13 @@ namespace ReviewsRatings.Controllers
                 }
             }
 
-            if(!string.IsNullOrEmpty(vtexAppKey) && !string.IsNullOrEmpty(vtexAppToken))
+            if (!string.IsNullOrEmpty(vtexAppKey) && !string.IsNullOrEmpty(vtexAppToken))
             {
                 string baseUrl = HttpContext.Request.Headers[FORWARDED_HOST];
                 keyAndTokenValid = await this._productReviewsService.ValidateKeyAndToken(vtexAppKey, vtexAppToken, baseUrl);
             }
 
-            if(string.IsNullOrEmpty(requestedAction))
+            if (string.IsNullOrEmpty(requestedAction))
             {
                 return BadRequest("Missing parameter");
             }
@@ -77,7 +77,7 @@ namespace ReviewsRatings.Controllers
                 switch (requestedAction)
                 {
                     case REVIEW:
-                        if (!userValidated && !keyAndTokenValid)
+                        if (!userValidated)
                         {
                             return Unauthorized("Invalid User");
                         }
@@ -105,14 +105,14 @@ namespace ReviewsRatings.Controllers
                         return Json(reviewResponse.Id);
                         break;
                     case REVIEWS:
-                        if(!keyAndTokenValid)
+                        if (!keyAndTokenValid)
                         {
                             return Unauthorized();
                         }
 
                         IList<Review> reviews = JsonConvert.DeserializeObject<IList<Review>>(bodyAsText);
                         List<int> ids = new List<int>();
-                        foreach(Review review in reviews)
+                        foreach (Review review in reviews)
                         {
                             var reviewsResponse = await this._productReviewsService.NewReview(review, false);
                             ids.Add(reviewsResponse.Id);
@@ -122,7 +122,7 @@ namespace ReviewsRatings.Controllers
                         break;
                 }
             }
-            else if("delete".Equals(HttpContext.Request.Method, StringComparison.OrdinalIgnoreCase))
+            else if ("delete".Equals(HttpContext.Request.Method, StringComparison.OrdinalIgnoreCase))
             {
                 int[] ids;
                 switch (requestedAction)
@@ -132,7 +132,7 @@ namespace ReviewsRatings.Controllers
                         {
                             return Json("Invalid User");
                         }
-                        
+
                         if (string.IsNullOrEmpty(id))
                         {
                             return BadRequest("Missing parameter.");
@@ -170,7 +170,7 @@ namespace ReviewsRatings.Controllers
                         break;
                 }
             }
-            else if("get".Equals(HttpContext.Request.Method, StringComparison.OrdinalIgnoreCase))
+            else if ("get".Equals(HttpContext.Request.Method, StringComparison.OrdinalIgnoreCase))
             {
                 var queryString = HttpContext.Request.Query;
                 var searchTerm = queryString["search_term"];
@@ -182,7 +182,7 @@ namespace ReviewsRatings.Controllers
                 switch (requestedAction)
                 {
                     case REVIEW:
-                        if(string.IsNullOrEmpty(id))
+                        if (string.IsNullOrEmpty(id))
                         {
                             return BadRequest("Missing parameter.");
                         }
@@ -225,7 +225,7 @@ namespace ReviewsRatings.Controllers
                             Data = new DataElement { data = searchData },
                             Range = new SearchRange { From = from, To = to, Total = totalCount }
                         };
-                        
+
                         return Json(searchResponse);
                         break;
                     case RATING:
@@ -237,7 +237,7 @@ namespace ReviewsRatings.Controllers
                             Average = average,
                             TotalCount = totalCount
                         };
-                        
+
                         return Json(ratingResponse);
                 }
             }
