@@ -128,7 +128,7 @@
       "name": "outbound-access",
       "attrs": {
         "host": "{{account}}.vtexcommercestable.com.br",
-        "path": "/api/vtexid/credential/validate"
+        "path": "/api/vtexid/*"
       }
     },
     {
