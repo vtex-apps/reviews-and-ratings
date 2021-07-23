@@ -261,6 +261,8 @@
             bool keyAndTokenValidated = false;
             bool keyHasAccess = false;
 
+            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+
             if (key != null && token != null)
             {
                 ValidateKeyAndToken validateKeyAndToken = new ValidateKeyAndToken
@@ -276,6 +278,11 @@
                     RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.{ENVIRONMENT}.com.br/api/vtexid/apptoken/login"),
                     Content = new StringContent(jsonSerializedKeyAndToken, Encoding.UTF8, APPLICATION_JSON)
                 };
+
+                if (authToken != null)
+                {
+                    vtexIdRequest.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
+                }
 
                 try
                 {
@@ -299,8 +306,6 @@
                     Method = HttpMethod.Get,
                     RequestUri = new Uri($"http://licensemanager.vtexcommercestable.com.br/api/license-manager/pvt/accounts/{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}/logins/{key}/granted")
                 };
-
-                string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
 
                 if (authToken != null)
                 {
