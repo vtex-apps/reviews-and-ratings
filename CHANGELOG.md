@@ -6,39 +6,63 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Removed
+
+- `VtexIdClientAutCookie` header from request sent to License Manager
+- `Get_Account_By_Identifier` policy
+
 ## [2.11.4] - 2021-07-23
 
 ### Added
+
 - `Get_Account_By_Identifier` policy
-### Secutiry
+
+### Security
+
 - Removed sensitive information from log
 
 ## [2.11.3] - 2021-07-22
+
 ### Fixed
+
 - Fix path in manafest.json
+
 ## [2.11.2] - 2021-07-22
+
 ### Fixed
+
 - Fix license validate url
+
 ## [2.11.1] - 2021-07-16
+
 ### Fixed
+
 - Fix to API user validation
+
 ## [2.11.0] - 2021-07-15
+
 ### Added
 
 - `formSection`, `formBottomLine`, `formRating`, `formName`, `formLocation`, `formEmail`, `formReview`, `formSubmit`, `formInvalidMessage`, `reviewCommentMessage`, `reviewsOrderBy`, `reviewInfo`, `reviewVerifiedPurchase`, `reviewDate`, `reviewDateSubmitted`, `reviewDateValue`, `reviewAuthor`, `reviewAuthorBy`, `reviewAuthorName`, `summaryTotalReviews` and `writeReviewButton` CSS handles.
+
 ### Changed
+
 - Review details structure (author and date) from using `ul` to `div` and `span`s.
 
 ## [2.10.2] - 2021-06-02
 
 ### Fixed
+
 - Fix for anonymous review submission
 
 ## [2.10.1] - 2021-05-27
+
 ### Security
+
 - Showing sensitive information
 
 ## [2.10.0] - 2021-05-03
+
 ### Added
 
 - I18n Fr, It, Kr and Nl.
@@ -50,12 +74,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [2.9.2] - 2021-04-14
 
 ### Fixed
+
 - Added an `id` property to structered data
 
 ## [2.9.1] - 2021-03-16
 
 ### Fixed
+
 - CPU factor by `80`
+
 ## [2.9.0] - 2021-03-10
 
 ### Added
@@ -66,7 +93,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-- I18n Jp. 
+- I18n Jp.
 
 ### Changed
 

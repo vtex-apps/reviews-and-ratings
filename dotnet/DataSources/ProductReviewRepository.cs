@@ -82,7 +82,7 @@
                     return null;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _context.Vtex.Logger.Error("GetProductReviewsAsync", null, "Request Error", ex);
             }
@@ -92,12 +92,12 @@
             {
                 productReviews = JsonConvert.DeserializeObject<IList<Review>>(responseContent);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine($"DeserializeObject Error: {ex.Message} ");
                 _context.Vtex.Logger.Error("GetProductReviewsAsync", null, "DeserializeObject Error", ex);
             }
-            
+
             return productReviews;
         }
 
@@ -129,7 +129,7 @@
                 string responseContent = await response.Content.ReadAsStringAsync();
                 _context.Vtex.Logger.Info("SaveProductReviewsAsync", null, $"[{response.StatusCode}] {responseContent}");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _context.Vtex.Logger.Error("SaveProductReviewsAsync", null, "Request Error", ex);
             }
@@ -248,7 +248,7 @@
                     validatedUser = JsonConvert.DeserializeObject<ValidatedUser>(responseContent);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _context.Vtex.Logger.Error("ValidateUserToken", null, $"Error validating user token", ex);
             }
@@ -265,12 +265,6 @@
                 Method = HttpMethod.Get,
                 RequestUri = new Uri($"http://licensemanager.vtexcommercestable.com.br/api/license-manager/pvt/accounts/hosts/{baseUrl}")
             };
-
-            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
-            if (authToken != null)
-            {
-                request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
-            }
 
             if (key != null)
             {
@@ -290,7 +284,7 @@
                 _context.Vtex.Logger.Info("ValidateKeyAndToken", null, $"[{response.StatusCode}] {responseContent}");
                 validated = response.IsSuccessStatusCode;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _context.Vtex.Logger.Error("ValidateKeyAndToken", null, $"Error validating key and token '{key}'", ex);
             }
