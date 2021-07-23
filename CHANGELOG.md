@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+- `Get_Account_By_Identifier` policy
+### Secutiry
+- Removed sensitive information from log
+
 ## [2.11.3] - 2021-07-22
 ### Fixed
 - Fix path in manafest.json

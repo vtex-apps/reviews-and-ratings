@@ -250,7 +250,7 @@
             }
             catch(Exception ex)
             {
-                _context.Vtex.Logger.Error("ValidateUserToken", null, $"Error validating user token '{token}'", ex);
+                _context.Vtex.Logger.Error("ValidateUserToken", null, $"Error validating user token", ex);
             }
 
             return validatedUser;
@@ -292,7 +292,7 @@
             }
             catch(Exception ex)
             {
-                _context.Vtex.Logger.Error("ValidateKeyAndToken", null, $"Error validating key and token '{key}' '{token}'", ex);
+                _context.Vtex.Logger.Error("ValidateKeyAndToken", null, $"Error validating key and token '{key}'", ex);
             }
 
             return validated;
