@@ -6,10 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-### Removed
+### Fixed
 
-- `VtexIdClientAutCookie` header from request sent to License Manager
-- `Get_Account_By_Identifier` policy
+- When validating app key and token, first validate with VTEX ID to see if key/token pair is valid, then validate with License Manager to see if app key has access to at least one resource
 
 ## [2.11.4] - 2021-07-23
 

@@ -115,6 +115,9 @@
       "name": "OMSViewer"
     },
     {
+      "name": "Get_Account_By_Identifier"
+    },
+    {
       "name": "outbound-access",
       "attrs": {
         "host": "{{account}}.vtexcommercestable.com.br",
@@ -132,7 +135,7 @@
       "name": "outbound-access",
       "attrs": {
         "host": "licensemanager.vtexcommercestable.com.br",
-        "path": "/api/license-manager/pvt/accounts/hosts/*"
+        "path": "/api/license-manager/pvt/accounts/*"
       }
     },
     {
