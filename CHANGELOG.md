@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.11.5] - 2021-07-23
+
 ### Fixed
 
 - When validating app key and token, first validate with VTEX ID to see if key/token pair is valid, then validate with License Manager to see if app key has access to at least one resource
