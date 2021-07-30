@@ -33,6 +33,7 @@ interface State {
   reviewSubmitted: boolean
   userAuthenticated: boolean
   alreadySubmitted: boolean
+  isSubmitting: boolean
   verifiedPurchaser: boolean
   validation: Validation
   showValidationErrors: boolean
@@ -56,6 +57,7 @@ type ReducerActions =
   | { type: 'SET_VERIFIED' }
   | { type: 'SET_ALREADY_SUBMITTED' }
   | { type: 'SET_SUBMITTED' }
+  | { type: 'SET_SUBMITTING'; args: { isSubmitting: boolean } }
   | { type: 'SHOW_VALIDATION' }
 
 const initialState = {
@@ -76,6 +78,7 @@ const initialState = {
     hasValidEmail: false,
   },
   showValidationErrors: false,
+  isSubmitting: false,
 }
 
 const reducer = (state: State, action: ReducerActions) => {
@@ -131,6 +134,11 @@ const reducer = (state: State, action: ReducerActions) => {
       return {
         ...state,
         reviewSubmitted: true,
+      }
+    case 'SET_SUBMITTING':
+      return {
+        ...state,
+        isSubmitting: action.args.isSubmitting,
       }
     case 'SET_AUTHENTICATED':
       return {
@@ -297,6 +305,10 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
   }, [client, productId])
 
   async function submitReview() {
+    dispatch({
+      type: 'SET_SUBMITTING',
+      args: { isSubmitting: true },
+    })
     if (state.validation.hasValidEmail) {
       client
         .query({
@@ -334,10 +346,18 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
           dispatch({
             type: 'SET_SUBMITTED',
           })
+          dispatch({
+            type: 'SET_SUBMITTING',
+            args: { isSubmitting: false },
+          })
         })
     } else {
       dispatch({
         type: 'SHOW_VALIDATION',
+      })
+      dispatch({
+        type: 'SET_SUBMITTING',
+        args: { isSubmitting: false },
       })
     }
   }
@@ -491,7 +511,11 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
                       <FormattedMessage id="store/reviews.form.invalid" />
                     </div>
                   )}
-                <Button variation="primary" onClick={() => submitReview()}>
+                <Button
+                  variation="primary"
+                  onClick={() => submitReview()}
+                  isLoading={state.isSubmitting}
+                >
                   <FormattedMessage id="store/reviews.form.submit" />
                 </Button>
               </Fragment>
