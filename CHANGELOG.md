@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Add loading state to "Submit Review" button to prevent duplicate submissions
+
 ## [2.11.5] - 2021-07-23
 
 ### Fixed
