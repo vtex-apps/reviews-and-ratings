@@ -296,6 +296,7 @@ const CSS_HANDLES = [
   'reviewsRatingCount',
   'reviewCommentsContainer',
   'reviewsOrderBy',
+  'reviewsPaging',
   'reviewComment',
   'reviewCommentMessage',
   'reviewCommentRating',
@@ -739,7 +740,7 @@ function Reviews() {
                 </div>
               )
             })}
-            <div className="review__paging">
+            <div className={`${handles.reviewsPaging} review__paging`}>
               <Pagination
                 textShowRows=""
                 currentItemFrom={state.from}
