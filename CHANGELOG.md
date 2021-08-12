@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Added a CSS handle for review pagination container
+
 ## [2.11.6] - 2021-08-02
 
 ### Fixed
