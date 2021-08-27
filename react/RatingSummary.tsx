@@ -33,6 +33,7 @@ interface AppSettings {
   defaultOpenCount: number
   showGraph: boolean
   displaySummaryIfNone: boolean
+  displayInlineIfNone: boolean
   displaySummaryTotalReviews: boolean
   displaySummaryAddButton: boolean
 }
@@ -70,6 +71,7 @@ const initialState = {
     useLocation: false,
     showGraph: false,
     displaySummaryIfNone: false,
+    displayInlineIfNone: false,
     displaySummaryTotalReviews: true,
     displaySummaryAddButton: false,
   },

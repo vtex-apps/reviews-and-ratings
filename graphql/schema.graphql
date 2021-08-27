@@ -49,6 +49,7 @@ type AppSettings {
   defaultOpenCount: Int
   showGraph: Boolean
   displaySummaryIfNone: Boolean
+  displayInlineIfNone: Boolean
   displaySummaryTotalReviews: Boolean
   displaySummaryAddButton: Boolean
 }

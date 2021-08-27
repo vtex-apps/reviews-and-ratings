@@ -13,6 +13,7 @@
     /// defaultOpenCount: Integer
     /// showGraph: Boolean
     /// displaySummaryIfNone: Boolean
+    /// displayInlineIfNone: Boolean
     /// displaySummaryTotalReviews: Boolean
     /// displaySummaryAddButton: Boolean
     /// }
@@ -26,6 +27,7 @@
         public int defaultOpenCount { get; set; }
         public bool showGraph { get; set; }
         public bool displaySummaryIfNone { get; set; }
+        public bool displayInlineIfNone { get; set; }
         public bool displaySummaryTotalReviews { get; set; }
         public bool displaySummaryAddButton { get; set; }
     }
