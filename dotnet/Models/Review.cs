@@ -39,7 +39,7 @@ namespace ReviewsRatings.Models
         /// <summary>
         /// Rating
         /// </summary>
-        public int Rating { get; set; }
+        public int? Rating { get; set; }
 
         /// <summary>
         /// Review Title
@@ -69,7 +69,7 @@ namespace ReviewsRatings.Models
         /// <summary>
         /// Shopper has purchased the item
         /// </summary>
-        public bool VerifiedPurchaser { get; set; }
+        public bool? VerifiedPurchaser { get; set; }
 
         /// <summary>
         /// Product sku
@@ -79,7 +79,7 @@ namespace ReviewsRatings.Models
         /// <summary>
         /// Review has been approved by moderator
         /// </summary>
-        public bool Approved { get; set; }
+        public bool? Approved { get; set; }
 
         /// <summary>
         /// Reviewer location
