@@ -68,6 +68,19 @@
                 IList<Review> reviews = await this._productReviewRepository.GetProductReviewsAsync(productId);
                 // Remove the old version
                 Review reviewToRemove = reviews.Where(r => r.Id == review.Id).FirstOrDefault();
+
+                review.Approved = review.Approved ?? reviewToRemove.Approved;
+                review.Location = string.IsNullOrEmpty(review.Location) ? reviewToRemove.Location : review.Location;
+                review.ProductId = string.IsNullOrEmpty(review.ProductId) ? reviewToRemove.ProductId : review.ProductId;
+                review.Rating = review.Rating ?? reviewToRemove.Rating;
+                review.ReviewDateTime = string.IsNullOrEmpty(review.ReviewDateTime) ? reviewToRemove.ReviewDateTime : review.ReviewDateTime;
+                review.ReviewerName = string.IsNullOrEmpty(review.ReviewerName) ? reviewToRemove.ReviewerName : review.ReviewerName;
+                review.ShopperId = string.IsNullOrEmpty(review.ShopperId) ? reviewToRemove.ShopperId : review.ShopperId;
+                review.Sku = string.IsNullOrEmpty(review.Sku) ? reviewToRemove.Sku : review.Sku;
+                review.Text = string.IsNullOrEmpty(review.Text) ? reviewToRemove.Text : review.Text;
+                review.Title = string.IsNullOrEmpty(review.Title) ? reviewToRemove.Title : review.Title;
+                review.VerifiedPurchaser = review.VerifiedPurchaser ?? reviewToRemove.VerifiedPurchaser;
+
                 if (reviewToRemove != null && reviews.Remove(reviewToRemove))
                 {
                     // Add and save the new version
@@ -88,13 +101,13 @@
                 AppSettings settings = await GetAppSettings();
                 if(settings.RequireApproval)
                 {
-                    reviews = reviews.Where(x => x.Approved).ToList();
+                    reviews = reviews.Where(x => x.Approved ?? false).ToList();
                 }
 
                 int numberOfReviews = reviews.Count;
                 if (numberOfReviews > 0)
                 {
-                    decimal totalRating = reviews.Sum(r => r.Rating);
+                    decimal totalRating = reviews.Sum(r => r.Rating ?? 0);
                     averageRating = totalRating / numberOfReviews;
                 }
             }

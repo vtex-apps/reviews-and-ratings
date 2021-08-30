@@ -11,6 +11,7 @@ type Review {
   verifiedPurchaser: Boolean
   sku: String
   approved: Boolean
+  shopperId: String
 }
 
 type ReviewsResult {
@@ -97,9 +98,22 @@ input ReviewInput {
   sku: String
 }
 
+input EditReviewInput {
+  id: ID
+  cacheId: ID
+  productId: String
+  rating: Int
+  title: String
+  text: String
+  reviewerName: String
+  reviewDateTime: String
+  sku: String
+  shopperId: String
+}
+
 type Mutation {
   newReview(review: ReviewInput!): Review
-  editReview(id: ID!, review: ReviewInput!): Review
+  editReview(id: ID!, review: EditReviewInput!): Review
   deleteReview(ids: [ID!]): Boolean
   moderateReview(ids: [ID!], approved: Boolean!): Boolean
 }

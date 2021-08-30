@@ -15,7 +15,7 @@ namespace ReviewsRatings.GraphQL.Types
             Field(b => b.Id).Description("The id of the review.");
             Field(b => b.CacheId).Description("The cache id of the review.");
             Field(b => b.ProductId).Description("The product id of the review.");
-            Field(b => b.Rating).Description("The rating of the review.");
+            Field(b => b.Rating, nullable: true).Description("The rating of the review.");
             Field(b => b.Title, nullable: true).Description("The title of the review.");
             Field(b => b.Text, nullable: true).Description("The text of the review.");
             Field(b => b.ReviewerName, nullable: true).Description("The name of the reviewer.");

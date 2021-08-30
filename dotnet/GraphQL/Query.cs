@@ -122,7 +122,7 @@ namespace ReviewsRatings.GraphQL
                         AppSettings appSettings = await productReviewService.GetAppSettings();
                         if (appSettings.RequireApproval)
                         {
-                            count = searchResult.Where(x => x.Approved).ToList().Count;
+                            count = searchResult.Where(x => x.Approved ?? false).ToList().Count;
                         }
                     }
 
