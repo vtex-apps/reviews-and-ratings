@@ -47,7 +47,6 @@ type ReducerActions =
   | { type: 'SET_AVERAGE'; args: { average: number } }
   | { type: 'SET_SETTINGS'; args: { settings: AppSettings } }
 
-
 const initialState = {
   total: 0,
   average: 0,
@@ -81,7 +80,7 @@ const reducer = (state: State, action: ReducerActions) => {
         average: action.args.average,
         hasAverage: true,
       }
-      case 'SET_SETTINGS':
+    case 'SET_SETTINGS':
       return {
         ...state,
         settings: action.args.settings,
@@ -120,8 +119,8 @@ function RatingInline() {
           args: { total },
         })
       })
-      
-      client
+
+    client
       .query({
         query: AverageRatingByProductId,
         variables: {
@@ -136,24 +135,23 @@ function RatingInline() {
         })
       })
 
-      client
+    client
       .query({
         query: AppSettings,
       })
       .then((response: ApolloQueryResult<SettingsData>) => {
-      const settings = response.data.appSettings
-      dispatch({
-        type: 'SET_SETTINGS',
-        args: { settings },
+        const settings = response.data.appSettings
+        dispatch({
+          type: 'SET_SETTINGS',
+          args: { settings },
+        })
       })
-    })
-    }, [client, productId])
-    
+  }, [client, productId])
 
   return (
     <div className={`${handles.inlineContainer} review-summary mw8 center`}>
-      {!state.hasTotal || !state.hasAverage ? null : state.total ===
-        0 && !state.settings.displayInlineIfNone ? null : (
+      {!state.hasTotal || !state.hasAverage ? null : state.total === 0 &&
+        !state.settings.displayInlineIfNone ? null : (
         <Fragment>
           <span className="t-heading-5 v-mid">
             <Stars rating={state.average} />

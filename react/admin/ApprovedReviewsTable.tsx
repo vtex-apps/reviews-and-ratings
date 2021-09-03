@@ -64,7 +64,9 @@ export const ApprovedReviewsTable: FC = () => {
     } = review
 
     return {
-      date: `${intl.formatDate(reviewDateTime)} ${intl.formatTime(reviewDateTime)}`,
+      date: `${intl.formatDate(reviewDateTime)} ${intl.formatTime(
+        reviewDateTime
+      )}`,
       product: {
         productId,
         sku,
