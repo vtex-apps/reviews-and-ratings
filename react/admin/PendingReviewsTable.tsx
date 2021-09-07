@@ -68,7 +68,9 @@ export const PendingReviewsTable: FC = () => {
     } = review
 
     return {
-      date: reviewDateTime,
+      date: `${intl.formatDate(reviewDateTime)} ${intl.formatTime(
+        reviewDateTime
+      )}`,
       product: {
         productId,
         sku,

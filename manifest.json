@@ -94,6 +94,11 @@
         "type": "boolean",
         "default": false
       },
+      "displayInlineIfNone": {
+        "title": "Display stars in product-rating-inline if there are no reviews",
+        "type": "boolean",
+        "default": false
+      },
       "displaySummaryTotalReviews": {
         "title": "Display total reviews number on product-rating-summary block",
         "type": "boolean",
