@@ -226,7 +226,7 @@
 
                 if (!string.IsNullOrEmpty(status))
                 {
-                    reviews = reviews.Where(x => x.Approved.Equals(Boolean.Parse(status))).ToList();
+                    reviews = reviews.Where(x => (x.Approved ?? false).Equals(bool.Parse(status))).ToList();
                 }
             }
 
@@ -336,6 +336,11 @@
 
                     review.ShopperId = userId;
                     review.VerifiedPurchaser = hasShopperPurchased;
+                }
+
+                if (review.Approved == null)
+                {
+                    review.Approved = false;
                 }
 
                 IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
