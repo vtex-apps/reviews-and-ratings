@@ -118,7 +118,7 @@ const messages = defineMessages({
   loadingReviews: {
     defaultMessage: 'Loading reviews...',
     id: 'store/reviews.list.loadingReviews',
-  }
+  },
 })
 
 function RatingSummary() {
