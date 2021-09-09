@@ -98,5 +98,5 @@
   "store/reviews.list.graph.stars": "{value, plural, =0 {0 stele} =1 {1 stea} other {# stele}}",
   "store/reviews.summary.add.login": "Te rugăm să te autentifici pentru a scrie o recenzie.",
   "store/reviews.summary.add.title": "Adaugă recenzie",
-  "store/reviews.list.loadingReviews": "Se încarcă recenziile ..."
+  "store/reviews.list.loadingReviews": "Se încarcă recenziile..."
 }
