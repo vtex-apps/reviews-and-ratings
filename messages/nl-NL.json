@@ -97,5 +97,6 @@
   "store/reviews.list.pagination.textOf": "van",
   "store/reviews.list.graph.stars": "{value, plural, =0{0 sterren} =1{1 ster} other{# sterren}}",
   "store/reviews.summary.add.login": "Log in om een beoordeling te schrijven.",
-  "store/reviews.summary.add.title": "Beoordeling toevoegen"
+  "store/reviews.summary.add.title": "Beoordeling toevoegen",
+  "store/reviews.list.loadingReviews": "Beoordelingen laden..."
 }
