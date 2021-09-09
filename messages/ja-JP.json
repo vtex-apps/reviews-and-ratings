@@ -97,5 +97,6 @@
   "store/reviews.list.pagination.textOf": "の",
   "store/reviews.list.graph.stars": "{value, plural, =0{星0} =1{星1} other{星#}}",
   "store/reviews.summary.add.login": "ログインしてレビューをご記入ください。",
-  "store/reviews.summary.add.title": "レビューを追加する"
+  "store/reviews.summary.add.title": "レビューを追加する",
+  "store/reviews.list.loadingReviews": "レビューを読み込んでいます..."
 }

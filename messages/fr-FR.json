@@ -97,5 +97,6 @@
   "store/reviews.list.pagination.textOf": "de",
   "store/reviews.list.graph.stars": "{value, plural, one {} =0{0 étoile} =1{1 étoile} other{# étoiles}}",
   "store/reviews.summary.add.login": "Veuillez vous connecter pour écrire un avis.",
-  "store/reviews.summary.add.title": "Ajouter un avis"
+  "store/reviews.summary.add.title": "Ajouter un avis",
+  "store/reviews.list.loadingReviews": "Chargement des avis..."
 }
