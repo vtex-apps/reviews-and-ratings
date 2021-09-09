@@ -114,6 +114,13 @@ const CSS_HANDLES = [
   'summaryTotalReviews',
 ] as const
 
+const messages = defineMessages({
+  loadingReviews: {
+    defaultMessage: 'Loading reviews...',
+    id: 'store/reviews.list.loadingReviews',
+  }
+})
+
 function RatingSummary() {
   const intl = useIntl()
   const client = useApolloClient()
@@ -268,12 +275,5 @@ function RatingSummary() {
     </div>
   )
 }
-
-const messages = defineMessages({
-  loadingReviews: {
-    defaultMessage: 'Loading reviews...',
-    id: 'store/reviews.list.loadingReviews',
-  }
-})
 
 export default RatingSummary
