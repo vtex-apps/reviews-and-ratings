@@ -244,5 +244,13 @@ namespace ReviewsRatings.Controllers
 
             return Json(responseString);
         }
+
+        public async Task<IActionResult> ClearData()
+        {
+            Response.Headers.Add("Cache-Control", "no-cache");
+            await _productReviewsService.ClearData();
+
+            return Json("Done");
+        }
     }
 }
