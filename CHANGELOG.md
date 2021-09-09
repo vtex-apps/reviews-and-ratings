@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - Limit number of records
+- Increased timeout
 
 ## [2.12.1] - 2021-09-08
 

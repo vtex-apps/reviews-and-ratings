@@ -1,6 +1,7 @@
 {
   "stack": "dotnet",
   "memory": 256,
+  "timeout": 300,
   "cpu": {
     "type": "shared",
     "value": 80
@@ -22,7 +23,7 @@
   "events": {
     "onAppsLinked": {
       "sender": "apps",
-      "keys": ["linked"]
+      "keys": [ "linked" ]
     }
   }
 }
