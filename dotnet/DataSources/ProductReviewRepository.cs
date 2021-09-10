@@ -76,9 +76,10 @@
                 var client = _clientFactory.CreateClient();
                 var response = await client.SendAsync(request);
                 responseContent = await response.Content.ReadAsStringAsync();
-                _context.Vtex.Logger.Info("GetProductReviewsAsync", null, $"[{response.StatusCode}] {responseContent}");
+                //_context.Vtex.Logger.Info("GetProductReviewsAsync", null, $"[{response.StatusCode}] {responseContent}");
                 if (response.StatusCode == HttpStatusCode.NotFound)
                 {
+                    _context.Vtex.Logger.Info("GetProductReviewsAsync", null, $"[{response.StatusCode}] {responseContent}");
                     return null;
                 }
             }
@@ -94,7 +95,7 @@
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"DeserializeObject Error: {ex.Message} ");
+                //Console.WriteLine($"DeserializeObject Error: {ex.Message} ");
                 _context.Vtex.Logger.Error("GetProductReviewsAsync", null, "DeserializeObject Error", ex);
             }
 
@@ -127,7 +128,7 @@
                 var client = _clientFactory.CreateClient();
                 var response = await client.SendAsync(request);
                 string responseContent = await response.Content.ReadAsStringAsync();
-                _context.Vtex.Logger.Info("SaveProductReviewsAsync", null, $"[{response.StatusCode}] {responseContent}");
+                //_context.Vtex.Logger.Info("SaveProductReviewsAsync", null, $"[{response.StatusCode}] {responseContent}");
             }
             catch (Exception ex)
             {
@@ -156,7 +157,7 @@
                 var client = _clientFactory.CreateClient();
                 var response = await client.SendAsync(request);
                 responseContent = await response.Content.ReadAsStringAsync();
-                _context.Vtex.Logger.Info("LoadLookupAsync", null, $"[{response.StatusCode}] {responseContent}");
+                //_context.Vtex.Logger.Info("LoadLookupAsync", null, $"[{response.StatusCode}] {responseContent}");
                 if (response.StatusCode == HttpStatusCode.NotFound)
                 {
                     return null;
@@ -174,7 +175,7 @@
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"DeserializeObject Error: {ex.Message} ");
+                //Console.WriteLine($"DeserializeObject Error: {ex.Message} ");
                 _context.Vtex.Logger.Error("LoadLookupAsync", null, "DeserializeObject Error", ex);
             }
 
@@ -207,7 +208,7 @@
                 var client = _clientFactory.CreateClient();
                 var response = await client.SendAsync(request);
                 string responseContent = await response.Content.ReadAsStringAsync();
-                _context.Vtex.Logger.Info("SaveLookupAsync", null, $"[{response.StatusCode}] {responseContent}");
+                //_context.Vtex.Logger.Info("SaveLookupAsync", null, $"[{response.StatusCode}] {responseContent}");
             }
             catch (Exception ex)
             {
@@ -242,7 +243,7 @@
             {
                 var response = await client.SendAsync(request);
                 string responseContent = await response.Content.ReadAsStringAsync();
-                _context.Vtex.Logger.Info("ValidateUserToken", null, $"[{response.StatusCode}] {responseContent}");
+                //_context.Vtex.Logger.Info("ValidateUserToken", null, $"[{response.StatusCode}] {responseContent}");
                 if (response.IsSuccessStatusCode)
                 {
                     validatedUser = JsonConvert.DeserializeObject<ValidatedUser>(responseContent);
@@ -289,11 +290,15 @@
                     var client = _clientFactory.CreateClient();
                     var response = await client.SendAsync(vtexIdRequest);
                     string responseContent = await response.Content.ReadAsStringAsync();
-                    _context.Vtex.Logger.Info("ValidateKeyAndToken", null, $"[{response.StatusCode}]");
+                    //_context.Vtex.Logger.Info("ValidateKeyAndToken", null, $"[{response.StatusCode}]");
                     if (response.IsSuccessStatusCode)
                     {
                         var validatedKeyAndToken = JsonConvert.DeserializeObject<ValidatedKeyAndToken>(responseContent);
                         keyAndTokenValidated = validatedKeyAndToken.AuthStatus.Equals("Success");
+                    }
+                    else
+                    {
+                        _context.Vtex.Logger.Info("ValidateKeyAndToken", null, $"[{response.StatusCode}]");
                     }
                 }
                 catch (Exception ex)
@@ -317,7 +322,7 @@
                     var client = _clientFactory.CreateClient();
                     var response = await client.SendAsync(request);
                     string responseContent = await response.Content.ReadAsStringAsync();
-                    _context.Vtex.Logger.Info("ValidateKeyAccessGranted", null, $"[{response.StatusCode}] {responseContent}");
+                    //_context.Vtex.Logger.Info("ValidateKeyAccessGranted", null, $"[{response.StatusCode}] {responseContent}");
                     keyHasAccess = response.IsSuccessStatusCode && responseContent.Equals("true");
                 }
                 catch (Exception ex)
@@ -357,7 +362,7 @@
                 if (response.IsSuccessStatusCode)
                 {
                     vtexOrder = JsonConvert.DeserializeObject<VtexOrder>(responseContent);
-                    Console.WriteLine($"GetOrderInformation: [{response.StatusCode}] ");
+                    //Console.WriteLine($"GetOrderInformation: [{response.StatusCode}] ");
                 }
             }
             catch (Exception ex)

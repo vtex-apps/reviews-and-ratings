@@ -17,7 +17,7 @@
         private readonly IProductReviewRepository _productReviewRepository;
         private readonly IAppSettingsRepository _appSettingsRepository;
         private readonly IIOServiceContext _context;
-        private const int maximumReturnedRecords = 999;
+        private const int maximumReturnedRecords = 500;
         private const string DELIMITER = ":";
 
         public ProductReviewService(IProductReviewRepository productReviewRepository, IAppSettingsRepository appSettingsRepository, IIOServiceContext context)
@@ -135,11 +135,52 @@
             if (lookup != null)
             {
                 List<string> productIds = lookup.Values.Distinct().ToList();
+                int maxProducts = maximumReturnedRecords;
+                int productsCounter = 0;
                 foreach (string productId in productIds)
                 {
                     // Get all results - sort/limit later
                     IList<Review> returnedReviewList = await this.GetReviewsByProductId(productId, 0, maximumReturnedRecords, string.Empty);
-                    reviews.AddRange(returnedReviewList);
+                    if (returnedReviewList.Count > 0)
+                    {
+                        reviews.AddRange(returnedReviewList);
+                        productsCounter++;
+                    }
+                    else
+                    {
+                        // Remove any broken lookup references
+                        try
+                        {
+                            List<int> missingIds = new List<int>();
+                            foreach(var lookupPair in lookup)
+                            {
+                                if (lookupPair.Value == null || lookupPair.Value.Equals(productId))
+                                {
+                                    missingIds.Add(lookupPair.Key);
+                                }
+                            }
+
+                            if (missingIds != null)
+                            {
+                                _context.Vtex.Logger.Warn("GetReviews", null, $"Removing broken lookup ids for product id {productId}\n{string.Join(",", missingIds.ToArray())}");
+                                foreach (int idToRemove in missingIds)
+                                {
+                                    lookup.Remove(idToRemove);
+                                }
+
+                                await _productReviewRepository.SaveLookupAsync(lookup);
+                            }
+                        }
+                        catch(Exception ex)
+                        {
+                            _context.Vtex.Logger.Error("GetReviews", null, $"Error removing broken lookup ids for product id {productId}", ex);
+                        }
+                    }
+
+                    if (productsCounter > maxProducts)
+                    {
+                        break;
+                    }
                 }
             }
 
@@ -394,11 +435,17 @@
             IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
             if (lookup != null)
             {
+                Console.WriteLine($"lookup =  {lookup.Count}");
                 List<string> productIds = lookup.Values.Distinct().ToList();
                 foreach (string productId in productIds)
                 {
+                    Console.WriteLine($"Removing {productId}");
                     await this._productReviewRepository.SaveProductReviewsAsync(productId, null);
                 }
+            }
+            else
+            {
+                Console.WriteLine("Lookup Null!");
             }
 
             await _productReviewRepository.SaveLookupAsync(null);
