@@ -97,5 +97,6 @@
   "store/reviews.list.pagination.textOf": "di",
   "store/reviews.list.graph.stars": "{value, plural, =0{0 stelle} =1{1 stella} other{# stelle}}",
   "store/reviews.summary.add.login": "Effettua l'accesso per scrivere una recensione.",
-  "store/reviews.summary.add.title": "Aggiungi recensione"
+  "store/reviews.summary.add.title": "Aggiungi recensione",
+  "store/reviews.list.loadingReviews": "Caricamento recensioni..."
 }

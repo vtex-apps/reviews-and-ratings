@@ -4,7 +4,7 @@ import { ApolloQueryResult } from 'apollo-client'
 import { useApolloClient } from 'react-apollo'
 import { useProduct } from 'vtex.product-context'
 import { useCssHandles } from 'vtex.css-handles'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 import { Link, canUseDOM } from 'vtex.render-runtime'
 import { Button } from 'vtex.styleguide'
 
@@ -114,7 +114,15 @@ const CSS_HANDLES = [
   'summaryTotalReviews',
 ] as const
 
+const messages = defineMessages({
+  loadingReviews: {
+    defaultMessage: 'Loading reviews...',
+    id: 'store/reviews.list.loadingReviews',
+  },
+})
+
 function RatingSummary() {
+  const intl = useIntl()
   const client = useApolloClient()
   const handles = useCssHandles(CSS_HANDLES)
   const { product } = useProduct() ?? {}
@@ -208,7 +216,7 @@ function RatingSummary() {
   return (
     <div className={`${handles.summaryContainer} review-summary mw8 center`}>
       {!state.hasTotal || !state.hasAverage ? (
-        <Fragment>Loading reviews...</Fragment>
+        <Fragment>{intl.formatMessage(messages.loadingReviews)}</Fragment>
       ) : state.total === 0 && !state.settings.displaySummaryIfNone ? null : (
         <Fragment>
           <Helmet>

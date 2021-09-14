@@ -97,5 +97,6 @@
   "store/reviews.list.pagination.textOf": "/",
   "store/reviews.list.graph.stars": "{value, plural, =0{별 0개} =1{별 1개} other{별 #개}}",
   "store/reviews.summary.add.login": "리뷰를 작성하려면 로그인하세요.",
-  "store/reviews.summary.add.title": "리뷰 추가"
+  "store/reviews.summary.add.title": "리뷰 추가",
+  "store/reviews.list.loadingReviews": "리뷰 로드 중..."
 }
