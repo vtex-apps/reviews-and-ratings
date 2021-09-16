@@ -17,7 +17,7 @@
   "admin/reviews.table.bulkActions.selectAll": "Selecionar tudo",
   "admin/reviews.table.bulkActions.selectedRows": "Linhas selecionadas",
   "admin/reviews.table.bulkActions.deleteReview": "Deletar avaliação(ões)",
-  "admin/reviews.table.empty-state": "Nada para mostar",
+  "admin/reviews.table.empty-state": "Nada para mostrar",
   "admin/reviews.table.pagination.textShowRows": "Mostrar linhas",
   "admin/reviews.table.pagination.textOf": "de",
   "admin/reviews.table.query.errorFeedback": "Houve um erro de atualização. Atualize a página ou tente novamente mais tarde.",

@@ -1,15 +1,9 @@
 {
   "name": "reviews-and-ratings",
   "vendor": "vtex",
-<<<<<<< HEAD
-  "version": "2.12.3",
-  "title": "Reviews and Ratings",
-  "description": "An app for saving and retrieving product reviews and ratings.",
-=======
   "version": "2.10.2",
   "title": "admin/reviews.reviewsandratings.title",
   "description": "admin/reviews.reviewsandratings.description",
->>>>>>> e4eb6fb (Add bg and bs translations)
   "builders": {
     "admin": "0.x",
     "store": "0.x",

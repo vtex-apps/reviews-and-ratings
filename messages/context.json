@@ -99,10 +99,7 @@
   "store/reviews.summary.add.login": "store/reviews.summary.add.login",
   "store/reviews.summary.add.title": "store/reviews.summary.add.title",
   "store/reviews.list.graph.star": "store/reviews.list.graph.star",
-<<<<<<< HEAD
-  "store/reviews.list.loadingReviews": "store/reviews.list.loadingReviews"
-}
-=======
+  "store/reviews.list.loadingReviews": "store/reviews.list.loadingReviews",
   "admin/reviews.reviewsandratings.title": "admin/reviews.reviewsandratings.title",
   "admin/reviews.reviewsandratings.description": "admin/reviews.reviewsandratings.description",
   "admin/reviews.allowsAnonymousReviews.title": "admin/reviews.allowsAnonymousReviews.title",
@@ -122,4 +119,3 @@
   "admin/reviews.displaySummaryTotalReviews.title": "admin/reviews.displaySummaryTotalReviews.title",
   "admin/reviews.displaySummaryAddButton.title": "admin/reviews.displaySummaryAddButton.title"
 }
->>>>>>> e4eb6fb (Add bg and bs translations)
