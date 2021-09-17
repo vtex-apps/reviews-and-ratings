@@ -11,7 +11,7 @@ namespace ReviewsRatings.GraphQL.Types
         {
             Name = "ReviewInput";
             Field(x => x.Id, nullable: true);
-            Field(x => x.CacheId, nullable: true);
+            //Field(x => x.CacheId, nullable: true);
             Field(x => x.ProductId, nullable: true);
             Field(x => x.Rating, nullable: true);
             Field(x => x.Title, nullable: true);

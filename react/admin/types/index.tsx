@@ -2,7 +2,6 @@ import { ApolloError } from 'apollo-client'
 
 export interface Review {
   id: string
-  cacheId: string
   productId: string
   rating: number
   title: string

@@ -6,9 +6,9 @@
 
     public interface IProductReviewRepository
     {
-        Task<IList<Review>> GetProductReviewsAsync(string productId);
+        Task<IList<LegacyReview>> GetProductReviewsAsync(string productId);
 
-        Task SaveProductReviewsAsync(string productId, IList<Review> productReviews);
+        Task SaveProductReviewsAsync(string productId, IList<LegacyReview> productReviews);
 
         Task<IDictionary<int, string>> LoadLookupAsync();
 
@@ -21,5 +21,10 @@
         Task<VtexOrder> GetOrderInformation(string orderId);
 
         Task<VtexOrderList> ListOrders(string queryString);
+
+        Task<bool> VerifySchema();
+        Task<IList<Review>> GetProductReviewsMD(string searchQuery);
+        Task<bool> DeleteProductReviewMD(string documentId);
+        Task<bool> SaveProductReviewMD(Review review);
     }
 }

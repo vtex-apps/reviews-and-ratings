@@ -1,6 +1,5 @@
 type Review {
-  id: ID!
-  cacheId: ID!
+  id: String!
   productId: String!
   rating: Int!
   title: String
@@ -20,8 +19,7 @@ type ReviewsResult {
 }
 
 type Data {
-  id: ID!
-  cacheId: ID!
+  id: String!
   productId: String!
   rating: Int!
   title: String
@@ -88,8 +86,7 @@ type Query {
 # Mutations
 
 input ReviewInput {
-  id: ID
-  cacheId: ID
+  id: String
   productId: String!
   rating: Int!
   title: String
@@ -100,8 +97,7 @@ input ReviewInput {
 }
 
 input EditReviewInput {
-  id: ID
-  cacheId: ID
+  id: String
   productId: String
   rating: Int
   title: String
@@ -114,7 +110,7 @@ input EditReviewInput {
 
 type Mutation {
   newReview(review: ReviewInput!): Review
-  editReview(id: ID!, review: EditReviewInput!): Review
-  deleteReview(ids: [ID!]): Boolean
-  moderateReview(ids: [ID!], approved: Boolean!): Boolean
+  editReview(id: String!, review: EditReviewInput!): Review
+  deleteReview(ids: [String!]): Boolean
+  moderateReview(ids: [String!], approved: Boolean!): Boolean
 }

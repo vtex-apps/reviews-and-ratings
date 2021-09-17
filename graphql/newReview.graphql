@@ -1,7 +1,6 @@
 mutation NewReview($review: ReviewInput!) {
   newReview(review: $review) {
     id
-    cacheId
     productId
     rating
     title

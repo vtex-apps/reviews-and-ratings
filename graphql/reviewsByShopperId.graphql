@@ -11,7 +11,6 @@ query ReviewsByShopperId(
     orderBy: $orderBy
   ) {
     id
-    cacheId
     productId
     rating
     title

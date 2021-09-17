@@ -23,8 +23,7 @@ import AverageRatingByProductId from '../graphql/averageRatingByProductId.graphq
 import ReviewsGraph from './ReviewsGraph'
 
 interface Review {
-  id: number
-  cacheId: number
+  id: string
   productId: string
   rating: number
   title: string

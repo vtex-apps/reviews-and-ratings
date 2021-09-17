@@ -16,6 +16,9 @@
     {
         private const string REVIEWS_BUCKET = "productReviews";
         private const string LOOKUP = "productLookup";
+        private const string DATA_ENTITY = "productReviews";
+        private const string SCHEMA = "reviewsSchema";
+        private const string SCHEMA_JSON = "{\"name\":\"reviewsSchema\",\"properties\":{\"productId\":{\"type\":\"string\",\"title\":\"productId\"},\"rating\":{\"type\":[\"integer\",\"null\"],\"title\":\"rating\"},\"title\":{\"type\":[\"string\",\"null\"],\"title\":\"title\"},\"text\":{\"type\":[\"string\",\"null\"],\"title\":\"text\"},\"reviewerName\":{\"type\":[\"string\",\"null\"],\"title\":\"reviewerName\"},\"shopperId\":{\"type\":[\"string\",\"null\"],\"title\":\"shopperId\"},\"reviewDateTime\":{\"type\":\"string\",\"title\":\"reviewDateTime\"},\"verifiedPurchaser\":{\"type\":\"boolean\",\"title\":\"verifiedPurchaser\"},\"sku\":{\"type\":[\"string\",\"null\"],\"title\":\"sku\"},\"approved\":{\"type\":\"boolean\",\"title\":\"approved\"},\"location\":{\"type\":[\"string\",\"null\"],\"title\":\"location\"}},\"v-indexed\":[\"productId\",\"shopperId\",\"approved\"],\"v-security\":{\"allowGetAll\":true}}";
         private const string HEADER_VTEX_CREDENTIAL = "X-Vtex-Credential";
         private const string HEADER_VTEX_WORKSPACE = "X-Vtex-Workspace";
         private const string HEADER_VTEX_ACCOUNT = "X-Vtex-Account";
@@ -56,12 +59,13 @@
         }
 
 
-        public async Task<IList<Review>> GetProductReviewsAsync(string productId)
+        public async Task<IList<LegacyReview>> GetProductReviewsAsync(string productId)
         {
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
                 RequestUri = new Uri($"http://infra.io.vtex.com/vbase/v2/{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_ACCOUNT]}/{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_WORKSPACE]}/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{productId}"),
+                //RequestUri = new Uri($"http://infra.io.vtex.com/vbase/v2/{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_ACCOUNT]}/master/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{productId}"),
             };
 
             string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
@@ -88,10 +92,10 @@
                 _context.Vtex.Logger.Error("GetProductReviewsAsync", null, "Request Error", ex);
             }
 
-            IList<Review> productReviews = null;
+            IList<LegacyReview> productReviews = null;
             try
             {
-                productReviews = JsonConvert.DeserializeObject<IList<Review>>(responseContent);
+                productReviews = JsonConvert.DeserializeObject<IList<LegacyReview>>(responseContent);
             }
             catch (Exception ex)
             {
@@ -102,11 +106,11 @@
             return productReviews;
         }
 
-        public async Task SaveProductReviewsAsync(string productId, IList<Review> productReviews)
+        public async Task SaveProductReviewsAsync(string productId, IList<LegacyReview> productReviews)
         {
             if (productReviews == null)
             {
-                productReviews = new List<Review>();
+                productReviews = new List<LegacyReview>();
             }
 
             var jsonSerializedProducReviews = JsonConvert.SerializeObject(productReviews);
@@ -142,6 +146,7 @@
             {
                 Method = HttpMethod.Get,
                 RequestUri = new Uri($"http://infra.io.vtex.com/vbase/v2/{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_ACCOUNT]}/{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_WORKSPACE]}/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{LOOKUP}"),
+                //RequestUri = new Uri($"http://infra.io.vtex.com/vbase/v2/{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_ACCOUNT]}/master/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{LOOKUP}"),
             };
 
             string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
@@ -184,6 +189,7 @@
 
         public async Task SaveLookupAsync(IDictionary<int, string> lookupDictionary)
         {
+            return;
             if (lookupDictionary == null)
             {
                 lookupDictionary = new Dictionary<int, string>();
@@ -413,6 +419,139 @@
             }
 
             return vtexOrderList;
+        }
+
+        public async Task<bool> VerifySchema()
+        {
+            // https://{{accountName}}.vtexcommercestable.com.br/api/dataentities/{{data_entity_name}}/schemas/{{schema_name}}
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri($"https://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/schemas/{SCHEMA}")
+            };
+
+            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+            if (authToken != null)
+            {
+                request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
+                request.Headers.Add(VTEX_ID_HEADER_NAME, authToken);
+                request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, authToken);
+            }
+
+            var client = _clientFactory.CreateClient();
+            var response = await client.SendAsync(request);
+            string responseContent = await response.Content.ReadAsStringAsync();
+            //Console.WriteLine($"VerifySchema [{response.StatusCode}] {responseContent}");
+            //_context.Vtex.Logger.Debug("VerifySchema", null, $"[{response.StatusCode}] {responseContent}");
+
+            if (response.IsSuccessStatusCode && !responseContent.Equals(SCHEMA_JSON))
+            {
+                request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Put,
+                    RequestUri = new Uri($"https://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/schemas/{SCHEMA}"),
+                    Content = new StringContent(SCHEMA_JSON, Encoding.UTF8, APPLICATION_JSON)
+                };
+
+                if (authToken != null)
+                {
+                    request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
+                    request.Headers.Add(VTEX_ID_HEADER_NAME, authToken);
+                    request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, authToken);
+                }
+
+                response = await client.SendAsync(request);
+                responseContent = await response.Content.ReadAsStringAsync();
+
+                Console.WriteLine($"Applying Schema [{response.StatusCode}] {responseContent}");
+                _context.Vtex.Logger.Debug("VerifySchema", null, $"Applying Schema [{response.StatusCode}] {responseContent}");
+            }
+
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<IList<Review>> GetProductReviewsMD(string searchQuery)
+        {
+            IList<Review> reviews = null;
+
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/search?_fields=_all&_schema={SCHEMA}&{searchQuery}")
+            };
+
+            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+            if (authToken != null)
+            {
+                request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
+                request.Headers.Add(VTEX_ID_HEADER_NAME, authToken);
+                request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, authToken);
+            }
+
+            var client = _clientFactory.CreateClient();
+            var response = await client.SendAsync(request);
+            string responseContent = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($" - GetProductReviewsMD '{searchQuery}' [{response.StatusCode}] '{responseContent}'");
+            if (response.IsSuccessStatusCode)
+            {
+                reviews = JsonConvert.DeserializeObject<IList<Review>>(responseContent);
+            }
+
+            return reviews;
+        }
+
+        public async Task<bool> DeleteProductReviewMD(string documentId)
+        {
+            // DELETE https://{accountName}.{environment}.com.br/api/dataentities/data_entity_name/documents/id
+
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/documents/{documentId}")
+            };
+
+            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+            if (authToken != null)
+            {
+                request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
+                request.Headers.Add(VTEX_ID_HEADER_NAME, authToken);
+                request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, authToken);
+            }
+
+            var client = _clientFactory.CreateClient();
+            var response = await client.SendAsync(request);
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> SaveProductReviewMD(Review review)
+        {
+            // PATCH https://{{accountName}}.vtexcommercestable.com.br/api/dataentities/{{data_entity_name}}/documents
+
+            var jsonSerializedReview = JsonConvert.SerializeObject(review);
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Put,
+                RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/documents?_schema={SCHEMA}"),
+                Content = new StringContent(jsonSerializedReview, Encoding.UTF8, APPLICATION_JSON)
+            };
+
+            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+            if (authToken != null)
+            {
+                request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
+                request.Headers.Add(VTEX_ID_HEADER_NAME, authToken);
+                request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, authToken);
+            }
+
+            var client = _clientFactory.CreateClient();
+            var response = await client.SendAsync(request);
+            string responseContent = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($" - SaveProductReviewMD  [{response.StatusCode}] '{responseContent}'\n{jsonSerializedReview}");
+            _context.Vtex.Logger.Debug("SaveProductReview", null, $"[{response.StatusCode}] '{responseContent}'\n{jsonSerializedReview}");
+
+            return response.IsSuccessStatusCode;
         }
     }
 }

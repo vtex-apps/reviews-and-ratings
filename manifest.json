@@ -1,7 +1,7 @@
 {
   "name": "reviews-and-ratings",
   "vendor": "vtex",
-  "version": "2.12.3",
+  "version": "2.12.4-beta",
   "title": "Reviews and Ratings",
   "description": "An app for saving and retrieving product reviews and ratings.",
   "builders": {
@@ -126,6 +126,9 @@
     },
     {
       "name": "ADMIN_DS"
+    },
+    {
+      "name": "POWER_USER_DS"
     },
     {
       "name": "AcessaTodosPedidos"
