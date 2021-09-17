@@ -463,7 +463,7 @@
                 response = await client.SendAsync(request);
                 responseContent = await response.Content.ReadAsStringAsync();
 
-                Console.WriteLine($"Applying Schema [{response.StatusCode}] {responseContent}");
+                //Console.WriteLine($"Applying Schema [{response.StatusCode}] {responseContent}");
                 _context.Vtex.Logger.Debug("VerifySchema", null, $"Applying Schema [{response.StatusCode}] {responseContent}");
             }
 
@@ -491,7 +491,8 @@
             var client = _clientFactory.CreateClient();
             var response = await client.SendAsync(request);
             string responseContent = await response.Content.ReadAsStringAsync();
-            Console.WriteLine($" - GetProductReviewsMD '{searchQuery}' [{response.StatusCode}] '{responseContent}'");
+            //Console.WriteLine($" - GetProductReviewsMD '{searchQuery}' [{response.StatusCode}] '{responseContent}'");
+            //Console.WriteLine($" - GetProductReviewsMD '{searchQuery}' [{response.StatusCode}] ");
             if (response.IsSuccessStatusCode)
             {
                 reviews = JsonConvert.DeserializeObject<IList<Review>>(responseContent);
@@ -548,7 +549,7 @@
             var client = _clientFactory.CreateClient();
             var response = await client.SendAsync(request);
             string responseContent = await response.Content.ReadAsStringAsync();
-            Console.WriteLine($" - SaveProductReviewMD  [{response.StatusCode}] '{responseContent}'\n{jsonSerializedReview}");
+            //Console.WriteLine($" - SaveProductReviewMD  [{response.StatusCode}] '{responseContent}'\n{jsonSerializedReview}");
             _context.Vtex.Logger.Debug("SaveProductReview", null, $"[{response.StatusCode}] '{responseContent}'\n{jsonSerializedReview}");
 
             return response.IsSuccessStatusCode;

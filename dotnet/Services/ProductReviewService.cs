@@ -31,14 +31,18 @@
                             throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<bool> DeleteLegacyReview(int[] ids)
+        public async Task<bool> DeleteLegacyReview(int[] ids, string productId = null)
         {
             bool retval = true;
             IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
-            string productId = string.Empty;
             foreach (int id in ids)
             {
-                if (lookup.TryGetValue(id, out productId))
+                if (string.IsNullOrEmpty(productId))
+                {
+                    lookup.TryGetValue(id, out productId);
+                }
+
+                if (!string.IsNullOrEmpty(productId))
                 {
                     IList<LegacyReview> reviews = await this._productReviewRepository.GetProductReviewsAsync(productId);
                     LegacyReview reviewToRemove = reviews.Where(r => r.Id == id).FirstOrDefault();
@@ -626,7 +630,7 @@
                         Review result = await this.NewReview(newReview, false);
                         if (result != null)
                         {
-                            await this.DeleteLegacyReview(new[] { review.Id });
+                            await this.DeleteLegacyReview(new[] { review.Id }, productId);
                         }
                         else
                         {
