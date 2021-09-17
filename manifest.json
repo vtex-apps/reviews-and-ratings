@@ -2,8 +2,8 @@
   "name": "reviews-and-ratings",
   "vendor": "vtex",
   "version": "2.12.4",
-  "title": "Reviews and Ratings",
-  "description": "An app for saving and retrieving product reviews and ratings.",
+  "title": "admin/reviews.reviewsandratings.title",
+  "description": "admin/reviews.reviewsandratings.description",
   "builders": {
     "admin": "0.x",
     "store": "0.x",
@@ -37,36 +37,36 @@
     ]
   },
   "settingsSchema": {
-    "title": "Reviews and Ratings",
+    "title": "admin/reviews.reviewsandratings.title",
     "type": "object",
     "properties": {
       "allowAnonymousReviews": {
-        "title": "Allow Anonymous Reviews",
-        "description": "Allow shoppers to submit reviews even if they are not logged in",
+        "title": "admin/reviews.allowsAnonymousReviews.title",
+        "description": "admin/reviews.allowsAnonymousReviews.description",
         "type": "boolean",
         "default": false
       },
       "requireApproval": {
-        "title": "Require Admin Approval",
-        "description": "Require administrator approval before newly submitted reviews are displayed",
+        "title": "admin/reviews.requireApproval.title",
+        "description": "admin/reviews.requireApproval.description",
         "type": "boolean",
         "default": false
       },
       "useLocation": {
-        "title": "Ask for Reviewer's Location",
-        "description": "Include a field for reviewer to input their location when submitting review",
+        "title": "admin/reviews.useLocation.title",
+        "description": "admin/reviews.useLocation.description",
         "type": "boolean",
         "default": false
       },
       "defaultOpen": {
-        "title": "Default all review accordions to open",
-        "description": "All review tabs on product page will default to open with review text truncated to x characters",
+        "title": "admin/reviews.defaultOpen.title",
+        "description": "admin/reviews.defaultOpen.description",
         "type": "boolean",
         "default": true
       },
       "defaultOpenCount": {
-        "title": "Number of open review accordions",
-        "description": "Specified number of review tabs on product page will default to open",
+        "title": "admin/reviews.defaultOpenCount.tittle",
+        "description": "admin/reviews.defaultOpenCount.description",
         "type": "string",
         "enum": [
           "0",
@@ -84,13 +84,13 @@
         "default": "0"
       },
       "showGraph": {
-        "title": "Display graph",
-        "description": "Display the reviews graph on product page",
+        "title": "admin/reviews.showGraph.title",
+        "description": "admin/reviews.showGraph.description",
         "type": "boolean",
         "default": false
       },
       "displaySummaryIfNone": {
-        "title": "Display stars in product-rating-summary if there are no reviews",
+        "title": "admin/reviews.displaySummaryIfNone.title",
         "type": "boolean",
         "default": false
       },
@@ -100,12 +100,12 @@
         "default": false
       },
       "displaySummaryTotalReviews": {
-        "title": "Display total reviews number on product-rating-summary block",
+        "title": "admin/reviews.displaySummaryTotalReviews.title",
         "type": "boolean",
         "default": true
       },
       "displaySummaryAddButton": {
-        "title": "Display `Add review` button on product-rating-summary block",
+        "title": "admin/reviews.displaySummaryAddButton.title",
         "type": "boolean",
         "default": false
       }
