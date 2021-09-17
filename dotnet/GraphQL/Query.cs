@@ -24,6 +24,7 @@ namespace ReviewsRatings.GraphQL
                 ),
                 resolve: async context =>
                 {
+                    //Console.WriteLine("! QUERY REVIEW !");
                     return await context.TryAsyncResolve(
                         async c => await productReviewService.GetReview(context.GetArgument<int>("id")));
                 }
@@ -41,6 +42,7 @@ namespace ReviewsRatings.GraphQL
                 ),
                 resolve: async context =>
                 {
+                    //Console.WriteLine("! QUERY REVIEWS !");
                     string searchTerm = context.GetArgument<string>("searchTerm");
                     int from = context.GetArgument<int>("from");
                     int to = context.GetArgument<int>("to");
@@ -73,6 +75,7 @@ namespace ReviewsRatings.GraphQL
                 ),
                 resolve: async context =>
                 {
+                    //Console.WriteLine("! QUERY REVIEWS BY PRODUCT ID !");
                     string productId = context.GetArgument<string>("productId");
                     string searchTerm = context.GetArgument<string>("searchTerm");
                     int from = context.GetArgument<int>("from");
@@ -102,6 +105,7 @@ namespace ReviewsRatings.GraphQL
                     ),
                 resolve: async context =>
                 {
+                    //Console.WriteLine("! QUERY AVERAGE RATING !");
                     return await context.TryAsyncResolve(
                         async c => await productReviewService.GetAverageRatingByProductId(context.GetArgument<string>("productId")));
                 }
@@ -114,6 +118,7 @@ namespace ReviewsRatings.GraphQL
                     ),
                 resolve: async context =>
                 {
+                    //Console.WriteLine("! QUERY TOTAL REVIEWS !");
                     int count = 0;
                     var searchResult = await productReviewService.GetReviewsByProductId(context.GetArgument<string>("productId"));
                     if (searchResult != null && searchResult.Count > 0)

@@ -32,7 +32,7 @@ namespace ReviewsRatings.GraphQL
                 ),
                 resolve: context =>
                 {
-                    var id = context.GetArgument<int>("id");
+                    var id = context.GetArgument<string>("id");
                     var review = context.GetArgument<Review>("review");
                     review.Id = id;
                     return productReviewService.EditReview(review);
@@ -45,7 +45,7 @@ namespace ReviewsRatings.GraphQL
                 ),
                 resolve: context =>
                 {
-                    var ids = context.GetArgument<int[]>("ids");
+                    var ids = context.GetArgument<string[]>("ids");
                     return productReviewService.DeleteReview(ids);
                 });
 
@@ -57,7 +57,7 @@ namespace ReviewsRatings.GraphQL
                 ),
                 resolve: context =>
                 {
-                    var ids = context.GetArgument<int[]>("ids");
+                    var ids = context.GetArgument<string[]>("ids");
                     var approved = context.GetArgument<bool>("approved");
                     return productReviewService.ModerateReview(ids, approved);
                 });

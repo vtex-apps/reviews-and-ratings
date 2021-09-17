@@ -111,7 +111,7 @@ namespace ReviewsRatings.Controllers
                         }
 
                         IList<Review> reviews = JsonConvert.DeserializeObject<IList<Review>>(bodyAsText);
-                        List<int> ids = new List<int>();
+                        List<string> ids = new List<string>();
                         foreach (Review review in reviews)
                         {
                             var reviewsResponse = await this._productReviewsService.NewReview(review, false);
@@ -124,7 +124,7 @@ namespace ReviewsRatings.Controllers
             }
             else if ("delete".Equals(HttpContext.Request.Method, StringComparison.OrdinalIgnoreCase))
             {
-                int[] ids;
+                string[] ids;
                 switch (requestedAction)
                 {
                     case REVIEW:
@@ -138,8 +138,8 @@ namespace ReviewsRatings.Controllers
                             return BadRequest("Missing parameter.");
                         }
 
-                        ids = new int[1];
-                        ids[0] = int.Parse(id);
+                        ids = new string[1];
+                        ids[0] = id;
                         return Json(await this._productReviewsService.DeleteReview(ids));
                         break;
                     case REVIEWS:
@@ -149,7 +149,7 @@ namespace ReviewsRatings.Controllers
                         }
 
                         string bodyAsText = await new System.IO.StreamReader(HttpContext.Request.Body).ReadToEndAsync();
-                        ids = JsonConvert.DeserializeObject<int[]>(bodyAsText);
+                        ids = JsonConvert.DeserializeObject<string[]>(bodyAsText);
                         return Json(await this._productReviewsService.DeleteReview(ids));
                         break;
                 }
@@ -251,6 +251,32 @@ namespace ReviewsRatings.Controllers
             await _productReviewsService.ClearData();
 
             return Json("Done");
+        }
+
+        public async Task<IActionResult> VerifySchema()
+        {
+            Response.Headers.Add("Cache-Control", "no-cache");
+            bool result = await _productReviewsService.VerifySchema();
+
+            return Json(result);
+        }
+
+        public async Task<IActionResult> MigrateData()
+        {
+            Response.Headers.Add("Cache-Control", "no-cache");
+            string result = string.Empty;
+            if ("post".Equals(HttpContext.Request.Method, StringComparison.OrdinalIgnoreCase))
+            {
+                string bodyAsText = await new System.IO.StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+                List<string> productIds = JsonConvert.DeserializeObject<List<string>>(bodyAsText);
+                result = await _productReviewsService.MigrateData(productIds);
+            }
+            else if ("get".Equals(HttpContext.Request.Method, StringComparison.OrdinalIgnoreCase))
+            {
+                result = await _productReviewsService.MigrateData();
+            }
+
+            return Json(result);
         }
     }
 }

@@ -22,8 +22,8 @@
                 review.VerifiedPurchaser = (bool)jo["Approved"];
             }
 
-            review.CacheId = (int)jo["CacheId"];
-            review.Id = (int)jo["Id"];
+            //review.CacheId = (int)jo["CacheId"];
+            //review.Id = (int)jo["Id"];
             review.Location = jo["Location"] != null ? (string)jo["Location"] : null;
             review.ProductId = (string)jo["ProductId"];
             review.Rating = (int)jo["Rating"];

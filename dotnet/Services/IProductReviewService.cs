@@ -22,13 +22,13 @@
 
         Task<Review> EditReview(Review review);
 
-        Task<bool> DeleteReview(int[] ids);
+        Task<bool> DeleteReview(string[] ids);
 
         Task<IList<Review>> GetReviewsByShopperId(string shopperId);
 
         Task ClearData();
 
-        Task<bool> ModerateReview(int[] ids, bool approved);
+        Task<bool> ModerateReview(string[] ids, bool approved);
 
         Task<bool> HasShopperReviewed(string shopperId, string productId);
 
@@ -43,5 +43,10 @@
         Task<bool> ValidateKeyAndToken(string key, string token, string baseUrl);
 
         Task<bool> ShopperHasPurchasedProduct(string shopperId, string productId);
+
+        Task<bool> VerifySchema();
+
+        Task<string> MigrateData();
+        Task<string> MigrateData(List<string> productIds);
     }
 }
