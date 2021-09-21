@@ -57,7 +57,10 @@
                 }
 
                 // also remove the reference to the review from the loopup
-                lookup.Remove(id);
+                if (lookup != null && lookup.Keys.Contains(id))
+                {
+                    lookup.Remove(id);
+                }
             }
 
             await _productReviewRepository.SaveLookupAsync(lookup);
@@ -564,7 +567,7 @@
         {
             Review newReview = new Review
             {
-                Approved = review.Approved,
+                Approved = review.Approved ?? false,
                 Id = review.Id.ToString(),
                 Location = review.Location,
                 ProductId = review.ProductId,
@@ -575,7 +578,7 @@
                 Sku = review.Sku,
                 Text = review.Text,
                 Title = review.Title,
-                VerifiedPurchaser = review.VerifiedPurchaser
+                VerifiedPurchaser = review.VerifiedPurchaser ?? false
             };
 
             return newReview;
@@ -625,16 +628,30 @@
                 {
                     foreach (LegacyReview review in reviews)
                     {
-                        sb.AppendLine($"MigrateData {review.Id} {review.ProductId} {review.ShopperId}");
-                        Review newReview = await ConvertLegacyReview(review);
-                        Review result = await this.NewReview(newReview, false);
-                        if (result != null)
+                        try
                         {
-                            await this.DeleteLegacyReview(new[] { review.Id }, productId);
+                            sb.AppendLine($"MigrateData {review.Id} {review.ProductId} {review.ShopperId}");
+                            Review newReview = await ConvertLegacyReview(review);
+                            Review result = await this.NewReview(newReview, false);
+                            if (result != null)
+                            {
+                                try
+                                {
+                                    await this.DeleteLegacyReview(new[] { review.Id }, productId);
+                                }
+                                catch(Exception ex)
+                                {
+                                    sb.AppendLine($"Error Deleting Review {review.Id} : {ex.Message}");
+                                }
+                            }
+                            else
+                            {
+                                sb.AppendLine($"Did not save review {review.Id}");
+                            }
                         }
-                        else
+                        catch(Exception ex)
                         {
-                            sb.AppendLine($"Did not save review {review.Id}");
+                            sb.AppendLine($"Error Migrating {review.Id} {review.ProductId} {review.ShopperId} : {ex.Message}");
                         }
                     }
                 }
