@@ -1,7 +1,7 @@
 {
   "name": "reviews-and-ratings",
   "vendor": "vtex",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "title": "admin/reviews.reviewsandratings.title",
   "description": "admin/reviews.reviewsandratings.description",
   "builders": {
