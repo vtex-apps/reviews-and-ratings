@@ -267,13 +267,27 @@ namespace ReviewsRatings.Controllers
             string result = string.Empty;
             if ("post".Equals(HttpContext.Request.Method, StringComparison.OrdinalIgnoreCase))
             {
-                string bodyAsText = await new System.IO.StreamReader(HttpContext.Request.Body).ReadToEndAsync();
-                List<string> productIds = JsonConvert.DeserializeObject<List<string>>(bodyAsText);
-                result = await _productReviewsService.MigrateData(productIds);
+                try
+                {
+                    string bodyAsText = await new System.IO.StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+                    List<string> productIds = JsonConvert.DeserializeObject<List<string>>(bodyAsText);
+                    result = await _productReviewsService.MigrateData(productIds);
+                }
+                catch(Exception ex)
+                {
+                    result = $"Error migrating data {ex.Message}";
+                }
             }
             else if ("get".Equals(HttpContext.Request.Method, StringComparison.OrdinalIgnoreCase))
             {
-                result = await _productReviewsService.MigrateData();
+                try
+                {
+                    result = await _productReviewsService.MigrateData();
+                }
+                catch (Exception ex)
+                {
+                    result = $"Error migrating data {ex.Message}";
+                }
             }
 
             return Json(result);
