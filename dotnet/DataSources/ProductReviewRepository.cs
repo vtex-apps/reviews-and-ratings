@@ -480,6 +480,8 @@
                 RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/search?_fields=_all&_schema={SCHEMA}&{searchQuery}")
             };
 
+            request.Headers.Add("REST-Range", "resources=0-300");
+
             string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
             if (authToken != null)
             {
@@ -549,7 +551,7 @@
             var client = _clientFactory.CreateClient();
             var response = await client.SendAsync(request);
             string responseContent = await response.Content.ReadAsStringAsync();
-            //Console.WriteLine($" - SaveProductReviewMD  [{response.StatusCode}] '{responseContent}'\n{jsonSerializedReview}");
+            Console.WriteLine($" - SaveProductReviewMD  [{response.StatusCode}] '{responseContent}'\n{jsonSerializedReview}");
             _context.Vtex.Logger.Debug("SaveProductReview", null, $"[{response.StatusCode}] '{responseContent}'\n{jsonSerializedReview}");
 
             return response.IsSuccessStatusCode;

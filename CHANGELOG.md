@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Added REST-Range header to search
+
 ## [3.0.1] - 2021-09-21
 
 ### Fixed
