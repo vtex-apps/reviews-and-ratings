@@ -172,6 +172,7 @@ namespace ReviewsRatings.Controllers
             }
             else if ("get".Equals(HttpContext.Request.Method, StringComparison.OrdinalIgnoreCase))
             {
+                ReviewsResponseWrapper wrapper = null;
                 var queryString = HttpContext.Request.Query;
                 var searchTerm = queryString["search_term"];
                 var fromParam = queryString["from"];
@@ -204,38 +205,31 @@ namespace ReviewsRatings.Controllers
 
                         int from = int.Parse(fromParam);
                         int to = int.Parse(toParam);
-                        IList<Review> searchResult = null;
-                        int totalCount = 0;
 
                         if (!string.IsNullOrEmpty(productId))
                         {
-                            searchResult = await _productReviewsService.GetReviewsByProductId(productId);
+                            wrapper = await _productReviewsService.GetReviewsByProductId(productId, from, to, orderBy, searchTerm);
                         }
                         else
                         {
-                            searchResult = await _productReviewsService.GetReviews();
+                            wrapper = await _productReviewsService.GetReviews(searchTerm, from, to, orderBy, status);
                         }
-
-                        IList<Review> searchData = await _productReviewsService.FilterReviews(searchResult, searchTerm, orderBy, status);
-                        totalCount = searchData.Count;
-                        searchData = await _productReviewsService.LimitReviews(searchData, from, to);
 
                         SearchResponse searchResponse = new SearchResponse
                         {
-                            Data = new DataElement { data = searchData },
-                            Range = new SearchRange { From = from, To = to, Total = totalCount }
+                            Data = new DataElement { data = wrapper.Reviews },
+                            Range = wrapper.Range
                         };
 
                         return Json(searchResponse);
                         break;
                     case RATING:
                         decimal average = await _productReviewsService.GetAverageRatingByProductId(id);
-                        searchResult = await _productReviewsService.GetReviewsByProductId(id);
-                        totalCount = searchResult.Count;
+                        wrapper = await _productReviewsService.GetReviewsByProductId(id);
                         RatingResponse ratingResponse = new RatingResponse
                         {
                             Average = average,
-                            TotalCount = totalCount
+                            TotalCount = wrapper.Range.Total
                         };
 
                         return Json(ratingResponse);

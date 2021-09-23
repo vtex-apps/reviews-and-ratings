@@ -2,8 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Text;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
@@ -18,7 +20,7 @@
         private const string LOOKUP = "productLookup";
         private const string DATA_ENTITY = "productReviews";
         private const string SCHEMA = "reviewsSchema";
-        private const string SCHEMA_JSON = "{\"name\":\"reviewsSchema\",\"properties\":{\"productId\":{\"type\":\"string\",\"title\":\"productId\"},\"rating\":{\"type\":[\"integer\",\"null\"],\"title\":\"rating\"},\"title\":{\"type\":[\"string\",\"null\"],\"title\":\"title\"},\"text\":{\"type\":[\"string\",\"null\"],\"title\":\"text\"},\"reviewerName\":{\"type\":[\"string\",\"null\"],\"title\":\"reviewerName\"},\"shopperId\":{\"type\":[\"string\",\"null\"],\"title\":\"shopperId\"},\"reviewDateTime\":{\"type\":\"string\",\"title\":\"reviewDateTime\"},\"verifiedPurchaser\":{\"type\":\"boolean\",\"title\":\"verifiedPurchaser\"},\"sku\":{\"type\":[\"string\",\"null\"],\"title\":\"sku\"},\"approved\":{\"type\":\"boolean\",\"title\":\"approved\"},\"location\":{\"type\":[\"string\",\"null\"],\"title\":\"location\"}},\"v-indexed\":[\"productId\",\"shopperId\",\"approved\"],\"v-security\":{\"allowGetAll\":true}}";
+        private const string SCHEMA_JSON = "{\"name\":\"reviewsSchema\",\"properties\":{\"productId\":{\"type\":\"string\",\"title\":\"productId\"},\"rating\":{\"type\":[\"integer\",\"null\"],\"title\":\"rating\"},\"title\":{\"type\":[\"string\",\"null\"],\"title\":\"title\"},\"text\":{\"type\":[\"string\",\"null\"],\"title\":\"text\"},\"reviewerName\":{\"type\":[\"string\",\"null\"],\"title\":\"reviewerName\"},\"shopperId\":{\"type\":[\"string\",\"null\"],\"title\":\"shopperId\"},\"reviewDateTime\":{\"type\":\"string\",\"title\":\"reviewDateTime\"},\"verifiedPurchaser\":{\"type\":\"boolean\",\"title\":\"verifiedPurchaser\"},\"sku\":{\"type\":[\"string\",\"null\"],\"title\":\"sku\"},\"approved\":{\"type\":\"boolean\",\"title\":\"approved\"},\"location\":{\"type\":[\"string\",\"null\"],\"title\":\"location\"}},\"v-indexed\":[\"productId\",\"shopperId\",\"approved\",\"reviewDateTime\"],\"v-security\":{\"allowGetAll\":true}}";
         private const string HEADER_VTEX_CREDENTIAL = "X-Vtex-Credential";
         private const string HEADER_VTEX_WORKSPACE = "X-Vtex-Workspace";
         private const string HEADER_VTEX_ACCOUNT = "X-Vtex-Account";
@@ -99,7 +101,6 @@
             }
             catch (Exception ex)
             {
-                //Console.WriteLine($"DeserializeObject Error: {ex.Message} ");
                 _context.Vtex.Logger.Error("GetProductReviewsAsync", null, "DeserializeObject Error", ex);
             }
 
@@ -180,7 +181,6 @@
             }
             catch (Exception ex)
             {
-                //Console.WriteLine($"DeserializeObject Error: {ex.Message} ");
                 _context.Vtex.Logger.Error("LoadLookupAsync", null, "DeserializeObject Error", ex);
             }
 
@@ -368,7 +368,6 @@
                 if (response.IsSuccessStatusCode)
                 {
                     vtexOrder = JsonConvert.DeserializeObject<VtexOrder>(responseContent);
-                    //Console.WriteLine($"GetOrderInformation: [{response.StatusCode}] ");
                 }
             }
             catch (Exception ex)
@@ -406,11 +405,6 @@
                 if (response.IsSuccessStatusCode)
                 {
                     vtexOrderList = JsonConvert.DeserializeObject<VtexOrderList>(responseContent);
-                    //Console.WriteLine($"ListOrders: [{response.StatusCode}] ");
-                }
-                else
-                {
-                    //Console.WriteLine($"ListOrders: [{response.StatusCode}] '{responseContent}'");
                 }
             }
             catch (Exception ex)
@@ -441,7 +435,6 @@
             var client = _clientFactory.CreateClient();
             var response = await client.SendAsync(request);
             string responseContent = await response.Content.ReadAsStringAsync();
-            //Console.WriteLine($"VerifySchema [{response.StatusCode}] {responseContent}");
             //_context.Vtex.Logger.Debug("VerifySchema", null, $"[{response.StatusCode}] {responseContent}");
 
             if (response.IsSuccessStatusCode && !responseContent.Equals(SCHEMA_JSON))
@@ -463,24 +456,40 @@
                 response = await client.SendAsync(request);
                 responseContent = await response.Content.ReadAsStringAsync();
 
-                //Console.WriteLine($"Applying Schema [{response.StatusCode}] {responseContent}");
                 _context.Vtex.Logger.Debug("VerifySchema", null, $"Applying Schema [{response.StatusCode}] {responseContent}");
             }
 
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<IList<Review>> GetProductReviewsMD(string searchQuery)
+        public async Task<ReviewsResponseWrapper> GetProductReviewsMD(string searchQuery, string from, string to)
         {
+            ReviewsResponseWrapper reviewsResponse = null;
             IList<Review> reviews = null;
+            string total = string.Empty;
+            string responseFrom = string.Empty;
+            string responseTo = string.Empty;
+
+            if (string.IsNullOrEmpty(from))
+                from = "0";
+            if (string.IsNullOrEmpty(to))
+                to = "300";
+            if(!string.IsNullOrEmpty(searchQuery))
+            {
+                if(!searchQuery.First().Equals('&'))
+                {
+                    searchQuery = $"&{searchQuery}";
+                }
+            }
+
 
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/search?_fields=_all&_schema={SCHEMA}&{searchQuery}")
+                RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/search?_fields=_all&_schema={SCHEMA}{searchQuery}")
             };
 
-            request.Headers.Add("REST-Range", "resources=0-300");
+            request.Headers.Add("REST-Range", $"resources={from}-{to}");
 
             string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
             if (authToken != null)
@@ -493,14 +502,39 @@
             var client = _clientFactory.CreateClient();
             var response = await client.SendAsync(request);
             string responseContent = await response.Content.ReadAsStringAsync();
-            //Console.WriteLine($" - GetProductReviewsMD '{searchQuery}' [{response.StatusCode}] '{responseContent}'");
-            //Console.WriteLine($" - GetProductReviewsMD '{searchQuery}' [{response.StatusCode}] ");
             if (response.IsSuccessStatusCode)
             {
                 reviews = JsonConvert.DeserializeObject<IList<Review>>(responseContent);
             }
 
-            return reviews;
+            HttpHeaders headers = response.Headers;
+            IEnumerable<string> values;
+            if (headers.TryGetValues("REST-Content-Range", out values))
+            {
+                // resources 0-10/168
+                string resources = values.First();
+                string[] split = resources.Split(' ');
+                string ranges = split[1];
+                string[] splitRanges = ranges.Split('/');
+                string fromTo = splitRanges[0];
+                total = splitRanges[1];
+                string[] splitFromTo = fromTo.Split('-');
+                responseFrom = splitFromTo[0];
+                responseTo = splitFromTo[1];
+            }
+
+            reviewsResponse = new ReviewsResponseWrapper
+            {
+                Reviews = reviews,
+                Range = new SearchRange
+                {
+                    From = long.Parse(responseFrom),
+                    To = long.Parse(responseTo),
+                    Total = long.Parse(total)
+                }
+            };
+
+            return reviewsResponse;
         }
 
         public async Task<bool> DeleteProductReviewMD(string documentId)
@@ -528,10 +562,10 @@
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> SaveProductReviewMD(Review review)
+        public async Task<string> SaveProductReviewMD(Review review)
         {
             // PATCH https://{{accountName}}.vtexcommercestable.com.br/api/dataentities/{{data_entity_name}}/documents
-
+            string id = string.Empty;
             var jsonSerializedReview = JsonConvert.SerializeObject(review);
             var request = new HttpRequestMessage
             {
@@ -551,10 +585,17 @@
             var client = _clientFactory.CreateClient();
             var response = await client.SendAsync(request);
             string responseContent = await response.Content.ReadAsStringAsync();
-            Console.WriteLine($" - SaveProductReviewMD  [{response.StatusCode}] '{responseContent}'\n{jsonSerializedReview}");
-            _context.Vtex.Logger.Debug("SaveProductReview", null, $"[{response.StatusCode}] '{responseContent}'\n{jsonSerializedReview}");
+            if (response.IsSuccessStatusCode)
+            {
+                dynamic savedReview = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                id = savedReview.DocumentId;
+            }
+            else
+            {
+                _context.Vtex.Logger.Warn("SaveProductReview", null, $"Did not save review [{response.StatusCode}] '{responseContent}'\n{jsonSerializedReview}");
+            }
 
-            return response.IsSuccessStatusCode;
+            return id;
         }
     }
 }

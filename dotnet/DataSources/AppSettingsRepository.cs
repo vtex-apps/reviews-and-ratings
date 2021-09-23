@@ -42,8 +42,6 @@
 
         public async Task<AppSettings> GetAppSettingAsync()
         {
-            //Console.WriteLine($"GetAppSettingAsync called with {this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_ACCOUNT]},{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_WORKSPACE]},{this._environmentVariableProvider.ApplicationName},{this._environmentVariableProvider.ApplicationVendor},{this._environmentVariableProvider.Region}");
-
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,

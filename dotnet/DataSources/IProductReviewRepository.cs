@@ -23,8 +23,8 @@
         Task<VtexOrderList> ListOrders(string queryString);
 
         Task<bool> VerifySchema();
-        Task<IList<Review>> GetProductReviewsMD(string searchQuery);
+        Task<ReviewsResponseWrapper> GetProductReviewsMD(string searchQuery, string from = null, string to = null);
         Task<bool> DeleteProductReviewMD(string documentId);
-        Task<bool> SaveProductReviewMD(Review review);
+        Task<string> SaveProductReviewMD(Review review);
     }
 }
