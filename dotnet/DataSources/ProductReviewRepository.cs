@@ -79,7 +79,7 @@
                 //_context.Vtex.Logger.Info("GetProductReviewsAsync", null, $"[{response.StatusCode}] {responseContent}");
                 if (response.StatusCode == HttpStatusCode.NotFound)
                 {
-                    _context.Vtex.Logger.Info("GetProductReviewsAsync", null, $"[{response.StatusCode}] {responseContent}");
+                    _context.Vtex.Logger.Metric("GetProductReviewsAsyncNotFound", 1, new (string, string)[]{("ProductId", productId)});
                     return null;
                 }
             }
@@ -298,7 +298,7 @@
                     }
                     else
                     {
-                        _context.Vtex.Logger.Info("ValidateKeyAndToken", null, $"[{response.StatusCode}]");
+                        _context.Vtex.Logger.Metric("ValidateKeyAndToken", 1, new []{("StatusCode", response.StatusCode.ToString())});
                     }
                 }
                 catch (Exception ex)
