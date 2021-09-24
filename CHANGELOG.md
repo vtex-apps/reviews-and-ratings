@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.12.4] - 2021-09-24
+
 ## [2.11.2] - 2021-09-24
 ### Added
 - Use short cache on GraphQL queries
