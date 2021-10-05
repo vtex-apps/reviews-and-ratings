@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- Performance improvements
+- Pagination
+
 ## [3.0.2] - 2021-09-22
 
 ### Fixed

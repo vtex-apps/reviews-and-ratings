@@ -70,8 +70,8 @@
 
         public async Task<Review> EditReview(Review review)
         {
-            IList<Review> reviews = await _productReviewRepository.GetProductReviewsMD($"id={review.Id}");
-            Review oldReview = reviews.FirstOrDefault();
+            ReviewsResponseWrapper wrapper = await _productReviewRepository.GetProductReviewsMD($"id={review.Id}");
+            Review oldReview = wrapper.Reviews.FirstOrDefault();
 
             review.Approved = review.Approved ?? oldReview.Approved;
             review.Location = string.IsNullOrEmpty(review.Location) ? oldReview.Location : review.Location;
@@ -85,9 +85,15 @@
             review.Title = string.IsNullOrEmpty(review.Title) ? oldReview.Title : review.Title;
             review.VerifiedPurchaser = review.VerifiedPurchaser ?? oldReview.VerifiedPurchaser;
 
-            bool success = await this._productReviewRepository.SaveProductReviewMD(review);
-            if (!success)
+            string id = await this._productReviewRepository.SaveProductReviewMD(review);
+            if (string.IsNullOrEmpty(id))
+            {
                 review = null;
+            }
+            else
+            {
+                review.Id = id;
+            }
 
             return review;
         }
@@ -102,7 +108,8 @@
                 searchQuery = $"{searchQuery}&approved=true";
             }
 
-            IList<Review> reviews = await this._productReviewRepository.GetProductReviewsMD(searchQuery);
+            ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD(searchQuery);
+            IList<Review> reviews = wrapper.Reviews;
             if (reviews != null)
             {
                 int numberOfReviews = reviews.Count;
@@ -119,7 +126,8 @@
         public async Task<Review> GetReview(int Id)
         {
             Review review = null;
-            IList<Review> reviews = await this._productReviewRepository.GetProductReviewsMD($"id={Id}");
+            ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD($"id={Id}");
+            IList<Review> reviews = wrapper.Reviews;
             if (reviews != null)
             {
                 review = reviews.FirstOrDefault();
@@ -275,64 +283,44 @@
         }
 
         /// query Reviews($searchTerm: String, $from: Int, $to: Int, $orderBy: String, $status: Boolean)
-        public async Task<IList<Review>> GetReviews(string searchTerm, int from, int to, string orderBy, string status)
+        public async Task<ReviewsResponseWrapper> GetReviews(string searchTerm, int from, int to, string orderBy, string status)
         {
-            IList<Review> reviews = await GetReviews();
-            reviews = await FilterReviews(reviews, searchTerm, orderBy, status);
-            reviews = await LimitReviews(reviews, from, to);
-            return reviews;
+            string searchQuery = string.Empty;
+            string statusQuery = string.Empty;
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                searchQuery = $"&_keyword={searchTerm}";
+            }
+
+            if (!string.IsNullOrEmpty(status))
+            {
+                statusQuery = $"&approved={status}";
+            }
+
+            string sortQuery = await this.GetSortQuery(orderBy);
+
+            ReviewsResponseWrapper wrapper = await _productReviewRepository.GetProductReviewsMD($"{searchQuery}{sortQuery}{statusQuery}");
+            
+            return wrapper;
         }
 
-        public async Task<IList<Review>> GetReviewsByProductId(string productId)
+        public async Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId)
         {
-            return await this.GetReviewsByProductId(productId, 0, maximumReturnedRecords, string.Empty);
+            return await this.GetReviewsByProductId(productId, 0, maximumReturnedRecords, string.Empty, string.Empty);
         }
 
-        public async Task<IList<Review>> GetReviewsByProductId(string productId, int offset, int limit, string orderBy)
+        public async Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId, int from, int to, string orderBy, string searchTerm)
         {
-            if(limit == 0)
+            string searchQuery = string.Empty;
+            string sort = await this.GetSortQuery(orderBy);
+            if (!string.IsNullOrEmpty(searchTerm))
             {
-                limit = maximumReturnedRecords;
+                searchQuery = $"&_keyword={searchTerm}";
             }
 
-            limit = Math.Min(limit, maximumReturnedRecords);
-            IList<Review> reviews = await this._productReviewRepository.GetProductReviewsMD($"productId={productId}");
-            if (reviews != null && reviews.Count > 0)
-            {
-                if (!string.IsNullOrEmpty(orderBy))
-                {
-                    string[] orderByArray = orderBy.Split(DELIMITER);
-                    PropertyInfo pi = typeof(Review).GetProperty(orderByArray[0]);
-                    if (pi != null)
-                    {
-                        bool descendingOrder = true;
-                        if (orderByArray.Length > 1)
-                        {
-                            if (orderByArray[1].ToLower().Contains("asc"))
-                            {
-                                descendingOrder = false;
-                            }
-                        }
+            ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD($"productId={productId}{sort}{searchQuery}", from.ToString(), to.ToString());
 
-                        if (descendingOrder)
-                        {
-                            reviews = reviews.OrderByDescending(x => pi.GetValue(x, null)).ToList();
-                        }
-                        else
-                        {
-                            reviews = reviews.OrderBy(x => pi.GetValue(x, null)).ToList();
-                        }
-                    }
-                }
-
-                reviews = reviews.Skip(offset).Take(limit).ToList();
-            }
-            else
-            {
-                reviews = new List<Review>();
-            }
-
-            return reviews;
+            return wrapper;
         }
 
         public async Task<Review> NewReview(Review review, bool doValidation)
@@ -419,20 +407,25 @@
                 //lookup.Add(review.Id, review.ProductId);
                 //await this._productReviewRepository.SaveLookupAsync(lookup);
 
-                success = await _productReviewRepository.SaveProductReviewMD(review);
-                if (!success)
+                string id = await this._productReviewRepository.SaveProductReviewMD(review);
+                if (string.IsNullOrEmpty(id))
+                {
                     review = null;
+                }
+                else
+                {
+                    review.Id = id;
+                }
             }
 
             return review;
         }
 
-        public async Task<IList<Review>> GetReviewsByShopperId(string shopperId)
+        public async Task<ReviewsResponseWrapper> GetReviewsByShopperId(string shopperId)
         {
-            IList<Review> reviews = await this.GetReviews();
-            reviews = reviews.Where(r => r.ShopperId == shopperId).ToList();
+            ReviewsResponseWrapper wrapper = await _productReviewRepository.GetProductReviewsMD($"shopperId={shopperId}");
 
-            return reviews;
+            return wrapper;
         }
 
         public async Task ClearData()
@@ -440,17 +433,11 @@
             IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
             if (lookup != null)
             {
-                Console.WriteLine($"lookup =  {lookup.Count}");
                 List<string> productIds = lookup.Values.Distinct().ToList();
                 foreach (string productId in productIds)
                 {
-                    Console.WriteLine($"Removing {productId}");
                     await this._productReviewRepository.SaveProductReviewsAsync(productId, null);
                 }
-            }
-            else
-            {
-                Console.WriteLine("Lookup Null!");
             }
 
             await _productReviewRepository.SaveLookupAsync(null);
@@ -482,12 +469,16 @@
             IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
             foreach (string id in ids)
             {
-                IList<Review> reviews = await this._productReviewRepository.GetProductReviewsMD($"id={id}");
-                Review reviewToModerate = reviews.Where(r => r.Id == id).FirstOrDefault();
+                ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD($"id={id}");
+                Review reviewToModerate = wrapper.Reviews.Where(r => r.Id == id).FirstOrDefault();
                 if (reviewToModerate != null)
                 {
                     reviewToModerate.Approved = approved;
-                    retval &= await this._productReviewRepository.SaveProductReviewMD(reviewToModerate);
+                    string returnedId = await this._productReviewRepository.SaveProductReviewMD(reviewToModerate);
+                    if (string.IsNullOrEmpty(returnedId))
+                    {
+                        retval = false;
+                    }
                 }
                 else
                 {
@@ -503,7 +494,8 @@
             bool retval = false;
             try
             {
-                IList<Review> reviews = await this._productReviewRepository.GetProductReviewsMD($"shopperId={shopperId}&productId={productId}");
+                ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD($"shopperId={shopperId}&productId={productId}");
+                IList<Review> reviews = wrapper.Reviews;
                 if (reviews != null && reviews.Count > 0)
                 {
                     retval = true;
@@ -664,9 +656,14 @@
             return sb.ToString();
         }
 
-        public async Task<IList<Review>> GetReviews()
+        public async Task<ReviewsResponseWrapper> GetReviews()
         {
             return await _productReviewRepository.GetProductReviewsMD(string.Empty);
+        }
+
+        public async Task<ReviewsResponseWrapper> GetReviews(int from, int to)
+        {
+            return await _productReviewRepository.GetProductReviewsMD(string.Empty, from.ToString(), to.ToString());
         }
 
         public async Task<bool> DeleteReview(string[] ids)
@@ -678,6 +675,42 @@
             }
 
             return retval;
+        }
+
+        private async Task<string> GetSortQuery(string orderBy)
+        {
+            string sort = string.Empty;
+            if (!string.IsNullOrEmpty(orderBy))
+            {
+                string[] orderByArray = orderBy.Split(DELIMITER);
+                PropertyInfo pi = typeof(Review).GetProperty(orderByArray[0]);
+                if (pi != null)
+                {
+                    bool descendingOrder = true;
+                    if (orderByArray.Length > 1)
+                    {
+                        if (orderByArray[1].ToLower().Contains("asc"))
+                        {
+                            descendingOrder = false;
+                        }
+                    }
+
+                    string fieldName = Char.ToLowerInvariant(pi.Name[0]) + pi.Name.Substring(1);
+
+                    sort = $"&_sort={fieldName}";
+
+                    if (descendingOrder)
+                    {
+                        sort = $"{sort} DESC";
+                    }
+                    else
+                    {
+                        sort = $"{sort} ASC";
+                    }
+                }
+            }
+
+            return sort;
         }
     }
 }

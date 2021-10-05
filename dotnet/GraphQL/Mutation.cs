@@ -3,6 +3,7 @@ using GraphQL.Types;
 using ReviewsRatings.GraphQL.Types;
 using ReviewsRatings.Models;
 using ReviewsRatings.Services;
+using System;
 
 namespace ReviewsRatings.GraphQL
 {

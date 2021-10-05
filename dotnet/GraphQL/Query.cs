@@ -24,7 +24,6 @@ namespace ReviewsRatings.GraphQL
                 ),
                 resolve: async context =>
                 {
-                    //Console.WriteLine("! QUERY REVIEW !");
                     return await context.TryAsyncResolve(
                         async c => await productReviewService.GetReview(context.GetArgument<int>("id")));
                 }
@@ -42,21 +41,16 @@ namespace ReviewsRatings.GraphQL
                 ),
                 resolve: async context =>
                 {
-                    //Console.WriteLine("! QUERY REVIEWS !");
                     string searchTerm = context.GetArgument<string>("searchTerm");
                     int from = context.GetArgument<int>("from");
                     int to = context.GetArgument<int>("to");
                     string orderBy = context.GetArgument<string>("orderBy");
                     string status = context.GetArgument<string>("status");
-                    var searchResult = productReviewService.GetReviews();
-                    IList<Review> searchData = await productReviewService.FilterReviews(searchResult.Result, searchTerm, orderBy, status);
-                    int totalCount = searchData.Count;
-                    searchData = await productReviewService.LimitReviews(searchData, from, to);
-                    //Console.WriteLine($"totalCount = {totalCount} : Filtered to {searchData.Count}");
+                    var searchResult = await productReviewService.GetReviews(searchTerm, from, to, orderBy, status);
                     SearchResponse searchResponse = new SearchResponse
                     {
-                        Data = new DataElement { data = searchData },
-                        Range = new SearchRange { From = from, To = to, Total = totalCount }
+                        Data = new DataElement { data = searchResult.Reviews },
+                        Range = searchResult.Range
                     };
 
                     return searchResponse;
@@ -75,7 +69,6 @@ namespace ReviewsRatings.GraphQL
                 ),
                 resolve: async context =>
                 {
-                    //Console.WriteLine("! QUERY REVIEWS BY PRODUCT ID !");
                     string productId = context.GetArgument<string>("productId");
                     string searchTerm = context.GetArgument<string>("searchTerm");
                     int from = context.GetArgument<int>("from");
@@ -83,15 +76,11 @@ namespace ReviewsRatings.GraphQL
                     string orderBy = context.GetArgument<string>("orderBy");
                     string status = context.GetArgument<string>("status");
 
-                    var searchResult = await productReviewService.GetReviewsByProductId(productId);
-                    IList<Review> searchData = await productReviewService.FilterReviews(searchResult, searchTerm, orderBy, status);
-                    int totalCount = searchData.Count;
-                    searchData = await productReviewService.LimitReviews(searchData, from, to);
-                    //Console.WriteLine($"totalCount = {totalCount} : Filtered to {searchData.Count}");
+                    var searchResult = await productReviewService.GetReviewsByProductId(productId, from, to, orderBy, searchTerm);
                     SearchResponse searchResponse = new SearchResponse
                     {
-                        Data = new DataElement { data = searchData },
-                        Range = new SearchRange { From = from, To = to, Total = totalCount }
+                        Data = new DataElement { data = searchResult.Reviews },
+                        Range = searchResult.Range
                     };
 
                     return searchResponse;
@@ -105,7 +94,6 @@ namespace ReviewsRatings.GraphQL
                     ),
                 resolve: async context =>
                 {
-                    //Console.WriteLine("! QUERY AVERAGE RATING !");
                     return await context.TryAsyncResolve(
                         async c => await productReviewService.GetAverageRatingByProductId(context.GetArgument<string>("productId")));
                 }
@@ -118,16 +106,15 @@ namespace ReviewsRatings.GraphQL
                     ),
                 resolve: async context =>
                 {
-                    //Console.WriteLine("! QUERY TOTAL REVIEWS !");
                     int count = 0;
                     var searchResult = await productReviewService.GetReviewsByProductId(context.GetArgument<string>("productId"));
-                    if (searchResult != null && searchResult.Count > 0)
+                    if (searchResult != null && searchResult.Reviews.Count > 0)
                     {
-                        count = searchResult.Count;
+                        count = searchResult.Reviews.Count;
                         AppSettings appSettings = await productReviewService.GetAppSettings();
                         if (appSettings.RequireApproval)
                         {
-                            count = searchResult.Where(x => x.Approved ?? false).ToList().Count;
+                            count = searchResult.Reviews.Where(x => x.Approved ?? false).ToList().Count;
                         }
                     }
 
@@ -154,15 +141,11 @@ namespace ReviewsRatings.GraphQL
                     string orderBy = context.GetArgument<string>("orderBy");
                     string status = context.GetArgument<string>("status");
 
-                    var searchResult = productReviewService.GetReviewsByShopperId(shopperId);
-                    IList<Review> searchData = await productReviewService.FilterReviews(searchResult.Result, searchTerm, orderBy, status);
-                    int totalCount = searchData.Count;
-                    searchData = await productReviewService.LimitReviews(searchData, from, to);
-                    //Console.WriteLine($"totalCount = {totalCount} : Filtered to {searchData.Count}");
+                    var searchResult = await productReviewService.GetReviewsByShopperId(shopperId);
                     SearchResponse searchResponse = new SearchResponse
                     {
-                        Data = new DataElement { data = searchData },
-                        Range = new SearchRange { From = from, To = to, Total = totalCount }
+                        Data = new DataElement { data = searchResult.Reviews },
+                        Range = searchResult.Range
                     };
 
                     return searchResponse;

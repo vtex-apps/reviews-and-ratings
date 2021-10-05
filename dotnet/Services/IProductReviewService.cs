@@ -6,15 +6,16 @@
 
     public interface IProductReviewService
     {
-        Task<IList<Review>> GetReviewsByProductId(string productId, int offset, int limit, string orderBy);
+        Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId, int from, int to, string orderBy, string searchTerm);
 
-        Task<IList<Review>> GetReviewsByProductId(string productId);
+        Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId);
 
         Task<Review> GetReview(int Id);
 
-        Task<IList<Review>> GetReviews();
+        Task<ReviewsResponseWrapper> GetReviews();
+        Task<ReviewsResponseWrapper> GetReviews(int from, int to);
 
-        Task<IList<Review>> GetReviews(string searchTerm, int from, int to, string orderBy, string status);
+        Task<ReviewsResponseWrapper> GetReviews(string searchTerm, int from, int to, string orderBy, string status);
 
         Task<decimal> GetAverageRatingByProductId(string productId);
 
@@ -24,7 +25,7 @@
 
         Task<bool> DeleteReview(string[] ids);
 
-        Task<IList<Review>> GetReviewsByShopperId(string shopperId);
+        Task<ReviewsResponseWrapper> GetReviewsByShopperId(string shopperId);
 
         Task ClearData();
 
