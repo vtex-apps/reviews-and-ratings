@@ -1,8 +1,23 @@
 import { FunctionComponent } from 'react'
 
+interface Runtime {
+  rootPath?: string
+  account: string
+  workspace: string
+}
+
 declare global {
+  namespace NodeJS {
+    interface Global extends Global {
+      __hostname__: string
+      __pathname__: string
+      __RUNTIME__: Runtime
+    }
+  }
   interface Window extends Window {
     __RENDER_8_SESSION__: RenderSession
+    __RUNTIME__: Runtime
+    location: Window['location']
   }
 
   interface RenderSession {
