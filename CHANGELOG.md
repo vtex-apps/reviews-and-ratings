@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Changed
-- Use the relative path to product page as id on `Product` schema for `RatingSummary` and `Reviews` blocks.
+- Use product's URI as @id on `Product` schema for `RatingSummary` and `Reviews` blocks.
 
 ## [2.12.4] - 2021-09-24
 
