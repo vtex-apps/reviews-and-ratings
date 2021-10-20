@@ -21,6 +21,7 @@ import AppSettings from '../graphql/appSettings.graphql'
 import ReviewsByProductId from '../graphql/reviewsByProductId.graphql'
 import AverageRatingByProductId from '../graphql/averageRatingByProductId.graphql'
 import ReviewsGraph from './ReviewsGraph'
+import { getBaseUrl } from './utils/baseUrl'
 
 interface Review {
   id: string
@@ -322,7 +323,7 @@ function Reviews() {
   const intl = useIntl()
   const handles = useCssHandles(CSS_HANDLES)
   const { product }: any = useProduct() ?? {}
-  const { productId, productName, link } = product ?? {}
+  const { productId, productName, linkText } = product ?? {}
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
@@ -503,6 +504,8 @@ function Reviews() {
       })
   }, [client, productId, state.from, state.to, state.sort, state.settings])
 
+  const baseUrl = getBaseUrl()
+
   return (
     <div
       className={`${handles.container} review mw8 center ph5`}
@@ -610,7 +613,7 @@ function Reviews() {
                       {JSON.stringify({
                         '@context': 'http://schema.org',
                         '@type': 'Product',
-                        '@id': link,
+                        '@id': `${baseUrl}/${linkText}/p`,
                         review: {
                           '@type': 'Review',
                           reviewRating: {
