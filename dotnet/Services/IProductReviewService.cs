@@ -27,6 +27,8 @@
 
         Task<ReviewsResponseWrapper> GetReviewsByShopperId(string shopperId);
 
+        Task<ReviewsResponseWrapper> GetReviewsByreviewDateTime(string reviewDateTime);
+
         Task ClearData();
 
         Task<bool> ModerateReview(string[] ids, bool approved);

@@ -174,6 +174,36 @@ namespace ReviewsRatings.GraphQL
                         async c => await productReviewService.GetAppSettings());
                 }
             );
+
+            FieldAsync<SearchResponseType>(
+                "reviewByreviewDateTime",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "reviewDateTime", Description = "Review DateTime" },
+                    new QueryArgument<StringGraphType> { Name = "searchTerm", Description = "Search term" },
+                    new QueryArgument<IntGraphType> { Name = "from", Description = "From" },
+                    new QueryArgument<IntGraphType> { Name = "to", Description = "To" },
+                    new QueryArgument<StringGraphType> { Name = "orderBy", Description = "Order by" },
+                    new QueryArgument<StringGraphType> { Name = "status", Description = "Status" }
+                ),
+                resolve: async context =>
+                {
+                    string reviewDateTime = context.GetArgument<string>("reviewDateTime");
+                    string searchTerm = context.GetArgument<string>("searchTerm");
+                    int from = context.GetArgument<int>("from");
+                    int to = context.GetArgument<int>("to");
+                    string orderBy = context.GetArgument<string>("orderBy");
+                    string status = context.GetArgument<string>("status");
+
+                    var searchResult = await productReviewService.GetReviewsByreviewDateTime(reviewDateTime);
+                    SearchResponse searchResponse = new SearchResponse
+                    {
+                        Data = new DataElement { data = searchResult.Reviews },
+                        Range = searchResult.Range
+                    };
+
+                    return searchResponse;
+                }
+            );
         }
     }
 }

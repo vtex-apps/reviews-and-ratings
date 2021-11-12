@@ -77,6 +77,13 @@ type Query {
     orderBy: String
     status: String
   ): ReviewsResult
+  reviewByreviewDateTime(
+    reviewDateTime: String!
+    from: Int
+    to: Int
+    orderBy: String
+    status: String
+  ): ReviewsResult
   hasShopperReviewed(shopperId: String!, productId: String!): Boolean
     @cacheControl(scope: PRIVATE)
   appSettings: AppSettings

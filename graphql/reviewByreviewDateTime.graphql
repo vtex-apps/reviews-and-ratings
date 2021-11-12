@@ -1,0 +1,24 @@
+query ReviewByreviewDateTime(
+  $reviewDateTime: String!
+  $offset: Int
+  $limit: Int
+  $orderBy: String
+) {
+  reviewByreviewDateTime(
+    reviewDateTime: $reviewDateTime
+    offset: $offset
+    limit: $limit
+    orderBy: $orderBy
+  ) {
+    id
+    productId
+    rating
+    title
+    text
+    reviewerName
+    location
+    shopperId
+    reviewDateTime
+    verifiedPurchaser
+  }
+}

@@ -24,6 +24,10 @@ export const adminReviewMessages = defineMessages({
     id: 'admin/reviews.tab.approved',
     defaultMessage: 'Approved',
   },
+  downloadTab: {
+    id: 'admin/reviews.tab.download',
+    defaultMessage: 'download',
+  },
 })
 
 export const mutationFeedbackMessages = defineMessages({

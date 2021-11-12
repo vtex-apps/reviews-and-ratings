@@ -39,6 +39,7 @@ export interface TabsTotalizersData {
   reviewsTotalizers: {
     pendingAmount: number
     acceptedAmount: number
+    downloadAmount: number
   }
 }
 

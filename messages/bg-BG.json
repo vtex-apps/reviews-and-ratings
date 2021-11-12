@@ -3,6 +3,7 @@
   "admin/reviews.settings.title": "Настройки за отзиви",
   "admin/reviews.tab.pending": "Изчакващи",
   "admin/reviews.tab.approved": "Одобрени",
+  "admin/reviews.tab.download": "Download",
   "admin/reviews.reviewSchema.review": "Отзив",
   "admin/reviews.reviewSchema.product": "Продукт",
   "admin/reviews.reviewSchema.date": "Дата",
@@ -98,6 +99,7 @@
   "store/reviews.list.graph.stars": "{value, plural, one {} =0{0 звезди} =1{1 звезда} other{# звезди}}",
   "store/reviews.summary.add.login": "Моля, влезте с потребителското си име и парола, за да напишете отзив.",
   "store/reviews.summary.add.title": "Добавяне на отзив",
+  "store/reviews.list.loadingReviews": "Loading reviews...",
   "admin/reviews.reviewsandratings.title": "Отзиви и оценки",
   "admin/reviews.reviewsandratings.description": "Приложение за спестяване и извличане на отзиви и оценки.",
   "admin/reviews.allowsAnonymousReviews.title": "Разрешаване на анонимни отзиви",
@@ -115,5 +117,11 @@
   "admin/reviews.displaySummaryIfNone.title": "Показване на звездите в обобщение за оценката на продукта, ако няма отзиви",
   "admin/reviews.displayInLineIfNone.title": "Показване на звездите в обобщение за оценката на продукта, ако няма отзиви",
   "admin/reviews.displaySummaryTotalReviews.title": "Показване на общия брой отзиви в блока за обобщение за оценката на продукта",
-  "admin/reviews.displaySummaryAddButton.title": "Показване на бутона „Добавяне на отзив“ в блока за обобщение за оценката на продукта"
+  "admin/reviews.displaySummaryAddButton.title": "Показване на бутона „Добавяне на отзив“ в блока за обобщение за оценката на продукта",
+  "admin/reviews.download.title": "Reviews Export",
+  "admin/reviews.download.icon": "Download",
+  "admin/reviews.filterFromDate": "From date",
+  "admin/reviews.filterToDate": "To date",
+  "admin/reviews.filterResults": "Apply",
+  "admin/reviews.clearFilters": "Clear"
 }

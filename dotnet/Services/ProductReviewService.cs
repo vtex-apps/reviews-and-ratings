@@ -428,6 +428,13 @@
             return wrapper;
         }
 
+         public async Task<ReviewsResponseWrapper> GetReviewsByreviewDateTime(string reviewDateTime)
+        {
+            ReviewsResponseWrapper wrapper = await _productReviewRepository.GetProductReviewsMD($"reviewDateTime={reviewDateTime}");
+
+            return wrapper;
+        }
+
         public async Task ClearData()
         {
             IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
