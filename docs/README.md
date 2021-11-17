@@ -16,9 +16,11 @@ Reviews & Ratings is a VTEX IO native solution that allows shoppers to submit re
 
 ### Step 1 - Installing the Reviews and Ratings app
 
-Using your terminal, log in to the desired VTEX account and run the following command:
+Using your terminal, log in to the desired VTEX account and run the following commands:
 
 `vtex install vtex.reviews-and-ratings@3.x`
+
+> ℹ️ _If you have already installed  `vtex.reviews-and-ratings@2.x` **you have to migrate the reviews to master data** by making this `GET` call: `https://{accountName}.{environment}.com/reviews-and-ratings/migrate-data`_
 
 ### Step 2 - Defining the app settings
 

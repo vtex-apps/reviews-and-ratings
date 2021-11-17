@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [3.1.0] - 2021-10-05
 
+### Added
+
+- Added steps to install v3 when already have v2
+
 ### Changed
 
 - Performance improvements
