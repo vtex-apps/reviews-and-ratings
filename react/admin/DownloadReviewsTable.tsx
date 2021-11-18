@@ -19,7 +19,7 @@ import {
   productSchema,
   dateSchema,
 } from './schemas'
-import { currentDate, filterDate } from './utils/dates'
+// import { currentDate, filterDate } from './utils/dates'
 import DownloadTable from './components/DownloadTable'
 
 const schema = (intl: IntlShape) => ({
@@ -39,15 +39,11 @@ const initialFilters = {
 export const DownlaodReviewsTable: FC = () => {
   const intl = useIntl()
   const [state, setState] = useState<any>({
-    time: '',
     filters: initialFilters,
-    isFiltered: false,
     loading: false,
   })
 
-  const { loading } = state
-  const { time } = state
-  const { filters } = state
+  const { filters, loading } = state
 
   const toReviewTableRowData = (review: Review) => {
     const {
@@ -81,16 +77,16 @@ export const DownlaodReviewsTable: FC = () => {
     }
   }
 
-  const getRequests = (reviewDateTime: string, resetFilters: boolean) => {
-    // const { filters } = state
+  const getRequests = (resetFilters: boolean) => {
     const useFilters = resetFilters ? initialFilters : filters
-    let where = `__reviewDateTime=${reviewDateTime}`
+    // let where = `__createdIn=${state.fromDate}`
 
     if (JSON.stringify(useFilters) === JSON.stringify(initialFilters)) {
-      setState({ isFiltered: false })
+      setState({ ...state, isFiltered: false })
     } else {
-      setState({ isFiltered: true })
+      setState({ ...state, isFiltered: true })
 
+      /*
       let startDate = '1970-01-01'
       let endDate = currentDate()
 
@@ -103,23 +99,34 @@ export const DownlaodReviewsTable: FC = () => {
           useFilters.toDate !== ''
             ? filterDate(useFilters.toDate)
             : filterDate(useFilters.fromDate)
-
-        where += `__reviewDateTime between ${startDate} AND ${endDate}`
-      }
+       // where += `__createdIn between ${startDate} AND ${endDate}` */
     }
 
-    if (where.startsWith('__')) {
-      where = where.substring(2)
-    }
+    // where = `__createdIn="${[useFilters.status]}"`
   }
+
+  /* const [getConfig, { loading: loadingConfig }] = useLazyQuery(GET_BY_ID, {
+    onCompleted: (res: any) => {
+      onChange(res.getById)
+    },
+  })
+
+  const load = (id: string) => {
+    getConfig({
+      variables: {
+        id,
+      },
+    })
+  }; */
 
   const handleResetFilters = () => {
     setState({
+      ...state,
       filters: initialFilters,
       tableIsLoading: true,
       isFiltered: false,
     })
-    getRequests(time, true)
+    getRequests(true)
   }
 
   const handleApplyFilters = () => {
@@ -128,12 +135,13 @@ export const DownlaodReviewsTable: FC = () => {
     if (JSON.stringify(filters) === JSON.stringify(initialFilters)) {
       handleResetFilters()
     } else {
-      getRequests(time, false)
+      getRequests(false)
     }
   }
 
   const filterFromDate = (val: string) => {
     setState((prevState: any) => ({
+      ...state,
       filters: {
         ...prevState.filters,
         fromDate: val,
@@ -150,6 +158,7 @@ export const DownlaodReviewsTable: FC = () => {
 
   const filterToDate = (val: string) => {
     setState((prevState: any) => ({
+      ...state,
       filters: {
         ...prevState.filters,
         toDate: val,
@@ -164,6 +173,7 @@ export const DownlaodReviewsTable: FC = () => {
     }, 20000)
   }
 
+  // console.log("test", state, filters)
   return (
     <Layout>
       <PageBlock variation="full">

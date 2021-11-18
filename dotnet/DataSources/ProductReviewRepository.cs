@@ -537,6 +537,81 @@
             return reviewsResponse;
         }
 
+        public async Task<ReviewsResponseWrapper> GetRangeReviewsMD(string fromDate, string toDate)
+        {
+            ReviewsResponseWrapper reviewsResponse = null;
+            IList<Review> reviews = null;
+            string total = string.Empty;
+            string responseFrom = string.Empty;
+            string responseTo = string.Empty;
+
+            /*if (string.IsNullOrEmpty(from))
+                from = "0";
+            if (string.IsNullOrEmpty(to))
+                to = "300";
+            if(!string.IsNullOrEmpty(searchQuery))
+            {
+                if(!searchQuery.First().Equals('&'))
+                {
+                    searchQuery = $"&{searchQuery}";
+                }
+            }*/
+
+
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/search?_where=_schema={SCHEMA} between {fromDate} AND {toDate}")
+            };
+
+            request.Headers.Add("REST-Range", $"resources={fromDate}-{toDate}");
+
+            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+            if (authToken != null)
+            {
+                request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
+                request.Headers.Add(VTEX_ID_HEADER_NAME, authToken);
+                request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, authToken);
+            }
+
+            var client = _clientFactory.CreateClient();
+            var response = await client.SendAsync(request);
+            string responseContent = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                reviews = JsonConvert.DeserializeObject<IList<Review>>(responseContent);
+            }
+
+            HttpHeaders headers = response.Headers;
+            IEnumerable<string> values;
+            if (headers.TryGetValues("REST-Content-Range", out values))
+            {
+                // resources 0-10/168
+                string resources = values.First();
+                string[] split = resources.Split(' ');
+                string ranges = split[1];
+                string[] splitRanges = ranges.Split('/');
+                string fromTo = splitRanges[0];
+                total = splitRanges[1];
+                string[] splitFromTo = fromTo.Split('-');
+                responseFrom = splitFromTo[0];
+                responseTo = splitFromTo[1];
+            }
+
+            reviewsResponse = new ReviewsResponseWrapper
+            {
+                Reviews = reviews,
+                Range = new SearchRange
+                {
+                    From = long.Parse(responseFrom),
+                    To = long.Parse(responseTo),
+                    Total = long.Parse(total)
+                }
+            };
+
+            return reviewsResponse;
+        }
+
         public async Task<bool> DeleteProductReviewMD(string documentId)
         {
             // DELETE https://{accountName}.{environment}.com.br/api/dataentities/data_entity_name/documents/id

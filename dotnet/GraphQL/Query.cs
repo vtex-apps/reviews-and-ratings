@@ -152,29 +152,6 @@ namespace ReviewsRatings.GraphQL
                 }
             );
 
-            FieldAsync<BooleanGraphType>(
-                "hasShopperReviewed",
-                arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "shopperId", Description = "Shopper Id" },
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "productId", Description = "Product Id" }
-                    ),
-                resolve: async context =>
-                {
-                    return await context.TryAsyncResolve(
-                        async c => await productReviewService.HasShopperReviewed(
-                            context.GetArgument<string>("shopperId"), context.GetArgument<string>("productId")));
-                }
-            );
-
-            FieldAsync<AppSettingsType>(
-                "appSettings",
-                resolve: async context =>
-                {
-                    return await context.TryAsyncResolve(
-                        async c => await productReviewService.GetAppSettings());
-                }
-            );
-
             FieldAsync<SearchResponseType>(
                 "reviewByreviewDateTime",
                 arguments: new QueryArguments(
@@ -204,6 +181,60 @@ namespace ReviewsRatings.GraphQL
                     return searchResponse;
                 }
             );
+
+              FieldAsync<SearchResponseType>(
+                "reviewByDateRange",
+                arguments: new QueryArguments(
+                    //new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "reviewDateTime", Description = "Review DateTime" },
+                    //new QueryArgument<StringGraphType> { Name = "searchTerm", Description = "Search term" },
+                    new QueryArgument<StringGraphType> { Name = "fromDate", Description = "From Date" },
+                    new QueryArgument<StringGraphType> { Name = "toDate", Description = "To Date" },
+                    new QueryArgument<StringGraphType> { Name = "orderBy", Description = "Order by" },
+                    new QueryArgument<StringGraphType> { Name = "status", Description = "Status" }
+                ),
+                resolve: async context =>
+                {
+                    //string reviewDateTime = context.GetArgument<string>("reviewDateTime");
+                    //string searchTerm = context.GetArgument<string>("searchTerm");
+                    string fromDate = context.GetArgument<string>("fromDate");
+                    string toDate = context.GetArgument<string>("toDate");
+                    string orderBy = context.GetArgument<string>("orderBy");
+                    string status = context.GetArgument<string>("status");
+
+                    var searchResult = await productReviewService.GetReviewsByDateRange(fromDate, toDate);
+                    SearchResponse searchResponse = new SearchResponse
+                    {
+                        Data = new DataElement { data = searchResult.Reviews },
+                        Range = searchResult.Range
+                    };
+
+                    return searchResponse;
+                }
+            );
+
+            FieldAsync<BooleanGraphType>(
+                "hasShopperReviewed",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "shopperId", Description = "Shopper Id" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "productId", Description = "Product Id" }
+                    ),
+                resolve: async context =>
+                {
+                    return await context.TryAsyncResolve(
+                        async c => await productReviewService.HasShopperReviewed(
+                            context.GetArgument<string>("shopperId"), context.GetArgument<string>("productId")));
+                }
+            );
+
+            FieldAsync<AppSettingsType>(
+                "appSettings",
+                resolve: async context =>
+                {
+                    return await context.TryAsyncResolve(
+                        async c => await productReviewService.GetAppSettings());
+                }
+            );
+
         }
     }
 }

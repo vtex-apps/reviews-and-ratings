@@ -435,6 +435,13 @@
             return wrapper;
         }
 
+        public async Task<ReviewsResponseWrapper> GetReviewsByDateRange(string fromDate, string toDate)
+        {
+            ReviewsResponseWrapper wrapper = await _productReviewRepository.GetRangeReviewsMD($"fromDate={fromDate}", $"toDate={toDate}");
+
+            return wrapper;
+        }
+
         public async Task ClearData()
         {
             IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();

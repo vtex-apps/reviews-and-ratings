@@ -1,0 +1,22 @@
+query ReviewByDateRange(
+  $fromDate: String
+  $toDate: String
+  $orderBy: String
+) {
+  reviewByDateRange(
+    fromDate: $fromDate
+    toDate: $toDate
+    orderBy: $orderBy
+  ) {
+    id
+    productId
+    rating
+    title
+    text
+    reviewerName
+    location
+    shopperId
+    reviewDateTime
+    verifiedPurchaser
+  }
+}
