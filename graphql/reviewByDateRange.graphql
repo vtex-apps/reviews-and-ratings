@@ -1,6 +1,6 @@
 query ReviewByDateRange(
-  $fromDate: String
-  $toDate: String
+  $fromDate: String!
+  $toDate: String!
   $orderBy: String
 ) {
   reviewByDateRange(
@@ -8,15 +8,23 @@ query ReviewByDateRange(
     toDate: $toDate
     orderBy: $orderBy
   ) {
-    id
-    productId
-    rating
-    title
-    text
-    reviewerName
-    location
-    shopperId
-    reviewDateTime
-    verifiedPurchaser
+    data {
+      id
+      productId
+      rating
+      title
+      text
+      reviewerName
+      location
+      reviewDateTime
+      verifiedPurchaser
+      sku
+      approved
+    }
+    range {
+      total
+      from
+      to
+    }
   }
 }

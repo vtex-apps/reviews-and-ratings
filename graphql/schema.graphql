@@ -85,8 +85,8 @@ type Query {
     status: String
   ): ReviewsResult
   reviewByDateRange(
-    fromDate: String
-    toDate: String
+    fromDate: String!
+    toDate: String!
     orderBy: String
     status: String
   ): ReviewsResult

@@ -75,6 +75,12 @@ namespace ReviewsRatings.Models
         public string ReviewDateTime { get; set; }
 
         /// <summary>
+        /// Date & time review submitted
+        /// </summary>
+        [JsonProperty("searchDate")]
+        public string SearchDate { get; set; }
+
+        /// <summary>
         /// Shopper has purchased the item
         /// </summary>
         [JsonProperty("verifiedPurchaser")]

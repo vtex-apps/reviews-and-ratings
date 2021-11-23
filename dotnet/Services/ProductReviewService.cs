@@ -437,7 +437,7 @@
 
         public async Task<ReviewsResponseWrapper> GetReviewsByDateRange(string fromDate, string toDate)
         {
-            ReviewsResponseWrapper wrapper = await _productReviewRepository.GetRangeReviewsMD($"fromDate={fromDate}", $"toDate={toDate}");
+            ReviewsResponseWrapper wrapper = await _productReviewRepository.GetRangeReviewsMD(fromDate, toDate);
 
             return wrapper;
         }
@@ -725,6 +725,15 @@
             }
 
             return sort;
+        }
+
+        public async Task AddSearchDate()
+        {
+            var recordsToUpdate = await _productReviewRepository.GetProductReviewsMD("_where=searchDate is null");
+            foreach (var review in recordsToUpdate.Reviews)
+            {
+                await _productReviewRepository.SaveProductReviewMD(review);
+            }
         }
     }
 }

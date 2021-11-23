@@ -53,5 +53,7 @@
 
         Task<string> MigrateData();
         Task<string> MigrateData(List<string> productIds);
+
+        Task AddSearchDate();
     }
 }

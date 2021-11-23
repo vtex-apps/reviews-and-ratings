@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, useState } from 'react'
-import { IntlShape, useIntl } from 'react-intl'
+import { useIntl } from 'react-intl'
+import { useLazyQuery } from 'react-apollo'
 import {
-  Box,
   Layout,
   PageBlock,
   Button,
@@ -11,25 +11,10 @@ import {
   IconDownload,
 } from 'vtex.styleguide'
 
+import { currentDate, filterDate } from './utils/dates'
 import styles from '../styles.css'
-import { Review } from './types'
-import {
-  reviewSchema,
-  reviewWithErrorSchema,
-  productSchema,
-  dateSchema,
-} from './schemas'
-// import { currentDate, filterDate } from './utils/dates'
-import DownloadTable from './components/DownloadTable'
-
-const schema = (intl: IntlShape) => ({
-  properties: {
-    ...reviewSchema.properties,
-    ...reviewWithErrorSchema,
-    ...productSchema.properties,
-    ...dateSchema(intl).properties,
-  },
-})
+// import XLSX from 'xlsx'
+import ReviewByDateRange from '../../graphql/reviewByDateRange.graphql'
 
 const initialFilters = {
   fromDate: '',
@@ -40,54 +25,95 @@ export const DownlaodReviewsTable: FC = () => {
   const intl = useIntl()
   const [state, setState] = useState<any>({
     filters: initialFilters,
-    loading: false,
+    load: false,
+    isFiltered: false,
   })
 
-  const { filters, loading } = state
+  const { filters, load, isFiltered } = state
 
-  const toReviewTableRowData = (review: Review) => {
-    const {
-      id,
-      reviewDateTime,
-      reviewerName,
-      title,
-      text,
-      productId,
-      shopperId,
-      rating,
-      sku,
-    } = review
+  /* // the click
+  const fetchRange = async () => {
+    const response: any = 
+      useLazyQuery(ReviewByDateRange, {
+        onCompleted: (res: any) => {
+          onChange(res.ReviewByDateRange)
+        },
+      })
+      { mode: 'no-cors' }
+    
 
-    return {
-      date: `${intl.formatDate(reviewDateTime)} ${intl.formatTime(
-        reviewDateTime
-      )}`,
-      product: {
-        productId,
-        sku,
-      },
-      review: {
-        id,
-        shopperId,
-        reviewerName,
-        rating,
-        title,
-        text,
-      },
-    }
+    return response.json()
   }
+
+  // download part : only two issues
+  const downloadRange = (allReviews: any) => {
+    const header = ['Product ID', 'Title', 'Review', 'Rating', 'Status', 'Reviewer', 'Review Time', 'SKU']
+    const data: any = []
+
+    for (const shopper of allReviews) {
+      const reviews = shopper.listItemsWrapper  // listItemsWrapper in schema??
+      for (const review of reviews) {
+        for (const reviewRow of review.listItems) { // where is listItems ??
+          const reviewData = {
+            'Product ID': reviewRow.productId,
+            Title: reviewRow.title,
+            Review: reviewRow.text,
+            Rating: reviewRow.rating,
+            Status: reviewRow.approved,
+            Reviewer: reviewRow.reviewerName,
+            'Review Time': reviewRow.reviewDateTime,
+            SKU: reviewRow.sku,
+          }
+
+          data.push(reviewData)
+        }
+      }
+    }
+
+    const ws = XLSX.utils.json_to_sheet(data, { header })
+    const wb = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1')
+    const exportFileName = `reviews.xls`
+    XLSX.writeFile(wb, exportFileName)
+  }
+
+  let allReviews: any = []
+
+  // pangknation
+  const getAllReviews = async () => {
+    let status = true
+    let i = 0
+    const chunkLength = 100
+    setState({ ...state, loading: true })
+
+    while (status) {
+      await fetchRange(i, i + chunkLength).then(data => { // with the click
+        const reviewArr = data.wishLists
+
+        if (!reviewArr.length) {
+          status = false
+        }
+        allReviews = [...allReviews, ...reviewArr]
+      })
+
+      i += 100
+    }
+
+    downloadRange(allReviews)
+    setState({ ...state, loading: false })
+  } */
+
+  const [loadEntries] = useLazyQuery(ReviewByDateRange)
 
   const getRequests = (resetFilters: boolean) => {
     const useFilters = resetFilters ? initialFilters : filters
-    // let where = `__createdIn=${state.fromDate}`
 
     if (JSON.stringify(useFilters) === JSON.stringify(initialFilters)) {
       setState({ ...state, isFiltered: false })
     } else {
       setState({ ...state, isFiltered: true })
 
-      /*
-      let startDate = '1970-01-01'
+      let startDate = '01/01/1970'
       let endDate = currentDate()
 
       if (useFilters.fromDate !== '' || useFilters.toDate !== '') {
@@ -99,26 +125,20 @@ export const DownlaodReviewsTable: FC = () => {
           useFilters.toDate !== ''
             ? filterDate(useFilters.toDate)
             : filterDate(useFilters.fromDate)
-       // where += `__createdIn between ${startDate} AND ${endDate}` */
-    }
 
-    // where = `__createdIn="${[useFilters.status]}"`
+        loadEntries({
+          variables: {
+            startDate,
+            endDate,
+          },
+        })
+      } else {
+        setState({ ...state, isFiltered: false })
+      }
+    }
   }
 
-  /* const [getConfig, { loading: loadingConfig }] = useLazyQuery(GET_BY_ID, {
-    onCompleted: (res: any) => {
-      onChange(res.getById)
-    },
-  })
-
-  const load = (id: string) => {
-    getConfig({
-      variables: {
-        id,
-      },
-    })
-  }; */
-
+  // nice function calling getRequests(true)
   const handleResetFilters = () => {
     setState({
       ...state,
@@ -129,9 +149,9 @@ export const DownlaodReviewsTable: FC = () => {
     getRequests(true)
   }
 
+  // nice function calling getRequests(false)
+  // onclick -> handleApplyFilters -> getRequests
   const handleApplyFilters = () => {
-    // const { filters } = state
-
     if (JSON.stringify(filters) === JSON.stringify(initialFilters)) {
       handleResetFilters()
     } else {
@@ -153,7 +173,7 @@ export const DownlaodReviewsTable: FC = () => {
     }))
     setTimeout(() => {
       handleApplyFilters()
-    }, 20000)
+    }, 100000)
   }
 
   const filterToDate = (val: string) => {
@@ -170,10 +190,9 @@ export const DownlaodReviewsTable: FC = () => {
     }))
     setTimeout(() => {
       handleApplyFilters()
-    }, 20000)
+    }, 100000)
   }
 
-  // console.log("test", state, filters)
   return (
     <Layout>
       <PageBlock variation="full">
@@ -215,52 +234,40 @@ export const DownlaodReviewsTable: FC = () => {
               })}
             </Button>
           </div>
-
-          <div
-            className={`ma2 ${styles.filterColumn} ${styles.filterColumnActionReset}`}
-          >
-            <ButtonWithIcon
-              variation="secondary"
-              size="small"
-              // onClick={() => handleResetFilters()}
+          {isFiltered ? (
+            <div
+              className={`ma2 ${styles.filterColumn} ${styles.filterColumnActionReset}`}
             >
-              {intl.formatMessage({
-                id: 'admin/reviews.clearFilters',
-              })}
-            </ButtonWithIcon>
-          </div>
-
-          <div
-            className={`pa6 ma2 ${styles.filterColumn} ${styles.filterColumnActionReset}`}
-          >
-            <ButtonWithIcon
-              size="small"
-              icon={IconDownload}
-              isLoading={loading}
-              onClick={() => {
-                // getAllReviews()
-              }}
-            >
-              {intl.formatMessage({
-                id: 'admin/reviews.download.icon',
-              })}
-            </ButtonWithIcon>
-          </div>
-        </div>
-
-        <DownloadTable
-          toRowData={toReviewTableRowData}
-          reviewStatus=""
-          reviewDateTime=""
-          schema={schema(intl)}
-          filterOptionsLists={{}}
-        >
-          {({ table }: { table: JSX.Element }) => (
-            <div>
-              <Box>{table}</Box>
+              <ButtonWithIcon
+                variation="secondary"
+                size="small"
+                // onClick={() => handleResetFilters()}
+              >
+                {intl.formatMessage({
+                  id: 'admin/reviews.clearFilters',
+                })}
+              </ButtonWithIcon>
             </div>
-          )}
-        </DownloadTable>
+          ) : null}
+          {isFiltered ? (
+            <div
+              className={`pa6 ma2 ${styles.filterColumn} ${styles.filterColumnActionReset}`}
+            >
+              <ButtonWithIcon
+                size="small"
+                icon={IconDownload}
+                isLoading={load}
+                onClick={() => {
+                  // getAllReviews()
+                }}
+              >
+                {intl.formatMessage({
+                  id: 'admin/reviews.download.icon',
+                })}
+              </ButtonWithIcon>
+            </div>
+          ) : null}
+        </div>
       </PageBlock>
     </Layout>
   )

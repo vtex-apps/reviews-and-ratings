@@ -63,6 +63,19 @@ export interface SearchReviewData {
   }
 }
 
+export interface SearchRangeArgs {
+  fromDate?: string
+  toDate?: string
+  orderBy?: string
+}
+
+export interface SearchRangeData {
+  reviews: {
+    data: Review[]
+    range: Range
+  }
+}
+
 export interface QueryResults {
   loading: boolean
   error?: ApolloError

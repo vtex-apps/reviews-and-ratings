@@ -13,6 +13,7 @@
     using ReviewsRatings.Models;
     using ReviewsRatings.Services;
     using Vtex.Api.Context;
+    using System.Web;
 
     public class ProductReviewRepository : IProductReviewRepository
     {
@@ -20,7 +21,7 @@
         private const string LOOKUP = "productLookup";
         private const string DATA_ENTITY = "productReviews";
         private const string SCHEMA = "reviewsSchema";
-        private const string SCHEMA_JSON = "{\"name\":\"reviewsSchema\",\"properties\":{\"productId\":{\"type\":\"string\",\"title\":\"productId\"},\"rating\":{\"type\":[\"integer\",\"null\"],\"title\":\"rating\"},\"title\":{\"type\":[\"string\",\"null\"],\"title\":\"title\"},\"text\":{\"type\":[\"string\",\"null\"],\"title\":\"text\"},\"reviewerName\":{\"type\":[\"string\",\"null\"],\"title\":\"reviewerName\"},\"shopperId\":{\"type\":[\"string\",\"null\"],\"title\":\"shopperId\"},\"reviewDateTime\":{\"type\":\"string\",\"title\":\"reviewDateTime\"},\"verifiedPurchaser\":{\"type\":\"boolean\",\"title\":\"verifiedPurchaser\"},\"sku\":{\"type\":[\"string\",\"null\"],\"title\":\"sku\"},\"approved\":{\"type\":\"boolean\",\"title\":\"approved\"},\"location\":{\"type\":[\"string\",\"null\"],\"title\":\"location\"}},\"v-indexed\":[\"productId\",\"shopperId\",\"approved\",\"reviewDateTime\"],\"v-security\":{\"allowGetAll\":true}}";
+        private const string SCHEMA_JSON = "{\"name\":\"reviewsSchema\",\"properties\":{\"productId\":{\"type\":\"string\",\"title\":\"productId\"},\"rating\":{\"type\":[\"integer\",\"null\"],\"title\":\"rating\"},\"title\":{\"type\":[\"string\",\"null\"],\"title\":\"title\"},\"text\":{\"type\":[\"string\",\"null\"],\"title\":\"text\"},\"reviewerName\":{\"type\":[\"string\",\"null\"],\"title\":\"reviewerName\"},\"shopperId\":{\"type\":[\"string\",\"null\"],\"title\":\"shopperId\"},\"reviewDateTime\":{\"type\":\"string\",\"title\":\"reviewDateTime\"},\"searchDate\":{\"type\":[\"string\",\"null\"],\"title\":\"searchDate\",\"format\":\"date-time\"}, \"verifiedPurchaser\":{\"type\":\"boolean\",\"title\":\"verifiedPurchaser\"},\"sku\":{\"type\":[\"string\",\"null\"],\"title\":\"sku\"},\"approved\":{\"type\":\"boolean\",\"title\":\"approved\"},\"location\":{\"type\":[\"string\",\"null\"],\"title\":\"location\"}},\"v-indexed\":[\"productId\",\"shopperId\",\"approved\",\"reviewDateTime\",\"searchDate\"],\"v-security\":{\"allowGetAll\":true}}";
         private const string HEADER_VTEX_CREDENTIAL = "X-Vtex-Credential";
         private const string HEADER_VTEX_WORKSPACE = "X-Vtex-Workspace";
         private const string HEADER_VTEX_ACCOUNT = "X-Vtex-Account";
@@ -536,35 +537,28 @@
 
             return reviewsResponse;
         }
-
+ 
         public async Task<ReviewsResponseWrapper> GetRangeReviewsMD(string fromDate, string toDate)
         {
             ReviewsResponseWrapper reviewsResponse = null;
-            IList<Review> reviews = null;
-            string total = string.Empty;
-            string responseFrom = string.Empty;
-            string responseTo = string.Empty;
-
-            /*if (string.IsNullOrEmpty(from))
-                from = "0";
-            if (string.IsNullOrEmpty(to))
-                to = "300";
-            if(!string.IsNullOrEmpty(searchQuery))
-            {
-                if(!searchQuery.First().Equals('&'))
-                {
-                    searchQuery = $"&{searchQuery}";
-                }
-            }*/
-
+            IList<Review> reviews = new List<Review>();
+            DateTime dtFromDate = DateTime.Parse(fromDate);
+            fromDate = dtFromDate.ToString("yyyy-MM-ddTHH:mm:ssZ");
+            DateTime dtToDate = DateTime.Parse(toDate);
+            toDate = dtToDate.ToString("yyyy-MM-ddTHH:mm:ssZ");
+            string total = "0";
+            string responseFrom = "0";
+            string responseTo = "0";
+            fromDate = HttpUtility.UrlEncode(fromDate);
+            toDate = HttpUtility.UrlEncode(toDate);
 
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/search?_where=_schema={SCHEMA} between {fromDate} AND {toDate}")
+                RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/search?_fields=_all&_schema={SCHEMA}&_where=searchDate between {fromDate} AND {toDate}")
             };
 
-            request.Headers.Add("REST-Range", $"resources={fromDate}-{toDate}");
+            //request.Headers.Add("REST-Range", $"resources={fromDate}-{toDate}");
 
             string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
             if (authToken != null)
@@ -641,6 +635,14 @@
         {
             // PATCH https://{{accountName}}.vtexcommercestable.com.br/api/dataentities/{{data_entity_name}}/documents
             string id = string.Empty;
+
+            // before SerializeObject
+            if(string.IsNullOrEmpty(review.SearchDate)) 
+            {
+                DateTime dtSearchDate = DateTime.Parse(review.ReviewDateTime);
+                review.SearchDate = dtSearchDate.ToString("yyyy-MM-ddTHH:mm:ssZ");
+            }
+
             var jsonSerializedReview = JsonConvert.SerializeObject(review);
             var request = new HttpRequestMessage
             {
@@ -672,5 +674,6 @@
 
             return id;
         }
+
     }
 }

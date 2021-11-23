@@ -286,5 +286,21 @@ namespace ReviewsRatings.Controllers
 
             return Json(result);
         }
+
+        public async Task<IActionResult> AddSearchDate()
+        {
+            Response.Headers.Add("Cache-Control", "no-cache");
+            try
+            {
+                await _productReviewsService.AddSearchDate();
+            }
+            catch(Exception ex)
+            {
+                return Json("False");
+            }
+
+            return Json("Done");
+            
+        }
     }
 }

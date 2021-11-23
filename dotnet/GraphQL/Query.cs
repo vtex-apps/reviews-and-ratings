@@ -185,8 +185,6 @@ namespace ReviewsRatings.GraphQL
               FieldAsync<SearchResponseType>(
                 "reviewByDateRange",
                 arguments: new QueryArguments(
-                    //new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "reviewDateTime", Description = "Review DateTime" },
-                    //new QueryArgument<StringGraphType> { Name = "searchTerm", Description = "Search term" },
                     new QueryArgument<StringGraphType> { Name = "fromDate", Description = "From Date" },
                     new QueryArgument<StringGraphType> { Name = "toDate", Description = "To Date" },
                     new QueryArgument<StringGraphType> { Name = "orderBy", Description = "Order by" },
@@ -194,8 +192,6 @@ namespace ReviewsRatings.GraphQL
                 ),
                 resolve: async context =>
                 {
-                    //string reviewDateTime = context.GetArgument<string>("reviewDateTime");
-                    //string searchTerm = context.GetArgument<string>("searchTerm");
                     string fromDate = context.GetArgument<string>("fromDate");
                     string toDate = context.GetArgument<string>("toDate");
                     string orderBy = context.GetArgument<string>("orderBy");
