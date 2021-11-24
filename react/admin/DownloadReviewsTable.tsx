@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, useState } from 'react'
 import { useIntl } from 'react-intl'
-import { useLazyQuery } from 'react-apollo'
+import { useQuery } from 'react-apollo'
 import {
   Layout,
   PageBlock,
@@ -10,10 +10,9 @@ import {
   DatePicker,
   IconDownload,
 } from 'vtex.styleguide'
+import XLSX from 'xlsx'
 
-import { currentDate, filterDate } from './utils/dates'
 import styles from '../styles.css'
-// import XLSX from 'xlsx'
 import ReviewByDateRange from '../../graphql/reviewByDateRange.graphql'
 
 const initialFilters = {
@@ -25,86 +24,61 @@ export const DownlaodReviewsTable: FC = () => {
   const intl = useIntl()
   const [state, setState] = useState<any>({
     filters: initialFilters,
-    load: false,
     isFiltered: false,
   })
 
-  const { filters, load, isFiltered } = state
+  const { filters, isFiltered } = state
 
-  /* // the click
-  const fetchRange = async () => {
-    const response: any = 
-      useLazyQuery(ReviewByDateRange, {
-        onCompleted: (res: any) => {
-          onChange(res.ReviewByDateRange)
-        },
-      })
-      { mode: 'no-cors' }
-    
+  const { loading, data } = useQuery(ReviewByDateRange, {
+    variables: {
+      fromDate: '01/01/2020',
+      toDate: '09/28/2021',
+    },
+  })
 
-    return response.json()
-  }
+  const downloadRange = (reviews: any = []) => {
+    const header = [
+      'Product ID',
+      'Title',
+      'Review',
+      'Rating',
+      'Approved',
+      'Reviewer',
+      'Time',
+      'SKU',
+    ]
+    const rows: any = []
 
-  // download part : only two issues
-  const downloadRange = (allReviews: any) => {
-    const header = ['Product ID', 'Title', 'Review', 'Rating', 'Status', 'Reviewer', 'Review Time', 'SKU']
-    const data: any = []
-
-    for (const shopper of allReviews) {
-      const reviews = shopper.listItemsWrapper  // listItemsWrapper in schema??
-      for (const review of reviews) {
-        for (const reviewRow of review.listItems) { // where is listItems ??
-          const reviewData = {
-            'Product ID': reviewRow.productId,
-            Title: reviewRow.title,
-            Review: reviewRow.text,
-            Rating: reviewRow.rating,
-            Status: reviewRow.approved,
-            Reviewer: reviewRow.reviewerName,
-            'Review Time': reviewRow.reviewDateTime,
-            SKU: reviewRow.sku,
-          }
-
-          data.push(reviewData)
-        }
+    for (const review of reviews) {
+      const reviewData = {
+        'Product ID': review.productId,
+        Title: review.title,
+        Review: review.text,
+        Rating: review.rating,
+        Approved: review.approved,
+        Reviewer: review.reviewerName,
+        Time: review.reviewDateTime,
+        SKU: review.sku,
       }
+      rows.push(reviewData)
     }
 
-    const ws = XLSX.utils.json_to_sheet(data, { header })
+    const ws = XLSX.utils.json_to_sheet(rows, { header })
     const wb = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1')
     const exportFileName = `reviews.xls`
     XLSX.writeFile(wb, exportFileName)
   }
 
-  let allReviews: any = []
-
-  // pangknation
   const getAllReviews = async () => {
-    let status = true
-    let i = 0
-    const chunkLength = 100
     setState({ ...state, loading: true })
+    // console.log(data.reviewByDateRange.data)
+    downloadRange(data.reviewByDateRange.data)
 
-    while (status) {
-      await fetchRange(i, i + chunkLength).then(data => { // with the click
-        const reviewArr = data.wishLists
-
-        if (!reviewArr.length) {
-          status = false
-        }
-        allReviews = [...allReviews, ...reviewArr]
-      })
-
-      i += 100
-    }
-
-    downloadRange(allReviews)
     setState({ ...state, loading: false })
-  } */
+  }
 
-  const [loadEntries] = useLazyQuery(ReviewByDateRange)
-
+  // trying to use this fuc pass two dates to the useQuery
   const getRequests = (resetFilters: boolean) => {
     const useFilters = resetFilters ? initialFilters : filters
 
@@ -113,7 +87,7 @@ export const DownlaodReviewsTable: FC = () => {
     } else {
       setState({ ...state, isFiltered: true })
 
-      let startDate = '01/01/1970'
+      /* let startDate = '01/01/1970'
       let endDate = currentDate()
 
       if (useFilters.fromDate !== '' || useFilters.toDate !== '') {
@@ -125,20 +99,23 @@ export const DownlaodReviewsTable: FC = () => {
           useFilters.toDate !== ''
             ? filterDate(useFilters.toDate)
             : filterDate(useFilters.fromDate)
+          
+          startDate = '01/01/1970'
+          endDate = '01/01/2022'
+          //console.log(startDate, endDate)
 
-        loadEntries({
-          variables: {
-            startDate,
-            endDate,
-          },
-        })
+         loadEntries({
+            variables: {
+              fromDate: startDate,
+              toDate: endDate
+            },
+          })
+          console.log(data.json());
       } else {
-        setState({ ...state, isFiltered: false })
-      }
+        setState({ ...state, isFiltered: false }) */
     }
   }
 
-  // nice function calling getRequests(true)
   const handleResetFilters = () => {
     setState({
       ...state,
@@ -149,8 +126,6 @@ export const DownlaodReviewsTable: FC = () => {
     getRequests(true)
   }
 
-  // nice function calling getRequests(false)
-  // onclick -> handleApplyFilters -> getRequests
   const handleApplyFilters = () => {
     if (JSON.stringify(filters) === JSON.stringify(initialFilters)) {
       handleResetFilters()
@@ -249,16 +224,18 @@ export const DownlaodReviewsTable: FC = () => {
               </ButtonWithIcon>
             </div>
           ) : null}
+        </div>
+        <div>
           {isFiltered ? (
             <div
-              className={`pa6 ma2 ${styles.filterColumn} ${styles.filterColumnActionReset}`}
+              className={`pa1 pt7 ${styles.filterColumn} ${styles.filterColumnActionReset}`}
             >
               <ButtonWithIcon
-                size="small"
+                size="medium"
                 icon={IconDownload}
-                isLoading={load}
+                isLoading={loading}
                 onClick={() => {
-                  // getAllReviews()
+                  getAllReviews()
                 }}
               >
                 {intl.formatMessage({

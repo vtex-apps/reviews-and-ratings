@@ -12,7 +12,7 @@ import { tableQueryMessages, tableSearchMessages } from '../utils/messages'
 import useSearch from './tableHelpers/useSearch'
 
 const NETWORK_REFETCHING_STATUS = 4
-const DEFAULT_TABLE_PAGE_TO = 15
+const DEFAULT_TABLE_PAGE_TO = 30
 const DEFAULT_TABLE_PAGE_FROM = 0
 const DEFAULT_SORT_ORDER = 'DESC'
 
