@@ -3,12 +3,14 @@ query ReviewByreviewDateTime(
   $offset: Int
   $limit: Int
   $orderBy: String
+  $status: String
 ) {
   reviewByreviewDateTime(
     reviewDateTime: $reviewDateTime
     offset: $offset
     limit: $limit
     orderBy: $orderBy
+    status: $status
   ) {
     id
     productId

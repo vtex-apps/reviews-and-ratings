@@ -78,7 +78,7 @@ export const DownlaodReviewsTable: FC = () => {
     const useFilters = resetFilters ? initialFilters : filters
 
     if (JSON.stringify(useFilters) === JSON.stringify(initialFilters)) {
-      setState({ ...state, isFiltered: false })
+      setState({ ...state, filters: initialFilters, isFiltered: false })
     } else {
       setState({ ...state, isFiltered: true })
 
@@ -109,10 +109,10 @@ export const DownlaodReviewsTable: FC = () => {
 
   const handleResetFilters = () => {
     setState({
-      ...state,
       filters: initialFilters,
       isFiltered: false,
     })
+
     getRequests(true)
   }
 
