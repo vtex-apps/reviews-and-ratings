@@ -558,7 +558,7 @@
                 RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/search?_fields=_all&_schema={SCHEMA}&_where=searchDate between {fromDate} AND {toDate}")
             };
 
-            //request.Headers.Add("REST-Range", $"resources={fromDate}-{toDate}");
+            request.Headers.Add("REST-Range", $"resources={0}-{800}");
 
             string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
             if (authToken != null)

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, useState } from 'react'
 import { useIntl } from 'react-intl'
-import { useQuery } from 'react-apollo'
+import { useLazyQuery } from 'react-apollo'
 import {
   Layout,
   PageBlock,
@@ -12,6 +12,7 @@ import {
 } from 'vtex.styleguide'
 import XLSX from 'xlsx'
 
+import { currentDate, filterDate } from './utils/dates'
 import styles from '../styles.css'
 import ReviewByDateRange from '../../graphql/reviewByDateRange.graphql'
 
@@ -29,12 +30,7 @@ export const DownlaodReviewsTable: FC = () => {
 
   const { filters, isFiltered } = state
 
-  const { loading, data } = useQuery(ReviewByDateRange, {
-    variables: {
-      fromDate: '01/01/2020',
-      toDate: '09/28/2021',
-    },
-  })
+  const [getData, { loading, data }] = useLazyQuery(ReviewByDateRange)
 
   const downloadRange = (reviews: any = []) => {
     const header = [
@@ -72,7 +68,6 @@ export const DownlaodReviewsTable: FC = () => {
 
   const getAllReviews = async () => {
     setState({ ...state, loading: true })
-    // console.log(data.reviewByDateRange.data)
     downloadRange(data.reviewByDateRange.data)
 
     setState({ ...state, loading: false })
@@ -87,7 +82,7 @@ export const DownlaodReviewsTable: FC = () => {
     } else {
       setState({ ...state, isFiltered: true })
 
-      /* let startDate = '01/01/1970'
+      let startDate = '01/01/1970'
       let endDate = currentDate()
 
       if (useFilters.fromDate !== '' || useFilters.toDate !== '') {
@@ -99,20 +94,16 @@ export const DownlaodReviewsTable: FC = () => {
           useFilters.toDate !== ''
             ? filterDate(useFilters.toDate)
             : filterDate(useFilters.fromDate)
-          
-          startDate = '01/01/1970'
-          endDate = '01/01/2022'
-          //console.log(startDate, endDate)
 
-         loadEntries({
-            variables: {
-              fromDate: startDate,
-              toDate: endDate
-            },
-          })
-          console.log(data.json());
+        getData({
+          variables: {
+            fromDate: startDate,
+            toDate: endDate,
+          },
+        })
       } else {
-        setState({ ...state, isFiltered: false }) */
+        setState({ ...state, isFiltered: false })
+      }
     }
   }
 
@@ -120,7 +111,6 @@ export const DownlaodReviewsTable: FC = () => {
     setState({
       ...state,
       filters: initialFilters,
-      tableIsLoading: true,
       isFiltered: false,
     })
     getRequests(true)
@@ -216,7 +206,7 @@ export const DownlaodReviewsTable: FC = () => {
               <ButtonWithIcon
                 variation="secondary"
                 size="small"
-                // onClick={() => handleResetFilters()}
+                onClick={() => handleResetFilters()}
               >
                 {intl.formatMessage({
                   id: 'admin/reviews.clearFilters',
