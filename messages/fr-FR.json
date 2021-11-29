@@ -3,7 +3,7 @@
   "admin/reviews.settings.title": "Vérifier les paramètres",
   "admin/reviews.tab.pending": "En attente",
   "admin/reviews.tab.approved": "Approuvé",
-  "admin/reviews.tab.download": "Download",
+  "admin/reviews.tab.download": "Télécharger",
   "admin/reviews.reviewSchema.review": "Avis",
   "admin/reviews.reviewSchema.product": "Produit",
   "admin/reviews.reviewSchema.date": "Date",
