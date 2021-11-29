@@ -99,7 +99,7 @@
   "store/reviews.list.graph.stars": "{value, plural, one {} =0{0 звезди} =1{1 звезда} other{# звезди}}",
   "store/reviews.summary.add.login": "Моля, влезте с потребителското си име и парола, за да напишете отзив.",
   "store/reviews.summary.add.title": "Добавяне на отзив",
-  "store/reviews.list.loadingReviews": "Loading reviews...",
+  "store/reviews.list.loadingReviews": "Зареждане на отзиви…...",
   "admin/reviews.reviewsandratings.title": "Отзиви и оценки",
   "admin/reviews.reviewsandratings.description": "Приложение за спестяване и извличане на отзиви и оценки.",
   "admin/reviews.allowsAnonymousReviews.title": "Разрешаване на анонимни отзиви",
