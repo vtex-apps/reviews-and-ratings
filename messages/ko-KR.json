@@ -3,7 +3,7 @@
   "admin/reviews.settings.title": "리뷰 설정",
   "admin/reviews.tab.pending": "보류 중",
   "admin/reviews.tab.approved": "승인됨",
-  "admin/reviews.tab.download": "Download",
+  "admin/reviews.tab.download": "다운로드",
   "admin/reviews.reviewSchema.review": "리뷰",
   "admin/reviews.reviewSchema.product": "제품",
   "admin/reviews.reviewSchema.date": "일",
