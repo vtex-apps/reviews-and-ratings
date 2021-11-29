@@ -3,7 +3,7 @@
   "admin/reviews.settings.title": "Настройки за отзиви",
   "admin/reviews.tab.pending": "Изчакващи",
   "admin/reviews.tab.approved": "Одобрени",
-  "admin/reviews.tab.download": "Download",
+  "admin/reviews.tab.download": "Изтегляне",
   "admin/reviews.reviewSchema.review": "Отзив",
   "admin/reviews.reviewSchema.product": "Продукт",
   "admin/reviews.reviewSchema.date": "Дата",
