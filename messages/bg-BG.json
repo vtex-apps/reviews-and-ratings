@@ -118,10 +118,10 @@
   "admin/reviews.displayInLineIfNone.title": "Показване на звездите в обобщение за оценката на продукта, ако няма отзиви",
   "admin/reviews.displaySummaryTotalReviews.title": "Показване на общия брой отзиви в блока за обобщение за оценката на продукта",
   "admin/reviews.displaySummaryAddButton.title": "Показване на бутона „Добавяне на отзив“ в блока за обобщение за оценката на продукта",
-  "admin/reviews.download.title": "Reviews Export",
-  "admin/reviews.download.icon": "Download",
-  "admin/reviews.filterFromDate": "From date",
-  "admin/reviews.filterToDate": "To date",
-  "admin/reviews.filterResults": "Apply",
-  "admin/reviews.clearFilters": "Clear"
+  "admin/reviews.download.title": "Експортиране на отзиви",
+  "admin/reviews.download.icon": "Изтегляне",
+  "admin/reviews.filterFromDate": "От",
+  "admin/reviews.filterToDate": "до",
+  "admin/reviews.filterResults": "Прилагане",
+  "admin/reviews.clearFilters": "Изчистване"
 }
