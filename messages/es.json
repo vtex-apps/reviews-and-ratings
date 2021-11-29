@@ -3,7 +3,7 @@
   "admin/reviews.settings.title": "Configuración de Comentarios",
   "admin/reviews.tab.pending": "Pendiente",
   "admin/reviews.tab.approved": "Aprobado",
-  "admin/reviews.tab.download": "Download",
+  "admin/reviews.tab.download": "Descargar",
   "admin/reviews.reviewSchema.review": "Comentario",
   "admin/reviews.reviewSchema.product": "Producto",
   "admin/reviews.reviewSchema.date": "Fecha",
