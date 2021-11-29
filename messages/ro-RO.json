@@ -3,7 +3,7 @@
   "admin/reviews.settings.title": "Setări recenzii",
   "admin/reviews.tab.pending": "În așteptare",
   "admin/reviews.tab.approved": "Aprobată",
-  "admin/reviews.tab.download": "Download",
+  "admin/reviews.tab.download": "Descarcă",
   "admin/reviews.reviewSchema.review": "Recenzie",
   "admin/reviews.reviewSchema.product": "Produs",
   "admin/reviews.reviewSchema.date": "Data",
