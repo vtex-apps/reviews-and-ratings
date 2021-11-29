@@ -3,7 +3,7 @@
   "admin/reviews.settings.title": "レビュー設定",
   "admin/reviews.tab.pending": "保留中",
   "admin/reviews.tab.approved": "承認済み",
-  "admin/reviews.tab.download": "Download",
+  "admin/reviews.tab.download": "ダウンロード",
   "admin/reviews.reviewSchema.review": "レビュー",
   "admin/reviews.reviewSchema.product": "製品",
   "admin/reviews.reviewSchema.date": "日付",
