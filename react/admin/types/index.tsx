@@ -39,6 +39,7 @@ export interface TabsTotalizersData {
   reviewsTotalizers: {
     pendingAmount: number
     acceptedAmount: number
+    downloadAmount: number
   }
 }
 
@@ -56,6 +57,19 @@ interface Range {
   to: number
 }
 export interface SearchReviewData {
+  reviews: {
+    data: Review[]
+    range: Range
+  }
+}
+
+export interface SearchRangeArgs {
+  fromDate?: string
+  toDate?: string
+  orderBy?: string
+}
+
+export interface SearchRangeData {
   reviews: {
     data: Review[]
     range: Range

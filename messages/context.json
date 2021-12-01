@@ -3,6 +3,7 @@
   "admin/reviews.settings.title": "admin/reviews.settings.title",
   "admin/reviews.tab.pending": "admin/reviews.tab.pending",
   "admin/reviews.tab.approved": "admin/reviews.tab.approved",
+  "admin/reviews.tab.download": "admin/reviews.tab.download",
   "admin/reviews.reviewSchema.review": "admin/reviews.reviewSchema.review",
   "admin/reviews.reviewSchema.product": "admin/reviews.reviewSchema.product",
   "admin/reviews.reviewSchema.date": "admin/reviews.reviewSchema.date",
@@ -117,5 +118,11 @@
   "admin/reviews.displaySummaryIfNone.title": "admin/reviews.displaySummaryIfNone.title",
   "admin/reviews.displayInLineIfNone.title": "admin/reviews.displayInLineIfNone.title",
   "admin/reviews.displaySummaryTotalReviews.title": "admin/reviews.displaySummaryTotalReviews.title",
-  "admin/reviews.displaySummaryAddButton.title": "admin/reviews.displaySummaryAddButton.title"
+  "admin/reviews.displaySummaryAddButton.title": "admin/reviews.displaySummaryAddButton.title",
+  "admin/reviews.download.title": "admin/reviews.download.title",
+  "admin/reviews.download.icon": "admin/reviews.download.icon",
+  "admin/reviews.filterFromDate": "admin/reviews.filterFromDate",
+  "admin/reviews.filterToDate": "admin/reviews.filterToDate",
+  "admin/reviews.filterResults": "admin/reviews.filterResults",
+  "admin/reviews.clearFilters": "admin/reviews.clearFilters"
 }

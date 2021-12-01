@@ -24,6 +24,9 @@
 
         Task<bool> VerifySchema();
         Task<ReviewsResponseWrapper> GetProductReviewsMD(string searchQuery, string from = null, string to = null);
+
+        Task<ReviewsResponseWrapper> GetRangeReviewsMD(string fromDate, string toDate);
+        
         Task<bool> DeleteProductReviewMD(string documentId);
         Task<string> SaveProductReviewMD(Review review);
     }

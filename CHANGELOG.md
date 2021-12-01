@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Add date range fillter and the export function in the new 'download' tab
+
 ## [3.1.0] - 2021-10-05
 
 ### Changed

@@ -27,6 +27,10 @@
 
         Task<ReviewsResponseWrapper> GetReviewsByShopperId(string shopperId);
 
+        Task<ReviewsResponseWrapper> GetReviewsByreviewDateTime(string reviewDateTime);
+
+        Task<ReviewsResponseWrapper> GetReviewsByDateRange(string fromDate, string toDate);
+
         Task ClearData();
 
         Task<bool> ModerateReview(string[] ids, bool approved);
@@ -49,5 +53,7 @@
 
         Task<string> MigrateData();
         Task<string> MigrateData(List<string> productIds);
+
+        Task AddSearchDate();
     }
 }

@@ -10,7 +10,11 @@ import {
 } from 'vtex.styleguide'
 import { RenderContext, useRuntime } from 'vtex.render-runtime'
 
-import { PENDING_REVIEWS_PAGE, APPROVED_REVIEWS_PAGE } from './utils'
+import {
+  PENDING_REVIEWS_PAGE,
+  APPROVED_REVIEWS_PAGE,
+  DOWNLOAD_REVIEWS_PAGE,
+} from './utils'
 import { adminReviewMessages, layoutHeaderMessage } from './utils/messages'
 
 import './components/global.css'
@@ -37,7 +41,11 @@ const ReviewIndex: FC = props => {
     navigate({ page: section })
   }
 
-  const [pending, approved] = [PENDING_REVIEWS_PAGE, APPROVED_REVIEWS_PAGE]
+  const [pending, approved, download] = [
+    PENDING_REVIEWS_PAGE,
+    APPROVED_REVIEWS_PAGE,
+    DOWNLOAD_REVIEWS_PAGE,
+  ]
 
   return (
     <Layout
@@ -95,6 +103,18 @@ const ReviewIndex: FC = props => {
                   }
                   active={activeTab === approved}
                   onClick={setActiveSection(approved)}
+                />
+                <Tab
+                  label={
+                    <div className="flex">
+                      <FormattedMessage {...adminReviewMessages.downloadTab} />
+                      {/* <div className="b ml3">
+                        {downloadAmount ? formatToTabNumber(downloadAmount) : '-'}
+                      </div> */}
+                    </div>
+                  }
+                  active={activeTab === download}
+                  onClick={setActiveSection(download)}
                 />
               </Tabs>
             </div>

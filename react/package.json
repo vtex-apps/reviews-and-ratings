@@ -17,7 +17,8 @@
     "react-helmet": "^6.0.0",
     "react-intl": "^3.0.0",
     "react-show-more": "^2.0.0",
-    "typescript": "3.9.7"
+    "typescript": "3.9.7",
+    "xlsx": "^0.17.3"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.7",

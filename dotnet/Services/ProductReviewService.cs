@@ -428,6 +428,20 @@
             return wrapper;
         }
 
+         public async Task<ReviewsResponseWrapper> GetReviewsByreviewDateTime(string reviewDateTime)
+        {
+            ReviewsResponseWrapper wrapper = await _productReviewRepository.GetProductReviewsMD($"reviewDateTime={reviewDateTime}");
+
+            return wrapper;
+        }
+
+        public async Task<ReviewsResponseWrapper> GetReviewsByDateRange(string fromDate, string toDate)
+        {
+            ReviewsResponseWrapper wrapper = await _productReviewRepository.GetRangeReviewsMD(fromDate, toDate);
+
+            return wrapper;
+        }
+
         public async Task ClearData()
         {
             IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
@@ -711,6 +725,15 @@
             }
 
             return sort;
+        }
+
+        public async Task AddSearchDate()
+        {
+            var recordsToUpdate = await _productReviewRepository.GetProductReviewsMD("_where=searchDate is null");
+            foreach (var review in recordsToUpdate.Reviews)
+            {
+                await _productReviewRepository.SaveProductReviewMD(review);
+            }
         }
     }
 }
