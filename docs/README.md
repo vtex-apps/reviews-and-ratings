@@ -77,7 +77,9 @@ To access and use the review moderation admin interface, follow the instructions
 1. Enable the **Require Admin Approval** setting as described above.
 2. In the admin dashboard, navigate to **Catalog > Reviews** using the admin's sidebar.
 3. You may view either **Pending** or **Approved** reviews using the tabs at the top of the page.
-4. You can export reviews to XLS files from the **Download** tab, and it is limited to exporting 800 reviews at a time. Please use the date pickers to select the time range of reviews you want to export.
+> ⚠️ Warning
+>
+> You can export reviews to XLS files from the **Download** tab, and it is limited to exporting 800 reviews at a time. Please use the date pickers to select the time range of reviews you want to export.
 
 Individual pending reviews may be either approved or deleted using the Kebab Menu (3 dots button) in the right column or selecting the checkbox in the left. Multiple reviews can also be selected using the checkboxes, being approved or deleted in bulk.
 
