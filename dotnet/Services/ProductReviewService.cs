@@ -566,7 +566,17 @@
 
         public async Task<bool> VerifySchema()
         {
-            return await _productReviewRepository.VerifySchema();
+            bool verified = false;
+            try
+            {
+                verified = await _productReviewRepository.VerifySchema();
+            }
+            catch(Exception ex)
+            {
+                _context.Vtex.Logger.Error("VerifySchema", null, "Error verifing schema", ex);
+            }
+
+            return verified;
         }
 
         private async Task<Review> ConvertLegacyReview(LegacyReview review)
@@ -594,28 +604,45 @@
         {
             StringBuilder sb = new StringBuilder();
 
-            await this.VerifySchema();
-            IList<LegacyReview> reviews = await this.GetLegacyReviews();
-            if(reviews != null && reviews.Count > 0)
+            bool verify = await this.VerifySchema();
+            sb.AppendLine("Could not verify schema");
+            try
             {
-                foreach(LegacyReview review in reviews)
+                IList<LegacyReview> reviews = await this.GetLegacyReviews();
+                if (reviews != null && reviews.Count > 0)
                 {
-                    sb.AppendLine($"MigrateData {review.Id} {review.ProductId} {review.ShopperId}");
-                    Review newReview = await ConvertLegacyReview(review);
-                    Review result = await this.NewReview(newReview, false);
-                    if (result != null)
+                    foreach (LegacyReview review in reviews)
                     {
-                        await this.DeleteLegacyReview(new[] { review.Id });
-                    }
-                    else
-                    {
-                        sb.AppendLine($"Did not save review {review.Id}");
+                        try
+                        {
+                            sb.AppendLine($"MigrateData {review.Id} {review.ProductId} {review.ShopperId}");
+                            Review newReview = await ConvertLegacyReview(review);
+                            Review result = await this.NewReview(newReview, false);
+                            if (result != null)
+                            {
+                                await this.DeleteLegacyReview(new[] { review.Id });
+                            }
+                            else
+                            {
+                                sb.AppendLine($"Did not save review {review.Id}");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            sb.AppendLine($"Error saving review {review.Id} {ex.Message}");
+                            _context.Vtex.Logger.Error("MigrateData", null, $"Error Saving {review.Id}", ex);
+                        }
                     }
                 }
+                else
+                {
+                    sb.AppendLine("No reviews.");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                sb.AppendLine("No reviews.");
+                _context.Vtex.Logger.Error("MigrateData", null, "Error migrating data", ex);
+                sb.AppendLine($"Error: {ex.Message}");
             }
 
             return sb.ToString();
@@ -734,6 +761,41 @@
             {
                 await _productReviewRepository.SaveProductReviewMD(review);
             }
+        }
+
+        public async Task<LegacyReview> NewReviewLegacy(LegacyReview review)
+        {
+            IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
+            int maxKeyValue = 0;
+            if (lookup != null)
+            {
+                maxKeyValue = lookup.Keys.Max();
+                maxKeyValue++;
+            }
+
+            review.Id = maxKeyValue;
+            Console.WriteLine($"MAX KEY VALUE = {maxKeyValue}");
+
+            IList<LegacyReview> reviews = await this._productReviewRepository.GetProductReviewsAsync(review.ProductId);
+            if(reviews == null)
+            {
+                reviews = new List<LegacyReview>();
+            }
+
+            reviews.Add(review);
+            await this._productReviewRepository.SaveProductReviewsAsync(review.ProductId, reviews);
+            try
+            {
+                lookup.Add(review.Id, review.ProductId);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"NewReviewLegacy {ex.Message}");
+            }
+
+            await _productReviewRepository.SaveLookupAsync(lookup);
+
+            return review;
         }
     }
 }

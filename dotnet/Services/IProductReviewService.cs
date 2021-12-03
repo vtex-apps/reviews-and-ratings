@@ -55,5 +55,7 @@
         Task<string> MigrateData(List<string> productIds);
 
         Task AddSearchDate();
+
+        Task<LegacyReview> NewReviewLegacy(LegacyReview review);
     }
 }
