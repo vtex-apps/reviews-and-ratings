@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Made changes so that default star rating is 5 when user starts writing a review
+
 ## [3.2.0] - 2021-12-02
 
 ### Fixed
