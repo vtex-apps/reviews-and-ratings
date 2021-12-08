@@ -6,9 +6,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+
 ### Fixed
 
 - Improved logging of migration
+
+## [3.2.1] - 2021-12-06
+
+### Fixed
+
+- Fixed Admin Messages
+
 
 ## [3.2.0] - 2021-12-02
 
