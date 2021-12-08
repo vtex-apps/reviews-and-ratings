@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Set alreadysubmitted state depending on the hasAlreadySubmitted query response.
+- Enabled cache for REST API.
+
 ## [3.3.4] - 2021-12-16
 
 ### Fixed
