@@ -4,6 +4,7 @@ using ReviewsRatings.Models;
 using ReviewsRatings.Services;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ReviewsRatings.Controllers
@@ -300,7 +301,34 @@ namespace ReviewsRatings.Controllers
             }
 
             return Json("Done");
-            
+        }
+
+        public async Task<IActionResult> CreateTestReviews()
+        {
+            Response.Headers.Add("Cache-Control", "no-cache");
+            StringBuilder sb = new StringBuilder();
+            Random rnd = new Random();
+            for (int i = 0; i < 10; i++)
+            {
+                LegacyReview review = new LegacyReview
+                {
+                    Approved = true,
+                    Location = "nowhere",
+                    ProductId = rnd.Next(100, 99999).ToString(),
+                    Rating = rnd.Next(1, 5),
+                    ReviewerName = "Test Reviewer",
+                    ShopperId = "test@test.com",
+                    VerifiedPurchaser = true,
+                    Title = "Test Review",
+                    Text = "This is a test Review."
+                };
+
+                LegacyReview result = await _productReviewsService.NewReviewLegacy(review);
+
+                sb.AppendLine($"[{i}] {result.Id} {result.ProductId}");
+            }
+
+            return Json(sb.ToString());
         }
     }
 }
