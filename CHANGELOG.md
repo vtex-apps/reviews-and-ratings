@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+- Fixed Place icon.png into images folder
+### Fixed
+
 - Improved logging of migration
 
 ## [3.2.1] - 2021-12-06
