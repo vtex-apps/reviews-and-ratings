@@ -318,6 +318,11 @@
                 searchQuery = $"&_keyword={searchTerm}";
             }
 
+            AppSettings settings = await GetAppSettings();
+            if (settings.RequireApproval)
+            {
+                searchQuery = $"{searchQuery}&approved=true";
+            }
             ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD($"productId={productId}{sort}{searchQuery}", from.ToString(), to.ToString());
 
             return wrapper;
