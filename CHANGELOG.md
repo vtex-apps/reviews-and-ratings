@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed get call reviews filtering correctly by the approve field according on the require approval setting
+
 ## [3.3.3] - 2021-12-13
 
 ### Fixed
