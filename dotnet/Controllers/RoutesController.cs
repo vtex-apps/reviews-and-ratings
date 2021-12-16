@@ -41,7 +41,6 @@ namespace ReviewsRatings.Controllers
 
         public async Task<IActionResult> ProcessReviewApiAction(string requestedAction, string id)
         {
-            Response.Headers.Add("Cache-Control", "no-cache");
             string responseString = string.Empty;
             string vtexCookie = HttpContext.Request.Headers[HEADER_VTEX_COOKIE];
             ValidatedUser validatedUser = null;
