@@ -10,7 +10,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Added rating filters feature for the store front
 
-
 ## [3.3.5] - 2021-12-16
 
 ### Fixed
