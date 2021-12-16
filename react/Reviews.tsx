@@ -543,10 +543,6 @@ function Reviews() {
         },
       })
       .then((response: ApolloQueryResult<ReviewsData>) => {
-        console.log(response.data)
-        console.log(response.data.reviewsByProductId)
-        console.log(response.data.reviewsByProductId.data)
-        console.log(response.data.reviewsByProductId.range)
         const reviews = response.data.reviewsByProductId.data
         const { total } = response.data.reviewsByProductId.range
         const graphArray = [0, 0, 0, 0, 0, 0]
