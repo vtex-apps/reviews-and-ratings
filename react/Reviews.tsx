@@ -68,7 +68,7 @@ interface AppSettings {
 
 interface State {
   sort: string
-  ratingFilter: string
+  ratingFilter: string | null
   from: number
   to: number
   reviews: Review[] | null
@@ -107,7 +107,7 @@ type ReducerActions =
 
 const initialState = {
   sort: 'ReviewDateTime:desc',
-  ratingFilter: '',
+  ratingFilter: null,
   from: 1,
   to: 10,
   reviews: null,
@@ -169,7 +169,6 @@ const reducer = (state: State, action: ReducerActions) => {
       return {
         ...state,
         ratingFilter: action.args.ratingFilter,
-        offset: 0,
       }
     case 'SET_REVIEWS':
       return {
@@ -388,7 +387,7 @@ function Reviews() {
   const filters = [
     {
       label: intl.formatMessage(messages.all),
-      value: 'null',
+      value: null,
     },
     {
       label: intl.formatMessage(messages.oneStar),
@@ -535,7 +534,7 @@ function Reviews() {
         query: ReviewsByProductId,
         variables: {
           productId,
-          rating: null,
+          rating: state.ratingFilter,
           from: state.from - 1,
           to: state.to - 1,
           orderBy: state.sort,
@@ -574,7 +573,7 @@ function Reviews() {
           },
         })
       })
-  }, [client, productId, state.from, state.to, state.sort, state.settings])
+  }, [client, productId, state.from, state.to, state.sort, state.ratingFilter,state.settings])
 
   return (
     <div
