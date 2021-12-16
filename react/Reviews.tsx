@@ -671,7 +671,7 @@ function Reviews() {
                   })
                 }}
                 value={state.ratingFilter}
-              /> 
+              />
             </div>
             {state.reviews.map((review: Review, i: number) => {
               return (
