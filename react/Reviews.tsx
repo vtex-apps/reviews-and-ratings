@@ -67,6 +67,7 @@ interface AppSettings {
 
 interface State {
   sort: string
+  ratingFilter: string
   from: number
   to: number
   reviews: Review[] | null
@@ -93,6 +94,7 @@ type ReducerActions =
   | { type: 'TOGGLE_REVIEW_ACCORDION'; args: { reviewNumber: number } }
   | { type: 'SET_OPEN_REVIEWS'; args: { reviewNumbers: number[] } }
   | { type: 'SET_SELECTED_SORT'; args: { sort: string } }
+  | { type: 'SET_RATING_FILTER'; args: { ratingFilter: string } }
   | {
       type: 'SET_REVIEWS'
       args: { reviews: Review[]; total: number; graphArray: number[] }
@@ -104,6 +106,7 @@ type ReducerActions =
 
 const initialState = {
   sort: 'ReviewDateTime:desc',
+  ratingFilter: '',
   from: 1,
   to: 10,
   reviews: null,
@@ -161,6 +164,12 @@ const reducer = (state: State, action: ReducerActions) => {
         ...state,
         sort: action.args.sort,
       }
+    case 'SET_RATING_FILTER': 
+      return {
+        ...state,
+        ratingFilter: action.args.ratingFilter,
+        offset: 0,
+      }
     case 'SET_REVIEWS':
       return {
         ...state,
@@ -201,6 +210,10 @@ const messages = defineMessages({
     id: 'store/reviews.list.sortOptions.placeholder',
     defaultMessage: 'Sort by:',
   },
+  filterPlaceholder: {
+    id: 'store/reviews.list.filterOptions.placeholder',
+    defaultMessage: 'Filter by:',
+  },
   sortMostRecent: {
     id: 'store/reviews.list.sortOptions.mostRecent',
     defaultMessage: 'Most Recent',
@@ -216,6 +229,30 @@ const messages = defineMessages({
   sortLowestRated: {
     id: 'store/reviews.list.sortOptions.lowestRated',
     defaultMessage: 'Lowest Rated',
+  },
+  all: {
+    id: 'store/reviews.list.filterOptions.all',
+    defaultMessage: 'All',
+  },
+  oneStar: {
+    id: 'store/reviews.list.filterOptions.one-star',
+    defaultMessage: '1 star',
+  },
+  twoStars: {
+    id: 'store/reviews.list.filterOptions.two-stars',
+    defaultMessage: '2 stars',
+  },
+  threeStars: {
+    id: 'store/reviews.list.filterOptions.three-stars',
+    defaultMessage: '3 stars',
+  },
+  fourStars: {
+    id: 'store/reviews.list.filterOptions.four-stars',
+    defaultMessage: '4 stars',
+  },
+  fiveStars: {
+    id: 'store/reviews.list.filterOptions.five-stars',
+    defaultMessage: '5 stars',
   },
   timeAgo: {
     id: 'store/reviews.list.timeAgo',
@@ -326,6 +363,8 @@ function Reviews() {
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
+  //const [getData, { data }] = useLazyQuery(ReviewByDateRange)
+
   const options = [
     {
       label: intl.formatMessage(messages.sortMostRecent),
@@ -344,6 +383,34 @@ function Reviews() {
       value: 'Rating:asc',
     },
   ]
+
+  const filters = [
+    {
+      label: intl.formatMessage(messages.all),
+      value: 'null',
+    },
+    {
+      label: intl.formatMessage(messages.oneStar),
+      value: '1',
+    },
+    {
+      label: intl.formatMessage(messages.twoStars),
+      value: '2',
+    },
+    {
+      label: intl.formatMessage(messages.threeStars),
+      value: '3',
+    },
+    {
+      label: intl.formatMessage(messages.fourStars),
+      value: '4',
+    },
+    {
+      label: intl.formatMessage(messages.fiveStars),
+      value: '5',
+    },
+  ]
+
 
   const getTimeAgo = (time: string) => {
     const before = new Date(`${time} UTC`)
@@ -467,6 +534,7 @@ function Reviews() {
         query: ReviewsByProductId,
         variables: {
           productId,
+          rating: null,
           from: state.from,
           to: state.to,
           orderBy: state.sort,
@@ -475,6 +543,10 @@ function Reviews() {
         },
       })
       .then((response: ApolloQueryResult<ReviewsData>) => {
+        console.log(response.data)
+        console.log(response.data.reviewsByProductId)
+        console.log(response.data.reviewsByProductId.data)
+        console.log(response.data.reviewsByProductId.range)
         const reviews = response.data.reviewsByProductId.data
         const { total } = response.data.reviewsByProductId.range
         const graphArray = [0, 0, 0, 0, 0, 0]
@@ -585,7 +657,6 @@ function Reviews() {
         ) : state.reviews.length ? (
           <Fragment>
             <div className={`${handles.reviewsOrderBy} flex mb7`}>
-              <div className="mr4">
                 <Dropdown
                   options={options}
                   placeholder={intl.formatMessage(messages.sortPlaceholder)}
@@ -597,7 +668,18 @@ function Reviews() {
                   }}
                   value={state.sort}
                 />
-              </div>
+                <Dropdown
+                  options={filters}
+                  placeholder={intl.formatMessage(messages.filterPlaceholder)}
+                  onChange={(event: React.FormEvent<HTMLSelectElement>) => {
+                    dispatch({
+                      type: 'SET_RATING_FILTER',
+                      args: { ratingFilter: event.currentTarget.value },
+                    })
+                  }}
+                  value={state.ratingFilter}
+                />
+              
             </div>
             {state.reviews.map((review: Review, i: number) => {
               return (

@@ -123,5 +123,12 @@
   "admin/reviews.filterFromDate": "A partir da data",
   "admin/reviews.filterToDate": "Até a data",
   "admin/reviews.filterResults": "Aplicar",
-  "admin/reviews.clearFilters": "Limpar"
+  "admin/reviews.clearFilters": "Limpar",
+  "store/reviews.list.filterOptions.placeholder": "Filter by:",
+  "store/reviews.list.filterOptions.all": "All",
+  "store/reviews.list.filterOptions.one-star": "1 star",
+  "store/reviews.list.filterOptions.two-stars": "2 stars",
+  "store/reviews.list.filterOptions.three-stars": "3 stars",
+  "store/reviews.list.filterOptions.four-stars": "4 stars",
+  "store/reviews.list.filterOptions.five-stars": "5 stars"
 }

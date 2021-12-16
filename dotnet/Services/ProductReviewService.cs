@@ -306,19 +306,24 @@
 
         public async Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId)
         {
-            return await this.GetReviewsByProductId(productId, 0, maximumReturnedRecords, string.Empty, string.Empty);
+            return await this.GetReviewsByProductId(productId, 0, maximumReturnedRecords, string.Empty, string.Empty, 0);
         }
 
-        public async Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId, int from, int to, string orderBy, string searchTerm)
+        public async Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId, int from, int to, string orderBy, string searchTerm, int rating)
         {
             string searchQuery = string.Empty;
+            string ratingQuery = string.Empty;
             string sort = await this.GetSortQuery(orderBy);
+            if (rating == 1 || rating == 2 || rating == 3 || rating == 4 || rating == 5)
+            {
+                ratingQuery = $"&rating={rating}";
+            }
             if (!string.IsNullOrEmpty(searchTerm))
             {
                 searchQuery = $"&_keyword={searchTerm}";
             }
 
-            ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD($"productId={productId}{sort}{searchQuery}", from.ToString(), to.ToString());
+            ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD($"productId={productId}{sort}{searchQuery}{ratingQuery}", from.ToString(), to.ToString());
 
             return wrapper;
         }

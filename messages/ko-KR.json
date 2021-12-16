@@ -123,5 +123,12 @@
   "admin/reviews.filterFromDate": "시작 날짜",
   "admin/reviews.filterToDate": "종료 날짜",
   "admin/reviews.filterResults": "적용",
-  "admin/reviews.clearFilters": "지우기"
+  "admin/reviews.clearFilters": "지우기",
+  "store/reviews.list.filterOptions.placeholder": "Filter by:",
+  "store/reviews.list.filterOptions.all": "All",
+  "store/reviews.list.filterOptions.one-star": "1 star",
+  "store/reviews.list.filterOptions.two-stars": "2 stars",
+  "store/reviews.list.filterOptions.three-stars": "3 stars",
+  "store/reviews.list.filterOptions.four-stars": "4 stars",
+  "store/reviews.list.filterOptions.five-stars": "5 stars"
 }
