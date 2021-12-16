@@ -23,6 +23,7 @@ import AverageRatingByProductId from '../graphql/averageRatingByProductId.graphq
 import ReviewsGraph from './ReviewsGraph'
 
 interface Review {
+  approved: boolean
   id: string
   productId: string
   rating: number
@@ -535,8 +536,8 @@ function Reviews() {
         variables: {
           productId,
           rating: null,
-          from: state.from,
-          to: state.to,
+          from: state.from - 1,
+          to: state.to - 1,
           orderBy: state.sort,
           status:
             state.settings && !state.settings.requireApproval ? '' : 'true',
