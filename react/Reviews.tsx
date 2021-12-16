@@ -165,7 +165,7 @@ const reducer = (state: State, action: ReducerActions) => {
         ...state,
         sort: action.args.sort,
       }
-    case 'SET_RATING_FILTER': 
+    case 'SET_RATING_FILTER':
       return {
         ...state,
         ratingFilter: action.args.ratingFilter,
@@ -363,8 +363,6 @@ function Reviews() {
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  //const [getData, { data }] = useLazyQuery(ReviewByDateRange)
-
   const options = [
     {
       label: intl.formatMessage(messages.sortMostRecent),
@@ -410,7 +408,6 @@ function Reviews() {
       value: '5',
     },
   ]
-
 
   const getTimeAgo = (time: string) => {
     const before = new Date(`${time} UTC`)
@@ -569,7 +566,7 @@ function Reviews() {
           },
         })
       })
-  }, [client, productId, state.from, state.to, state.sort, state.ratingFilter,state.settings])
+  }, [client, productId, state.from, state.to, state.sort, state.ratingFilter, state.settings])
 
   return (
     <div
@@ -653,29 +650,28 @@ function Reviews() {
         ) : state.reviews.length ? (
           <Fragment>
             <div className={`${handles.reviewsOrderBy} flex mb7`}>
-                <Dropdown
-                  options={options}
-                  placeholder={intl.formatMessage(messages.sortPlaceholder)}
-                  onChange={(event: React.FormEvent<HTMLSelectElement>) => {
-                    dispatch({
-                      type: 'SET_SELECTED_SORT',
-                      args: { sort: event.currentTarget.value },
-                    })
-                  }}
-                  value={state.sort}
-                />
-                <Dropdown
-                  options={filters}
-                  placeholder={intl.formatMessage(messages.filterPlaceholder)}
-                  onChange={(event: React.FormEvent<HTMLSelectElement>) => {
-                    dispatch({
-                      type: 'SET_RATING_FILTER',
-                      args: { ratingFilter: event.currentTarget.value },
-                    })
-                  }}
-                  value={state.ratingFilter}
-                />
-              
+              <Dropdown
+                options={options}
+                placeholder={intl.formatMessage(messages.sortPlaceholder)}
+                onChange={(event: React.FormEvent<HTMLSelectElement>) => {
+                  dispatch({
+                    type: 'SET_SELECTED_SORT',
+                    args: { sort: event.currentTarget.value },
+                  })
+                }}
+                value={state.sort}
+              />
+              <Dropdown
+                options={filters}
+                placeholder={intl.formatMessage(messages.filterPlaceholder)}
+                onChange={(event: React.FormEvent<HTMLSelectElement>) => {
+                  dispatch({
+                    type: 'SET_RATING_FILTER',
+                    args: { ratingFilter: event.currentTarget.value },
+                  })
+                }}
+                value={state.ratingFilter}
+              /> 
             </div>
             {state.reviews.map((review: Review, i: number) => {
               return (
