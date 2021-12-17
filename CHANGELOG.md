@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Specify cache control for REST API
+
 ## [3.3.5] - 2021-12-16
 
 ### Fixed
