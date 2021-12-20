@@ -107,7 +107,7 @@ type ReducerActions =
 
 const initialState = {
   sort: 'ReviewDateTime:desc',
-  ratingFilter: null,
+  ratingFilter: '0',
   from: 1,
   to: 10,
   reviews: null,
@@ -385,7 +385,7 @@ function Reviews() {
   const filters = [
     {
       label: intl.formatMessage(messages.all),
-      value: null,
+      value: '0',
     },
     {
       label: intl.formatMessage(messages.oneStar),
@@ -581,7 +581,7 @@ function Reviews() {
       <div className={`${handles.reviewsRating} review__rating`}>
         {!state.hasTotal || !state.hasAverage ? (
           <FormattedMessage id="store/reviews.list.summary.loading" />
-        ) : !state.total ? null : (
+        ) : (
           <Fragment>
             <div className={`${handles.starsContainer} t-heading-4`}>
               <Stars rating={state.average} />
@@ -644,12 +644,7 @@ function Reviews() {
           </Link>
         )}
       </div>
-      <div className={`${handles.reviewCommentsContainer} review__comments`}>
-        {state.reviews === null ? (
-          <FormattedMessage id="store/reviews.list.loading" />
-        ) : state.reviews.length ? (
-          <Fragment>
-            <div className={`${handles.reviewsOrderBy} flex mb7`}>
+      <div className={`${handles.reviewsOrderBy} flex mb7`}>
               <Dropdown
                 options={options}
                 placeholder={intl.formatMessage(messages.sortPlaceholder)}
@@ -673,6 +668,11 @@ function Reviews() {
                 value={state.ratingFilter}
               />
             </div>
+      <div className={`${handles.reviewCommentsContainer} review__comments`}>
+        {state.reviews === null ? (
+          <FormattedMessage id="store/reviews.list.loading" />
+        ) : state.reviews.length ? (
+          <Fragment>
             {state.reviews.map((review: Review, i: number) => {
               return (
                 <div
