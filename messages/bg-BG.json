@@ -124,11 +124,11 @@
   "admin/reviews.filterToDate": "до",
   "admin/reviews.filterResults": "Прилагане",
   "admin/reviews.clearFilters": "Изчистване",
-  "store/reviews.list.filterOptions.placeholder": "Filter by:",
-  "store/reviews.list.filterOptions.all": "All",
-  "store/reviews.list.filterOptions.one-star": "1 star",
-  "store/reviews.list.filterOptions.two-stars": "2 stars",
-  "store/reviews.list.filterOptions.three-stars": "3 stars",
-  "store/reviews.list.filterOptions.four-stars": "4 stars",
-  "store/reviews.list.filterOptions.five-stars": "5 stars"
+  "store/reviews.list.filterOptions.placeholder": "Филтриране по:",
+  "store/reviews.list.filterOptions.all": "Всички",
+  "store/reviews.list.filterOptions.one-star": "1 звезда",
+  "store/reviews.list.filterOptions.two-stars": "2 звезди",
+  "store/reviews.list.filterOptions.three-stars": "3 звезди",
+  "store/reviews.list.filterOptions.four-stars": "4 звезди",
+  "store/reviews.list.filterOptions.five-stars": "5 звезди"
 }
