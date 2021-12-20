@@ -124,11 +124,11 @@
   "admin/reviews.filterToDate": "À la date",
   "admin/reviews.filterResults": "Appliquer",
   "admin/reviews.clearFilters": "Effacer",
-  "store/reviews.list.filterOptions.placeholder": "Filter by:",
-  "store/reviews.list.filterOptions.all": "All",
-  "store/reviews.list.filterOptions.one-star": "1 star",
-  "store/reviews.list.filterOptions.two-stars": "2 stars",
-  "store/reviews.list.filterOptions.three-stars": "3 stars",
-  "store/reviews.list.filterOptions.four-stars": "4 stars",
-  "store/reviews.list.filterOptions.five-stars": "5 stars"
+  "store/reviews.list.filterOptions.placeholder": "Filtré par:",
+  "store/reviews.list.filterOptions.all": "Tout",
+  "store/reviews.list.filterOptions.one-star": "1 étoile",
+  "store/reviews.list.filterOptions.two-stars": "2 étoiles",
+  "store/reviews.list.filterOptions.three-stars": "3 étoiles",
+  "store/reviews.list.filterOptions.four-stars": "4 étoiles",
+  "store/reviews.list.filterOptions.five-stars": "5 étoiles"
 }
