@@ -124,11 +124,11 @@
   "admin/reviews.filterToDate": "終了日",
   "admin/reviews.filterResults": "適用する",
   "admin/reviews.clearFilters": "クリア",
-  "store/reviews.list.filterOptions.placeholder": "Filter by:",
-  "store/reviews.list.filterOptions.all": "All",
-  "store/reviews.list.filterOptions.one-star": "1 star",
-  "store/reviews.list.filterOptions.two-stars": "2 stars",
-  "store/reviews.list.filterOptions.three-stars": "3 stars",
-  "store/reviews.list.filterOptions.four-stars": "4 stars",
-  "store/reviews.list.filterOptions.five-stars": "5 stars"
+  "store/reviews.list.filterOptions.placeholder": "フィルタにかける:",
+  "store/reviews.list.filterOptions.all": "すべて",
+  "store/reviews.list.filterOptions.one-star": "1つ星",
+  "store/reviews.list.filterOptions.two-stars": "2つ星",
+  "store/reviews.list.filterOptions.three-stars": "3つ星",
+  "store/reviews.list.filterOptions.four-stars": "4つ星",
+  "store/reviews.list.filterOptions.five-stars": "5つ星"
 }
