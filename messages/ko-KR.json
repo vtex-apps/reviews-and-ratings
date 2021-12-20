@@ -124,11 +124,11 @@
   "admin/reviews.filterToDate": "종료 날짜",
   "admin/reviews.filterResults": "적용",
   "admin/reviews.clearFilters": "지우기",
-  "store/reviews.list.filterOptions.placeholder": "Filter by:",
-  "store/reviews.list.filterOptions.all": "All",
-  "store/reviews.list.filterOptions.one-star": "1 star",
-  "store/reviews.list.filterOptions.two-stars": "2 stars",
-  "store/reviews.list.filterOptions.three-stars": "3 stars",
-  "store/reviews.list.filterOptions.four-stars": "4 stars",
-  "store/reviews.list.filterOptions.five-stars": "5 stars"
+  "store/reviews.list.filterOptions.placeholder": "필터링 기준:",
+  "store/reviews.list.filterOptions.all": "모두",
+  "store/reviews.list.filterOptions.one-star": "별 1개",
+  "store/reviews.list.filterOptions.two-stars": "별 2개",
+  "store/reviews.list.filterOptions.three-stars": "별 3개",
+  "store/reviews.list.filterOptions.four-stars": "별 4개",
+  "store/reviews.list.filterOptions.five-stars": "별 5개"
 }
