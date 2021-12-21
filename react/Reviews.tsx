@@ -566,7 +566,15 @@ function Reviews() {
           },
         })
       })
-  }, [client, productId, state.from, state.to, state.sort, state.ratingFilter, state.settings])
+  }, [
+    client,
+    productId,
+    state.from,
+    state.to,
+    state.sort,
+    state.ratingFilter,
+    state.settings,
+  ]);
 
   return (
     <div
@@ -645,29 +653,29 @@ function Reviews() {
         )}
       </div>
       <div className={`${handles.reviewsOrderBy} flex mb7`}>
-              <Dropdown
-                options={options}
-                placeholder={intl.formatMessage(messages.sortPlaceholder)}
-                onChange={(event: React.FormEvent<HTMLSelectElement>) => {
-                  dispatch({
-                    type: 'SET_SELECTED_SORT',
-                    args: { sort: event.currentTarget.value },
-                  })
-                }}
-                value={state.sort}
-              />
-              <Dropdown
-                options={filters}
-                placeholder={intl.formatMessage(messages.filterPlaceholder)}
-                onChange={(event: React.FormEvent<HTMLSelectElement>) => {
-                  dispatch({
-                    type: 'SET_RATING_FILTER',
-                    args: { ratingFilter: event.currentTarget.value },
-                  })
-                }}
-                value={state.ratingFilter}
-              />
-            </div>
+        <Dropdown
+          options={options}
+          placeholder={intl.formatMessage(messages.sortPlaceholder)}
+          onChange={(event: React.FormEvent<HTMLSelectElement>) => {
+            dispatch({
+              type: 'SET_SELECTED_SORT',
+              args: { sort: event.currentTarget.value },
+            })
+          }}
+          value={state.sort}
+        />
+        <Dropdown
+          options={filters}
+          placeholder={intl.formatMessage(messages.filterPlaceholder)}
+          onChange={(event: React.FormEvent<HTMLSelectElement>) => {
+            dispatch({
+              type: 'SET_RATING_FILTER',
+              args: { ratingFilter: event.currentTarget.value },
+            })
+          }}
+          value={state.ratingFilter}
+        />
+      </div>
       <div className={`${handles.reviewCommentsContainer} review__comments`}>
         {state.reviews === null ? (
           <FormattedMessage id="store/reviews.list.loading" />
