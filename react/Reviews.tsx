@@ -574,7 +574,7 @@ function Reviews() {
     state.sort,
     state.ratingFilter,
     state.settings,
-  ]);
+  ])
 
   return (
     <div
