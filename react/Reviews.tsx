@@ -68,7 +68,7 @@ interface AppSettings {
 
 interface State {
   sort: string
-  ratingFilter: string | null
+  ratingFilter: number
   from: number
   to: number
   reviews: Review[] | null
@@ -95,7 +95,7 @@ type ReducerActions =
   | { type: 'TOGGLE_REVIEW_ACCORDION'; args: { reviewNumber: number } }
   | { type: 'SET_OPEN_REVIEWS'; args: { reviewNumbers: number[] } }
   | { type: 'SET_SELECTED_SORT'; args: { sort: string } }
-  | { type: 'SET_RATING_FILTER'; args: { ratingFilter: string } }
+  | { type: 'SET_RATING_FILTER'; args: { ratingFilter: number } }
   | {
       type: 'SET_REVIEWS'
       args: { reviews: Review[]; total: number; graphArray: number[] }
@@ -107,7 +107,7 @@ type ReducerActions =
 
 const initialState = {
   sort: 'ReviewDateTime:desc',
-  ratingFilter: '0',
+  ratingFilter: 0,
   from: 1,
   to: 10,
   reviews: null,
@@ -385,27 +385,27 @@ function Reviews() {
   const filters = [
     {
       label: intl.formatMessage(messages.all),
-      value: '0',
+      value: 0,
     },
     {
       label: intl.formatMessage(messages.oneStar),
-      value: '1',
+      value: 1,
     },
     {
       label: intl.formatMessage(messages.twoStars),
-      value: '2',
+      value: 2,
     },
     {
       label: intl.formatMessage(messages.threeStars),
-      value: '3',
+      value: 3,
     },
     {
       label: intl.formatMessage(messages.fourStars),
-      value: '4',
+      value: 4,
     },
     {
       label: intl.formatMessage(messages.fiveStars),
-      value: '5',
+      value: 5,
     },
   ]
 
@@ -566,7 +566,15 @@ function Reviews() {
           },
         })
       })
-  }, [client, productId, state.from, state.to, state.sort, state.ratingFilter, state.settings])
+  }, [
+    client,
+    productId,
+    state.from,
+    state.to,
+    state.sort,
+    state.ratingFilter,
+    state.settings,
+  ])
 
   return (
     <div
@@ -645,29 +653,29 @@ function Reviews() {
         )}
       </div>
       <div className={`${handles.reviewsOrderBy} flex mb7`}>
-              <Dropdown
-                options={options}
-                placeholder={intl.formatMessage(messages.sortPlaceholder)}
-                onChange={(event: React.FormEvent<HTMLSelectElement>) => {
-                  dispatch({
-                    type: 'SET_SELECTED_SORT',
-                    args: { sort: event.currentTarget.value },
-                  })
-                }}
-                value={state.sort}
-              />
-              <Dropdown
-                options={filters}
-                placeholder={intl.formatMessage(messages.filterPlaceholder)}
-                onChange={(event: React.FormEvent<HTMLSelectElement>) => {
-                  dispatch({
-                    type: 'SET_RATING_FILTER',
-                    args: { ratingFilter: event.currentTarget.value },
-                  })
-                }}
-                value={state.ratingFilter}
-              />
-            </div>
+        <Dropdown
+          options={options}
+          placeholder={intl.formatMessage(messages.sortPlaceholder)}
+          onChange={(event: React.FormEvent<HTMLSelectElement>) => {
+            dispatch({
+              type: 'SET_SELECTED_SORT',
+              args: { sort: event.currentTarget.value },
+            })
+          }}
+          value={state.sort}
+        />
+        <Dropdown
+          options={filters}
+          placeholder={intl.formatMessage(messages.filterPlaceholder)}
+          onChange={(event: React.FormEvent<HTMLSelectElement>) => {
+            dispatch({
+              type: 'SET_RATING_FILTER',
+              args: { ratingFilter: +event.currentTarget.value },
+            })
+          }}
+          value={state.ratingFilter}
+        />
+      </div>
       <div className={`${handles.reviewCommentsContainer} review__comments`}>
         {state.reviews === null ? (
           <FormattedMessage id="store/reviews.list.loading" />
