@@ -99,7 +99,7 @@
   "store/reviews.list.graph.stars": "{value, plural, =0{0 stelle} =1{1 stella} other{# stelle}}",
   "store/reviews.summary.add.login": "Effettua l'accesso per scrivere una recensione.",
   "store/reviews.summary.add.title": "Aggiungi recensione",
-  "store/reviews.list.loadingReviews": "Caricamento recensioni...",
+  "store/reviews.list.loadingReviews": "Caricamento delle recensioni...",
   "admin/reviews.reviewsandratings.title": "Recensioni e valutazioni",
   "admin/reviews.reviewsandratings.description": "Un'app per salvare e recuperare recensioni e valutazioni dei prodotti.",
   "admin/reviews.allowsAnonymousReviews.title": "Consenti recensioni anonime",
@@ -114,14 +114,8 @@
   "admin/reviews.defaultOpenCount.description": "Il numero specificato di schede delle recensioni si aprirà di default sulla pagina del prodotto",
   "admin/reviews.showGraph.title": "Mostra grafico",
   "admin/reviews.showGraph.description": "Mostra il grafico delle recensioni sulla pagina del prodotto",
-  "admin/reviews.displaySummaryIfNone.title": "Mostra le stelle nel se non ci sono recensioni",
-  "admin/reviews.displayInLineIfNone.title": "Mostra le stelle nel se non ci sono recensioni",
-  "admin/reviews.displaySummaryTotalReviews.title": "Mostra il numero totale di recensioni nel blocco",
-  "admin/reviews.displaySummaryAddButton.title": "Mostra il pulsante 'Aggiungi recensione' nel blocco",
-  "admin/reviews.download.title": "Esportazione delle recensioni",
-  "admin/reviews.download.icon": "Scarica",
-  "admin/reviews.filterFromDate": "Dal giorno",
-  "admin/reviews.filterToDate": "Al giorno",
-  "admin/reviews.filterResults": "Applica",
-  "admin/reviews.clearFilters": "Rimuovi"
+  "admin/reviews.displaySummaryIfNone.title": "Mostra le stelle nel \"product-rating-summary\" se non ci sono recensioni",
+  "admin/reviews.displayInLineIfNone.title": "Mostra le stelle nel \"product-rating-inline\" se non ci sono recensioni",
+  "admin/reviews.displaySummaryTotalReviews.title": "Mostra il numero totale di recensioni nel blocco \"product-rating-summary\"",
+  "admin/reviews.displaySummaryAddButton.title": "Mostra il pulsante \"Aggiungi recensione\" nel blocco \"product-rating-summary\""
 }
