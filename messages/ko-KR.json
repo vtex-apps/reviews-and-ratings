@@ -117,5 +117,12 @@
   "admin/reviews.displaySummaryIfNone.title": "리뷰가 없는 경우 제품 평가 요약에 별 표시",
   "admin/reviews.displayInLineIfNone.title": "리뷰가 없는 경우 제품 평가 인라인에 별 표시",
   "admin/reviews.displaySummaryTotalReviews.title": "제품 평가 요약 블록에 총 리뷰 수 표시",
-  "admin/reviews.displaySummaryAddButton.title": "제품 평가 요약 블록에 '리뷰 추가' 버튼 표시"
+  "admin/reviews.displaySummaryAddButton.title": "제품 평가 요약 블록에 '리뷰 추가' 버튼 표시",
+  "store/reviews.list.filterOptions.placeholder": "필터링 기준:",
+  "store/reviews.list.filterOptions.all": "모두",
+  "store/reviews.list.filterOptions.one-star": "별 1개",
+  "store/reviews.list.filterOptions.two-stars": "별 2개",
+  "store/reviews.list.filterOptions.three-stars": "별 3개",
+  "store/reviews.list.filterOptions.four-stars": "별 4개",
+  "store/reviews.list.filterOptions.five-stars": "별 5개"
 }

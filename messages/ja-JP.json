@@ -117,5 +117,12 @@
   "admin/reviews.displaySummaryIfNone.title": "レビューがない場合、製品評価サマリに星を表示します",
   "admin/reviews.displayInLineIfNone.title": "レビューがない場合、製品評価インラインに星を表示します",
   "admin/reviews.displaySummaryTotalReviews.title": "製品評価サマリブロックにレビュー総数を表示します",
-  "admin/reviews.displaySummaryAddButton.title": "製品評価サマリブロックに「レビューを追加」ボタンを表示します"
+  "admin/reviews.displaySummaryAddButton.title": "製品評価サマリブロックに「レビューを追加」ボタンを表示します",
+  "store/reviews.list.filterOptions.placeholder": "フィルタにかける:",
+  "store/reviews.list.filterOptions.all": "すべて",
+  "store/reviews.list.filterOptions.one-star": "1つ星",
+  "store/reviews.list.filterOptions.two-stars": "2つ星",
+  "store/reviews.list.filterOptions.three-stars": "3つ星",
+  "store/reviews.list.filterOptions.four-stars": "4つ星",
+  "store/reviews.list.filterOptions.five-stars": "5つ星"
 }

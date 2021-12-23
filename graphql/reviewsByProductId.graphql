@@ -1,5 +1,6 @@
 query ReviewsByProductId(
   $productId: String!
+  $rating: Int
   $from: Int
   $to: Int
   $orderBy: String
@@ -7,6 +8,7 @@ query ReviewsByProductId(
 ) {
   reviewsByProductId(
     productId: $productId
+    rating: $rating
     from: $from
     to: $to
     orderBy: $orderBy

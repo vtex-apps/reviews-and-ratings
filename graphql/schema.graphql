@@ -63,6 +63,7 @@ type Query {
   ): ReviewsResult
   reviewsByProductId(
     productId: String!
+    rating: Int
     from: Int
     to: Int
     orderBy: String

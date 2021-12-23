@@ -117,5 +117,12 @@
   "admin/reviews.displaySummaryIfNone.title": "Mostra le stelle nel \"product-rating-summary\" se non ci sono recensioni",
   "admin/reviews.displayInLineIfNone.title": "Mostra le stelle nel \"product-rating-inline\" se non ci sono recensioni",
   "admin/reviews.displaySummaryTotalReviews.title": "Mostra il numero totale di recensioni nel blocco \"product-rating-summary\"",
-  "admin/reviews.displaySummaryAddButton.title": "Mostra il pulsante \"Aggiungi recensione\" nel blocco \"product-rating-summary\""
+  "admin/reviews.displaySummaryAddButton.title": "Mostra il pulsante \"Aggiungi recensione\" nel blocco \"product-rating-summary\"",
+  "store/reviews.list.filterOptions.placeholder": "Filtra per:",
+  "store/reviews.list.filterOptions.all": "Tutti",
+  "store/reviews.list.filterOptions.one-star": "1 stella",
+  "store/reviews.list.filterOptions.two-stars": "2 stelle",
+  "store/reviews.list.filterOptions.three-stars": "3 stelle",
+  "store/reviews.list.filterOptions.four-stars": "4 stelle",
+  "store/reviews.list.filterOptions.five-stars": "5 stelle"
 }

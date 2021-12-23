@@ -68,6 +68,7 @@ interface AppSettings {
 
 interface State {
   sort: string
+  ratingFilter: number
   from: number
   to: number
   reviews: Review[] | null
@@ -94,6 +95,7 @@ type ReducerActions =
   | { type: 'TOGGLE_REVIEW_ACCORDION'; args: { reviewNumber: number } }
   | { type: 'SET_OPEN_REVIEWS'; args: { reviewNumbers: number[] } }
   | { type: 'SET_SELECTED_SORT'; args: { sort: string } }
+  | { type: 'SET_RATING_FILTER'; args: { ratingFilter: number } }
   | {
       type: 'SET_REVIEWS'
       args: { reviews: Review[]; total: number; graphArray: number[] }
@@ -105,6 +107,7 @@ type ReducerActions =
 
 const initialState = {
   sort: 'ReviewDateTime:desc',
+  ratingFilter: 0,
   from: 1,
   to: 10,
   reviews: null,
@@ -162,6 +165,11 @@ const reducer = (state: State, action: ReducerActions) => {
         ...state,
         sort: action.args.sort,
       }
+    case 'SET_RATING_FILTER':
+      return {
+        ...state,
+        ratingFilter: action.args.ratingFilter,
+      }
     case 'SET_REVIEWS':
       return {
         ...state,
@@ -202,6 +210,10 @@ const messages = defineMessages({
     id: 'store/reviews.list.sortOptions.placeholder',
     defaultMessage: 'Sort by:',
   },
+  filterPlaceholder: {
+    id: 'store/reviews.list.filterOptions.placeholder',
+    defaultMessage: 'Filter by:',
+  },
   sortMostRecent: {
     id: 'store/reviews.list.sortOptions.mostRecent',
     defaultMessage: 'Most Recent',
@@ -217,6 +229,30 @@ const messages = defineMessages({
   sortLowestRated: {
     id: 'store/reviews.list.sortOptions.lowestRated',
     defaultMessage: 'Lowest Rated',
+  },
+  all: {
+    id: 'store/reviews.list.filterOptions.all',
+    defaultMessage: 'All',
+  },
+  oneStar: {
+    id: 'store/reviews.list.filterOptions.one-star',
+    defaultMessage: '1 star',
+  },
+  twoStars: {
+    id: 'store/reviews.list.filterOptions.two-stars',
+    defaultMessage: '2 stars',
+  },
+  threeStars: {
+    id: 'store/reviews.list.filterOptions.three-stars',
+    defaultMessage: '3 stars',
+  },
+  fourStars: {
+    id: 'store/reviews.list.filterOptions.four-stars',
+    defaultMessage: '4 stars',
+  },
+  fiveStars: {
+    id: 'store/reviews.list.filterOptions.five-stars',
+    defaultMessage: '5 stars',
   },
   timeAgo: {
     id: 'store/reviews.list.timeAgo',
@@ -346,6 +382,33 @@ function Reviews() {
     },
   ]
 
+  const filters = [
+    {
+      label: intl.formatMessage(messages.all),
+      value: 0,
+    },
+    {
+      label: intl.formatMessage(messages.oneStar),
+      value: 1,
+    },
+    {
+      label: intl.formatMessage(messages.twoStars),
+      value: 2,
+    },
+    {
+      label: intl.formatMessage(messages.threeStars),
+      value: 3,
+    },
+    {
+      label: intl.formatMessage(messages.fourStars),
+      value: 4,
+    },
+    {
+      label: intl.formatMessage(messages.fiveStars),
+      value: 5,
+    },
+  ]
+
   const getTimeAgo = (time: string) => {
     const before = new Date(`${time} UTC`)
     const now = new Date()
@@ -468,6 +531,7 @@ function Reviews() {
         query: ReviewsByProductId,
         variables: {
           productId,
+          rating: state.ratingFilter,
           from: state.from - 1,
           to: state.to - 1,
           orderBy: state.sort,
@@ -502,7 +566,15 @@ function Reviews() {
           },
         })
       })
-  }, [client, productId, state.from, state.to, state.sort, state.settings])
+  }, [
+    client,
+    productId,
+    state.from,
+    state.to,
+    state.sort,
+    state.ratingFilter,
+    state.settings,
+  ])
 
   return (
     <div
@@ -517,7 +589,7 @@ function Reviews() {
       <div className={`${handles.reviewsRating} review__rating`}>
         {!state.hasTotal || !state.hasAverage ? (
           <FormattedMessage id="store/reviews.list.summary.loading" />
-        ) : !state.total ? null : (
+        ) : (
           <Fragment>
             <div className={`${handles.starsContainer} t-heading-4`}>
               <Stars rating={state.average} />
@@ -580,26 +652,35 @@ function Reviews() {
           </Link>
         )}
       </div>
+      <div className={`${handles.reviewsOrderBy} flex mb7`}>
+        <Dropdown
+          options={options}
+          placeholder={intl.formatMessage(messages.sortPlaceholder)}
+          onChange={(event: React.FormEvent<HTMLSelectElement>) => {
+            dispatch({
+              type: 'SET_SELECTED_SORT',
+              args: { sort: event.currentTarget.value },
+            })
+          }}
+          value={state.sort}
+        />
+        <Dropdown
+          options={filters}
+          placeholder={intl.formatMessage(messages.filterPlaceholder)}
+          onChange={(event: React.FormEvent<HTMLSelectElement>) => {
+            dispatch({
+              type: 'SET_RATING_FILTER',
+              args: { ratingFilter: +event.currentTarget.value },
+            })
+          }}
+          value={state.ratingFilter}
+        />
+      </div>
       <div className={`${handles.reviewCommentsContainer} review__comments`}>
         {state.reviews === null ? (
           <FormattedMessage id="store/reviews.list.loading" />
         ) : state.reviews.length ? (
           <Fragment>
-            <div className={`${handles.reviewsOrderBy} flex mb7`}>
-              <div className="mr4">
-                <Dropdown
-                  options={options}
-                  placeholder={intl.formatMessage(messages.sortPlaceholder)}
-                  onChange={(event: React.FormEvent<HTMLSelectElement>) => {
-                    dispatch({
-                      type: 'SET_SELECTED_SORT',
-                      args: { sort: event.currentTarget.value },
-                    })
-                  }}
-                  value={state.sort}
-                />
-              </div>
-            </div>
             {state.reviews.map((review: Review, i: number) => {
               return (
                 <div

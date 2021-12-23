@@ -117,5 +117,12 @@
   "admin/reviews.displaySummaryIfNone.title": "S’il n’y a pas de commentaires, afficher les étoiles dans le résumé des évaluations de produits",
   "admin/reviews.displayInLineIfNone.title": "S’il n'y a pas d’avis, afficher les étoiles en ligne",
   "admin/reviews.displaySummaryTotalReviews.title": "Afficher le nombre total d’avis sur le bloc récapitulatif de la note produit",
-  "admin/reviews.displaySummaryAddButton.title": "Afficher le bouton \"Ajouter un commentaire\" sur le bloc récapitulatif de la note produit"
+  "admin/reviews.displaySummaryAddButton.title": "Afficher le bouton \"Ajouter un commentaire\" sur le bloc récapitulatif de la note produit",
+  "store/reviews.list.filterOptions.placeholder": "Filtré par:",
+  "store/reviews.list.filterOptions.all": "Tout",
+  "store/reviews.list.filterOptions.one-star": "1 étoile",
+  "store/reviews.list.filterOptions.two-stars": "2 étoiles",
+  "store/reviews.list.filterOptions.three-stars": "3 étoiles",
+  "store/reviews.list.filterOptions.four-stars": "4 étoiles",
+  "store/reviews.list.filterOptions.five-stars": "5 étoiles"
 }

@@ -32,9 +32,7 @@
     },
     "free": true,
     "type": "free",
-    "availableCountries": [
-      "*"
-    ]
+    "availableCountries": ["*"]
   },
   "settingsSchema": {
     "title": "Reviews and Ratings",
@@ -68,19 +66,7 @@
         "title": "Number of open review accordions",
         "description": "Specified number of review tabs on product page will default to open",
         "type": "string",
-        "enum": [
-          "0",
-          "1",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10"
-        ],
+        "enum": ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
         "default": "0"
       },
       "showGraph": {

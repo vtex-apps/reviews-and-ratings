@@ -181,6 +181,7 @@ namespace ReviewsRatings.Controllers
                 var orderBy = queryString["order_by"];
                 var status = queryString["status"];
                 var productId = queryString["product_id"];
+                var rating = int.Parse(queryString["rating"]);
                 switch (requestedAction)
                 {
                     case REVIEW:
@@ -209,7 +210,7 @@ namespace ReviewsRatings.Controllers
 
                         if (!string.IsNullOrEmpty(productId))
                         {
-                            wrapper = await _productReviewsService.GetReviewsByProductId(productId, from, to, orderBy, searchTerm);
+                            wrapper = await _productReviewsService.GetReviewsByProductId(productId, from, to, orderBy, searchTerm, rating);
                         }
                         else
                         {

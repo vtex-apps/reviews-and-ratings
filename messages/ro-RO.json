@@ -117,5 +117,12 @@
   "admin/reviews.displaySummaryIfNone.title": "Afișează stelele în product-rating-summary dacă nu există recenzii",
   "admin/reviews.displayInLineIfNone.title": "Afișează stelele în product-rating-inline dacă nu există recenzii",
   "admin/reviews.displaySummaryTotalReviews.title": "Afișează numărul total de recenzii în blocul product-rating-summary",
-  "admin/reviews.displaySummaryAddButton.title": "Afișează butonul „Adaugă recenzie” în blocul product-rating-summary"
+  "admin/reviews.displaySummaryAddButton.title": "Afișează butonul „Adaugă recenzie” în blocul product-rating-summary",
+  "store/reviews.list.filterOptions.placeholder": "Filtrare după:",
+  "store/reviews.list.filterOptions.all": "Toate",
+  "store/reviews.list.filterOptions.one-star": "1 stea",
+  "store/reviews.list.filterOptions.two-stars": "2 stele",
+  "store/reviews.list.filterOptions.three-stars": "3 stele",
+  "store/reviews.list.filterOptions.four-stars": "4 stele",
+  "store/reviews.list.filterOptions.five-stars": "5 stele"
 }
