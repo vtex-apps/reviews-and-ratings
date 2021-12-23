@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.4.0] - 2021-12-23
+
 ### Added
 
 - Added rating filters feature for the store front
