@@ -258,7 +258,7 @@ namespace ReviewsRatings.Controllers
         public async Task<IActionResult> VerifySchema()
         {
             Response.Headers.Add("Cache-Control", "no-cache");
-            bool result = await _productReviewsService.VerifySchema();
+            string result = await _productReviewsService.VerifySchema();
 
             return Json(result);
         }

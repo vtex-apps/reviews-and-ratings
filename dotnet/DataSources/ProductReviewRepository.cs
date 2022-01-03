@@ -417,7 +417,7 @@
             return vtexOrderList;
         }
 
-        public async Task<bool> VerifySchema()
+        public async Task<string> VerifySchema()
         {
             // https://{{accountName}}.vtexcommercestable.com.br/api/dataentities/{{data_entity_name}}/schemas/{{schema_name}}
             var request = new HttpRequestMessage
@@ -439,6 +439,9 @@
             string responseContent = await response.Content.ReadAsStringAsync();
             //_context.Vtex.Logger.Debug("VerifySchema", null, $"[{response.StatusCode}] {responseContent}");
 
+            string getSchemaReasonPhrase = ($"Get Schema ReasonPhrase: {response.ReasonPhrase}");
+
+            string result = ($"{getSchemaReasonPhrase} Schema no modified");
             if (response.IsSuccessStatusCode && !responseContent.Equals(SCHEMA_JSON))
             {
                 request = new HttpRequestMessage
@@ -458,10 +461,15 @@
                 response = await client.SendAsync(request);
                 responseContent = await response.Content.ReadAsStringAsync();
 
+                string putSchemaResponse = ($"Put Schema ReasonPhrase: {response.ReasonPhrase}");
                 _context.Vtex.Logger.Debug("VerifySchema", null, $"Applying Schema [{response.StatusCode}] {responseContent}");
+                result = putSchemaResponse;
             }
-
-            return response.IsSuccessStatusCode;
+            
+            
+            //return response.IsSuccessStatusCode;
+            // return response.ReasonPhrase;
+            return result;
         }
 
         public async Task<ReviewsResponseWrapper> GetProductReviewsMD(string searchQuery, string from, string to)

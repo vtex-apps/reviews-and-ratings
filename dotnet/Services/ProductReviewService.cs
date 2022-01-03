@@ -575,15 +575,17 @@
             return hasPurchased;
         }
 
-        public async Task<bool> VerifySchema()
+        public async Task<string> VerifySchema()
         {
-            bool verified = false;
+            
+            string verified = "hello";
             try
             {
                 verified = await _productReviewRepository.VerifySchema();
             }
             catch(Exception ex)
             {
+                verified = ex.InnerException.Message;
                 _context.Vtex.Logger.Error("VerifySchema", null, "Error verifing schema", ex);
             }
 
@@ -615,7 +617,7 @@
         {
             StringBuilder sb = new StringBuilder();
 
-            bool verify = await this.VerifySchema();
+            string verify = await this.VerifySchema();
             sb.AppendLine("Could not verify schema");
             try
             {

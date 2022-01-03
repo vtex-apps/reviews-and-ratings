@@ -22,7 +22,7 @@
 
         Task<VtexOrderList> ListOrders(string queryString);
 
-        Task<bool> VerifySchema();
+        Task<string> VerifySchema();
         Task<ReviewsResponseWrapper> GetProductReviewsMD(string searchQuery, string from = null, string to = null);
 
         Task<ReviewsResponseWrapper> GetRangeReviewsMD(string fromDate, string toDate);
