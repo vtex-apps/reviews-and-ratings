@@ -49,7 +49,7 @@
 
         Task<bool> ShopperHasPurchasedProduct(string shopperId, string productId);
 
-        Task<bool> VerifySchema();
+        Task<string> VerifySchema();
 
         Task<string> MigrateData();
         Task<string> MigrateData(List<string> productIds);
