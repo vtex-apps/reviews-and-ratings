@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Bugfix for the rating parsing issues
+
 ## [3.4.0] - 2021-12-23
 
 ### Added
@@ -45,7 +49,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-- Added immediate indexing in MasterData to fix caching problems 
+- Added immediate indexing in MasterData to fix caching problems
 
 ## [3.3.2] - 2021-12-10
 
@@ -56,7 +60,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [3.3.1] - 2021-12-09
 
 ## [3.3.0] - 2021-12-08
-
 
 ### Fixed
 
@@ -71,7 +74,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 
 - Fixed Admin Messages
-
 
 ## [3.2.0] - 2021-12-02
 
@@ -110,7 +112,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [2.11.0] - 2021-09-16
 
-### Added 
+### Added
 
 - I18n Bg and pseudo language to implement In Context tool.
 
@@ -138,7 +140,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - Add setting to display stars in `product-rating-inline` block when the product has no reviews
-- Use locale to format review's date in account admin view 
+- Use locale to format review's date in account admin view
 
 ## [2.11.8] - 2021-08-30
 
