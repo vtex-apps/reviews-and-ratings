@@ -181,7 +181,8 @@ namespace ReviewsRatings.Controllers
                 var orderBy = queryString["order_by"];
                 var status = queryString["status"];
                 var productId = queryString["product_id"];
-                var rating = int.Parse(queryString["rating"]);
+                int rating = 0;
+                string ratingQS = queryString["rating"];
                 switch (requestedAction)
                 {
                     case REVIEW:
@@ -195,6 +196,11 @@ namespace ReviewsRatings.Controllers
                         break;
                     case REVIEWS:
                         IList<Review> reviews;
+                        if (!string.IsNullOrEmpty(ratingQS))
+                        {
+                            int.TryParse(ratingQS, out rating);
+                        }
+
                         if (string.IsNullOrEmpty(fromParam))
                         {
                             fromParam = "0";
