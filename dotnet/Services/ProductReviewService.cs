@@ -578,7 +578,7 @@
         public async Task<string> VerifySchema()
         {
             
-            string verified = "hello";
+            string verified = string.Empty;
             try
             {
                 verified = await _productReviewRepository.VerifySchema();
