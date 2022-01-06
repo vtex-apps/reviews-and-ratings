@@ -420,24 +420,21 @@
         public async Task<string> VerifySchema()
         {
             // https://{{accountName}}.vtexcommercestable.com.br/api/dataentities/{{data_entity_name}}/schemas/{{schema_name}}
+            
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri($"https://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/schemas/{SCHEMA}")
+                RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/schemas/{SCHEMA}")
             };
 
-            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
-            if (authToken != null)
-            {
-                request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
-                request.Headers.Add(VTEX_ID_HEADER_NAME, authToken);
-                request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, authToken);
-            }
+            request.Headers.Add("Proxy-Authorization", _context.Vtex.AuthToken);
+            request.Headers.Add("VtexIdclientAutCookie", _context.Vtex.AdminUserAuthToken);
+            request.Headers.Add("X-Vtex-Use-Https", "true");
 
             var client = _clientFactory.CreateClient();
             var response = await client.SendAsync(request);
             string responseContent = await response.Content.ReadAsStringAsync();
-            //_context.Vtex.Logger.Debug("VerifySchema", null, $"[{response.StatusCode}] {responseContent}");
+            _context.Vtex.Logger.Debug("VerifySchema", null, $"[{response.StatusCode}] {responseContent}");
 
             string getSchemaReasonPhrase = ($"Get Schema ReasonPhrase: {response.ReasonPhrase}");
 
@@ -447,16 +444,13 @@
                 request = new HttpRequestMessage
                 {
                     Method = HttpMethod.Put,
-                    RequestUri = new Uri($"https://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/schemas/{SCHEMA}"),
+                    RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/schemas/{SCHEMA}"),
                     Content = new StringContent(SCHEMA_JSON, Encoding.UTF8, APPLICATION_JSON)
                 };
 
-                if (authToken != null)
-                {
-                    request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
-                    request.Headers.Add(VTEX_ID_HEADER_NAME, authToken);
-                    request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, authToken);
-                }
+                request.Headers.Add("Proxy-Authorization", _context.Vtex.AuthToken);
+                request.Headers.Add("VtexIdclientAutCookie", _context.Vtex.AdminUserAuthToken);
+                request.Headers.Add("X-Vtex-Use-Https", "true");
 
                 response = await client.SendAsync(request);
                 responseContent = await response.Content.ReadAsStringAsync();
@@ -466,9 +460,6 @@
                 result = putSchemaResponse;
             }
             
-            
-            //return response.IsSuccessStatusCode;
-            // return response.ReasonPhrase;
             return result;
         }
 
