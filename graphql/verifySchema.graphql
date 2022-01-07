@@ -1,0 +1,5 @@
+query VerifySchema {
+  verifySchema @context(provider: "vtex.reviews-and-ratings") {
+    verifySchemaResponse
+  }
+}

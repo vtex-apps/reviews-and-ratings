@@ -227,6 +227,15 @@ namespace ReviewsRatings.GraphQL
                 }
             );
 
+            FieldAsync<VerifySchemaType>(
+                "verifySchema",
+                resolve: async context =>
+                {
+                    return await context.TryAsyncResolve(
+                        async c => await productReviewService.VerifySchema());
+                }
+            );
+
         }
     }
 }

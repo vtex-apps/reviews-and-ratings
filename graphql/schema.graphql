@@ -52,6 +52,10 @@ type AppSettings {
   displaySummaryAddButton: Boolean
 }
 
+type VerifySchema {
+  verifySchemaResponse: String
+}
+
 type Query {
   review(id: ID!): Review
   reviews(
