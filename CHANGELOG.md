@@ -6,12 +6,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed headers for Verify Schema.
+- Add to verify schema process hashed schema comparison.
+- Run Migrate Data automatically only when it's necessary.
+- Added a button to migrate data if they need.
+
 ### Added
 
 - Quality engineering actions (SonarCloud analysis for .Net and TS)
 
 ## [3.4.2] - 2022-01-13
+
 ### Changed
+
 - Use product's URI as @id on `Product` schema for `RatingSummary` and `Reviews` blocks.
 
 ## [3.4.1] - 2022-01-04

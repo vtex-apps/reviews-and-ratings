@@ -8,6 +8,7 @@
     using System.Net.Http.Headers;
     using System.Text;
     using System.Threading.Tasks;
+    using System.Security.Cryptography;
     using Microsoft.AspNetCore.Http;
     using Newtonsoft.Json;
     using ReviewsRatings.Models;
@@ -19,6 +20,7 @@
     {
         private const string REVIEWS_BUCKET = "productReviews";
         private const string LOOKUP = "productLookup";
+        private const string HASHED_SCHEMA = "HashedSchema";
         private const string DATA_ENTITY = "productReviews";
         private const string SCHEMA = "reviewsSchema";
         private const string SCHEMA_JSON = "{\"name\":\"reviewsSchema\",\"properties\":{\"productId\":{\"type\":\"string\",\"title\":\"productId\"},\"rating\":{\"type\":[\"integer\",\"null\"],\"title\":\"rating\"},\"title\":{\"type\":[\"string\",\"null\"],\"title\":\"title\"},\"text\":{\"type\":[\"string\",\"null\"],\"title\":\"text\"},\"reviewerName\":{\"type\":[\"string\",\"null\"],\"title\":\"reviewerName\"},\"shopperId\":{\"type\":[\"string\",\"null\"],\"title\":\"shopperId\"},\"reviewDateTime\":{\"type\":\"string\",\"title\":\"reviewDateTime\"},\"searchDate\":{\"type\":[\"string\",\"null\"],\"title\":\"searchDate\",\"format\":\"date-time\"}, \"verifiedPurchaser\":{\"type\":\"boolean\",\"title\":\"verifiedPurchaser\"},\"sku\":{\"type\":[\"string\",\"null\"],\"title\":\"sku\"},\"approved\":{\"type\":\"boolean\",\"title\":\"approved\"},\"location\":{\"type\":[\"string\",\"null\"],\"title\":\"location\"}},\"v-indexed\":[\"productId\",\"shopperId\",\"approved\",\"reviewDateTime\",\"searchDate\", \"rating\"],\"v-security\":{\"allowGetAll\":true},\"v-immediate-indexing\":true}";
@@ -416,51 +418,82 @@
 
             return vtexOrderList;
         }
-
         public async Task<string> VerifySchema()
         {
             // https://{{accountName}}.vtexcommercestable.com.br/api/dataentities/{{data_entity_name}}/schemas/{{schema_name}}
             
+            bool verifyResult = false;
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/schemas/{SCHEMA}")
+                RequestUri = new Uri($"http://infra.io.vtex.com/vbase/v2/{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_ACCOUNT]}/master/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{HASHED_SCHEMA}"),
             };
 
-            request.Headers.Add("Proxy-Authorization", _context.Vtex.AuthToken);
-            request.Headers.Add("VtexIdclientAutCookie", _context.Vtex.AdminUserAuthToken);
-            request.Headers.Add("X-Vtex-Use-Https", "true");
-
+            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+            if (authToken != null)
+            {
+                request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
+            }
+            
             var client = _clientFactory.CreateClient();
             var response = await client.SendAsync(request);
             string responseContent = await response.Content.ReadAsStringAsync();
-            _context.Vtex.Logger.Debug("VerifySchema", null, $"[{response.StatusCode}] {responseContent}");
 
-            string getSchemaReasonPhrase = ($"Get Schema ReasonPhrase: {response.ReasonPhrase}");
-
-            string result = ($"{getSchemaReasonPhrase} Schema no modified");
-            if (response.IsSuccessStatusCode && !responseContent.Equals(SCHEMA_JSON))
+            string GetSHA256(string str)
             {
-                request = new HttpRequestMessage
-                {
-                    Method = HttpMethod.Put,
-                    RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/schemas/{SCHEMA}"),
-                    Content = new StringContent(SCHEMA_JSON, Encoding.UTF8, APPLICATION_JSON)
-                };
-
-                request.Headers.Add("Proxy-Authorization", _context.Vtex.AuthToken);
-                request.Headers.Add("VtexIdclientAutCookie", _context.Vtex.AdminUserAuthToken);
-                request.Headers.Add("X-Vtex-Use-Https", "true");
-
-                response = await client.SendAsync(request);
-                responseContent = await response.Content.ReadAsStringAsync();
-
-                string putSchemaResponse = ($"Put Schema ReasonPhrase: {response.ReasonPhrase}");
-                _context.Vtex.Logger.Debug("VerifySchema", null, $"Applying Schema [{response.StatusCode}] {responseContent}");
-                result = putSchemaResponse;
+                SHA256 sha256 = SHA256Managed.Create();
+                ASCIIEncoding encoding = new ASCIIEncoding();
+                byte[] stream = null;
+                StringBuilder sb = new StringBuilder();
+                stream = sha256.ComputeHash(encoding.GetBytes(str));
+                for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
+                return sb.ToString();
             }
+        
+            verifyResult = response.StatusCode == HttpStatusCode.NotFound 
+                ? false
+                : responseContent.Equals(GetSHA256(SCHEMA_JSON));
+
+            if (!verifyResult) {
+                try {
+                    request = new HttpRequestMessage
+                    {
+                        Method = HttpMethod.Put,
+                        RequestUri = new Uri($"http://infra.io.vtex.com/vbase/v2/{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}/master/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{HASHED_SCHEMA}"),
+                        Content = new StringContent(GetSHA256(SCHEMA_JSON), Encoding.UTF8, APPLICATION_JSON)
+                    };
+
+                    request.Headers.Add("Proxy-Authorization", _context.Vtex.AuthToken);
+                    request.Headers.Add("VtexIdclientAutCookie", _context.Vtex.AdminUserAuthToken);
+                    request.Headers.Add("X-Vtex-Use-Https", "true");
+
+                    response = await client.SendAsync(request);
+                    responseContent = await response.Content.ReadAsStringAsync();
+
+                    request = new HttpRequestMessage
+                    {
+                        Method = HttpMethod.Put,
+                        RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/schemas/{SCHEMA}"),
+                        Content = new StringContent(SCHEMA_JSON, Encoding.UTF8, APPLICATION_JSON)
+                    };
+
+                    request.Headers.Add("Proxy-Authorization", _context.Vtex.AuthToken);
+                    request.Headers.Add("VtexIdclientAutCookie", _context.Vtex.AdminUserAuthToken);
+                    request.Headers.Add("X-Vtex-Use-Https", "true");
+
+                    response = await client.SendAsync(request);
+                    responseContent = await response.Content.ReadAsStringAsync();
+                }
+                catch (Exception ex)
+                {
+                    _context.Vtex.Logger.Error("VerifySchema", null, "Request Error", ex);
+                }
+                
+                verifyResult = response.ReasonPhrase == "OK";
+            } 
             
-            return result;
+            return verifyResult ? "Schema is up to date!" : "Schema is NOT up to date";
+            
         }
 
         public async Task<ReviewsResponseWrapper> GetProductReviewsMD(string searchQuery, string from, string to)
@@ -608,8 +641,6 @@
 
         public async Task<bool> DeleteProductReviewMD(string documentId)
         {
-            // DELETE https://{accountName}.{environment}.com.br/api/dataentities/data_entity_name/documents/id
-
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Delete,
@@ -633,7 +664,6 @@
 
         public async Task<string> SaveProductReviewMD(Review review)
         {
-            // PATCH https://{{accountName}}.vtexcommercestable.com.br/api/dataentities/{{data_entity_name}}/documents
             string id = string.Empty;
 
             // before SerializeObject
