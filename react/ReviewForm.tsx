@@ -28,6 +28,7 @@ interface State {
   title: string
   text: string
   location: string | null
+  locale: string | null
   reviewerName: string
   shopperId: string | null
   reviewSubmitted: boolean
@@ -51,6 +52,7 @@ type ReducerActions =
   | { type: 'SET_TITLE'; args: { title: string } }
   | { type: 'SET_TEXT'; args: { text: string } }
   | { type: 'SET_LOCATION'; args: { location: string } }
+  | { type: 'SET_LOCALE'; args: { locale: string } }
   | { type: 'SET_NAME'; args: { name: string } }
   | { type: 'SET_ID'; args: { id: string } }
   | { type: 'SET_AUTHENTICATED'; args: { authenticated: boolean } }
@@ -65,6 +67,7 @@ const initialState = {
   title: '',
   text: '',
   location: '',
+  locale: '',
   reviewerName: '',
   shopperId: '',
   reviewSubmitted: false,
@@ -110,6 +113,11 @@ const reducer = (state: State, action: ReducerActions) => {
       return {
         ...state,
         location: action.args.location,
+      }
+    case 'SET_LOCALE':
+      return {
+        ...state,
+        locale: action.args.locale,
       }
     case 'SET_NAME':
       return {
@@ -248,6 +256,13 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
         args: { authenticated: true },
       })
 
+      dispatch({
+        type: 'SET_LOCALE',
+        args: {
+          locale: intl.locale,
+        },
+      })
+
       const profile = {
         email:
           namespaces.profile?.email?.value ??
@@ -303,7 +318,7 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
           }
         })
     })
-  }, [client, productId])
+  }, [client, intl, productId])
 
   async function submitReview() {
     dispatch({
@@ -341,6 +356,7 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
               title: state.title,
               text: state.text,
               reviewerName: state.reviewerName,
+              locale: state.locale,
             },
           },
         })

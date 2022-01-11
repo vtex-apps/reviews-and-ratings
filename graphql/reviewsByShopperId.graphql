@@ -17,6 +17,7 @@ query ReviewsByShopperId(
     text
     reviewerName
     location
+    locale
     shopperId
     reviewDateTime
     verifiedPurchaser

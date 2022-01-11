@@ -181,7 +181,19 @@ namespace ReviewsRatings.Controllers
                 var orderBy = queryString["order_by"];
                 var status = queryString["status"];
                 var productId = queryString["product_id"];
-                var rating = int.Parse(queryString["rating"]);
+                var locale = queryString["locale"];
+                var boolValue = queryString["pastReviews"];
+                bool pastReviews;
+                if(boolValue == "TRUE" || boolValue == "true" || boolValue == "1") 
+                {
+                    pastReviews = true;
+                }
+                else
+                {
+                    pastReviews = false;
+                }
+                int rating;
+                bool success = int.TryParse(queryString["rating"], out rating);
                 switch (requestedAction)
                 {
                     case REVIEW:
@@ -210,7 +222,7 @@ namespace ReviewsRatings.Controllers
 
                         if (!string.IsNullOrEmpty(productId))
                         {
-                            wrapper = await _productReviewsService.GetReviewsByProductId(productId, from, to, orderBy, searchTerm, rating);
+                            wrapper = await _productReviewsService.GetReviewsByProductId(productId, from, to, orderBy, searchTerm, rating, locale, pastReviews);
                         }
                         else
                         {
@@ -304,6 +316,21 @@ namespace ReviewsRatings.Controllers
             return Json("Done");
         }
 
+        public async Task<IActionResult> AddLocale()
+        {
+            Response.Headers.Add("Cache-Control", "no-cache");
+            try
+            {
+                await _productReviewsService.AddLocale();
+            }
+            catch(Exception ex)
+            {
+                return Json("False");
+            }
+
+            return Json("Done");
+        }
+
         public async Task<IActionResult> CreateTestReviews()
         {
             Response.Headers.Add("Cache-Control", "no-cache");
@@ -315,6 +342,7 @@ namespace ReviewsRatings.Controllers
                 {
                     Approved = true,
                     Location = "nowhere",
+                    Locale = "nowhere",
                     ProductId = rnd.Next(100, 99999).ToString(),
                     Rating = rnd.Next(1, 5),
                     ReviewerName = "Test Reviewer",

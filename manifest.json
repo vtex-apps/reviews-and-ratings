@@ -21,6 +21,7 @@
     "vtex.store": "2.x",
     "vtex.search-graphql": "0.x",
     "vtex.store-graphql": "2.x",
+    "vtex.tenant-graphql": "0.x",
     "vtex.channels-components": "4.x",
     "vtex.paginated-table": "0.x",
     "vtex.css-handles": "0.x"
@@ -32,9 +33,7 @@
     },
     "free": true,
     "type": "free",
-    "availableCountries": [
-      "*"
-    ]
+    "availableCountries": ["*"]
   },
   "settingsSchema": {
     "title": "Reviews and Ratings",
@@ -68,19 +67,7 @@
         "title": "Number of open review accordions",
         "description": "Specified number of review tabs on product page will default to open",
         "type": "string",
-        "enum": [
-          "0",
-          "1",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10"
-        ],
+        "enum": ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
         "default": "0"
       },
       "showGraph": {

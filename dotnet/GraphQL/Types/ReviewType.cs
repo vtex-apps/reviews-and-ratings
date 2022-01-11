@@ -25,6 +25,7 @@ namespace ReviewsRatings.GraphQL.Types
             Field(b => b.Sku, nullable: true).Description("The product sku of the review.");
             Field(b => b.Approved, nullable: true).Description("Indicates whether the review has been approved.");
             Field(b => b.Location, nullable: true).Description("Reviewer location.");
+            Field(b => b.Locale, nullable: true).Description("Reviewer locale.");
         }
     }
 }

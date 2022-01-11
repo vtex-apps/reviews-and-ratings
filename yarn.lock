@@ -1316,6 +1316,11 @@
     "array-includes" "^3.0.3"
     "object.assign" "^4.1.0"
 
+"languagedetect@^2.0.0":
+  "integrity" "sha512-AZb/liiQ+6ZoTj4f1J0aE6OkzhCo8fyH+tuSaPfSo8YHCWLFJrdSixhtO2TYdIkjcDQNaR4RmGaV2A5FJklDMQ=="
+  "resolved" "https://registry.npmjs.org/languagedetect/-/languagedetect-2.0.0.tgz"
+  "version" "2.0.0"
+
 "levn@^0.3.0", "levn@~0.3.0":
   "integrity" "sha1-OwmSTt+fCDwEkP3UwLxEIeBHZO4="
   "resolved" "https://registry.npmjs.org/levn/-/levn-0.3.0.tgz"
