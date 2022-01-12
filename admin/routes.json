@@ -11,6 +11,10 @@
     "component": "ApprovedReviewsTable",
     "path": "/admin/app/reviews-ratings/approved"
   },
+  "admin.app.reviews.download": {
+    "component": "DownloadReviewsTable",
+    "path": "/admin/app/reviews-ratings/download"
+  },
   "layout": {
     "component": "ReviewAdmin"
   }

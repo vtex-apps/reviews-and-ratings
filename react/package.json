@@ -11,13 +11,15 @@
     "copy-to-clipboard": "^3.2.0",
     "graphql": "^14.5.8",
     "lodash.flowright": "^3.5.0",
+    "node": "^17.2.0",
     "react": "^16.8.3",
     "react-apollo": "^3.1.1",
     "react-dom": "^16.8.3",
     "react-helmet": "^6.0.0",
     "react-intl": "^3.0.0",
     "react-show-more": "^2.0.0",
-    "typescript": "3.9.7"
+    "typescript": "3.9.7",
+    "xlsx": "^0.17.3"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.7",
@@ -42,5 +44,5 @@
     "vtex.store-graphql": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.store-graphql@2.136.9/public/@types/vtex.store-graphql",
     "vtex.styleguide": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.styleguide@9.134.0/public/@types/vtex.styleguide"
   },
-  "version": "3.1.0"
+  "version": "3.4.1"
 }

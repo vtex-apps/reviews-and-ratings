@@ -4,6 +4,7 @@ using ReviewsRatings.Models;
 using ReviewsRatings.Services;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ReviewsRatings.Controllers
@@ -40,7 +41,7 @@ namespace ReviewsRatings.Controllers
 
         public async Task<IActionResult> ProcessReviewApiAction(string requestedAction, string id)
         {
-            Response.Headers.Add("Cache-Control", "no-cache");
+            Response.Headers.Add("Cache-Control", "public, max-age=300, stale-while-revalidate=3600, stale-if-error=3600");
             string responseString = string.Empty;
             string vtexCookie = HttpContext.Request.Headers[HEADER_VTEX_COOKIE];
             ValidatedUser validatedUser = null;
@@ -180,6 +181,8 @@ namespace ReviewsRatings.Controllers
                 var orderBy = queryString["order_by"];
                 var status = queryString["status"];
                 var productId = queryString["product_id"];
+                int rating = 0;
+                string ratingQS = queryString["rating"];
                 switch (requestedAction)
                 {
                     case REVIEW:
@@ -193,6 +196,11 @@ namespace ReviewsRatings.Controllers
                         break;
                     case REVIEWS:
                         IList<Review> reviews;
+                        if (!string.IsNullOrEmpty(ratingQS))
+                        {
+                            int.TryParse(ratingQS, out rating);
+                        }
+
                         if (string.IsNullOrEmpty(fromParam))
                         {
                             fromParam = "0";
@@ -208,7 +216,7 @@ namespace ReviewsRatings.Controllers
 
                         if (!string.IsNullOrEmpty(productId))
                         {
-                            wrapper = await _productReviewsService.GetReviewsByProductId(productId, from, to, orderBy, searchTerm);
+                            wrapper = await _productReviewsService.GetReviewsByProductId(productId, from, to, orderBy, searchTerm, rating);
                         }
                         else
                         {
@@ -285,6 +293,49 @@ namespace ReviewsRatings.Controllers
             }
 
             return Json(result);
+        }
+
+        public async Task<IActionResult> AddSearchDate()
+        {
+            Response.Headers.Add("Cache-Control", "no-cache");
+            try
+            {
+                await _productReviewsService.AddSearchDate();
+            }
+            catch(Exception ex)
+            {
+                return Json("False");
+            }
+
+            return Json("Done");
+        }
+
+        public async Task<IActionResult> CreateTestReviews()
+        {
+            Response.Headers.Add("Cache-Control", "no-cache");
+            StringBuilder sb = new StringBuilder();
+            Random rnd = new Random();
+            for (int i = 0; i < 10; i++)
+            {
+                LegacyReview review = new LegacyReview
+                {
+                    Approved = true,
+                    Location = "nowhere",
+                    ProductId = rnd.Next(100, 99999).ToString(),
+                    Rating = rnd.Next(1, 5),
+                    ReviewerName = "Test Reviewer",
+                    ShopperId = "test@test.com",
+                    VerifiedPurchaser = true,
+                    Title = "Test Review",
+                    Text = "This is a test Review."
+                };
+
+                LegacyReview result = await _productReviewsService.NewReviewLegacy(review);
+
+                sb.AppendLine($"[{i}] {result.Id} {result.ProductId}");
+            }
+
+            return Json(sb.ToString());
         }
     }
 }

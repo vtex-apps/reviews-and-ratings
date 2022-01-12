@@ -1,18 +1,12 @@
-query ReviewsByProductId(
-  $productId: String!
-  $rating: Int
-  $from: Int
-  $to: Int
+query ReviewByDateRange(
+  $fromDate: String!
+  $toDate: String!
   $orderBy: String
-  $status: String
 ) {
-  reviewsByProductId(
-    productId: $productId
-    rating: $rating
-    from: $from
-    to: $to
+  reviewByDateRange(
+    fromDate: $fromDate
+    toDate: $toDate
     orderBy: $orderBy
-    status: $status
   ) {
     data {
       id

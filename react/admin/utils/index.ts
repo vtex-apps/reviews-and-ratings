@@ -5,6 +5,7 @@ export const DATE_COLUMN_WIDTH_PX = 160
 
 export const PENDING_REVIEWS_PAGE = 'admin.app.reviews.pending'
 export const APPROVED_REVIEWS_PAGE = 'admin.app.reviews.approved'
+export const DOWNLOAD_REVIEWS_PAGE = 'admin.app.reviews.download'
 
 export const displayLoading = () => {
   window.postMessage({ action: { type: 'START_LOADING' } }, '*')

@@ -306,19 +306,30 @@
 
         public async Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId)
         {
-            return await this.GetReviewsByProductId(productId, 0, maximumReturnedRecords, string.Empty, string.Empty);
+            return await this.GetReviewsByProductId(productId, 0, maximumReturnedRecords, string.Empty, string.Empty, 0);
         }
 
-        public async Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId, int from, int to, string orderBy, string searchTerm)
+        public async Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId, int from, int to, string orderBy, string searchTerm, int rating)
         {
             string searchQuery = string.Empty;
+            string ratingQuery = string.Empty;
             string sort = await this.GetSortQuery(orderBy);
+            if (rating > 0 && rating <= 5)
+            {
+                ratingQuery = $"&rating={rating}";
+            }
             if (!string.IsNullOrEmpty(searchTerm))
             {
                 searchQuery = $"&_keyword={searchTerm}";
             }
 
-            ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD($"productId={productId}{sort}{searchQuery}", from.ToString(), to.ToString());
+            AppSettings settings = await GetAppSettings();
+            if (settings.RequireApproval)
+            {
+                searchQuery = $"{searchQuery}&approved=true";
+            }
+            
+            ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD($"productId={productId}{sort}{searchQuery}{ratingQuery}", from.ToString(), to.ToString());
 
             return wrapper;
         }
@@ -424,6 +435,20 @@
         public async Task<ReviewsResponseWrapper> GetReviewsByShopperId(string shopperId)
         {
             ReviewsResponseWrapper wrapper = await _productReviewRepository.GetProductReviewsMD($"shopperId={shopperId}");
+
+            return wrapper;
+        }
+
+         public async Task<ReviewsResponseWrapper> GetReviewsByreviewDateTime(string reviewDateTime)
+        {
+            ReviewsResponseWrapper wrapper = await _productReviewRepository.GetProductReviewsMD($"reviewDateTime={reviewDateTime}");
+
+            return wrapper;
+        }
+
+        public async Task<ReviewsResponseWrapper> GetReviewsByDateRange(string fromDate, string toDate)
+        {
+            ReviewsResponseWrapper wrapper = await _productReviewRepository.GetRangeReviewsMD(fromDate, toDate);
 
             return wrapper;
         }
@@ -552,7 +577,17 @@
 
         public async Task<bool> VerifySchema()
         {
-            return await _productReviewRepository.VerifySchema();
+            bool verified = false;
+            try
+            {
+                verified = await _productReviewRepository.VerifySchema();
+            }
+            catch(Exception ex)
+            {
+                _context.Vtex.Logger.Error("VerifySchema", null, "Error verifing schema", ex);
+            }
+
+            return verified;
         }
 
         private async Task<Review> ConvertLegacyReview(LegacyReview review)
@@ -580,28 +615,45 @@
         {
             StringBuilder sb = new StringBuilder();
 
-            await this.VerifySchema();
-            IList<LegacyReview> reviews = await this.GetLegacyReviews();
-            if(reviews != null && reviews.Count > 0)
+            bool verify = await this.VerifySchema();
+            sb.AppendLine("Could not verify schema");
+            try
             {
-                foreach(LegacyReview review in reviews)
+                IList<LegacyReview> reviews = await this.GetLegacyReviews();
+                if (reviews != null && reviews.Count > 0)
                 {
-                    sb.AppendLine($"MigrateData {review.Id} {review.ProductId} {review.ShopperId}");
-                    Review newReview = await ConvertLegacyReview(review);
-                    Review result = await this.NewReview(newReview, false);
-                    if (result != null)
+                    foreach (LegacyReview review in reviews)
                     {
-                        await this.DeleteLegacyReview(new[] { review.Id });
-                    }
-                    else
-                    {
-                        sb.AppendLine($"Did not save review {review.Id}");
+                        try
+                        {
+                            sb.AppendLine($"MigrateData {review.Id} {review.ProductId} {review.ShopperId}");
+                            Review newReview = await ConvertLegacyReview(review);
+                            Review result = await this.NewReview(newReview, false);
+                            if (result != null)
+                            {
+                                await this.DeleteLegacyReview(new[] { review.Id });
+                            }
+                            else
+                            {
+                                sb.AppendLine($"Did not save review {review.Id}");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            sb.AppendLine($"Error saving review {review.Id} {ex.Message}");
+                            _context.Vtex.Logger.Error("MigrateData", null, $"Error Saving {review.Id}", ex);
+                        }
                     }
                 }
+                else
+                {
+                    sb.AppendLine("No reviews.");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                sb.AppendLine("No reviews.");
+                _context.Vtex.Logger.Error("MigrateData", null, "Error migrating data", ex);
+                sb.AppendLine($"Error: {ex.Message}");
             }
 
             return sb.ToString();
@@ -711,6 +763,50 @@
             }
 
             return sort;
+        }
+
+        public async Task AddSearchDate()
+        {
+            var recordsToUpdate = await _productReviewRepository.GetProductReviewsMD("_where=searchDate is null");
+            foreach (var review in recordsToUpdate.Reviews)
+            {
+                await _productReviewRepository.SaveProductReviewMD(review);
+            }
+        }
+
+        public async Task<LegacyReview> NewReviewLegacy(LegacyReview review)
+        {
+            IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
+            int maxKeyValue = 0;
+            if (lookup != null)
+            {
+                maxKeyValue = lookup.Keys.Max();
+                maxKeyValue++;
+            }
+
+            review.Id = maxKeyValue;
+            Console.WriteLine($"MAX KEY VALUE = {maxKeyValue}");
+
+            IList<LegacyReview> reviews = await this._productReviewRepository.GetProductReviewsAsync(review.ProductId);
+            if(reviews == null)
+            {
+                reviews = new List<LegacyReview>();
+            }
+
+            reviews.Add(review);
+            await this._productReviewRepository.SaveProductReviewsAsync(review.ProductId, reviews);
+            try
+            {
+                lookup.Add(review.Id, review.ProductId);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"NewReviewLegacy {ex.Message}");
+            }
+
+            await _productReviewRepository.SaveLookupAsync(lookup);
+
+            return review;
         }
     }
 }

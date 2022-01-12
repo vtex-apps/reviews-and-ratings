@@ -55,7 +55,7 @@ type ReducerActions =
   | { type: 'SET_ID'; args: { id: string } }
   | { type: 'SET_AUTHENTICATED'; args: { authenticated: boolean } }
   | { type: 'SET_VERIFIED' }
-  | { type: 'SET_ALREADY_SUBMITTED' }
+  | { type: 'SET_ALREADY_SUBMITTED'; args: { alreadySubmitted: boolean } }
   | { type: 'SET_SUBMITTED' }
   | { type: 'SET_SUBMITTING'; args: { isSubmitting: boolean } }
   | { type: 'SHOW_VALIDATION' }
@@ -153,7 +153,7 @@ const reducer = (state: State, action: ReducerActions) => {
     case 'SET_ALREADY_SUBMITTED':
       return {
         ...state,
-        alreadySubmitted: true,
+        alreadySubmitted: action.args.alreadySubmitted,
       }
     case 'SHOW_VALIDATION':
       return {
@@ -271,9 +271,10 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
           variables: { shopperId: profile.email, productId },
         })
         .then((result: ApolloQueryResult<HasShopperReviewedData>) => {
-          if (result.data.hasShopperReviewed) {
+          if (result.data) {
             dispatch({
               type: 'SET_ALREADY_SUBMITTED',
+              args: { alreadySubmitted: result.data.hasShopperReviewed },
             })
           }
         })
@@ -316,9 +317,10 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
           variables: { shopperId: state.shopperId, productId },
         })
         .then((result: ApolloQueryResult<HasShopperReviewedData>) => {
-          if (result.data.hasShopperReviewed) {
+          if (result.data) {
             dispatch({
               type: 'SET_ALREADY_SUBMITTED',
+              args: { alreadySubmitted: result.data.hasShopperReviewed },
             })
           }
         })

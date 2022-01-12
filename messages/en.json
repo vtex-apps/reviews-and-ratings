@@ -3,6 +3,7 @@
   "admin/reviews.settings.title": "Reviews Settings",
   "admin/reviews.tab.pending": "Pending",
   "admin/reviews.tab.approved": "Approved",
+  "admin/reviews.tab.download": "Download",
   "admin/reviews.reviewSchema.review": "Review",
   "admin/reviews.reviewSchema.product": "Product",
   "admin/reviews.reviewSchema.date": "Date",
@@ -116,5 +117,18 @@
   "admin/reviews.displaySummaryIfNone.title": "Display stars in product-rating-summary if there are no reviews",
   "admin/reviews.displayInLineIfNone.title": "Display stars in product-rating-inline if there are no reviews",
   "admin/reviews.displaySummaryTotalReviews.title": "Display total reviews number on product-rating-summary block",
-  "admin/reviews.displaySummaryAddButton.title": "Display `Add review` button on product-rating-summary block"
+  "admin/reviews.displaySummaryAddButton.title": "Display `Add review` button on product-rating-summary block",
+  "admin/reviews.download.title": "Reviews Export",
+  "admin/reviews.download.icon": "Download",
+  "admin/reviews.filterFromDate": "From date",
+  "admin/reviews.filterToDate": "To date",
+  "admin/reviews.filterResults": "Apply",
+  "admin/reviews.clearFilters": "Clear",
+  "store/reviews.list.filterOptions.placeholder": "Filter by:",
+  "store/reviews.list.filterOptions.all": "All",
+  "store/reviews.list.filterOptions.one-star": "1 star",
+  "store/reviews.list.filterOptions.two-stars": "2 stars",
+  "store/reviews.list.filterOptions.three-stars": "3 stars",
+  "store/reviews.list.filterOptions.four-stars": "4 stars",
+  "store/reviews.list.filterOptions.five-stars": "5 stars"
 }

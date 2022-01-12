@@ -16,6 +16,7 @@ declare module 'vtex.styleguide' {
   export const IconCaretUp
   export const IconArrowDown
   export const IconArrowBack
+  export const IconDownload
   export const IconArrowUp
   export const IconClose
   export const IconExternalLink
@@ -35,4 +36,6 @@ declare module 'vtex.styleguide' {
   export const Tab
   export const Layout
   export const Tabs
+  export const PageBlock
+  export const DatePicker
 }

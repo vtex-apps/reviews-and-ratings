@@ -1,0 +1,14 @@
+{
+  "name": "Reviews & Ratings",
+  "headline": "Native solution for product reviews and ratings.",
+  "overview": "This app improves your product page and product shelves with customer ratings and reviews. Allow customers to make smarter decisions based on other shoppers' feedback, and share their feedback for the products they purchase.",
+  "features": [
+    "Display average star ratings on product shelves and full text reviews on the PDP",
+    "Review moderation: approve new product reviews before they are displayed in the product page",
+    "Configure your store to allow anonymous reviews"
+  ],
+  "websiteURL": "https://vtex.com/",
+  "support": {
+    "url": "https://help-tickets.vtex.com/en/support?app=vtex.reviews-and-ratings"
+  }
+}

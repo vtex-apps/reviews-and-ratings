@@ -8,8 +8,7 @@
   },
   "minReplicas": 8,
   "maxReplicas": 80,
-  "runtimeArgs": [
-  ],
+  "runtimeArgs": [],
   "routes": {
     "reviewApiAction": {
       "path": "/reviews-and-ratings/api/:requestedAction",
@@ -26,12 +25,16 @@
     "migrateData": {
       "path": "/reviews-and-ratings/migrate-data",
       "public": true
+    },
+    "addSearchDate": {
+      "path": "/reviews-and-ratings/add-search-date",
+      "public": true
     }
   },
   "events": {
     "onAppsLinked": {
       "sender": "apps",
-      "keys": [ "linked" ]
+      "keys": ["linked"]
     }
   }
 }

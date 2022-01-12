@@ -6,7 +6,7 @@
 
     public interface IProductReviewService
     {
-        Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId, int from, int to, string orderBy, string searchTerm);
+        Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId, int from, int to, string orderBy, string searchTerm, int rating);
 
         Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId);
 
@@ -26,6 +26,10 @@
         Task<bool> DeleteReview(string[] ids);
 
         Task<ReviewsResponseWrapper> GetReviewsByShopperId(string shopperId);
+
+        Task<ReviewsResponseWrapper> GetReviewsByreviewDateTime(string reviewDateTime);
+
+        Task<ReviewsResponseWrapper> GetReviewsByDateRange(string fromDate, string toDate);
 
         Task ClearData();
 
@@ -49,5 +53,9 @@
 
         Task<string> MigrateData();
         Task<string> MigrateData(List<string> productIds);
+
+        Task AddSearchDate();
+
+        Task<LegacyReview> NewReviewLegacy(LegacyReview review);
     }
 }

@@ -8,6 +8,87 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Use product's URI as @id on `Product` schema for `RatingSummary` and `Reviews` blocks.
 
+## [3.4.1] - 2022-01-04
+
+### Fixed
+
+- Bugfix for the rating parsing issues
+
+## [3.4.0] - 2021-12-23
+
+### Added
+
+- Added rating filters feature for the store front
+
+## [3.3.7] - 2021-12-22
+
+### Fixed
+
+- French, Italian, Japanese, Korean, Portuguese, Dutch and Romanian translations
+
+### Removed
+
+- Pseudolanguage
+
+## [3.3.6] - 2021-12-17
+
+### Added
+
+- Specify cache control for REST API
+
+## [3.3.5] - 2021-12-16
+
+### Fixed
+
+- Set alreadysubmitted state depending on the hasAlreadySubmitted query response.
+- Enabled cache for REST API.
+
+## [3.3.4] - 2021-12-16
+
+### Fixed
+
+- Fixed get call reviews filtering correctly by the approve field according on the require approval setting
+
+## [3.3.3] - 2021-12-13
+
+### Fixed
+
+- Added immediate indexing in MasterData to fix caching problems
+
+## [3.3.2] - 2021-12-10
+
+### Fixed
+
+- Metadata folder re-estructured according the new submit process
+
+## [3.3.1] - 2021-12-09
+
+## [3.3.0] - 2021-12-08
+
+### Fixed
+
+- Fixed Place icon.png into images folder
+
+### Fixed
+
+- Improved logging of migration
+
+## [3.2.1] - 2021-12-06
+
+### Fixed
+
+- Fixed Admin Messages
+
+## [3.2.0] - 2021-12-02
+
+### Fixed
+
+- Updated README file
+
+### Added
+
+- Add date range fillter and the export function in the new 'download' tab
+
 ## [3.1.0] - 2021-10-05
 
 ### Changed
@@ -35,7 +116,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [2.11.0] - 2021-09-16
 
-### Added 
+### Added
 
 - I18n Bg and pseudo language to implement In Context tool.
 
@@ -63,7 +144,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - Add setting to display stars in `product-rating-inline` block when the product has no reviews
-- Use locale to format review's date in account admin view 
+- Use locale to format review's date in account admin view
 
 ## [2.11.8] - 2021-08-30
 
