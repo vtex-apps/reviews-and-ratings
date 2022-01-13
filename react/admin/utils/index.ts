@@ -14,12 +14,3 @@ export const displayLoading = () => {
 export const stopLoading = () => {
   window.postMessage({ action: { type: 'STOP_LOADING' } }, '*')
 }
-
-declare global {
-  interface Window {
-    __RUNTIME__: {
-      account: string
-      workspace: string
-    }
-  }
-}

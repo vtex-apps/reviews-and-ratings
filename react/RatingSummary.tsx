@@ -12,6 +12,7 @@ import AppSettings from '../graphql/appSettings.graphql'
 import Stars from './components/Stars'
 import TotalReviewsByProductId from '../graphql/totalReviewsByProductId.graphql'
 import AverageRatingByProductId from '../graphql/averageRatingByProductId.graphql'
+import { getBaseUrl } from './utils/baseUrl'
 
 interface TotalData {
   totalReviewsByProductId: number
@@ -126,7 +127,7 @@ function RatingSummary() {
   const client = useApolloClient()
   const handles = useCssHandles(CSS_HANDLES)
   const { product } = useProduct() ?? {}
-  const { productId, productName, link } = product ?? {}
+  const { productId, productName, linkText } = product ?? {}
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
@@ -213,6 +214,8 @@ function RatingSummary() {
     if (reviewsContainer) reviewsContainer.scrollIntoView()
   }
 
+  const baseUrl = getBaseUrl()
+
   return (
     <div className={`${handles.summaryContainer} review-summary mw8 center`}>
       {!state.hasTotal || !state.hasAverage ? (
@@ -224,7 +227,7 @@ function RatingSummary() {
               {JSON.stringify({
                 '@context': 'http://schema.org',
                 '@type': 'Product',
-                '@id': link,
+                '@id': `${baseUrl}/${linkText}/p`,
                 aggregateRating: {
                   '@type': 'AggregateRating',
                   ratingValue: state.average.toString(),
