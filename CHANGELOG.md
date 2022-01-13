@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Quality engineering actions (SonarCloud analysis for .Net and TS)
+
 ## [3.4.2] - 2022-01-13
 ### Changed
 - Use product's URI as @id on `Product` schema for `RatingSummary` and `Reviews` blocks.
