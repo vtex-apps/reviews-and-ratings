@@ -71,7 +71,6 @@
         public async Task<Review> EditReview(Review review)
         {
 
-            await this.MigrateData();
             ReviewsResponseWrapper wrapper = await _productReviewRepository.GetProductReviewsMD($"id={review.Id}");
             Review oldReview = wrapper.Reviews.FirstOrDefault();
 
@@ -102,7 +101,6 @@
 
         public async Task<decimal> GetAverageRatingByProductId(string productId)
         {
-            await this.MigrateData();
             string searchQuery = $"productId={productId}";
             decimal averageRating = 0m;
             AppSettings settings = await GetAppSettings();
@@ -128,7 +126,6 @@
 
         public async Task<Review> GetReview(int Id)
         {
-            await this.MigrateData();
             Review review = null;
             ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD($"id={Id}");
             IList<Review> reviews = wrapper.Reviews;
@@ -289,7 +286,6 @@
         /// query Reviews($searchTerm: String, $from: Int, $to: Int, $orderBy: String, $status: Boolean)
         public async Task<ReviewsResponseWrapper> GetReviews(string searchTerm, int from, int to, string orderBy, string status)
         {
-            await this.MigrateData();
             string searchQuery = string.Empty;
             string statusQuery = string.Empty;
             if (!string.IsNullOrEmpty(searchTerm))
@@ -316,7 +312,6 @@
 
         public async Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId, int from, int to, string orderBy, string searchTerm, int rating)
         {
-            await this.MigrateData();
             string searchQuery = string.Empty;
             string ratingQuery = string.Empty;
             string sort = await this.GetSortQuery(orderBy);
@@ -342,7 +337,6 @@
 
         public async Task<Review> NewReview(Review review, bool doValidation)
         {
-            await this.MigrateData();
             bool success = false;
             if (review != null)
             {
@@ -441,7 +435,6 @@
 
         public async Task<ReviewsResponseWrapper> GetReviewsByShopperId(string shopperId)
         {
-            await this.MigrateData();
             ReviewsResponseWrapper wrapper = await _productReviewRepository.GetProductReviewsMD($"shopperId={shopperId}");
 
             return wrapper;
@@ -449,7 +442,6 @@
 
         public async Task<ReviewsResponseWrapper> GetReviewsByreviewDateTime(string reviewDateTime)
         {
-            await this.MigrateData();
             ReviewsResponseWrapper wrapper = await _productReviewRepository.GetProductReviewsMD($"reviewDateTime={reviewDateTime}");
 
             return wrapper;
@@ -457,7 +449,6 @@
 
         public async Task<ReviewsResponseWrapper> GetReviewsByDateRange(string fromDate, string toDate)
         {
-            await this.MigrateData();
             ReviewsResponseWrapper wrapper = await _productReviewRepository.GetRangeReviewsMD(fromDate, toDate);
             return wrapper;
         }
@@ -499,7 +490,6 @@
 
         public async Task<bool> ModerateReview(string[] ids, bool approved)
         {
-            await this.MigrateData();
             bool retval = true;
             IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
             foreach (string id in ids)
@@ -526,7 +516,6 @@
 
         public async Task<bool> HasShopperReviewed(string shopperId, string productId)
         {
-            await this.MigrateData();
             bool retval = false;
             try
             {
@@ -547,7 +536,6 @@
 
         public async Task<AppSettings> GetAppSettings()
         {
-            await this.MigrateData();
             return await this._appSettingsRepository.GetAppSettingAsync();
         }
 
@@ -604,6 +592,40 @@
             return verified;
         }
 
+        public async Task<string> VerifyMigration()
+        {
+            
+            string verified = string.Empty;
+            try
+            {
+                verified = await _productReviewRepository.VerifyMigration();
+            }
+            catch(Exception ex)
+            {
+                verified = ex.InnerException.Message;
+                _context.Vtex.Logger.Error("VerifyMigration", null, "Error verifing Migration", ex);
+            }
+
+            return verified;
+        }
+
+        public async Task<string> SuccessfulMigration()
+        {
+            
+            string verified = string.Empty;
+            try
+            {
+                verified = await _productReviewRepository.SuccessfulMigration();
+            }
+            catch(Exception ex)
+            {
+                verified = ex.InnerException.Message;
+                _context.Vtex.Logger.Error("SuccessfulMigration", null, "Error successing Migration", ex);
+            }
+
+            return verified;
+        }
+
         private async Task<Review> ConvertLegacyReview(LegacyReview review)
         {
             Review newReview = new Review
@@ -632,10 +654,6 @@
             string verify = await this.VerifySchema();
 
             sb.AppendLine(verify);
-
-            if (verify == "Schema is up to date!") {
-                return ($"{verify}, Data already migrated");
-            }
 
             try
             {
@@ -730,19 +748,16 @@
 
         public async Task<ReviewsResponseWrapper> GetReviews()
         {
-            await this.MigrateData();
             return await _productReviewRepository.GetProductReviewsMD(string.Empty);
         }
 
         public async Task<ReviewsResponseWrapper> GetReviews(int from, int to)
         {
-            await this.MigrateData();
             return await _productReviewRepository.GetProductReviewsMD(string.Empty, from.ToString(), to.ToString());
         }
 
         public async Task<bool> DeleteReview(string[] ids)
         {
-            await this.MigrateData();
             bool retval = true;
             foreach (string id in ids)
             {
@@ -790,7 +805,6 @@
 
         public async Task AddSearchDate()
         {
-            await this.MigrateData();
             var recordsToUpdate = await _productReviewRepository.GetProductReviewsMD("_where=searchDate is null");
             foreach (var review in recordsToUpdate.Reviews)
             {

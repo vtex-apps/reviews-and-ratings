@@ -21,6 +21,7 @@
         private const string REVIEWS_BUCKET = "productReviews";
         private const string LOOKUP = "productLookup";
         private const string HASHED_SCHEMA = "HashedSchema";
+        private const string SUCCESSFUL_MIGRATION = "SuccessfulMigration";
         private const string DATA_ENTITY = "productReviews";
         private const string SCHEMA = "reviewsSchema";
         private const string SCHEMA_JSON = "{\"name\":\"reviewsSchema\",\"properties\":{\"productId\":{\"type\":\"string\",\"title\":\"productId\"},\"rating\":{\"type\":[\"integer\",\"null\"],\"title\":\"rating\"},\"title\":{\"type\":[\"string\",\"null\"],\"title\":\"title\"},\"text\":{\"type\":[\"string\",\"null\"],\"title\":\"text\"},\"reviewerName\":{\"type\":[\"string\",\"null\"],\"title\":\"reviewerName\"},\"shopperId\":{\"type\":[\"string\",\"null\"],\"title\":\"shopperId\"},\"reviewDateTime\":{\"type\":\"string\",\"title\":\"reviewDateTime\"},\"searchDate\":{\"type\":[\"string\",\"null\"],\"title\":\"searchDate\",\"format\":\"date-time\"}, \"verifiedPurchaser\":{\"type\":\"boolean\",\"title\":\"verifiedPurchaser\"},\"sku\":{\"type\":[\"string\",\"null\"],\"title\":\"sku\"},\"approved\":{\"type\":\"boolean\",\"title\":\"approved\"},\"location\":{\"type\":[\"string\",\"null\"],\"title\":\"location\"}},\"v-indexed\":[\"productId\",\"shopperId\",\"approved\",\"reviewDateTime\",\"searchDate\", \"rating\"],\"v-security\":{\"allowGetAll\":true},\"v-immediate-indexing\":true}";
@@ -434,6 +435,7 @@
             {
                 request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
             }
+            request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
             
             var client = _clientFactory.CreateClient();
             var response = await client.SendAsync(request);
@@ -449,10 +451,9 @@
                 for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
                 return sb.ToString();
             }
-        
-            verifyResult = response.StatusCode == HttpStatusCode.NotFound 
-                ? false
-                : responseContent.Equals(GetSHA256(SCHEMA_JSON));
+
+            verifyResult = response.StatusCode != HttpStatusCode.NotFound 
+                && responseContent.Equals(GetSHA256(SCHEMA_JSON));
 
             if (!verifyResult) {
                 try {
@@ -463,9 +464,9 @@
                         Content = new StringContent(GetSHA256(SCHEMA_JSON), Encoding.UTF8, APPLICATION_JSON)
                     };
 
-                    request.Headers.Add("Proxy-Authorization", _context.Vtex.AuthToken);
-                    request.Headers.Add("VtexIdclientAutCookie", _context.Vtex.AdminUserAuthToken);
-                    request.Headers.Add("X-Vtex-Use-Https", "true");
+                    request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, _context.Vtex.AuthToken);
+                    request.Headers.Add(VTEX_ID_HEADER_NAME, _context.Vtex.AdminUserAuthToken);
+                    request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
 
                     response = await client.SendAsync(request);
                     responseContent = await response.Content.ReadAsStringAsync();
@@ -477,9 +478,9 @@
                         Content = new StringContent(SCHEMA_JSON, Encoding.UTF8, APPLICATION_JSON)
                     };
 
-                    request.Headers.Add("Proxy-Authorization", _context.Vtex.AuthToken);
-                    request.Headers.Add("VtexIdclientAutCookie", _context.Vtex.AdminUserAuthToken);
-                    request.Headers.Add("X-Vtex-Use-Https", "true");
+                    request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, _context.Vtex.AuthToken);
+                    request.Headers.Add(VTEX_ID_HEADER_NAME, _context.Vtex.AdminUserAuthToken);
+                    request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
 
                     response = await client.SendAsync(request);
                     responseContent = await response.Content.ReadAsStringAsync();
@@ -496,8 +497,61 @@
             
         }
 
+        public async Task<string> VerifyMigration()
+        {
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri($"http://infra.io.vtex.com/vbase/v2/{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_ACCOUNT]}/master/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{SUCCESSFUL_MIGRATION}"),
+            };
+
+            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+            if (authToken != null)
+            {
+                request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
+            }
+            request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
+            
+            var client = _clientFactory.CreateClient();
+            var response = await client.SendAsync(request);
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            string result = response.StatusCode == HttpStatusCode.NotFound 
+                ? "0"
+                : responseContent;
+
+            return result;
+        }
+
+        public async Task<string> SuccessfulMigration()
+        {
+            try {
+                var request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Put,
+                    RequestUri = new Uri($"http://infra.io.vtex.com/vbase/v2/{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}/master/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{SUCCESSFUL_MIGRATION}"),
+                    Content = new StringContent("1", Encoding.UTF8, APPLICATION_JSON)
+                };
+
+                request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, _context.Vtex.AuthToken);
+                request.Headers.Add(VTEX_ID_HEADER_NAME, _context.Vtex.AdminUserAuthToken);
+                request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
+                
+                var client = _clientFactory.CreateClient();
+                var response = await client.SendAsync(request);
+                string responseContent = await response.Content.ReadAsStringAsync();
+                return responseContent;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException.Message);
+                return ex.InnerException.Message;
+            }
+        }
+
         public async Task<ReviewsResponseWrapper> GetProductReviewsMD(string searchQuery, string from, string to)
         {
+            await this.VerifySchema();
             ReviewsResponseWrapper reviewsResponse = null;
             IList<Review> reviews = null;
             string total = string.Empty;
@@ -573,6 +627,7 @@
  
         public async Task<ReviewsResponseWrapper> GetRangeReviewsMD(string fromDate, string toDate)
         {
+            await this.VerifySchema();
             ReviewsResponseWrapper reviewsResponse = null;
             IList<Review> reviews = new List<Review>();
             DateTime dtFromDate = DateTime.Parse(fromDate);
@@ -641,6 +696,7 @@
 
         public async Task<bool> DeleteProductReviewMD(string documentId)
         {
+            await this.VerifySchema();
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Delete,
@@ -664,6 +720,7 @@
 
         public async Task<string> SaveProductReviewMD(Review review)
         {
+            await this.VerifySchema();
             string id = string.Empty;
 
             // before SerializeObject

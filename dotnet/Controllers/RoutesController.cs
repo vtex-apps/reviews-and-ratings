@@ -41,7 +41,7 @@ namespace ReviewsRatings.Controllers
 
         public async Task<IActionResult> ProcessReviewApiAction(string requestedAction, string id)
         {
-            await _productReviewsService.MigrateData();
+            await this.VerifySchema();
             Response.Headers.Add("Cache-Control", "public, max-age=300, stale-while-revalidate=3600, stale-if-error=3600");
             string responseString = string.Empty;
             string vtexCookie = HttpContext.Request.Headers[HEADER_VTEX_COOKIE];
@@ -260,6 +260,22 @@ namespace ReviewsRatings.Controllers
         {
             Response.Headers.Add("Cache-Control", "no-cache");
             string result = await _productReviewsService.VerifySchema();
+
+            return Json(result);
+        }
+
+        public async Task<IActionResult> VerifyMigration()
+        {
+            Response.Headers.Add("Cache-Control", "no-cache");
+            string result = await _productReviewsService.VerifyMigration();
+
+            return Json(result);
+        }
+
+        public async Task<IActionResult> SuccessfulMigration()
+        {
+            Response.Headers.Add("Cache-Control", "no-cache");
+            string result = await _productReviewsService.SuccessfulMigration();
 
             return Json(result);
         }

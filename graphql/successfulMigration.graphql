@@ -1,0 +1,3 @@
+query SuccessfulMigration {
+  successfulMigration @context(provider: "vtex.reviews-and-ratings")
+}

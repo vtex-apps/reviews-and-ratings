@@ -95,6 +95,9 @@ type Query {
     @cacheControl(scope: PRIVATE)
   appSettings: AppSettings
   verifySchema: String
+  migrateData: String
+  verifyMigration: String
+  successfulMigration: String
 }
 
 # Mutations

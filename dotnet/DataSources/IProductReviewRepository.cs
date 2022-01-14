@@ -23,6 +23,8 @@
         Task<VtexOrderList> ListOrders(string queryString);
 
         Task<string> VerifySchema();
+        Task<string> VerifyMigration();
+        Task<string> SuccessfulMigration();
         Task<ReviewsResponseWrapper> GetProductReviewsMD(string searchQuery, string from = null, string to = null);
 
         Task<ReviewsResponseWrapper> GetRangeReviewsMD(string fromDate, string toDate);
