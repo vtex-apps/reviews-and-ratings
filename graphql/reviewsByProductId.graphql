@@ -1,6 +1,8 @@
 query ReviewsByProductId(
   $productId: String!
   $rating: Int
+  $locale: String
+  $pastReviews: Boolean
   $from: Int
   $to: Int
   $orderBy: String
@@ -9,6 +11,8 @@ query ReviewsByProductId(
   reviewsByProductId(
     productId: $productId
     rating: $rating
+    locale: $locale
+    pastReviews: $pastReviews
     from: $from
     to: $to
     orderBy: $orderBy
@@ -22,6 +26,8 @@ query ReviewsByProductId(
       text
       reviewerName
       location
+      locale
+      pastReviews
       reviewDateTime
       verifiedPurchaser
       sku

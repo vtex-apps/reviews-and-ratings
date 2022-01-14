@@ -32,6 +32,7 @@
     "typescript": "^3.7.5"
   },
   "dependencies": {
+    "languagedetect": "^2.0.0",
     "xlsx": "^0.17.3"
   }
 }

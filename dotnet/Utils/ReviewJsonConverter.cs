@@ -25,6 +25,7 @@
             //review.CacheId = (int)jo["CacheId"];
             //review.Id = (int)jo["Id"];
             review.Location = jo["Location"] != null ? (string)jo["Location"] : null;
+            review.Locale = jo["Locale"] != null ? (string)jo["Locale"] : null;
             review.ProductId = (string)jo["ProductId"];
             review.Rating = (int)jo["Rating"];
             review.ReviewDateTime = jo["ReviewDateTime"] != null ? (string)jo["ReviewDateTime"] : null;

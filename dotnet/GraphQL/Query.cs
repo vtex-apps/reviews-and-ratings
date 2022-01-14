@@ -62,6 +62,8 @@ namespace ReviewsRatings.GraphQL
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "productId", Description = "Product Id" },
                     new QueryArgument<IntGraphType> { Name = "rating", Description = "Rating" },
+                    new QueryArgument<StringGraphType> { Name = "locale", Description = "Locale" },
+                    new QueryArgument<BooleanGraphType> { Name = "pastReviews", Description = "PastReviews" },
                     new QueryArgument<StringGraphType> { Name = "searchTerm", Description = "Search term" },
                     new QueryArgument<IntGraphType> { Name = "from", Description = "From" },
                     new QueryArgument<IntGraphType> { Name = "to", Description = "To" },
@@ -72,13 +74,15 @@ namespace ReviewsRatings.GraphQL
                 {
                     string productId = context.GetArgument<string>("productId");
                     int rating = context.GetArgument<int>("rating");
+                    string locale = context.GetArgument<string>("locale");
+                    bool pastReviews = context.GetArgument<bool>("pastReviews");
                     string searchTerm = context.GetArgument<string>("searchTerm");
                     int from = context.GetArgument<int>("from");
                     int to = context.GetArgument<int>("to");
                     string orderBy = context.GetArgument<string>("orderBy");
                     string status = context.GetArgument<string>("status");
 
-                    var searchResult = await productReviewService.GetReviewsByProductId(productId, from, to, orderBy, searchTerm, rating);
+                    var searchResult = await productReviewService.GetReviewsByProductId(productId, from, to, orderBy, searchTerm, rating, locale, pastReviews);
                     SearchResponse searchResponse = new SearchResponse
                     {
                         Data = new DataElement { data = searchResult.Reviews },

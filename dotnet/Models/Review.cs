@@ -17,6 +17,7 @@ namespace ReviewsRatings.Models
     ///  Sku: String
     ///  Approved : Boolean
     ///  Location : String
+    ///  Locale : String
     /// </summary>
     //[JsonConverter(typeof(ReviewJsonConverter))]
     public class Review
@@ -103,5 +104,11 @@ namespace ReviewsRatings.Models
         /// </summary>
         [JsonProperty("location")]
         public string Location { get; set; }
+
+        /// <summary>
+        /// Reviewer locale
+        /// </summary>
+        [JsonProperty("locale")]
+        public string Locale { get; set; }
     }
 }

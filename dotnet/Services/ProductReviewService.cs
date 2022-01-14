@@ -307,13 +307,14 @@
 
         public async Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId)
         {
-            return await this.GetReviewsByProductId(productId, 0, maximumReturnedRecords, string.Empty, string.Empty, 0);
+            return await this.GetReviewsByProductId(productId, 0, maximumReturnedRecords, string.Empty, string.Empty, 0, string.Empty, false);
         }
 
-        public async Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId, int from, int to, string orderBy, string searchTerm, int rating)
+        public async Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId, int from, int to, string orderBy, string searchTerm, int rating, string locale, bool pastReviews)
         {
             string searchQuery = string.Empty;
             string ratingQuery = string.Empty;
+            string localeQuery = string.Empty;
             string sort = await this.GetSortQuery(orderBy);
             if (rating > 0 && rating <= 5)
             {
@@ -323,14 +324,24 @@
             {
                 searchQuery = $"&_keyword={searchTerm}";
             }
+            if (!string.IsNullOrEmpty(locale))
+            {
+                localeQuery = $"&locale={locale}";
+            }
 
             AppSettings settings = await GetAppSettings();
             if (settings.RequireApproval)
             {
                 searchQuery = $"{searchQuery}&approved=true";
             }
-            
-            ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD($"productId={productId}{sort}{searchQuery}{ratingQuery}", from.ToString(), to.ToString());
+
+            /*if (pastReviews)
+            {
+                wrapper = await this._productReviewRepository.GetProductReviewsMD($"_where={productId}{sort}{searchQuery}{ratingQuery}{localeQuery}", from.ToString(), to.ToString());
+                                                                                    // _where=(((locale=en-US) OR (locale is null)) AND productId=880031)
+            }*/
+           
+            ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD($"productId={productId}{sort}{searchQuery}{ratingQuery}{localeQuery}", from.ToString(), to.ToString());
 
             return wrapper;
         }
@@ -633,6 +644,7 @@
                 Approved = review.Approved ?? false,
                 Id = review.Id.ToString(),
                 Location = review.Location,
+                Locale = review.Locale,
                 ProductId = review.ProductId,
                 Rating = review.Rating,
                 ReviewDateTime = review.ReviewDateTime,
@@ -811,6 +823,16 @@
                 await _productReviewRepository.SaveProductReviewMD(review);
             }
         }
+
+        public async Task AddLocale()
+        {
+            var recordsToUpdate = await _productReviewRepository.GetProductReviewsMD("_where=locale is null");
+            foreach (var review in recordsToUpdate.Reviews)
+            {
+                await _productReviewRepository.SaveProductReviewMD(review);
+            }
+        }
+
 
         public async Task<LegacyReview> NewReviewLegacy(LegacyReview review)
         {
