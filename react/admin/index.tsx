@@ -1,5 +1,9 @@
-import React, { FC, useState } from 'react'
+/* eslint-disable import/order */
+/* eslint-disable no-console */
+import React, { useState, useEffect, FC } from 'react'
 import { FormattedMessage } from 'react-intl'
+import { useApolloClient } from 'react-apollo'
+import { useRuntime, RenderContext } from 'vtex.render-runtime'
 import {
   Layout,
   PageHeader,
@@ -7,17 +11,21 @@ import {
   Tabs,
   ToastProvider,
   IconArrowBack,
+  Button,
+  Spinner,
 } from 'vtex.styleguide'
-import { RenderContext, useRuntime } from 'vtex.render-runtime'
 
 import {
   PENDING_REVIEWS_PAGE,
   APPROVED_REVIEWS_PAGE,
   DOWNLOAD_REVIEWS_PAGE,
 } from './utils'
-import { adminReviewMessages, layoutHeaderMessage } from './utils/messages'
+import { layoutHeaderMessage, adminReviewMessages } from './utils/messages'
 
 import './components/global.css'
+import MigrateData from '../../graphql/migrateData.graphql'
+import VerifyMigration from '../../graphql/verifyMigration.graphql'
+import SuccessfulMigration from '../../graphql/successfulMigration.graphql'
 
 const IconArrowForward: FC = () => (
   <div className="rotate-180 flex items-center">
@@ -25,16 +33,12 @@ const IconArrowForward: FC = () => (
   </div>
 )
 
-// const formatToTabNumber = (num: number) => {
-//   if (num > 10000) {
-//     return `${Math.floor(num / 1000)}K`
-//   }
-//   return num
-// }
-
 const ReviewIndex: FC = props => {
   const { navigate, route } = useRuntime() as RenderContext.RenderContext
   const [activeTab, setActiveTab] = useState(route.id)
+  const [needsMigrate, setNeedsMigrate] = useState(false)
+  const [isMigrationloading, setIsMigrationloading] = useState(false)
+  const client = useApolloClient()
 
   const setActiveSection = (section: string) => () => {
     setActiveTab(section)
@@ -46,6 +50,65 @@ const ReviewIndex: FC = props => {
     APPROVED_REVIEWS_PAGE,
     DOWNLOAD_REVIEWS_PAGE,
   ]
+
+  const flagSuccessfulMigration = () => {
+    client
+      .query({
+        query: SuccessfulMigration,
+      })
+      .then((response: any) => {
+        console.log('SuccessfulMigration:', response)
+        if (response.networkStatus === 7) {
+          setNeedsMigrate(false)
+          setIsMigrationloading(false)
+          window.location.reload()
+        } else {
+          setIsMigrationloading(false)
+        }
+      })
+      .catch(error => {
+        setIsMigrationloading(false)
+        console.error('flagSuccessfulMigration', error)
+      })
+  }
+
+  const migrateData = () => {
+    client
+      .query({
+        query: MigrateData,
+      })
+      .then((response: any) => {
+        setIsMigrationloading(true)
+        console.log('MigrateData:', response)
+        if (response.networkStatus === 7) {
+          flagSuccessfulMigration()
+        } else {
+          setIsMigrationloading(false)
+        }
+      })
+      .catch(error => {
+        setIsMigrationloading(false)
+        console.error('migrateData', error)
+      })
+  }
+
+  useEffect(() => {
+    client
+      ?.query({
+        query: VerifyMigration,
+      })
+      .then((response: any) => {
+        console.log('VerifyMigration:', response)
+        setNeedsMigrate(response.data.verifyMigration !== '1')
+      })
+      .catch(error => {
+        console.error('VerifyMigration', error)
+      })
+  }, [client])
+
+  useEffect(() => {
+    console.log('needsMigrate:', needsMigrate)
+  }, [needsMigrate])
 
   return (
     <Layout
@@ -68,6 +131,13 @@ const ReviewIndex: FC = props => {
                 </div>
               </a>
             </PageHeader>
+            {needsMigrate && (
+              <div className="pa7-ns pt0-m">
+                <Button onClick={migrateData}>
+                  {isMigrationloading ? <Spinner /> : 'Migrate Data'}
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       }

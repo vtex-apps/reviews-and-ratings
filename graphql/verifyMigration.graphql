@@ -1,0 +1,3 @@
+query VerifyMigration {
+  verifyMigration @context(provider: "vtex.reviews-and-ratings")
+}

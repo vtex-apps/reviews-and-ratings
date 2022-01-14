@@ -227,6 +227,37 @@ namespace ReviewsRatings.GraphQL
                 }
             );
 
+            FieldAsync<StringGraphType>(
+                "verifySchema",
+                resolve: async context =>
+                {
+                    return await productReviewService.VerifySchema();
+                }
+            );
+
+            FieldAsync<StringGraphType>(
+                "migrateData",
+                resolve: async context =>
+                {
+                    return await productReviewService.MigrateData();
+                }
+            );
+
+            FieldAsync<StringGraphType>(
+                "verifyMigration",
+                resolve: async context =>
+                {
+                    return await productReviewService.VerifyMigration();
+                }
+            );
+
+            FieldAsync<StringGraphType>(
+                "successfulMigration",
+                resolve: async context =>
+                {
+                 return await productReviewService.SuccessfulMigration();
+                }
+            );
         }
     }
 }

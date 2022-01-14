@@ -94,6 +94,10 @@ type Query {
   hasShopperReviewed(shopperId: String!, productId: String!): Boolean
     @cacheControl(scope: PRIVATE)
   appSettings: AppSettings
+  verifySchema: String
+  migrateData: String
+  verifyMigration: String
+  successfulMigration: String
 }
 
 # Mutations

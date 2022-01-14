@@ -70,6 +70,7 @@
 
         public async Task<Review> EditReview(Review review)
         {
+
             ReviewsResponseWrapper wrapper = await _productReviewRepository.GetProductReviewsMD($"id={review.Id}");
             Review oldReview = wrapper.Reviews.FirstOrDefault();
 
@@ -439,7 +440,7 @@
             return wrapper;
         }
 
-         public async Task<ReviewsResponseWrapper> GetReviewsByreviewDateTime(string reviewDateTime)
+        public async Task<ReviewsResponseWrapper> GetReviewsByreviewDateTime(string reviewDateTime)
         {
             ReviewsResponseWrapper wrapper = await _productReviewRepository.GetProductReviewsMD($"reviewDateTime={reviewDateTime}");
 
@@ -449,7 +450,6 @@
         public async Task<ReviewsResponseWrapper> GetReviewsByDateRange(string fromDate, string toDate)
         {
             ReviewsResponseWrapper wrapper = await _productReviewRepository.GetRangeReviewsMD(fromDate, toDate);
-
             return wrapper;
         }
 
@@ -575,16 +575,52 @@
             return hasPurchased;
         }
 
-        public async Task<bool> VerifySchema()
+        public async Task<string> VerifySchema()
         {
-            bool verified = false;
+            
+            string verified = string.Empty;
             try
             {
                 verified = await _productReviewRepository.VerifySchema();
             }
             catch(Exception ex)
             {
+                verified = ex.InnerException.Message;
                 _context.Vtex.Logger.Error("VerifySchema", null, "Error verifing schema", ex);
+            }
+
+            return verified;
+        }
+
+        public async Task<string> VerifyMigration()
+        {
+            
+            string verified = string.Empty;
+            try
+            {
+                verified = await _productReviewRepository.VerifyMigration();
+            }
+            catch(Exception ex)
+            {
+                verified = ex.InnerException.Message;
+                _context.Vtex.Logger.Error("VerifyMigration", null, "Error verifing Migration", ex);
+            }
+
+            return verified;
+        }
+
+        public async Task<string> SuccessfulMigration()
+        {
+            
+            string verified = string.Empty;
+            try
+            {
+                verified = await _productReviewRepository.SuccessfulMigration();
+            }
+            catch(Exception ex)
+            {
+                verified = ex.InnerException.Message;
+                _context.Vtex.Logger.Error("SuccessfulMigration", null, "Error successing Migration", ex);
             }
 
             return verified;
@@ -613,10 +649,12 @@
 
         public async Task<string> MigrateData()
         {
+            
             StringBuilder sb = new StringBuilder();
+            string verify = await this.VerifySchema();
 
-            bool verify = await this.VerifySchema();
-            sb.AppendLine("Could not verify schema");
+            sb.AppendLine(verify);
+
             try
             {
                 IList<LegacyReview> reviews = await this.GetLegacyReviews();
