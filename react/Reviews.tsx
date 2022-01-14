@@ -1,9 +1,4 @@
-/* eslint-disable prefer-object-spread */
-/* eslint-disable no-useless-return */
-/* eslint-disable prefer-template */
-/* eslint-disable @typescript-eslint/restrict-plus-operands */
-/* eslint-disable prettier/prettier */
-/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { Fragment, useEffect, useReducer } from 'react'
 import { Helmet } from 'react-helmet'
 import { ApolloQueryResult } from 'apollo-client'
@@ -79,6 +74,7 @@ interface State {
   ratingFilter: number
   localeFilter: string
   localeOptions: string[]
+  pastReviews: boolean
   from: number
   to: number
   reviews: Review[] | null
@@ -108,6 +104,7 @@ type ReducerActions =
   | { type: 'SET_RATING_FILTER'; args: { ratingFilter: number } }
   | { type: 'SET_LOCALE_FILTER'; args: { localeFilter: string } }
   | { type: 'SET_LOCALE_OPTIONS'; args: { localeOptions: string[] } }
+  | { type: 'SET_PASTREVIEWS'; args: { pastReviews: boolean } }
   | {
       type: 'SET_REVIEWS'
       args: { reviews: Review[]; total: number; graphArray: number[] }
@@ -167,6 +164,11 @@ const reducer = (state: State, action: ReducerActions) => {
       return {
         ...state,
         localeOptions: action.args.localeOptions,
+      }
+    case 'SET_PASTREVIEWS':
+      return {
+        ...state,
+        pastReviews: action.args.pastReviews,
       }
     case 'SET_REVIEWS':
       return {
@@ -362,8 +364,9 @@ function Reviews() {
   const initialState = {
     sort: 'ReviewDateTime:desc',
     ratingFilter: 0,
-    localeFilter: intl.locale,
+    localeFilter: intl.locale.slice(0, 2),
     localeOptions: [],
+    pastReviews: true,
     from: 1,
     to: 10,
     reviews: null,
@@ -441,7 +444,7 @@ function Reviews() {
       })
       .then((res: any) => {
         const list = res.data.tenantInfo.bindings.map((item: any) => {
-          return item.defaultLocale
+          return item.defaultLocale.slice(0, 2)
         })
         const localeOptions = [...new Set(list as string)]
         dispatch({
@@ -452,7 +455,7 @@ function Reviews() {
   }, [client])
 
   const localeFilters = state.localeOptions.map((str: any) => ({
-    label: str.slice(0, 2).toUpperCase(),
+    label: str.toUpperCase(),
     value: str,
   }))
 
@@ -581,6 +584,7 @@ function Reviews() {
           productId,
           rating: state.ratingFilter,
           locale: state.localeFilter,
+          pastReviews: state.pastReviews,
           from: state.from - 1,
           to: state.to - 1,
           orderBy: state.sort,
@@ -623,6 +627,7 @@ function Reviews() {
     state.sort,
     state.ratingFilter,
     state.localeFilter,
+    state.pastReviews,
     state.settings,
   ])
 
@@ -725,7 +730,7 @@ function Reviews() {
           }}
           value={state.ratingFilter}
         />
-        {state.localeOptions.length === 10000 ||
+        {state.localeOptions.length === 1 ||
         state.localeOptions.length === 0 ? null : (
           <Dropdown
             options={localeFilters}
@@ -734,6 +739,13 @@ function Reviews() {
               dispatch({
                 type: 'SET_LOCALE_FILTER',
                 args: { localeFilter: event.currentTarget.value },
+              })
+              dispatch({
+                type: 'SET_PASTREVIEWS',
+                args: {
+                  pastReviews:
+                    event.currentTarget.value === intl.locale.slice(0, 2),
+                },
               })
             }}
             value={state.localeFilter}

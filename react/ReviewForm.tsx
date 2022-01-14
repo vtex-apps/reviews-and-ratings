@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { Fragment, useEffect, useReducer } from 'react'
 import { useProduct } from 'vtex.product-context'
 import { ApolloQueryResult } from 'apollo-client'
