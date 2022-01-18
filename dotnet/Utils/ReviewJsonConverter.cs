@@ -25,7 +25,7 @@
             //review.CacheId = (int)jo["CacheId"];
             //review.Id = (int)jo["Id"];
             review.Location = jo["Location"] != null ? (string)jo["Location"] : null;
-            review.Locale = jo["Locale"] != null ? (string)jo["Locale"] : null;
+            // review.Locale = jo["Locale"] != null ? (string)jo["Locale"] : null;
             review.ProductId = (string)jo["ProductId"];
             review.Rating = (int)jo["Rating"];
             review.ReviewDateTime = jo["ReviewDateTime"] != null ? (string)jo["ReviewDateTime"] : null;
@@ -44,6 +44,12 @@
             {
                 JToken titleText = jo["Title"];
                 review.Title = EscapeForJson(titleText.ToString());
+            }
+
+            if (jo["Locale"] != null)
+            {
+                JToken localeText = jo["Locale"];
+                review.Locale = EscapeForJson(localeText.ToString());
             }
 
             if (jo["VerifiedPurchaser"] != null)

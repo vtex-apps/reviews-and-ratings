@@ -83,6 +83,7 @@
             review.Sku = string.IsNullOrEmpty(review.Sku) ? oldReview.Sku : review.Sku;
             review.Text = string.IsNullOrEmpty(review.Text) ? oldReview.Text : review.Text;
             review.Title = string.IsNullOrEmpty(review.Title) ? oldReview.Title : review.Title;
+            review.Locale = string.IsNullOrEmpty(review.Locale) ? oldReview.Locale : review.Locale;
             review.VerifiedPurchaser = review.VerifiedPurchaser ?? oldReview.VerifiedPurchaser;
 
             string id = await this._productReviewRepository.SaveProductReviewMD(review);
@@ -306,7 +307,7 @@
 
         public async Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId)
         {
-            return await this.GetReviewsByProductId(productId, 0, maximumReturnedRecords, string.Empty, string.Empty, 0, string.Empty, false);
+            return await this.GetReviewsByProductId(productId, 0, maximumReturnedRecords, string.Empty, string.Empty, 0, string.Empty, true);
         }
 
         public async Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId, int from, int to, string orderBy, string searchTerm, int rating, string locale, bool pastReviews)
@@ -315,17 +316,11 @@
             string ratingQuery = string.Empty;
             string localeQuery = string.Empty;
             string sort = await this.GetSortQuery(orderBy);
-            if (rating > 0 && rating <= 5)
-            {
-                ratingQuery = $"&rating={rating}";
-            }
+            ReviewsResponseWrapper wrapper;
+
             if (!string.IsNullOrEmpty(searchTerm))
             {
                 searchQuery = $"&_keyword={searchTerm}";
-            }
-            if (!string.IsNullOrEmpty(locale))
-            {
-                localeQuery = $"&locale={locale}";
             }
 
             AppSettings settings = await GetAppSettings();
@@ -334,13 +329,33 @@
                 searchQuery = $"{searchQuery}&approved=true";
             }
 
-            /*if (pastReviews)
+            if (pastReviews)
             {
-                wrapper = await this._productReviewRepository.GetProductReviewsMD($"_where={productId}{sort}{searchQuery}{ratingQuery}{localeQuery}", from.ToString(), to.ToString());
-                                                                                    // _where=(((locale=en-US) OR (locale is null)) AND productId=880031)
-            }*/
-           
-            ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD($"productId={productId}{sort}{searchQuery}{ratingQuery}{localeQuery}", from.ToString(), to.ToString());
+                string productQuery = $" AND productId={productId}";
+                if (rating > 0 && rating <= 5)
+                {
+                    ratingQuery = $" AND rating={rating}";
+                }
+                if (!string.IsNullOrEmpty(locale))
+                {
+                    localeQuery = $"((locale=*{locale}-*) OR (locale is null))";
+                }
+
+                wrapper = await this._productReviewRepository.GetProductReviewsMD($"_where={localeQuery}{ratingQuery}{productQuery}{searchQuery}{sort}", from.ToString(), to.ToString());
+            }
+            else
+            {
+                if (rating > 0 && rating <= 5)
+                {
+                    ratingQuery = $"&rating={rating}";
+                }
+                if (!string.IsNullOrEmpty(locale))
+                {
+                    localeQuery = $"&locale=*{locale}-*";
+                }
+
+                wrapper = await this._productReviewRepository.GetProductReviewsMD($"productId={productId}{sort}{searchQuery}{ratingQuery}{localeQuery}", from.ToString(), to.ToString());
+            }
 
             return wrapper;
         }
@@ -608,7 +623,6 @@
                 Approved = review.Approved ?? false,
                 Id = review.Id.ToString(),
                 Location = review.Location,
-                Locale = review.Locale,
                 ProductId = review.ProductId,
                 Rating = review.Rating,
                 ReviewDateTime = review.ReviewDateTime,
@@ -617,6 +631,7 @@
                 Sku = review.Sku,
                 Text = review.Text,
                 Title = review.Title,
+                Locale = review.Locale,
                 VerifiedPurchaser = review.VerifiedPurchaser ?? false
             };
 

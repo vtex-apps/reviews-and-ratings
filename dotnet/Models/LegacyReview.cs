@@ -18,6 +18,7 @@ namespace ReviewsRatings.Models
     ///  Approved : Boolean
     ///  Location : String
     ///  Locale : String
+    ///  pastReviews : Boolean
     /// </summary>
     //[JsonConverter(typeof(ReviewJsonConverter))]
     public class LegacyReview
@@ -91,5 +92,10 @@ namespace ReviewsRatings.Models
         /// Reviewer locale
         /// </summary>
         public string Locale { get; set; }
+
+         /// <summary>
+        /// Past Reviews
+        /// </summary>
+        public bool? PastReviews { get; set; }
     }
 }
