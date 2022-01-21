@@ -124,7 +124,7 @@
             return decimal.Round(averageRating, 2, MidpointRounding.AwayFromZero);
         }
 
-        public async Task<Review> GetReview(int Id)
+        public async Task<Review> GetReview(string Id)
         {
             Review review = null;
             ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD($"id={Id}");
@@ -322,6 +322,10 @@
             if (!string.IsNullOrEmpty(searchTerm))
             {
                 searchQuery = $"&_keyword={searchTerm}";
+            }
+
+            if (to == 0 || to < from) {
+                to = maximumReturnedRecords;
             }
 
             AppSettings settings = await GetAppSettings();

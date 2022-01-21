@@ -100,6 +100,8 @@ namespace ReviewsRatings.Controllers
                             ShopperId = validatedUser.User,
                             Title = newReview.Title,
                             Text = newReview.Text,
+                            ReviewerName = newReview.ReviewerName,
+                            ReviewDateTime = newReview.ReviewDateTime,
                             VerifiedPurchaser = hasShopperPurchased
                         };
 
@@ -168,6 +170,7 @@ namespace ReviewsRatings.Controllers
 
                         string bodyAsText = await new System.IO.StreamReader(HttpContext.Request.Body).ReadToEndAsync();
                         Review review = JsonConvert.DeserializeObject<Review>(bodyAsText);
+                        review.Id = id;
                         return Json(await this._productReviewsService.EditReview(review));
                         break;
                 }
@@ -192,7 +195,7 @@ namespace ReviewsRatings.Controllers
                             return BadRequest("Missing parameter.");
                         }
 
-                        Review review = await this._productReviewsService.GetReview(int.Parse(id));
+                        Review review = await this._productReviewsService.GetReview(id);
                         return Json(review);
                         break;
                     case REVIEWS:
@@ -250,7 +253,6 @@ namespace ReviewsRatings.Controllers
 
         public async Task<IActionResult> ClearData()
         {
-            Response.Headers.Add("Cache-Control", "no-cache");
             await _productReviewsService.ClearData();
 
             return Json("Done");
@@ -258,7 +260,6 @@ namespace ReviewsRatings.Controllers
 
         public async Task<IActionResult> VerifySchema()
         {
-            Response.Headers.Add("Cache-Control", "no-cache");
             string result = await _productReviewsService.VerifySchema();
 
             return Json(result);
@@ -266,7 +267,6 @@ namespace ReviewsRatings.Controllers
 
         public async Task<IActionResult> VerifyMigration()
         {
-            Response.Headers.Add("Cache-Control", "no-cache");
             string result = await _productReviewsService.VerifyMigration();
 
             return Json(result);
@@ -274,7 +274,6 @@ namespace ReviewsRatings.Controllers
 
         public async Task<IActionResult> SuccessfulMigration()
         {
-            Response.Headers.Add("Cache-Control", "no-cache");
             string result = await _productReviewsService.SuccessfulMigration();
 
             return Json(result);
@@ -282,7 +281,6 @@ namespace ReviewsRatings.Controllers
 
         public async Task<IActionResult> MigrateData()
         {
-            Response.Headers.Add("Cache-Control", "no-cache");
             string result = string.Empty;
             if ("post".Equals(HttpContext.Request.Method, StringComparison.OrdinalIgnoreCase))
             {
@@ -314,7 +312,6 @@ namespace ReviewsRatings.Controllers
 
         public async Task<IActionResult> AddSearchDate()
         {
-            Response.Headers.Add("Cache-Control", "no-cache");
             try
             {
                 await _productReviewsService.AddSearchDate();
@@ -329,7 +326,6 @@ namespace ReviewsRatings.Controllers
 
         public async Task<IActionResult> CreateTestReviews()
         {
-            Response.Headers.Add("Cache-Control", "no-cache");
             StringBuilder sb = new StringBuilder();
             Random rnd = new Random();
             for (int i = 0; i < 10; i++)
