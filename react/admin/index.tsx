@@ -1,9 +1,11 @@
 /* eslint-disable import/order */
 /* eslint-disable no-console */
-import React, { useState, useEffect, FC } from 'react'
+import type { FC } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { useApolloClient } from 'react-apollo'
-import { useRuntime, RenderContext } from 'vtex.render-runtime'
+import type { RenderContext } from 'vtex.render-runtime'
+import { useRuntime } from 'vtex.render-runtime'
 import {
   Layout,
   PageHeader,

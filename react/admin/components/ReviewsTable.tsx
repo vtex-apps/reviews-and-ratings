@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { FC, useState, useEffect, Fragment } from 'react'
+import type { FC } from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
-import { Query, ObservableQueryFields } from 'react-apollo'
+import type { ObservableQueryFields } from 'react-apollo'
+import { Query } from 'react-apollo'
 import { Button, EmptyState } from 'vtex.styleguide'
 import { PersistedPaginatedTable } from 'vtex.paginated-table'
 import { useRuntime } from 'vtex.render-runtime'
 
-import { Review, SearchReviewArgs, SearchReviewData } from '../types'
+import type { Review, SearchReviewArgs, SearchReviewData } from '../types'
 import reviews from '../../../graphql/reviews.graphql'
 import { tableQueryMessages, tableSearchMessages } from '../utils/messages'
 import useSearch from './tableHelpers/useSearch'
@@ -28,7 +30,7 @@ interface ReviewsTableProps {
   bulkActions?: any
   setTotal?: (total: number) => void
   emptyStateText?: string | JSX.Element
-  filterOptionsLists?: {}
+  filterOptionsLists?: Record<string, unknown>
   children?: ({
     fetchMore,
     variables,
@@ -183,6 +185,7 @@ export const ReviewsTable: FC<ReviewsTableProps> = ({
         if (children && typeof children === 'function') {
           return children({ fetchMore, variables, table })
         }
+
         return table
       }}
     </Query>

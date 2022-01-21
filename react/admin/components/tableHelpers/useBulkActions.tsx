@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { IntlShape } from 'react-intl'
+import type { IntlShape } from 'react-intl'
 
 import { tuple } from '.'
-import { ReviewTableRowData } from '../../types'
+import type { ReviewTableRowData } from '../../types'
 import { tableBulkActionsMessages } from '../../utils/messages'
 
 const useBulkActions = (
@@ -11,6 +11,7 @@ const useBulkActions = (
   setIsApprovingReviews: React.Dispatch<React.SetStateAction<boolean>>,
   setIsDeletingReviews: React.Dispatch<React.SetStateAction<boolean>>,
   intl: IntlShape
+  // eslint-disable-next-line max-params
 ) => {
   const texts = {
     secondaryActionsLabel: intl.formatMessage(tableBulkActionsMessages.more),

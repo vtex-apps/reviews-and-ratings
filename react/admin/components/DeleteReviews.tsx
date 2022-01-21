@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { FC, useState } from 'react'
-import { ObservableQueryFields } from 'react-apollo'
+import type { FC } from 'react'
+import React, { useState } from 'react'
+import type { ObservableQueryFields } from 'react-apollo'
 import { Button, Modal, Alert } from 'vtex.styleguide'
 import { FormattedMessage, useIntl } from 'react-intl'
 
 import { useMatchingError } from './applyMatchHelpers/useMatchingError'
 import updateReviewsCache from './applyMatchHelpers/updateReviewsCache'
-import {
+import type {
   ReviewTableRowData,
   SearchReviewArgs,
   SearchReviewData,
@@ -52,6 +53,7 @@ export const DeleteReviewsPanel: FC<DeleteReviewsPanelProps> = props => {
     return {
       ids: displayedReviews.map(row => {
         const { id } = row.review
+
         return id
       }),
     }

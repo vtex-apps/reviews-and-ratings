@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useReducer } from 'react'
 import { Helmet } from 'react-helmet'
-import { ApolloQueryResult } from 'apollo-client'
+import type { ApolloQueryResult } from 'apollo-client'
 import { useApolloClient } from 'react-apollo'
 import { useProduct } from 'vtex.product-context'
 import { useCssHandles } from 'vtex.css-handles'
@@ -87,22 +87,26 @@ const reducer = (state: State, action: ReducerActions) => {
         total: action.args.total,
         hasTotal: true,
       }
+
     case 'SET_AVERAGE':
       return {
         ...state,
         average: action.args.average,
         hasAverage: true,
       }
+
     case 'SET_SETTINGS':
       return {
         ...state,
         settings: action.args.settings,
       }
+
     case 'SET_AUTHENTICATED':
       return {
         ...state,
         userAuthenticated: action.args.authenticated,
       }
+
     default:
       return state
   }
@@ -155,6 +159,7 @@ function RatingSummary() {
       })
       .then((response: ApolloQueryResult<TotalData>) => {
         const total = response.data.totalReviewsByProductId
+
         dispatch({
           type: 'SET_TOTAL',
           args: { total },
@@ -170,6 +175,7 @@ function RatingSummary() {
       })
       .then((response: ApolloQueryResult<AverageData>) => {
         const average = response.data.averageRatingByProductId
+
         dispatch({
           type: 'SET_AVERAGE',
           args: { average },
@@ -182,6 +188,7 @@ function RatingSummary() {
       })
       .then((response: ApolloQueryResult<SettingsData>) => {
         const settings = response.data.appSettings
+
         dispatch({
           type: 'SET_SETTINGS',
           args: { settings },
@@ -199,9 +206,11 @@ function RatingSummary() {
 
       const { namespaces } = sessionRespose
       const storeUserId = namespaces?.authentication?.storeUserId?.value
+
       if (!storeUserId) {
         return
       }
+
       dispatch({
         type: 'SET_AUTHENTICATED',
         args: { authenticated: true },
@@ -211,6 +220,7 @@ function RatingSummary() {
 
   const scrollToForm = () => {
     const reviewsContainer = document.getElementById('reviews-main-container')
+
     if (reviewsContainer) reviewsContainer.scrollIntoView()
   }
 
@@ -248,7 +258,7 @@ function RatingSummary() {
             </span>
           ) : null}
           {state.settings.displaySummaryAddButton ? (
-            (state.settings && state.settings.allowAnonymousReviews) ||
+            state.settings?.allowAnonymousReviews ||
             (state.settings &&
               !state.settings.allowAnonymousReviews &&
               state.userAuthenticated) ? (

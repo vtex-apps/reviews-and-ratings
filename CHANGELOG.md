@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- reviewsByProductId input string format errors
+- review GET, PATCH, POST
+- Eslint errors and warnings except Unexpected any.
+- remove package-lock.json and reinstall yarn
+
 ## [3.4.3] - 2022-01-14
 
 ### Fixed

@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useReducer } from 'react'
-import { ApolloQueryResult } from 'apollo-client'
+import type { ApolloQueryResult } from 'apollo-client'
 import { useApolloClient } from 'react-apollo'
 import { useCssHandles } from 'vtex.css-handles'
 import { useProduct } from 'vtex.product-context'
@@ -74,17 +74,20 @@ const reducer = (state: State, action: ReducerActions) => {
         total: action.args.total,
         hasTotal: true,
       }
+
     case 'SET_AVERAGE':
       return {
         ...state,
         average: action.args.average,
         hasAverage: true,
       }
+
     case 'SET_SETTINGS':
       return {
         ...state,
         settings: action.args.settings,
       }
+
     default:
       return state
   }
@@ -114,6 +117,7 @@ function RatingInline() {
       })
       .then((response: ApolloQueryResult<TotalData>) => {
         const total = response.data.totalReviewsByProductId
+
         dispatch({
           type: 'SET_TOTAL',
           args: { total },
@@ -129,6 +133,7 @@ function RatingInline() {
       })
       .then((response: ApolloQueryResult<AverageData>) => {
         const average = response.data.averageRatingByProductId
+
         dispatch({
           type: 'SET_AVERAGE',
           args: { average },
@@ -141,6 +146,7 @@ function RatingInline() {
       })
       .then((response: ApolloQueryResult<SettingsData>) => {
         const settings = response.data.appSettings
+
         dispatch({
           type: 'SET_SETTINGS',
           args: { settings },

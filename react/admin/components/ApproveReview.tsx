@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/display-name */
 import React, { useState } from 'react'
-import { ObservableQueryFields } from 'react-apollo'
+import type { ObservableQueryFields } from 'react-apollo'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { Alert, Button, Modal, Table, ToastProvider } from 'vtex.styleguide'
 
-import {
+import type {
   ReviewTableRowData,
   SearchReviewData,
   SearchReviewArgs,
@@ -63,6 +63,7 @@ const ApproveReview = (props: ApproveReviewProps) => {
     return {
       ids: displayedReviews.map(row => {
         const { id } = row.review
+
         return id
       }),
       approved: true,
@@ -70,6 +71,7 @@ const ApproveReview = (props: ApproveReviewProps) => {
   }
 
   const { searchReviewsArgs, fetchMore } = props
+
   return (
     <Modal
       responsiveFullScreen

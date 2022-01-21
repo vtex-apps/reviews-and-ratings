@@ -1,8 +1,9 @@
 /* eslint-disable react/display-name */
 import React from 'react'
-import { FormattedMessage, IntlShape } from 'react-intl'
+import type { IntlShape } from 'react-intl'
+import { FormattedMessage } from 'react-intl'
 
-import { Product, ReviewTableRowData } from '../types'
+import type { Product, ReviewTableRowData } from '../types'
 import ProductCellRenderer from '../components/util/productCellRenderer'
 import ReviewCellRenderer from '../components/util/reviewCellRenderer'
 import {
