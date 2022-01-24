@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { MutationUpdaterFn } from 'apollo-client'
+import type { MutationUpdaterFn } from 'apollo-client'
 import { Mutation } from 'react-apollo'
 import React, { useState } from 'react'
 import { Button } from 'vtex.styleguide'
 
 import reviews from '../../../../graphql/reviews.graphql'
-import {
+import type {
   ApplyMatchData,
   // SingleActionResponse,
   ApplyMatchVariables,
@@ -68,6 +68,7 @@ const ApplyMatchButton = (props: ApplyMatchProps) => {
                 onWrongInput()
               } else {
                 const args = buildArgs()
+
                 applyMatch({
                   refetchQueries: [
                     {

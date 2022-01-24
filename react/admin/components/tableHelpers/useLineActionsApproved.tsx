@@ -2,7 +2,7 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
 
-import { ReviewTableRowData } from '../../types'
+import type { ReviewTableRowData } from '../../types'
 import { tuple } from '.'
 import { tableActionsMessages } from '../../utils/messages'
 

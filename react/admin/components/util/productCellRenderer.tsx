@@ -12,7 +12,7 @@ import {
 } from 'vtex.styleguide'
 
 import ProductQuery from '../../graphql/ProductQuery.graphql'
-import { Product, ToastRenderProps } from '../../types'
+import type { Product, ToastRenderProps } from '../../types'
 
 const DEFAULT_TOAST_DURATION_MS = 1500
 

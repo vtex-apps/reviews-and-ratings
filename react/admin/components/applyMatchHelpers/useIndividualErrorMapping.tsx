@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react'
-import { IntlShape, MessageDescriptor } from 'react-intl'
-import { ApolloError } from 'apollo-client'
+import type { IntlShape, MessageDescriptor } from 'react-intl'
+import type { ApolloError } from 'apollo-client'
 
 import { getGraphQLErrorCode } from './index'
 
@@ -11,9 +11,9 @@ interface GenericError extends ApolloError {
 }
 
 export const useIndividualErrorMapping = (intl: IntlShape) => {
-  const [shouldShowIndividualErrors, setShouldShowIndividualErrors] = useState(
-    false
-  )
+  const [shouldShowIndividualErrors, setShouldShowIndividualErrors] =
+    useState(false)
+
   const [allErrorsMap, setAllErrorsMap] = useState({} as Record<string, any>)
 
   const translateMessage = (message: MessageDescriptor) => {
@@ -24,9 +24,10 @@ export const useIndividualErrorMapping = (intl: IntlShape) => {
     if (errors.length > 0) {
       setShouldShowIndividualErrors(true)
     }
+
     setAllErrorsMap(
       errors.reduce((acc, error) => {
-        const graphQLError = error.graphQLErrors && error.graphQLErrors[0]
+        const graphQLError = error.graphQLErrors?.[0]
         const applyMatchErrorCode =
           (getGraphQLErrorCode(graphQLError) ?? error.code) || 0
 

@@ -25,7 +25,7 @@ namespace ReviewsRatings.GraphQL
                 resolve: async context =>
                 {
                     return await context.TryAsyncResolve(
-                        async c => await productReviewService.GetReview(context.GetArgument<int>("id")));
+                        async c => await productReviewService.GetReview(context.GetArgument<string>("id")));
                 }
             );
 

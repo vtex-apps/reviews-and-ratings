@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { FC, useState } from 'react'
+import type { FC } from 'react'
+import React, { useState } from 'react'
 import { useIntl } from 'react-intl'
 import { useLazyQuery } from 'react-apollo'
 import {
@@ -43,6 +44,7 @@ export const DownlaodReviewsTable: FC = () => {
       'Time',
       'SKU',
     ]
+
     const rows: any = []
 
     for (const review of reviews) {
@@ -56,13 +58,16 @@ export const DownlaodReviewsTable: FC = () => {
         Time: review.reviewDateTime,
         SKU: review.sku,
       }
+
       rows.push(reviewData)
     }
 
     const ws = XLSX.utils.json_to_sheet(rows, { header })
     const wb = XLSX.utils.book_new()
+
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1')
     const exportFileName = `reviews.xls`
+
     XLSX.writeFile(wb, exportFileName)
   }
 

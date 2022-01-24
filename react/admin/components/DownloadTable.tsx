@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { FC, useState, useEffect } from 'react'
+import type { FC } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Query } from 'react-apollo'
 import { Button, EmptyState } from 'vtex.styleguide'
 import { PersistedPaginatedTable } from 'vtex.paginated-table'
 import { useRuntime } from 'vtex.render-runtime'
 
-import { Review } from '../types'
+import type { Review } from '../types'
 import reviews from '../../../graphql/reviews.graphql'
 import { tableQueryMessages } from '../utils/messages'
 
@@ -25,7 +26,7 @@ interface DownloadTableProps {
   reviewDateTime: string
   schema: any
   emptyStateText?: string | JSX.Element
-  filterOptionsLists?: {}
+  filterOptionsLists?: Record<string, unknown>
   children?: ({ table }: { table: JSX.Element }) => JSX.Element
 }
 
@@ -117,6 +118,7 @@ export const DownloadTable: FC<DownloadTableProps> = ({
         if (children && typeof children === 'function') {
           return children({ table })
         }
+
         return table
       }}
     </Query>

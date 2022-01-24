@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { IntlShape, MessageDescriptor } from 'react-intl'
-import { ApolloError } from 'apollo-client'
+import type { IntlShape, MessageDescriptor } from 'react-intl'
+import type { ApolloError } from 'apollo-client'
 
 import { getGraphQLErrorCode } from './index'
 
@@ -26,9 +26,10 @@ export const useMatchingError = (intl: IntlShape, operation?: string) => {
   }
 
   const setSingleError = (err: GenericError) => {
-    const graphQLError = err.graphQLErrors && err.graphQLErrors[0]
+    const graphQLError = err.graphQLErrors?.[0]
     const applyMatchErrorCode =
       (getGraphQLErrorCode(graphQLError) ?? err.code) || 0
+
     setHasError(true)
     setErrorMessage(
       translateMessage({
@@ -40,6 +41,7 @@ export const useMatchingError = (intl: IntlShape, operation?: string) => {
   const setMultipleError = (err: GenericError[]) => {
     setHasError(true)
     const pluralCode = err.length > 1 ? 'plural' : 'singular'
+
     setErrorMessage(
       translateMessage({
         id: `admin/reviews.table.applyMatch.error.partial.${partialErrorMessageId}.${pluralCode}`,

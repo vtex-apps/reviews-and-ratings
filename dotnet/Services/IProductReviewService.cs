@@ -10,7 +10,7 @@
 
         Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId);
 
-        Task<Review> GetReview(int Id);
+        Task<Review> GetReview(string Id);
 
         Task<ReviewsResponseWrapper> GetReviews();
         Task<ReviewsResponseWrapper> GetReviews(int from, int to);

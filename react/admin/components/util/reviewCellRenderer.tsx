@@ -6,8 +6,8 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 import { IconCopy, ToastConsumer, Tooltip } from 'vtex.styleguide'
 
 import Stars from '../../../components/Stars'
-import { ToastRenderProps } from '../../types'
-import { ReviewSummary } from '../../schemas'
+import type { ToastRenderProps } from '../../types'
+import type { ReviewSummary } from '../../schemas'
 
 const DEFAULT_TOAST_DURATION_MS = 1500
 

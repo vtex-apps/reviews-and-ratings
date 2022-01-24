@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useReducer } from 'react'
 import { Helmet } from 'react-helmet'
-import { ApolloQueryResult } from 'apollo-client'
+import type { ApolloQueryResult } from 'apollo-client'
 import { useApolloClient } from 'react-apollo'
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 import { useProduct } from 'vtex.product-context'
@@ -138,17 +138,20 @@ const reducer = (state: State, action: ReducerActions) => {
         from: state.total < 11 ? state.from : state.from + 10,
         to: state.to + 10 > state.total ? state.total : state.to + 10,
       }
+
     case 'SET_PREV_PAGE':
       return {
         ...state,
         from: state.from - (state.from < 11 ? 0 : 10),
         to: state.from > 10 ? state.from - 1 : state.to,
       }
+
     case 'TOGGLE_REVIEW_FORM':
       return {
         ...state,
         showForm: !state.showForm,
       }
+
     case 'TOGGLE_REVIEW_ACCORDION':
       return {
         ...state,
@@ -156,21 +159,25 @@ const reducer = (state: State, action: ReducerActions) => {
           ? state.openReviews.filter(i => i !== action.args.reviewNumber)
           : [...state.openReviews, action.args.reviewNumber],
       }
+
     case 'SET_OPEN_REVIEWS':
       return {
         ...state,
         openReviews: action.args.reviewNumbers,
       }
+
     case 'SET_SELECTED_SORT':
       return {
         ...state,
         sort: action.args.sort,
       }
+
     case 'SET_RATING_FILTER':
       return {
         ...state,
         ratingFilter: action.args.ratingFilter,
       }
+
     case 'SET_REVIEWS':
       return {
         ...state,
@@ -179,28 +186,33 @@ const reducer = (state: State, action: ReducerActions) => {
         reviewsStats: action.args.graphArray || [],
         hasTotal: true,
       }
+
     case 'SET_TOTAL':
       return {
         ...state,
         total: action.args.total,
         hasTotal: true,
       }
+
     case 'SET_AVERAGE':
       return {
         ...state,
         average: action.args.average,
         hasAverage: true,
       }
+
     case 'SET_SETTINGS':
       return {
         ...state,
         settings: action.args.settings,
       }
+
     case 'SET_AUTHENTICATED':
       return {
         ...state,
         userAuthenticated: action.args.authenticated,
       }
+
     default:
       return state
   }
@@ -428,6 +440,7 @@ function Reviews() {
           : intl.formatMessage(messages.timeAgoYear)
       } ${intl.formatMessage(messages.timeAgo)}`
     }
+
     if (months > 0) {
       return `${months} ${
         months > 1
@@ -435,6 +448,7 @@ function Reviews() {
           : intl.formatMessage(messages.timeAgoMonth)
       } ${intl.formatMessage(messages.timeAgo)}`
     }
+
     if (days > 0) {
       return `${days} ${
         days > 1
@@ -442,6 +456,7 @@ function Reviews() {
           : intl.formatMessage(messages.timeAgoDay)
       } ${intl.formatMessage(messages.timeAgo)}`
     }
+
     if (hours > 0) {
       return `${hours} ${
         hours > 1
@@ -449,6 +464,7 @@ function Reviews() {
           : intl.formatMessage(messages.timeAgoHour)
       } ${intl.formatMessage(messages.timeAgo)}`
     }
+
     if (minutes > 0) {
       return `${minutes} ${
         minutes > 1
@@ -456,8 +472,10 @@ function Reviews() {
           : intl.formatMessage(messages.timeAgoMinute)
       } ${intl.formatMessage(messages.timeAgo)}`
     }
+
     return intl.formatMessage(messages.timeAgoJustNow)
   }
+
   const getLocation = () =>
     canUseDOM
       ? {
@@ -467,6 +485,7 @@ function Reviews() {
       : { url: global.__pathname__, pathName: global.__pathname__ }
 
   const { url } = getLocation()
+
   useEffect(() => {
     window.__RENDER_8_SESSION__.sessionPromise.then((data: any) => {
       const sessionRespose = data.response
@@ -481,6 +500,7 @@ function Reviews() {
       if (!storeUserId) {
         return
       }
+
       dispatch({
         type: 'SET_AUTHENTICATED',
         args: { authenticated: true },
@@ -495,6 +515,7 @@ function Reviews() {
       })
       .then((response: ApolloQueryResult<SettingsData>) => {
         const settings = response.data.appSettings
+
         dispatch({
           type: 'SET_SETTINGS',
           args: { settings },
@@ -516,6 +537,7 @@ function Reviews() {
       })
       .then((response: ApolloQueryResult<AverageData>) => {
         const average = response.data.averageRatingByProductId
+
         dispatch({
           type: 'SET_AVERAGE',
           args: { average },
@@ -527,6 +549,7 @@ function Reviews() {
     if (!productId) {
       return
     }
+
     client
       .query({
         query: ReviewsByProductId,
@@ -544,13 +567,16 @@ function Reviews() {
         const reviews = response.data.reviewsByProductId.data
         const { total } = response.data.reviewsByProductId.range
         const graphArray = [0, 0, 0, 0, 0, 0]
+
         graphArray[0] = total
         if (reviews) {
           reviews.forEach((review: Review) => {
             const thisRating = review.rating
+
             graphArray[thisRating] += 1
           })
         }
+
         dispatch({
           type: 'SET_REVIEWS',
           args: { reviews, total, graphArray },
@@ -560,6 +586,7 @@ function Reviews() {
           state.settings.defaultOpenCount,
           total
         )
+
         dispatch({
           type: 'SET_OPEN_REVIEWS',
           args: {
@@ -624,7 +651,7 @@ function Reviews() {
         <ReviewsGraph reviewsStats={state.reviewsStats} />
       ) : null}
       <div className={`${handles.writeReviewContainer} mv5`}>
-        {(state.settings && state.settings.allowAnonymousReviews) ||
+        {state.settings?.allowAnonymousReviews ||
         (state.settings &&
           !state.settings.allowAnonymousReviews &&
           state.userAuthenticated) ? (
@@ -754,9 +781,9 @@ function Reviews() {
                             {review.reviewerName ||
                               intl.formatMessage(messages.anonymous)}
                           </strong>
-                          {state.settings &&
-                            state.settings.useLocation &&
-                            review.location && <span>, {review.location}</span>}
+                          {state.settings?.useLocation && review.location && (
+                            <span>, {review.location}</span>
+                          )}
                         </span>
                       </div>
                       <div
@@ -813,9 +840,9 @@ function Reviews() {
                             {review.reviewerName ||
                               intl.formatMessage(messages.anonymous)}
                           </strong>
-                          {state.settings &&
-                            state.settings.useLocation &&
-                            review.location && <span>, {review.location}</span>}
+                          {state.settings?.useLocation && review.location && (
+                            <span>, {review.location}</span>
+                          )}
                         </li>
                       </ul>
                       <p className="t-body lh-copy mw9">{review.text}</p>

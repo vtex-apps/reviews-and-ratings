@@ -570,7 +570,6 @@
                 }
             }
 
-
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,

@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { FC, useState, Fragment } from 'react'
-import { FormattedMessage, useIntl, IntlShape } from 'react-intl'
+import type { FC } from 'react'
+import React, { useState, Fragment } from 'react'
+import type { IntlShape } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { Box, ToastConsumer } from 'vtex.styleguide'
 
-import {
+import type {
   Review,
   ReviewTableRowData,
   SearchReviewArgs,
