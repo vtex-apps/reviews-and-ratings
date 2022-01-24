@@ -183,15 +183,8 @@ namespace ReviewsRatings.Controllers
                 var productId = queryString["product_id"];
                 var locale = queryString["locale"];
                 var boolValue = queryString["pastReviews"];
-                bool pastReviews;
-                if(boolValue == "TRUE" || boolValue == "true" || boolValue == "1") 
-                {
-                    pastReviews = true;
-                }
-                else
-                {
-                    pastReviews = false;
-                }
+                bool pastReviews = false;
+                bool.TryParse(boolValue, out pastReviews);
                 int rating;
                 bool success = int.TryParse(queryString["rating"], out rating);
                 switch (requestedAction)
@@ -307,21 +300,6 @@ namespace ReviewsRatings.Controllers
             try
             {
                 await _productReviewsService.AddSearchDate();
-            }
-            catch(Exception ex)
-            {
-                return Json("False");
-            }
-
-            return Json("Done");
-        }
-
-        public async Task<IActionResult> AddLocale()
-        {
-            Response.Headers.Add("Cache-Control", "no-cache");
-            try
-            {
-                await _productReviewsService.AddLocale();
             }
             catch(Exception ex)
             {

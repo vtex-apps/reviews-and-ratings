@@ -29,10 +29,6 @@
     "addSearchDate": {
       "path": "/reviews-and-ratings/add-search-date",
       "public": true
-    },
-    "addLocale": {
-      "path": "/reviews-and-ratings/add-locale",
-      "public": true
     }
   },
   "events": {

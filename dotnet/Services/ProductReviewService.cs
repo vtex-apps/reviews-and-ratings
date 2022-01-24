@@ -801,16 +801,6 @@
             }
         }
 
-        public async Task AddLocale()
-        {
-            var recordsToUpdate = await _productReviewRepository.GetProductReviewsMD("_where=locale is null");
-            foreach (var review in recordsToUpdate.Reviews)
-            {
-                await _productReviewRepository.SaveProductReviewMD(review);
-            }
-        }
-
-
         public async Task<LegacyReview> NewReviewLegacy(LegacyReview review)
         {
             IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();

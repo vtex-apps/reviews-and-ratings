@@ -56,8 +56,6 @@
 
         Task AddSearchDate();
 
-        Task AddLocale();
-
         Task<LegacyReview> NewReviewLegacy(LegacyReview review);
     }
 }
