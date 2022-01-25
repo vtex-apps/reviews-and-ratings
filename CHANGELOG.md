@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.5.0] - 2022-01-25
+
 ### Added
 
 - Added Locale(Bindings) filters feature for the store front
