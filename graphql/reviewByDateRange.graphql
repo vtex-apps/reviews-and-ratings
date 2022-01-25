@@ -3,11 +3,7 @@ query ReviewByDateRange(
   $toDate: String!
   $orderBy: String
 ) {
-  reviewByDateRange(
-    fromDate: $fromDate
-    toDate: $toDate
-    orderBy: $orderBy
-  ) {
+  reviewByDateRange(fromDate: $fromDate, toDate: $toDate, orderBy: $orderBy) {
     data {
       id
       productId
@@ -16,6 +12,7 @@ query ReviewByDateRange(
       text
       reviewerName
       location
+      locale
       reviewDateTime
       verifiedPurchaser
       sku

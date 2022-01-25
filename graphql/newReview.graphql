@@ -6,6 +6,7 @@ mutation NewReview($review: ReviewInput!) {
     title
     text
     reviewerName
+    locale
     reviewDateTime
     sku
   }

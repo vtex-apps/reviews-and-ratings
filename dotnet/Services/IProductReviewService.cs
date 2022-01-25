@@ -6,7 +6,7 @@
 
     public interface IProductReviewService
     {
-        Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId, int from, int to, string orderBy, string searchTerm, int rating);
+        Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId, int from, int to, string orderBy, string searchTerm, int rating, string locale, bool pastReviews);
 
         Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId);
 
