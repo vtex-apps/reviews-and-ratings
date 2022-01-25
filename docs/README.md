@@ -81,6 +81,10 @@ To access and use the review moderation admin interface, follow the instructions
 >
 > You can export reviews to XLS files from the **Download** tab, and it is limited to exporting 800 reviews at a time. Please use the date pickers to select the time range of reviews you want to export.
 
+> ⚠️ Warning
+>
+> If you don't see any review in this section and you see the **Migrate Data** button, you may have been using version 2.x on this account, you only need to click on this button to migrate all reviews saved during the v2, and then the page will be refreshed automatically, and the button will not appear any more.
+
 Individual pending reviews may be either approved or deleted using the Kebab Menu (3 dots button) in the right column or selecting the checkbox in the left. Multiple reviews can also be selected using the checkboxes, being approved or deleted in bulk.
 
 Approved reviews may be deleted as well, either individually or in bulk.
