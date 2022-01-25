@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- admin panel pagination bugfix
+
 ## [3.4.4] - 2022-01-24
 
 ### Fixed
