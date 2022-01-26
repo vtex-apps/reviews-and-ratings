@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - admin panel pagination bugfix
 
+## [3.5.0] - 2022-01-25
+
+### Added
+
+- Added Locale(Bindings) filters feature for the store front
+
 ## [3.4.4] - 2022-01-24
 
 ### Fixed

@@ -6,6 +6,8 @@ type Review {
   text: String
   reviewerName: String
   location: String
+  locale: String
+  pastReviews: Boolean
   reviewDateTime: String
   verifiedPurchaser: Boolean
   sku: String
@@ -27,6 +29,8 @@ type Data {
   reviewerName: String
   shopperId: String
   location: String
+  locale: String
+  pastReviews: Boolean
   reviewDateTime: String
   verifiedPurchaser: Boolean
   sku: String
@@ -64,6 +68,8 @@ type Query {
   reviewsByProductId(
     productId: String!
     rating: Int
+    locale: String
+    pastReviews: Boolean
     from: Int
     to: Int
     orderBy: String

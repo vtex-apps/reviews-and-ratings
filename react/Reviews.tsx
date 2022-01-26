@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { Fragment, useEffect, useReducer } from 'react'
 import { Helmet } from 'react-helmet'
 import type { ApolloQueryResult } from 'apollo-client'
@@ -22,12 +23,14 @@ import ReviewsByProductId from '../graphql/reviewsByProductId.graphql'
 import AverageRatingByProductId from '../graphql/averageRatingByProductId.graphql'
 import ReviewsGraph from './ReviewsGraph'
 import { getBaseUrl } from './utils/baseUrl'
+import getBindings from './queries/bindings.graphql'
 
 interface Review {
   approved: boolean
   id: string
   productId: string
   rating: number
+  locale: string | null
   title: string
   text: string
   location: string | null
@@ -70,6 +73,9 @@ interface AppSettings {
 interface State {
   sort: string
   ratingFilter: number
+  localeFilter: string
+  localeOptions: string[]
+  pastReviews: boolean
   from: number
   to: number
   reviews: Review[] | null
@@ -97,6 +103,9 @@ type ReducerActions =
   | { type: 'SET_OPEN_REVIEWS'; args: { reviewNumbers: number[] } }
   | { type: 'SET_SELECTED_SORT'; args: { sort: string } }
   | { type: 'SET_RATING_FILTER'; args: { ratingFilter: number } }
+  | { type: 'SET_LOCALE_FILTER'; args: { localeFilter: string } }
+  | { type: 'SET_LOCALE_OPTIONS'; args: { localeOptions: string[] } }
+  | { type: 'SET_PASTREVIEWS'; args: { pastReviews: boolean } }
   | {
       type: 'SET_REVIEWS'
       args: { reviews: Review[]; total: number; graphArray: number[] }
@@ -105,30 +114,6 @@ type ReducerActions =
   | { type: 'SET_AVERAGE'; args: { average: number } }
   | { type: 'SET_SETTINGS'; args: { settings: AppSettings } }
   | { type: 'SET_AUTHENTICATED'; args: { authenticated: boolean } }
-
-const initialState = {
-  sort: 'ReviewDateTime:desc',
-  ratingFilter: 0,
-  from: 1,
-  to: 10,
-  reviews: null,
-  total: 0,
-  average: 0,
-  hasTotal: false,
-  hasAverage: false,
-  showForm: false,
-  openReviews: [],
-  settings: {
-    defaultOpen: false,
-    defaultOpenCount: 0,
-    allowAnonymousReviews: false,
-    requireApproval: true,
-    useLocation: false,
-    showGraph: false,
-  },
-  userAuthenticated: false,
-  reviewsStats: [],
-}
 
 const reducer = (state: State, action: ReducerActions) => {
   switch (action.type) {
@@ -177,7 +162,21 @@ const reducer = (state: State, action: ReducerActions) => {
         ...state,
         ratingFilter: action.args.ratingFilter,
       }
-
+    case 'SET_LOCALE_FILTER':
+      return {
+        ...state,
+        localeFilter: action.args.localeFilter,
+      }
+    case 'SET_LOCALE_OPTIONS':
+      return {
+        ...state,
+        localeOptions: action.args.localeOptions,
+      }
+    case 'SET_PASTREVIEWS':
+      return {
+        ...state,
+        pastReviews: action.args.pastReviews,
+      }
     case 'SET_REVIEWS':
       return {
         ...state,
@@ -374,6 +373,33 @@ function Reviews() {
   const { product }: any = useProduct() ?? {}
   const { productId, productName, linkText } = product ?? {}
 
+  const initialState = {
+    sort: 'ReviewDateTime:desc',
+    ratingFilter: 0,
+    localeFilter: intl.locale.slice(0, 2),
+    localeOptions: [],
+    pastReviews: true,
+    from: 1,
+    to: 10,
+    reviews: null,
+    total: 0,
+    average: 0,
+    hasTotal: false,
+    hasAverage: false,
+    showForm: false,
+    openReviews: [],
+    settings: {
+      defaultOpen: false,
+      defaultOpenCount: 0,
+      allowAnonymousReviews: false,
+      requireApproval: true,
+      useLocation: false,
+      showGraph: false,
+    },
+    userAuthenticated: false,
+    reviewsStats: [],
+  }
+
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const options = [
@@ -395,7 +421,7 @@ function Reviews() {
     },
   ]
 
-  const filters = [
+  const ratingFilters = [
     {
       label: intl.formatMessage(messages.all),
       value: 0,
@@ -421,6 +447,29 @@ function Reviews() {
       value: 5,
     },
   ]
+
+  useEffect(() => {
+    client
+      .query({
+        query: getBindings,
+        variables: null,
+      })
+      .then((res: any) => {
+        const list = res.data.tenantInfo.bindings.map((item: any) => {
+          return item.defaultLocale.slice(0, 2)
+        })
+        const localeOptions = [...new Set(list as string)]
+        dispatch({
+          type: 'SET_LOCALE_OPTIONS',
+          args: { localeOptions },
+        })
+      })
+  }, [client])
+
+  const localeFilters = state.localeOptions.map((str: any) => ({
+    label: str.toUpperCase(),
+    value: str,
+  }))
 
   const getTimeAgo = (time: string) => {
     const before = new Date(`${time} UTC`)
@@ -556,6 +605,8 @@ function Reviews() {
         variables: {
           productId,
           rating: state.ratingFilter,
+          locale: state.localeFilter,
+          pastReviews: state.pastReviews,
           from: state.from - 1,
           to: state.to - 1,
           orderBy: state.sort,
@@ -601,6 +652,8 @@ function Reviews() {
     state.to,
     state.sort,
     state.ratingFilter,
+    state.localeFilter,
+    state.pastReviews,
     state.settings,
   ])
 
@@ -695,7 +748,7 @@ function Reviews() {
           value={state.sort}
         />
         <Dropdown
-          options={filters}
+          options={ratingFilters}
           placeholder={intl.formatMessage(messages.filterPlaceholder)}
           onChange={(event: React.FormEvent<HTMLSelectElement>) => {
             dispatch({
@@ -705,6 +758,27 @@ function Reviews() {
           }}
           value={state.ratingFilter}
         />
+        {state.localeOptions.length === 1 ||
+        state.localeOptions.length === 0 ? null : (
+          <Dropdown
+            options={localeFilters}
+            placeholder={intl.formatMessage(messages.filterPlaceholder)}
+            onChange={(event: React.FormEvent<HTMLSelectElement>) => {
+              dispatch({
+                type: 'SET_LOCALE_FILTER',
+                args: { localeFilter: event.currentTarget.value },
+              })
+              dispatch({
+                type: 'SET_PASTREVIEWS',
+                args: {
+                  pastReviews:
+                    event.currentTarget.value === intl.locale.slice(0, 2),
+                },
+              })
+            }}
+            value={state.localeFilter}
+          />
+        )}
       </div>
       <div className={`${handles.reviewCommentsContainer} review__comments`}>
         {state.reviews === null ? (

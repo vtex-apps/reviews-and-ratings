@@ -187,6 +187,10 @@ namespace ReviewsRatings.Controllers
                 var productId = queryString["product_id"];
                 int rating = 0;
                 string ratingQS = queryString["rating"];
+                var locale = queryString["locale"];
+                var boolValue = queryString["pastReviews"];
+                bool pastReviews = false;
+                bool.TryParse(boolValue, out pastReviews);
                 switch (requestedAction)
                 {
                     case REVIEW:
@@ -220,7 +224,7 @@ namespace ReviewsRatings.Controllers
 
                         if (!string.IsNullOrEmpty(productId))
                         {
-                            wrapper = await _productReviewsService.GetReviewsByProductId(productId, from, to, orderBy, searchTerm, rating);
+                            wrapper = await _productReviewsService.GetReviewsByProductId(productId, from, to, orderBy, searchTerm, rating, locale, pastReviews);
                         }
                         else
                         {
@@ -334,6 +338,7 @@ namespace ReviewsRatings.Controllers
                 {
                     Approved = true,
                     Location = "nowhere",
+                    Locale = "nowhere",
                     ProductId = rnd.Next(100, 99999).ToString(),
                     Rating = rnd.Next(1, 5),
                     ReviewerName = "Test Reviewer",

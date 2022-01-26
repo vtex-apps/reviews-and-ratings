@@ -22,6 +22,7 @@ namespace ReviewsRatings.GraphQL.Types
             //Field(x => x.VerifiedPurchaser);
             Field(x => x.Sku, nullable: true);
             Field(x => x.Location, nullable: true);
+            Field(x => x.Locale, nullable: true);
         }
     }
 }
