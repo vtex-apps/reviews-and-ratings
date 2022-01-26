@@ -71,7 +71,7 @@
         public async Task<Review> EditReview(Review review)
         {
 
-            ReviewsResponseWrapper wrapper = await _productReviewRepository.GetProductReviewsMD($"id={review.Id}");
+            ReviewsResponseWrapper wrapper = await _productReviewRepository.GetProductReviewsMD($"id={review.Id}", null, null);
             Review oldReview = wrapper.Reviews.FirstOrDefault();
 
             review.Approved = review.Approved ?? oldReview.Approved;
@@ -110,7 +110,7 @@
                 searchQuery = $"{searchQuery}&approved=true";
             }
 
-            ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD(searchQuery);
+            ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD(searchQuery, null, null);
             IList<Review> reviews = wrapper.Reviews;
             if (reviews != null)
             {
@@ -128,7 +128,7 @@
         public async Task<Review> GetReview(string Id)
         {
             Review review = null;
-            ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD($"id={Id}");
+            ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD($"id={Id}", null, null);
             IList<Review> reviews = wrapper.Reviews;
             if (reviews != null)
             {
@@ -301,7 +301,7 @@
 
             string sortQuery = await this.GetSortQuery(orderBy);
 
-            ReviewsResponseWrapper wrapper = await _productReviewRepository.GetProductReviewsMD($"{searchQuery}{sortQuery}{statusQuery}");
+            ReviewsResponseWrapper wrapper = await _productReviewRepository.GetProductReviewsMD($"{searchQuery}{sortQuery}{statusQuery}", Convert.ToString(from), Convert.ToString(to));
             
             return wrapper;
         }
@@ -465,14 +465,14 @@
 
         public async Task<ReviewsResponseWrapper> GetReviewsByShopperId(string shopperId)
         {
-            ReviewsResponseWrapper wrapper = await _productReviewRepository.GetProductReviewsMD($"shopperId={shopperId}");
+            ReviewsResponseWrapper wrapper = await _productReviewRepository.GetProductReviewsMD($"shopperId={shopperId}", null, null);
 
             return wrapper;
         }
 
         public async Task<ReviewsResponseWrapper> GetReviewsByreviewDateTime(string reviewDateTime)
         {
-            ReviewsResponseWrapper wrapper = await _productReviewRepository.GetProductReviewsMD($"reviewDateTime={reviewDateTime}");
+            ReviewsResponseWrapper wrapper = await _productReviewRepository.GetProductReviewsMD($"reviewDateTime={reviewDateTime}",null, null);
 
             return wrapper;
         }
@@ -524,7 +524,7 @@
             IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
             foreach (string id in ids)
             {
-                ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD($"id={id}");
+                ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD($"id={id}", null, null);
                 Review reviewToModerate = wrapper.Reviews.Where(r => r.Id == id).FirstOrDefault();
                 if (reviewToModerate != null)
                 {
@@ -549,7 +549,7 @@
             bool retval = false;
             try
             {
-                ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD($"shopperId={shopperId}&productId={productId}");
+                ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD($"shopperId={shopperId}&productId={productId}", null, null);
                 IList<Review> reviews = wrapper.Reviews;
                 if (reviews != null && reviews.Count > 0)
                 {
@@ -779,7 +779,7 @@
 
         public async Task<ReviewsResponseWrapper> GetReviews()
         {
-            return await _productReviewRepository.GetProductReviewsMD(string.Empty);
+            return await _productReviewRepository.GetProductReviewsMD(string.Empty, null, null);
         }
 
         public async Task<ReviewsResponseWrapper> GetReviews(int from, int to)
@@ -836,7 +836,7 @@
 
         public async Task AddSearchDate()
         {
-            var recordsToUpdate = await _productReviewRepository.GetProductReviewsMD("_where=searchDate is null");
+            var recordsToUpdate = await _productReviewRepository.GetProductReviewsMD("_where=searchDate is null", null, null);
             foreach (var review in recordsToUpdate.Reviews)
             {
                 await _productReviewRepository.SaveProductReviewMD(review);
