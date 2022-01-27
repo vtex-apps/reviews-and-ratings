@@ -110,6 +110,8 @@
   "admin/reviews.useLocation.description": "Incluye un campo para que el usuario introduzca su ubicación cuando envíe un comentario.",
   "admin/reviews.defaultOpen.title": "Por defecto, todos los acordeones de los comentarios se abrirán.",
   "admin/reviews.defaultOpen.description": "Todas las pestañas de comentarios en la página del producto se abrirán por defecto con el texto del comentario truncado con x caracteres",
+  "admin/reviews.defaultStarsRating.tittle": "Number of open review accordions",
+  "admin/reviews.defaultStarsRating.description": "Specified number of review tabs on product page will default to open",
   "admin/reviews.defaultOpenCount.tittle": "Número de acordeones de comentarios abiertos",
   "admin/reviews.defaultOpenCount.description": "Número especificado de pestañas de comentarios en la página del producto que se abrirá por defecto.",
   "admin/reviews.showGraph.title": "Mostrar gráfico",

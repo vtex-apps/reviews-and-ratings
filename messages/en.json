@@ -110,6 +110,8 @@
   "admin/reviews.useLocation.description": "Include a field for reviewer to input their location when submitting review",
   "admin/reviews.defaultOpen.title": "Default all review accordions to open",
   "admin/reviews.defaultOpen.description": "All review tabs on product page will default to open with review text truncated to x characters",
+  "admin/reviews.defaultStarsRating.tittle": "Number of open review accordions",
+  "admin/reviews.defaultStarsRating.description": "Specified number of review tabs on product page will default to open",
   "admin/reviews.defaultOpenCount.tittle": "Number of open review accordions",
   "admin/reviews.defaultOpenCount.description": "Specified number of review tabs on product page will default to open",
   "admin/reviews.showGraph.title": "Display graph",

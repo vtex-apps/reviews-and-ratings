@@ -26,6 +26,7 @@ interface AppSettings {
   requireApproval: boolean
   useLocation: boolean
   defaultOpen: boolean
+  defaultStarsRating: number
   defaultOpenCount: number
   showGraph: boolean
   displaySummaryIfNone: boolean
@@ -54,6 +55,7 @@ const initialState = {
   hasAverage: false,
   settings: {
     defaultOpen: false,
+    defaultStarsRating: 5,
     defaultOpenCount: 0,
     allowAnonymousReviews: false,
     requireApproval: true,

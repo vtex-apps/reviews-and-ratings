@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-console */
 import React, { Fragment, useEffect, useReducer } from 'react'
 import { useProduct } from 'vtex.product-context'
 import type { ApolloQueryResult } from 'apollo-client'
@@ -17,6 +17,7 @@ interface AppSettings {
   requireApproval: boolean
   useLocation: boolean
   defaultOpen: boolean
+  defaultStarsRating: number
 }
 
 interface HasShopperReviewedData {
@@ -61,28 +62,6 @@ type ReducerActions =
   | { type: 'SET_SUBMITTED' }
   | { type: 'SET_SUBMITTING'; args: { isSubmitting: boolean } }
   | { type: 'SHOW_VALIDATION' }
-
-const initialState = {
-  rating: 3,
-  title: '',
-  text: '',
-  location: '',
-  locale: '',
-  reviewerName: '',
-  shopperId: '',
-  reviewSubmitted: false,
-  alreadySubmitted: false,
-  verifiedPurchaser: false,
-  userAuthenticated: false,
-  validation: {
-    hasTitle: false,
-    hasText: false,
-    hasName: false,
-    hasValidEmail: false,
-  },
-  showValidationErrors: false,
-  isSubmitting: false,
-}
 
 const reducer = (state: State, action: ReducerActions) => {
   switch (action.type) {
@@ -240,6 +219,33 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
 
   const { product } = useProduct() ?? {}
   const { productId } = product ?? {}
+
+  let defaultRating = 5
+  if (settings?.defaultStarsRating !== undefined) {
+    defaultRating = settings?.defaultStarsRating
+  }
+
+  const initialState = {
+    rating: defaultRating,
+    title: '',
+    text: '',
+    location: '',
+    locale: '',
+    reviewerName: '',
+    shopperId: '',
+    reviewSubmitted: false,
+    alreadySubmitted: false,
+    verifiedPurchaser: false,
+    userAuthenticated: false,
+    validation: {
+      hasTitle: false,
+      hasText: false,
+      hasName: false,
+      hasValidEmail: false,
+    },
+    showValidationErrors: false,
+    isSubmitting: false,
+  }
 
   const [state, dispatch] = useReducer(reducer, initialState)
 

@@ -16,6 +16,7 @@ namespace ReviewsRatings.GraphQL.Types
             Field(b => b.RequireApproval).Description("Indicates whether reviews require approval.");
             Field(b => b.UseLocation).Description("Indicates whether to use Location field.");
             Field(b => b.defaultOpen).Description("Indicates whether reviews should expand by default");
+            Field(b => b.defaultStarsRating).Description("Indicates number of stars of reviews by default");
             Field(b => b.defaultOpenCount).Description("Indicates number of reviews to be expanded by default");
             Field(b => b.showGraph).Description("Show the reviews graph on product page");
             Field(b => b.displaySummaryIfNone).Description("Display stars in product-rating-summary if there are no reviews");
