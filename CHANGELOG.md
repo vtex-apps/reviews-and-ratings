@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.5.2] - 2022-01-27
+
 ### Added
 
 - Added warning information about the migration of data admin button.
