@@ -83,7 +83,7 @@ To access and use the review moderation admin interface, follow the instructions
 
 > ⚠️ Warning
 >
-> If you see the **Migrate Data** button instead of a list of reviews in the **Catalog > Reviews** page, that means you are using an outdated version of the **Reviews and Ratings** app. To solve this issue and upgrade to the newer version of the app, click on **Migrate Data**. This will save all previous reviews in the newer version of the **Reviews and Ratings** app. Once the migration is finished, the page will automatically refresh, and the list of reviews will become available for you.
+> If you have updated to version 3.x after using a prior version of **Reviews and Ratings**, you may see the **Migrate Data** button instead of a list of reviews in the **Catalog > Reviews** page. Clicking this button will migrate all existing review data from the previous storage solution (VBASE) to the new solution (Masterdata V2). Once the migration is finished, the page will automatically refresh, and the list of reviews will become available for you.
 
 Individual pending reviews may be either approved or deleted using the Kebab Menu (3 dots button) in the right column or selecting the checkbox in the left. Multiple reviews can also be selected using the checkboxes, being approved or deleted in bulk.
 
