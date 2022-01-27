@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - added admin setting about default stars of rating
 
+## [3.5.2] - 2022-01-27
+
+### Added
+
+- Added warning information about the migration of data admin button.
+
 ## [3.5.1] - 2022-01-26
 
 ### Fixed
