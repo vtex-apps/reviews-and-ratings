@@ -110,6 +110,8 @@
   "admin/reviews.useLocation.description": "Voeg een veld toe voor de beoordelaar om hun locatie in te voeren bij het indienen van de beoordeling",
   "admin/reviews.defaultOpen.title": "Standaard alle beoordelingsovereenkomsten om te openen",
   "admin/reviews.defaultOpen.description": "Alle tabbladen op de productpagina worden standaard ingesteld om te openen met de beoordelingstekst afgekapt tot x tekens",
+  "admin/reviews.defaultStarsRating.tittle": "Aantal open beoordelingsovereenkomsten",
+  "admin/reviews.defaultStarsRating.description": "Opgegeven aantal beoordelings tabbladen op de productpagina worden standaard om te openen",
   "admin/reviews.defaultOpenCount.tittle": "Aantal open beoordelingsovereenkomsten",
   "admin/reviews.defaultOpenCount.description": "Opgegeven aantal beoordelings tabbladen op de productpagina worden standaard om te openen",
   "admin/reviews.showGraph.title": "Grafiek weergeven",

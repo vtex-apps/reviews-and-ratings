@@ -111,6 +111,8 @@
   "admin/reviews.useLocation.description": "admin/reviews.useLocation.description",
   "admin/reviews.defaultOpen.title": "admin/reviews.defaultOpen.title",
   "admin/reviews.defaultOpen.description": "admin/reviews.defaultOpen.description",
+  "admin/reviews.defaultStarsRating.tittle": "admin/reviews.defaultStarsRating.tittle",
+  "admin/reviews.defaultStarsRating.description": "admin/reviews.defaultStarsRating.description",
   "admin/reviews.defaultOpenCount.tittle": "admin/reviews.defaultOpenCount.tittle",
   "admin/reviews.defaultOpenCount.description": "admin/reviews.defaultOpenCount.description",
   "admin/reviews.showGraph.title": "admin/reviews.showGraph.title",

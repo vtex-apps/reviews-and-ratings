@@ -65,6 +65,20 @@
         "type": "boolean",
         "default": true
       },
+      "defaultStarsRating": {
+        "title": "Default stars of review",
+        "description": "Specified default stars of review on product page",
+        "type": "string",
+        "enum": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ],
+        "default": "5"
+      },
       "defaultOpenCount": {
         "title": "Number of open review accordions",
         "description": "Specified number of review tabs on product page will default to open",

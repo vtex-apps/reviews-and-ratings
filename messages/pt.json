@@ -110,6 +110,8 @@
   "admin/reviews.useLocation.description": "Incluir um campo para que o cliente insira a sua localização ao enviar a avaliação",
   "admin/reviews.defaultOpen.title": "Definir todas as exibições estilo accordion (sanfona) das avaliações para abertas",
   "admin/reviews.defaultOpen.description": "Todas as abas de avaliação na página do produto serão abertas por padrão com o texto das avaliações truncado a x caracteres",
+  "admin/reviews.defaultStarsRating.tittle": "Número de avaliações abertas no estilo accordion (sanfona)",
+  "admin/reviews.defaultStarsRating.description": "Número especificado de abas de avaliação abertos por padrão na página do produto",
   "admin/reviews.defaultOpenCount.tittle": "Número de exibições estilo accordion (sanfona) abertas das avaliações",
   "admin/reviews.defaultOpenCount.description": "O número especificado de abas de avaliação na página do produto será, por padrão, aberto",
   "admin/reviews.showGraph.title": "Exibir gráfico",

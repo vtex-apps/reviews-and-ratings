@@ -110,6 +110,8 @@
   "admin/reviews.useLocation.description": "Includi un campo affinché la persona che recensisce possa inserire la propria posizione quando invia una recensione",
   "admin/reviews.defaultOpen.title": "Apri di default tutte le schede delle recensioni",
   "admin/reviews.defaultOpen.description": "Tutte le schede delle recensioni sulla pagina del prodotto si apriranno di default con il testo della recensione troncato a X caratteri",
+  "admin/reviews.defaultStarsRating.tittle": "Numero di schede di recensioni aperte",
+  "admin/reviews.defaultStarsRating.description": "Numero specificato di schede di recensioni che si aprirà di default sulla pagina del prodotto",
   "admin/reviews.defaultOpenCount.tittle": "Numero di schede delle recensioni aperte",
   "admin/reviews.defaultOpenCount.description": "Il numero specificato di schede delle recensioni si aprirà di default sulla pagina del prodotto",
   "admin/reviews.showGraph.title": "Mostra grafico",

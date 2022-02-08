@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- added admin setting about default stars of rating
+
 ## [3.5.2] - 2022-01-27
 
 ### Added

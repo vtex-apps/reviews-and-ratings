@@ -10,6 +10,7 @@
     /// requireApproval: Boolean
     /// useLocation: Boolean
     /// defaultOpen: Boolean
+    /// defaultStarsRating: Integer
     /// defaultOpenCount: Integer
     /// showGraph: Boolean
     /// displaySummaryIfNone: Boolean
@@ -24,6 +25,7 @@
         public bool RequireApproval { get; set; }
         public bool UseLocation { get; set; }
         public bool defaultOpen { get; set; }
+        public int defaultStarsRating { get; set; }
         public int defaultOpenCount { get; set; }
         public bool showGraph { get; set; }
         public bool displaySummaryIfNone { get; set; }

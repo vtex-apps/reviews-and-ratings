@@ -110,6 +110,8 @@
   "admin/reviews.useLocation.description": "Include un câmp pentru persoana care lasă recenzia pentru a-și transmite locația la trimiterea recenziei",
   "admin/reviews.defaultOpen.title": "Setează implicit toate acordeoanele pentru recenzii să se deschidă",
   "admin/reviews.defaultOpen.description": "Toate filele de recenzii pe pagina de produs se vor deschide implicit cu textul recenziei truncat la x caractere",
+  "admin/reviews.defaultStarsRating.tittle": "Numărul acordeoanelor cu recenzii deschise",
+  "admin/reviews.defaultStarsRating.description": "Numărul specificat de file de recenzii de pe pagina produsului se va deschide implicit",
   "admin/reviews.defaultOpenCount.tittle": "Numărul acordeoanelor de recenzii deschise",
   "admin/reviews.defaultOpenCount.description": "Numărul specificat de file de recenzii pe pagina de produs de vor deschide implicit",
   "admin/reviews.showGraph.title": "Afișează grafic",

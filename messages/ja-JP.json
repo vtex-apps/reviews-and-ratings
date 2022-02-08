@@ -110,6 +110,8 @@
   "admin/reviews.useLocation.description": "レビューを送信する時、自分の位置情報を入力するフィールドを含めます",
   "admin/reviews.defaultOpen.title": "全てのレビューアコーディオンをデフォルトで開く",
   "admin/reviews.defaultOpen.description": "製品ページの全てのレビュータブが、レビューテキストを x 文字で切り捨てて表示するデフォルトになります",
+  "admin/reviews.defaultStarsRating.tittle": "レビューアコーディオンを開く数",
+  "admin/reviews.defaultStarsRating.description": "指定した数のレビュータブが、製品ページにおいてデフォルト表示されます",
   "admin/reviews.defaultOpenCount.tittle": "レビューアコーディオンを開く数",
   "admin/reviews.defaultOpenCount.description": "指定した数のレビュータブを製品ページに表示するデフォルトになります",
   "admin/reviews.showGraph.title": "グラフを表示",

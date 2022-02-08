@@ -4,6 +4,7 @@ query AppSettings {
     requireApproval
     useLocation
     defaultOpen
+    defaultStarsRating
     defaultOpenCount
     showGraph
     displaySummaryIfNone

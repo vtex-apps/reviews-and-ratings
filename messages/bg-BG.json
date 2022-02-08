@@ -110,6 +110,8 @@
   "admin/reviews.useLocation.description": "Включване на поле за оставящия отзива, в което да запише местоположението си, когато подава отзив",
   "admin/reviews.defaultOpen.title": "Задаване като опция по подразбиране акордеоните с отзиви да се отварят",
   "admin/reviews.defaultOpen.description": "Опцията по подразбиране за всички раздели с отзиви в страницата на продукта е да се отварят, когато текстът на отзива е съкратен до x знака",
+  "admin/reviews.defaultStarsRating.tittle": "Брой отворени акордеони с отзиви",
+  "admin/reviews.defaultStarsRating.description": "Опцията по подразбиране за конкретен брой раздели с отзиви в страницата на продукта е да се отварят",
   "admin/reviews.defaultOpenCount.tittle": "Брой отворени акордеони с отзиви",
   "admin/reviews.defaultOpenCount.description": "Опцията по подразбиране за конкретен брой раздели с отзиви в страницата на продукта е да се отварят",
   "admin/reviews.showGraph.title": "Показване на графиката",
