@@ -336,17 +336,23 @@
 
             if (pastReviews)
             {
-                string productQuery = $" AND productId={productId}";
-                if (rating > 0 && rating <= 5)
-                {
-                    ratingQuery = $" AND rating={rating}";
+                if (rating == 0) {
+                    wrapper = await this._productReviewRepository.GetProductReviewsMD($"productId={productId}{sort}{searchQuery}", from.ToString(), to.ToString());
                 }
-                if (!string.IsNullOrEmpty(locale))
+                else
                 {
-                    localeQuery = $"((locale=*{locale}-*) OR (locale is null))";
-                }
+                    string productQuery = $" AND productId={productId}";
+                    if (rating > 0 && rating <= 5)
+                    {
+                        ratingQuery = $" AND rating={rating}";
+                    }
+                    if (!string.IsNullOrEmpty(locale))
+                    {
+                        localeQuery = $"((locale=*{locale}-*) OR (locale is null))";
+                    }
 
-                wrapper = await this._productReviewRepository.GetProductReviewsMD($"_where={localeQuery}{ratingQuery}{productQuery}{searchQuery}{sort}", from.ToString(), to.ToString());
+                    wrapper = await this._productReviewRepository.GetProductReviewsMD($"_where={localeQuery}{ratingQuery}{productQuery}{searchQuery}{sort}", from.ToString(), to.ToString());
+                }
             }
             else
             {
