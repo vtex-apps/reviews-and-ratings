@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+Fix the bug for product reviews filter at store front
+
 ## [3.6.1] - 2022-02-10
 
 ### Fixed
