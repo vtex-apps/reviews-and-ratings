@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+Fix the bug for product reviews filter at store front
+
+### Fixed
+
 Fix the bug for totalReviewsByProductId query 
 
 ## [3.6.0] - 2022-02-08
