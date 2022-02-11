@@ -336,15 +336,12 @@
 
             if (pastReviews && !string.IsNullOrEmpty(locale))
             {
-                string productQuery = $" AND productId={productId}";
+                localeQuery = $"((locale=*{locale}-*) OR (locale is null))";
                 if (rating > 0 && rating <= 5)
                 {
                     ratingQuery = $" AND rating={rating}";
                 }
-                if (!string.IsNullOrEmpty(locale))
-                {
-                    localeQuery = $"((locale=*{locale}-*) OR (locale is null))";
-                }
+                string productQuery = $" AND productId={productId}";
 
                 wrapper = await this._productReviewRepository.GetProductReviewsMD($"_where={localeQuery}{ratingQuery}{productQuery}{searchQuery}{sort}", from.ToString(), to.ToString());
             }
