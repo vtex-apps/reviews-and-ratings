@@ -331,7 +331,7 @@
             AppSettings settings = await GetAppSettings();
             if (settings.RequireApproval)
             {
-                searchQuery = $"{searchQuery}&approved=true";
+                searchQuery = $"{searchQuery} AND approved=true";
             }
 
             if (pastReviews && !string.IsNullOrEmpty(locale))
