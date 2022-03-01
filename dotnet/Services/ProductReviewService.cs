@@ -317,6 +317,8 @@
             string ratingQuery = string.Empty;
             string localeQuery = string.Empty;
             string sort = await this.GetSortQuery(orderBy);
+            bool ratingFilter = rating > 0 && rating <= 5;
+            bool pastRevNLocale = pastReviews && !string.IsNullOrEmpty(locale);
             ReviewsResponseWrapper wrapper;
 
             if (!string.IsNullOrEmpty(searchTerm))
@@ -329,15 +331,15 @@
             }
 
             AppSettings settings = await GetAppSettings();
-            if (settings.RequireApproval)
-            {
-                searchQuery = $"{searchQuery} AND approved=true";
-            }
 
-            if (pastReviews && !string.IsNullOrEmpty(locale))
+            if (pastRevNLocale)
             {
+                if (settings.RequireApproval)
+                {
+                    searchQuery = $" AND approved=true";
+                }
                 localeQuery = $"((locale=*{locale}-*) OR (locale is null))";
-                if (rating > 0 && rating <= 5)
+                if (ratingFilter)
                 {
                     ratingQuery = $" AND rating={rating}";
                 }
@@ -347,9 +349,13 @@
             }
             else
             {
-                if (rating > 0 && rating <= 5)
+                if (ratingFilter)
                 {
                     ratingQuery = $"&rating={rating}";
+                }
+                if (settings.RequireApproval)
+                {
+                    searchQuery = $"{searchQuery}&approved=true";
                 }
                 if (!string.IsNullOrEmpty(locale))
                 {
