@@ -296,25 +296,32 @@
                     vtexIdRequest.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
                 }
 
-                try
+                int count = 0;
+                int max = 5;
+                while (true)
                 {
-                    var client = _clientFactory.CreateClient();
-                    var response = await client.SendAsync(vtexIdRequest);
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    //_context.Vtex.Logger.Info("ValidateKeyAndToken", null, $"[{response.StatusCode}]");
-                    if (response.IsSuccessStatusCode)
+                    try
                     {
-                        var validatedKeyAndToken = JsonConvert.DeserializeObject<ValidatedKeyAndToken>(responseContent);
-                        keyAndTokenValidated = validatedKeyAndToken.AuthStatus.Equals("Success");
+                        var client = _clientFactory.CreateClient();
+                        var response = await client.SendAsync(vtexIdRequest);
+                        string responseContent = await response.Content.ReadAsStringAsync();
+                        //_context.Vtex.Logger.Info("ValidateKeyAndToken", null, $"[{response.StatusCode}]");
+                        if (response.IsSuccessStatusCode)
+                        {
+                            var validatedKeyAndToken = JsonConvert.DeserializeObject<ValidatedKeyAndToken>(responseContent);
+                            keyAndTokenValidated = validatedKeyAndToken.AuthStatus.Equals("Success");
+                        }
+                        else
+                        {
+                            _context.Vtex.Logger.Info("ValidateKeyAndToken", null, $"[{response.StatusCode}]");
+                        }
+                        break;
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        _context.Vtex.Logger.Info("ValidateKeyAndToken", null, $"[{response.StatusCode}]");
+                        _context.Vtex.Logger.Error("ValidateKeyAndToken", null, $"Error validating key and token '{key}'", ex);
+                        if (++count == max) throw ex;
                     }
-                }
-                catch (Exception ex)
-                {
-                    _context.Vtex.Logger.Error("ValidateKeyAndToken", null, $"Error validating key and token '{key}'", ex);
                 }
 
                 var request = new HttpRequestMessage
