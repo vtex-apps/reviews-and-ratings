@@ -31,16 +31,17 @@ const ApplyMatchButton = (props: ApplyMatchProps) => {
 
   const {
     buildArgs,
-    onGlobalError = () => {},
-    onMixedError = () => {},
-    onSuccess = () => {},
-    updateCache = () => {},
+    onGlobalError = () => { },
+    onMixedError = () => { },
+    onSuccess = () => { },
+    updateCache = () => { },
     isInputValid = () => true,
-    onWrongInput = () => {},
+    onWrongInput = () => { },
     variation = 'primary',
     mutation,
     label,
   } = props
+
 
   // const parseErrors = (errorResponses: SingleActionResponse[]) => {
   //   return errorResponses.length !== 0
@@ -78,7 +79,7 @@ const ApplyMatchButton = (props: ApplyMatchProps) => {
                       },
                     },
                   ],
-                  awaitRefetchQueries: true,
+                  awaitRefetchQueries: false,
                   variables: { ...args },
                 })
                   .then(result => {
