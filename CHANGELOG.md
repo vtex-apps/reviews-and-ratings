@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.7.3] - 2022-03-04
+
 ### Fixed
 
 - Fix the ValidateKeyAndToken function alerts, added retry and maximum retry is 5 times
