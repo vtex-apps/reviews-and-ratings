@@ -319,8 +319,12 @@
                     }
                     catch (Exception ex)
                     {
-                        _context.Vtex.Logger.Error("ValidateKeyAndToken", null, $"Error validating key and token '{key}'", ex);
-                        if (++count == max) throw ex;
+                        _context.Vtex.Logger.Warn("ValidateKeyAndToken", null, $"Error validating key and token '{key}'");
+                        if (++count == max)
+                        {
+                         _context.Vtex.Logger.Error("ValidateKeyAndToken", null, $"Maximum retries reached validating key and token '{key}'", ex);
+                         throw ex;
+                        }
                     }
                 }
 
