@@ -78,7 +78,7 @@ const ApplyMatchButton = (props: ApplyMatchProps) => {
                       },
                     },
                   ],
-                  awaitRefetchQueries: true,
+                  awaitRefetchQueries: false,
                   variables: { ...args },
                 })
                   .then(result => {
