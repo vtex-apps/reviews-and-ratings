@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Structured data rendered only if reviews > 0.
+
 ## [3.7.4] - 2022-03-07
 
 ### Fixed

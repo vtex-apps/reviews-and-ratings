@@ -234,21 +234,23 @@ function RatingSummary() {
         <Fragment>{intl.formatMessage(messages.loadingReviews)}</Fragment>
       ) : state.total === 0 && !state.settings.displaySummaryIfNone ? null : (
         <Fragment>
-          <Helmet>
-            <script type="application/ld+json">
-              {JSON.stringify({
-                '@context': 'http://schema.org',
-                '@type': 'Product',
-                '@id': `${baseUrl}/${linkText}/p`,
-                aggregateRating: {
-                  '@type': 'AggregateRating',
-                  ratingValue: state.average.toString(),
-                  reviewCount: state.total.toString(),
-                },
-                name: productName,
-              })}
-            </script>
-          </Helmet>
+          {state.total > 0 && (
+            <Helmet>
+              <script type="application/ld+json">
+                {JSON.stringify({
+                  '@context': 'http://schema.org',
+                  '@type': 'Product',
+                  '@id': `${baseUrl}/${linkText}/p`,
+                  aggregateRating: {
+                    '@type': 'AggregateRating',
+                    ratingValue: state.average.toString(),
+                    reviewCount: state.total.toString(),
+                  },
+                  name: productName,
+                })}
+              </script>
+            </Helmet>
+          )}
           <span className="t-heading-4 v-mid">
             <Stars rating={state.average} />
           </span>{' '}
