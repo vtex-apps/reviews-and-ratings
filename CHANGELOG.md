@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+- Change the order of the PUT calls, i put first the verify schema and then the hashed one in vBase.
+- Throw Exception message if the first put schema status code !IsSuccessStatusCode or NotModified
+
+### Fixed
+
 - Structured data rendered only if reviews > 0.
 
 ## [3.7.4] - 2022-03-07
