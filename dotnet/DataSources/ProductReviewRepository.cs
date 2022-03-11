@@ -463,7 +463,7 @@
                 return sb.ToString();
             }
 
-            verifyResult = response.StatusCode != HttpStatusCode.NotFound 
+            verifyResult = response.IsSuccessStatusCode
                 && responseContent.Equals(GetSHA256(SCHEMA_JSON));
 
             if (!verifyResult) {
@@ -471,8 +471,8 @@
                     request = new HttpRequestMessage
                     {
                         Method = HttpMethod.Put,
-                        RequestUri = new Uri($"http://infra.io.vtex.com/vbase/v2/{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}/master/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{HASHED_SCHEMA}"),
-                        Content = new StringContent(GetSHA256(SCHEMA_JSON), Encoding.UTF8, APPLICATION_JSON)
+                        RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/schemas/{SCHEMA}"),
+                        Content = new StringContent(SCHEMA_JSON, Encoding.UTF8, APPLICATION_JSON)
                     };
 
                     request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, _context.Vtex.AuthToken);
@@ -482,11 +482,16 @@
                     response = await client.SendAsync(request);
                     responseContent = await response.Content.ReadAsStringAsync();
 
+                    if (!response.IsSuccessStatusCode && response.StatusCode != HttpStatusCode.NotModified)
+                    {
+                        throw new Exception(responseContent);
+                    }
+
                     request = new HttpRequestMessage
                     {
                         Method = HttpMethod.Put,
-                        RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/schemas/{SCHEMA}"),
-                        Content = new StringContent(SCHEMA_JSON, Encoding.UTF8, APPLICATION_JSON)
+                        RequestUri = new Uri($"http://infra.io.vtex.com/vbase/v2/{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}/master/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{HASHED_SCHEMA}"),
+                        Content = new StringContent(GetSHA256(SCHEMA_JSON), Encoding.UTF8, APPLICATION_JSON)
                     };
 
                     request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, _context.Vtex.AuthToken);
