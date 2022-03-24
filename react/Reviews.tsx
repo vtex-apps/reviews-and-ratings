@@ -162,21 +162,25 @@ const reducer = (state: State, action: ReducerActions) => {
         ...state,
         ratingFilter: action.args.ratingFilter,
       }
+
     case 'SET_LOCALE_FILTER':
       return {
         ...state,
         localeFilter: action.args.localeFilter,
       }
+
     case 'SET_LOCALE_OPTIONS':
       return {
         ...state,
         localeOptions: action.args.localeOptions,
       }
+
     case 'SET_PASTREVIEWS':
       return {
         ...state,
         pastReviews: action.args.pastReviews,
       }
+
     case 'SET_REVIEWS':
       return {
         ...state,
@@ -374,7 +378,7 @@ function Reviews() {
   const { productId, productName, linkText } = product ?? {}
 
   const initialState = {
-    sort: 'ReviewDateTime:desc',
+    sort: 'SearchDate:desc',
     ratingFilter: 0,
     localeFilter: intl.locale.slice(0, 2),
     localeOptions: [],
@@ -405,11 +409,11 @@ function Reviews() {
   const options = [
     {
       label: intl.formatMessage(messages.sortMostRecent),
-      value: 'ReviewDateTime:desc',
+      value: 'SearchDate:desc',
     },
     {
       label: intl.formatMessage(messages.sortOldest),
-      value: 'ReviewDateTime:asc',
+      value: 'SearchDate:asc',
     },
     {
       label: intl.formatMessage(messages.sortHighestRated),
@@ -458,7 +462,9 @@ function Reviews() {
         const list = res.data.tenantInfo.bindings.map((item: any) => {
           return item.defaultLocale.slice(0, 2)
         })
+
         const localeOptions = [...new Set(list as string)]
+
         dispatch({
           type: 'SET_LOCALE_OPTIONS',
           args: { localeOptions },

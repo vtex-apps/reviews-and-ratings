@@ -67,7 +67,7 @@ export const DownloadTable: FC<DownloadTableProps> = ({
         to,
         orderBy: sortBy
           ? `${orderByMap[sortBy]}:${sortOrder}`
-          : 'ReviewDateTime:desc',
+          : 'SearchDate:desc',
       }}
       notifyOnNetworkStatusChange
       fetchPolicy="cache-and-network"
