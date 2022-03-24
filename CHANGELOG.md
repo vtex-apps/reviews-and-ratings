@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+- Remove the UTC string to avoid returning invalid date for new Date.
+
+### Fixed
+
 - Use search-date field to order reviews instead reviewDateTime.
 
 ## [3.8.0] - 2022-03-11
