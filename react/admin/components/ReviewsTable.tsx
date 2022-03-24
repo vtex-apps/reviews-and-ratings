@@ -19,7 +19,7 @@ const DEFAULT_TABLE_PAGE_FROM = 0
 const DEFAULT_SORT_ORDER = 'DESC'
 
 const orderByMap: any = {
-  date: 'ReviewDateTime',
+  date: 'SearchDate',
 }
 
 interface ReviewsTableProps {
@@ -117,7 +117,7 @@ export const ReviewsTable: FC<ReviewsTableProps> = ({
         to,
         orderBy: sortBy
           ? `${orderByMap[sortBy]}:${sortOrder}`
-          : 'ReviewDateTime:desc',
+          : 'SearchDate:desc',
       }}
       notifyOnNetworkStatusChange
       fetchPolicy="cache-and-network"

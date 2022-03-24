@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Use search-date field to order reviews instead reviewDateTime.
+
 ## [3.8.0] - 2022-03-11
 
 ## [3.7.5] - 2022-03-07
