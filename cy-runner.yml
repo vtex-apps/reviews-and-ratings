@@ -1,0 +1,72 @@
+---
+base:
+  secrets:
+    enabled: true
+    name: VTEX_QE
+  vtex:
+    account: sandboxusdev
+    id: 2001459804
+    domain: myvtex.com
+    urlExternalSeller:
+    vtexIdUrl: https://vtexid.vtex.com.br/api/vtexid/pub/authenticate/default
+    deployCli:
+      enabled: true
+      git: https://github.com/vtex/toolbelt.git
+      branch: qe/cypress
+  twilio:
+    enabled: true
+  jira:
+    enabled: false
+    account: config-dev
+    board: jira-key
+    issueType: task
+  slack:
+    enabled: false
+    channel: some-channel
+  cypress:
+    devMode: true
+    runHeaded: false
+    enabled: false
+    projectId: xyza
+    video: true
+    videoCompression: 32
+    videoUploadOnPasses: false
+    screenshotOnRunFailure: true
+    trashAssetsBeforeRuns: false
+    viewportWidth: 1440
+    viewportHeight: 1500
+    defaultCommandTimeout: 25000
+    requestTimeout: 25000
+    watchForFileChanges: false
+    pageLoadTimeout: 45000
+    browser: chrome
+    chromeWebSecurity: false
+  stateFiles: [.orders.json]
+
+workspace:
+  name: master
+  prefix: reviewsandratings
+  linkApp:
+    enabled: false
+    logOutput:
+      enabled: false
+  installApps: []
+  removeApps: []
+  wipe:
+    enabled: false
+    stopOnFail: false
+    spec: cypress-shared/integration/pass.spec.js
+  teardown:
+    enabled: false
+
+strategy:
+  sku:
+    enabled: true
+    sendDashboard: false
+    hardTries: 0
+    stopOnFail: false
+    parallel: false
+    runInOrder: true
+    specs:
+      - cy-runner/cypress/integration/sample.spec.js
+  
