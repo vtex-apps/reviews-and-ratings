@@ -4,13 +4,13 @@ base:
     enabled: true
     name: VTEX_QE
   vtex:
-    account: sandboxusdev
+    account: productusqa
     id: 2001459804
     domain: myvtex.com
-    urlExternalSeller:
+    urlExternalSeller: https://productusqaseller.myvtex.com
     vtexIdUrl: https://vtexid.vtex.com.br/api/vtexid/pub/authenticate/default
     deployCli:
-      enabled: true
+      enabled: false
       git: https://github.com/vtex/toolbelt.git
       branch: qe/cypress
   twilio:
@@ -44,10 +44,10 @@ base:
   stateFiles: [.orders.json]
 
 workspace:
-  name: master
+  name: random
   prefix: reviewsandratings
   linkApp:
-    enabled: false
+    enabled: true
     logOutput:
       enabled: false
   installApps: []
@@ -69,4 +69,3 @@ strategy:
     runInOrder: true
     specs:
       - cy-runner/cypress/integration/sample.spec.js
-  
