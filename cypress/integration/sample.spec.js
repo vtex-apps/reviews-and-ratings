@@ -20,7 +20,7 @@ describe('Adding review testcase', () => {
   })
 
   it('Verify average ratings', updateRetry(2), () => {
-    cy.getAverageRating(testCase1.anonymousUser1)
+    cy.getAverageRating(PRODUCTS.coconut, testCase1.anonymousUser1)
   })
 
   it(
@@ -32,6 +32,6 @@ describe('Adding review testcase', () => {
   )
 
   it('Verify average ratings', updateRetry(2), () => {
-    cy.getAverageRating(testCase1.anonymousUser2)
+    cy.getAverageRating(PRODUCTS.coconut, testCase1.anonymousUser2)
   })
 })

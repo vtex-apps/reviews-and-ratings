@@ -42,7 +42,6 @@ Cypress.Commands.add('openProduct', product => {
 })
 
 Cypress.Commands.add('addReview', (product, user) => {
-  // Search the product
   cy.openProduct(product)
   cy.get('.vtex-reviews-and-ratings-3-x-writeReviewButton').click()
   cy.fillReviewInformation(user)
@@ -71,8 +70,9 @@ Cypress.Commands.add('fillReviewInformation', user => {
   )
 })
 
-Cypress.Commands.add('getAverageRating', user => {
-  cy.reload()
+Cypress.Commands.add('getAverageRating', (product, user) => {
+  cy.get('#menu-item-category-home').click()
+  cy.openProduct(product)
   cy.get('body').then($body => {
     const starsCount = $body.find(
       '.vtex-reviews-and-ratings-3-x-reviewsRating > div > span > .vtex-reviews-and-ratings-3-x-star--filled'
@@ -86,7 +86,8 @@ Cypress.Commands.add('getAverageRating', user => {
       .then(averageText => {
         const getAverage = averageText.split(' ')
 
-        expect(averageStars).to.equal(getAverage[0])
+        // eslint-disable-next-line radix
+        expect(averageStars).to.equal(parseInt(getAverage[0]))
       })
   })
 })
