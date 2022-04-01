@@ -7,3 +7,8 @@ import './commands.js'
 Cypress.Cookies.defaults({
   preserve: 'VtexIdclientAutCookie',
 })
+
+// Avoid application errors
+Cypress.on('uncaught:exception', () => {
+  return false
+})
