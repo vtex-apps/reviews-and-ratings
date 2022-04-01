@@ -5,7 +5,6 @@ export function updateSettings(
   {
     allowAnonymousReviews,
     requireApproval,
-    useLocation,
     defaultOpen,
     defaultStarsRating,
     defaultOpenCount,
@@ -27,7 +26,7 @@ export function updateSettings(
       const req = {
         allowAnonymousReviews: allowAnonymousReviews || false,
         requireApproval: requireApproval || false,
-        useLocation: useLocation || false,
+        useLocation: true,
         defaultOpen: defaultOpen || false,
         defaultStarsRating: defaultStarsRating || '0',
         defaultOpenCount: defaultOpenCount || '4',
