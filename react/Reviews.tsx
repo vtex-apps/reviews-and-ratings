@@ -478,13 +478,16 @@ function Reviews() {
   }))
 
   const getTimeAgo = (time: string) => {
-    const before = Date.UTC(
-      new Date(time).getUTCFullYear(),
-      new Date(time).getUTCMonth(),
-      new Date(time).getUTCDate(),
-      new Date(time).getUTCHours(),
-      new Date(time).getUTCMinutes(),
-      new Date(time).getUTCSeconds()
+    const newTime = new Date(time)
+    const before = new Date(
+      Date.UTC(
+        newTime.getUTCFullYear(),
+        newTime.getUTCMonth(),
+        newTime.getUTCDate(),
+        newTime.getUTCHours(),
+        newTime.getUTCMinutes(),
+        newTime.getUTCSeconds()
+      )
     )
 
     const now = new Date()
