@@ -3,7 +3,7 @@ import './common/api_commands'
 import './common/env_orders'
 import './commands.js'
 
-// only preserve admin cookies
+// Configure it to preserve cookies
 Cypress.Cookies.defaults({
   preserve: 'VtexIdclientAutCookie',
 })

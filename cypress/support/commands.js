@@ -26,45 +26,41 @@
 
 import selectors from './common/selectors'
 import { generateAddtoCartCardSelector } from './common/utils'
+import reviewsAndRatingSelectors from './reviews_and_ratings.selectors'
 
-Cypress.Commands.add('openProduct', product => {
+Cypress.Commands.add('openProduct', (product, detailPage = false) => {
   // Search product in search bar
   cy.get(selectors.Search)
     .should('be.visible')
     .clear()
     .type(product)
     .type('{enter}')
-  cy.get(selectors.ProductAnchorElement)
-    .should('have.attr', 'href')
-    .then(href => {
-      cy.get(generateAddtoCartCardSelector(href)).first().click()
-    })
+
+  if (detailPage) {
+    cy.get(selectors.ProductAnchorElement)
+      .should('have.attr', 'href')
+      .then(href => {
+        cy.get(generateAddtoCartCardSelector(href)).first().click()
+      })
+  }
 })
 
 Cypress.Commands.add('addReview', (product, user) => {
-  cy.openProduct(product)
-  cy.get('.vtex-reviews-and-ratings-3-x-writeReviewButton').click()
+  cy.openProduct(product, true)
+  cy.get(reviewsAndRatingSelectors.writeReviewButton).click()
   cy.fillReviewInformation(user)
 })
 
 Cypress.Commands.add('fillReviewInformation', user => {
-  cy.get('.vtex-reviews-and-ratings-3-x-formBottomLine label div input')
-    .clear()
-    .type(user.line)
+  cy.get(reviewsAndRatingSelectors.formBottomLine).clear().type(user.line)
   cy.get(
-    `.vtex-reviews-and-ratings-3-x-formRating > label > span:nth-child(2) > span:nth-child(${user.rating})`
+    `${reviewsAndRatingSelectors.ratingStar} > span:nth-child(${user.rating})`
   ).click()
-  cy.get('.vtex-reviews-and-ratings-3-x-formName > label > div > input')
-    .clear()
-    .type(user.name)
-  cy.get('.vtex-reviews-and-ratings-3-x-formEmail > label > div > input')
-    .clear()
-    .type(user.email)
-  cy.get('.vtex-reviews-and-ratings-3-x-formReview > label > textarea')
-    .clear()
-    .type(user.review)
-  cy.get('.vtex-reviews-and-ratings-3-x-formSubmit > button').click()
-  cy.get('.vtex-reviews-and-ratings-3-x-formContainer > div > h5').should(
+  cy.get(reviewsAndRatingSelectors.formName).clear().type(user.name)
+  cy.get(reviewsAndRatingSelectors.formEmail).clear().type(user.email)
+  cy.get(reviewsAndRatingSelectors.formTextArea).clear().type(user.review)
+  cy.get(reviewsAndRatingSelectors.formSubmit).click()
+  cy.get(reviewsAndRatingSelectors.submittedReviewText).should(
     'have.text',
     'Your review has been submitted.'
   )
@@ -72,16 +68,14 @@ Cypress.Commands.add('fillReviewInformation', user => {
 
 Cypress.Commands.add('getAverageRating', (product, user) => {
   cy.get('#menu-item-category-home').click()
-  cy.openProduct(product)
+  cy.openProduct(product, true)
   cy.get('body').then($body => {
-    const starsCount = $body.find(
-      '.vtex-reviews-and-ratings-3-x-reviewsRating > div > span > .vtex-reviews-and-ratings-3-x-star--filled'
-    ).length
+    const starsCount = $body.find(reviewsAndRatingSelectors.starCount).length
 
     cy.log(starsCount)
     const averageStars = (starsCount + user.rating) / user.count
 
-    cy.get('.review__rating--average')
+    cy.get(reviewsAndRatingSelectors.averageRating)
       .invoke('text')
       .then(averageText => {
         const getAverage = averageText.split(' ')
@@ -90,4 +84,88 @@ Cypress.Commands.add('getAverageRating', (product, user) => {
         expect(averageStars).to.equal(parseInt(getAverage[0]))
       })
   })
+})
+
+Cypress.Commands.add('verifyGraphUI', (graph = false) => {
+  if (graph) {
+    cy.get('div').should('have.class', reviewsAndRatingSelectors.graphContent)
+  } else {
+    cy.get('div').should(
+      'not.have.class',
+      reviewsAndRatingSelectors.graphContent
+    )
+  }
+})
+
+Cypress.Commands.add('verifyStarsInProductRatingSummary', (enable = false) => {
+  if (enable) {
+    cy.get('div').should(
+      'have.class',
+      reviewsAndRatingSelectors.summaryContainer
+    )
+  } else {
+    cy.get('div').should(
+      'not.have.class',
+      reviewsAndRatingSelectors.summaryContainer
+    )
+  }
+})
+
+Cypress.Commands.add('verifyStarsInProductRatingInline', (enable = false) => {
+  if (enable) {
+    cy.get('div').should(
+      'have.class',
+      reviewsAndRatingSelectors.inlineContainer
+    )
+  } else {
+    cy.get('div').should(
+      'not.have.class',
+      reviewsAndRatingSelectors.inlineContainer
+    )
+  }
+})
+
+Cypress.Commands.add(
+  'verifyTotalReviewsInProductRatingSummary',
+  (enable = false) => {
+    if (enable) {
+      cy.get('span').should(
+        'have.class',
+        reviewsAndRatingSelectors.summaryTotalReviews
+      )
+    } else {
+      cy.get('span').should(
+        'not.have.class',
+        reviewsAndRatingSelectors.summaryTotalReviews
+      )
+    }
+  }
+)
+
+Cypress.Commands.add(
+  'verifyAddReviewButtonInProductRatingSummary',
+  (enable = false) => {
+    if (enable) {
+      cy.get('div').should(
+        'have.class',
+        reviewsAndRatingSelectors.summaryButtonContainer
+      )
+    } else {
+      cy.get('div').should(
+        'not.have.class',
+        reviewsAndRatingSelectors.summaryButtonContainer
+      )
+    }
+  }
+)
+
+Cypress.Commands.add('openStoreFront', (login = false) => {
+  cy.intercept('**/rc.vtex.com.br/api/events').as('events')
+  cy.visit('/')
+  cy.wait('@events')
+  if (login === true) {
+    cy.get(selectors.ProfileLabel)
+      .should('be.visible')
+      .should('have.contain', `Hello,`)
+  }
 })

@@ -8,6 +8,11 @@ export function updateSettings(
     defaultOpen,
     defaultStarsRating,
     defaultOpenCount,
+    showGraph,
+    displaySummaryIfNone,
+    displayInlineIfNone,
+    displaySummaryTotalReviews,
+    displaySummaryAddButton,
   } = {}
 ) {
   it(`In ${prefix} -Update Reviews and Ratings Settings`, () => {
@@ -30,11 +35,11 @@ export function updateSettings(
         defaultOpen: defaultOpen || false,
         defaultStarsRating: defaultStarsRating || '0',
         defaultOpenCount: defaultOpenCount || '4',
-        showGraph: false,
-        displaySummaryIfNone: false,
-        displayInlineIfNone: false,
-        displaySummaryTotalReviews: false,
-        displaySummaryAddButton: false,
+        showGraph: showGraph || false,
+        displaySummaryIfNone: displaySummaryIfNone || false,
+        displayInlineIfNone: displayInlineIfNone || false,
+        displaySummaryTotalReviews: displaySummaryTotalReviews || false,
+        displaySummaryAddButton: displaySummaryAddButton || false,
       }
 
       const QUERY_VARIABLES = {
