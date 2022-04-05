@@ -63,7 +63,7 @@ export function verifyFilter(filter = 'ALL') {
 }
 
 export function verifySorting(sort = 'ALL') {
-  it('verify filtering', updateRetry(2), () => {
+  it(`${sort} - verify sorting`, updateRetry(2), () => {
     cy.get(`.${reviewsAndRatingsSelectors.reviewCommentRating}`, {
       timeout: 30000,
     }).should('be.visible')
