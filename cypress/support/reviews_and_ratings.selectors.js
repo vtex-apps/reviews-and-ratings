@@ -1,7 +1,7 @@
 export default {
   // *************Reviews and Ratings Constants start here************ //
 
-  writeReviewButton: '.vtex-reviews-and-ratings-3-x-writeReviewButton',
+  writeReviewButton: '.vtex-reviews-and-ratings-3-x-formSubmit > button',
   formBottomLine:
     '.vtex-reviews-and-ratings-3-x-formBottomLine label div input',
   ratingStar:

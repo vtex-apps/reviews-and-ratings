@@ -36,22 +36,18 @@ Cypress.Commands.add('addReview', (product, defaultStarsRating, user) => {
   cy.get('body').then($body => {
     if ($body.find(`img[alt="${product}"]`).length > 0) {
       cy.get(`img[alt="${product}"]`).should('be.visible').click()
-    } else if (
-      $body.find('.vtex-reviews-and-ratings-3-x-writeReviewButton').length === 0
-    ) {
+    } else if ($body.find(rrselectors.WriteReview).length === 0) {
       cy.openProduct(product, true)
     }
 
-    cy.get('.vtex-reviews-and-ratings-3-x-writeReviewButton', {
+    cy.get(rrselectors.WriteReview, {
       timeout: 40000,
     }).should('be.visible')
     cy.get('div[class*=postalCode]', { timeout: 30000 }).should('be.visible')
     cy.getAverageRating(user, product, false).then(match => {
       if (!match) {
-        cy.get('.vtex-reviews-and-ratings-3-x-writeReviewButton').click()
-        cy.get('.vtex-reviews-and-ratings-3-x-formSubmit > button').should(
-          'be.visible'
-        )
+        cy.get(rrselectors.WriteReview).click()
+        cy.get(rrselectors.writeReviewButton).should('be.visible')
         // TODO: For promotional product, default stars is not showing corectly
         // cy.get(rrselectors.StarsFilled)
         //   .its('length')
@@ -65,28 +61,13 @@ Cypress.Commands.add('addReview', (product, defaultStarsRating, user) => {
 })
 
 Cypress.Commands.add('fillReviewInformation', user => {
-  const { line, name, email, review } = user
-
-  cy.get('.vtex-reviews-and-ratings-3-x-formBottomLine label div input')
-    .clear()
-    .type(line)
-  cy.get(
-    `.vtex-reviews-and-ratings-3-x-formRating > label > span:nth-child(2) > span:nth-child(${user.rating})`
-  ).click()
-  cy.get('.vtex-reviews-and-ratings-3-x-formName > label > div > input')
-    .clear()
-    .type(name)
-  if (email) {
-    cy.get('.vtex-reviews-and-ratings-3-x-formEmail > label > div > input')
-      .clear()
-      .type(email)
-  }
-
-  cy.get('.vtex-reviews-and-ratings-3-x-formReview > label > textarea')
-    .clear()
-    .type(review)
-  cy.get('.vtex-reviews-and-ratings-3-x-formSubmit > button').click()
-  cy.get('.vtex-reviews-and-ratings-3-x-formContainer > div > h5').should(
+  cy.get(rrselectors.formBottomLine).clear().type(user.line)
+  cy.get(`${rrselectors.ratingStar} > span:nth-child(${user.rating})`).click()
+  cy.get(rrselectors.formName).clear().type(user.name)
+  cy.get(rrselectors.formEmail).clear().type(user.email)
+  cy.get(rrselectors.formTextArea).clear().type(user.review)
+  cy.get(rrselectors.formSubmit).click()
+  cy.get(rrselectors.submittedReviewText).should(
     'have.text',
     'Your review has been submitted.'
   )
