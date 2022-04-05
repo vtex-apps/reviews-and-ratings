@@ -1,127 +1,144 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-
 import selectors from './common/selectors'
 import { generateAddtoCartCardSelector } from './common/utils'
-import reviewsAndRatingSelectors from './reviews_and_ratings.selectors'
+import rrselectors from './reviews_and_ratings.selectors.js'
+import { promissoryPayment, buyProduct } from './common/support.js'
+
+Cypress.Commands.add('promissoryPayment', promissoryPayment)
+Cypress.Commands.add('buyProduct', buyProduct)
+
+Cypress.Commands.add('gotoProductDetailPage', () => {
+  cy.get(selectors.ProductAnchorElement)
+    .should('have.attr', 'href')
+    .then(href => {
+      cy.get(generateAddtoCartCardSelector(href)).first().click()
+    })
+})
 
 Cypress.Commands.add('openProduct', (product, detailPage = false) => {
   // Search product in search bar
-  cy.get(selectors.Search)
-    .should('be.visible')
-    .clear()
-    .type(product)
-    .type('{enter}')
+  cy.get(selectors.Search).should('be.not.disabled').should('be.visible')
+
+  cy.get(selectors.Search).type(`${product}{enter}`)
+  // Page should load successfully now Filter should be visible
+  cy.get(selectors.searchResult).should('have.text', product.toLowerCase())
+  cy.get(selectors.FilterHeading, { timeout: 30000 }).should('be.visible')
 
   if (detailPage) {
-    cy.get(selectors.ProductAnchorElement)
-      .should('have.attr', 'href')
-      .then(href => {
-        cy.get(generateAddtoCartCardSelector(href)).first().click()
-      })
+    cy.gotoProductDetailPage()
+    cy.get(rrselectors.PostalCode, { timeout: 20000 }).should('be.visible')
+  } else {
+    cy.log('Visiting detail page is disabled')
   }
 })
 
-Cypress.Commands.add('addReview', (product, user) => {
-  cy.openProduct(product, true)
-  cy.get(reviewsAndRatingSelectors.writeReviewButton).click()
-  cy.fillReviewInformation(user)
+Cypress.Commands.add('addReview', (product, defaultStarsRating, user) => {
+  // Search the product
+  cy.get('body').then($body => {
+    if ($body.find(`img[alt="${product}"]`).length > 0) {
+      cy.get(`img[alt="${product}"]`).should('be.visible').click()
+    } else if (
+      $body.find('.vtex-reviews-and-ratings-3-x-writeReviewButton').length === 0
+    ) {
+      cy.openProduct(product, true)
+    }
+
+    cy.get('.vtex-reviews-and-ratings-3-x-writeReviewButton', {
+      timeout: 40000,
+    }).should('be.visible')
+    cy.get('div[class*=postalCode]', { timeout: 30000 }).should('be.visible')
+    cy.getAverageRating(user, product, false).then(match => {
+      if (!match) {
+        cy.get('.vtex-reviews-and-ratings-3-x-writeReviewButton').click()
+        cy.get('.vtex-reviews-and-ratings-3-x-formSubmit > button').should(
+          'be.visible'
+        )
+        // TODO: For promotional product, default stars is not showing corectly
+        // cy.get(rrselectors.StarsFilled)
+        //   .its('length')
+        //   .should('eq', +defaultStarsRating)
+        cy.fillReviewInformation(user)
+      } else {
+        cy.log('Review is been already added in storefront')
+      }
+    })
+  })
 })
 
 Cypress.Commands.add('fillReviewInformation', user => {
-  cy.get(reviewsAndRatingSelectors.formBottomLine).clear().type(user.line)
+  const { line, name, email, review } = user
+
+  cy.get('.vtex-reviews-and-ratings-3-x-formBottomLine label div input')
+    .clear()
+    .type(line)
   cy.get(
-    `${reviewsAndRatingSelectors.ratingStar} > span:nth-child(${user.rating})`
+    `.vtex-reviews-and-ratings-3-x-formRating > label > span:nth-child(2) > span:nth-child(${user.rating})`
   ).click()
-  cy.get(reviewsAndRatingSelectors.formName).clear().type(user.name)
-  cy.get(reviewsAndRatingSelectors.formEmail).clear().type(user.email)
-  cy.get(reviewsAndRatingSelectors.formTextArea).clear().type(user.review)
-  cy.get(reviewsAndRatingSelectors.formSubmit).click()
-  cy.get(reviewsAndRatingSelectors.submittedReviewText).should(
+  cy.get('.vtex-reviews-and-ratings-3-x-formName > label > div > input')
+    .clear()
+    .type(name)
+  if (email) {
+    cy.get('.vtex-reviews-and-ratings-3-x-formEmail > label > div > input')
+      .clear()
+      .type(email)
+  }
+
+  cy.get('.vtex-reviews-and-ratings-3-x-formReview > label > textarea')
+    .clear()
+    .type(review)
+  cy.get('.vtex-reviews-and-ratings-3-x-formSubmit > button').click()
+  cy.get('.vtex-reviews-and-ratings-3-x-formContainer > div > h5').should(
     'have.text',
     'Your review has been submitted.'
   )
 })
 
-Cypress.Commands.add('getAverageRating', (product, user) => {
-  cy.get('#menu-item-category-home').click()
-  cy.openProduct(product, true)
-  cy.get('body').then($body => {
-    const starsCount = $body.find(reviewsAndRatingSelectors.starCount).length
+Cypress.Commands.add('getAverageRating', (user, product, validate = true) => {
+  const { average, verified } = user
 
-    cy.log(starsCount)
-    const averageStars = (starsCount + user.rating) / user.count
+  if (validate) {
+    cy.openProduct(product, true)
+  }
 
-    cy.get(reviewsAndRatingSelectors.averageRating)
-      .invoke('text')
-      .then(averageText => {
-        const getAverage = averageText.split(' ')
+  cy.get('span[class*=average]', { timeout: 40000 })
+    .invoke('text')
+    .then(averageText => {
+      const getAverage = averageText.split(' ')
 
-        // eslint-disable-next-line radix
-        expect(averageStars).to.equal(parseInt(getAverage[0]))
-      })
-  })
+      if (validate) {
+        expect(average).to.equal(+getAverage[0])
+      } else if (average === +getAverage[0]) {
+        return cy.wrap(true)
+      } else {
+        return cy.wrap(false)
+      }
+
+      if (verified) {
+        cy.contains('Verified Purchaser')
+      }
+    })
 })
 
 Cypress.Commands.add('verifyGraphUI', (graph = false) => {
   if (graph) {
-    cy.get('div').should('have.class', reviewsAndRatingSelectors.graphContent)
+    cy.get('div').should('have.class', rrselectors.graphContent)
   } else {
-    cy.get('div').should(
-      'not.have.class',
-      reviewsAndRatingSelectors.graphContent
-    )
+    cy.get('div').should('not.have.class', rrselectors.graphContent)
   }
 })
 
 Cypress.Commands.add('verifyStarsInProductRatingSummary', (enable = false) => {
   if (enable) {
-    cy.get('div').should(
-      'have.class',
-      reviewsAndRatingSelectors.summaryContainer
-    )
+    cy.get('div').should('have.class', rrselectors.summaryContainer)
   } else {
-    cy.get('div').should(
-      'not.have.class',
-      reviewsAndRatingSelectors.summaryContainer
-    )
+    cy.get('div').should('not.have.class', rrselectors.summaryContainer)
   }
 })
 
 Cypress.Commands.add('verifyStarsInProductRatingInline', (enable = false) => {
   if (enable) {
-    cy.get('div').should(
-      'have.class',
-      reviewsAndRatingSelectors.inlineContainer
-    )
+    cy.get('div').should('have.class', rrselectors.inlineContainer)
   } else {
-    cy.get('div').should(
-      'not.have.class',
-      reviewsAndRatingSelectors.inlineContainer
-    )
+    cy.get('div').should('not.have.class', rrselectors.inlineContainer)
   }
 })
 
@@ -129,15 +146,9 @@ Cypress.Commands.add(
   'verifyTotalReviewsInProductRatingSummary',
   (enable = false) => {
     if (enable) {
-      cy.get('span').should(
-        'have.class',
-        reviewsAndRatingSelectors.summaryTotalReviews
-      )
+      cy.get('span').should('have.class', rrselectors.summaryTotalReviews)
     } else {
-      cy.get('span').should(
-        'not.have.class',
-        reviewsAndRatingSelectors.summaryTotalReviews
-      )
+      cy.get('span').should('not.have.class', rrselectors.summaryTotalReviews)
     }
   }
 )
@@ -146,15 +157,9 @@ Cypress.Commands.add(
   'verifyAddReviewButtonInProductRatingSummary',
   (enable = false) => {
     if (enable) {
-      cy.get('div').should(
-        'have.class',
-        reviewsAndRatingSelectors.summaryButtonContainer
-      )
+      cy.get('div').should('have.class', rrselectors.summaryButtonContainer)
     } else {
-      cy.get('div').should(
-        'not.have.class',
-        reviewsAndRatingSelectors.summaryButtonContainer
-      )
+      cy.get('div').should('not.have.class', rrselectors.summaryButtonContainer)
     }
   }
 )

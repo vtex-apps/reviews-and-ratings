@@ -26,4 +26,13 @@ export default {
     '.vtex-reviews-and-ratings-3-x-reviewsOrderBy > div:nth-child(2) > label> div> select',
   reviewStarsCount:
     '.vtex-reviews-and-ratings-3-x-reviewCommentRating > span > span',
+
+  // Product Specification Page
+  LoginLink: 'div[class*=review] a[href*=login]',
+  PostalCode: 'div[class*=postalCode]',
+  ForgotPassword: 'a[class*=forgot]',
+  Cropped: '#menu-item-cropped',
+  StarsFilled: 'label[class*=review] .t-heading-4 span[class*=filled]',
+  WriteReview: '.vtex-reviews-and-ratings-3-x-writeReviewButton',
+  Danger: 'div[class*=danger]',
 }
