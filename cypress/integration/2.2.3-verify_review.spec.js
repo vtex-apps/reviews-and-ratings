@@ -9,8 +9,8 @@ describe('Verify review with Signed User', () => {
   testSetup()
 
   it('Added review should show immediately to the user', () => {
-    cy.openStoreFront()
-    cy.openProduct(product)
+    cy.openStoreFront(true)
+    cy.openProduct(product, true)
     cy.get(rrselectors.PostalCode, { timeout: 20000 }).should('be.visible')
     cy.get('span[class*=reviewComment]').contains(user1.line)
   })

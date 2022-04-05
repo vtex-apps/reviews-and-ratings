@@ -26,9 +26,6 @@ Cypress.Commands.add('openProduct', (product, detailPage = false) => {
   if (detailPage) {
     cy.gotoProductDetailPage()
     cy.get(rrselectors.PostalCode, { timeout: 20000 }).should('be.visible')
-    cy.get('.vtex-reviews-and-ratings-3-x-writeReviewButton').should(
-      'be.visible'
-    )
   } else {
     cy.log('Visiting detail page is disabled')
   }
@@ -42,12 +39,13 @@ Cypress.Commands.add('addReview', (product, defaultStarsRating, user) => {
     } else if (
       $body.find('.vtex-reviews-and-ratings-3-x-writeReviewButton').length === 0
     ) {
-      cy.openProduct(product)
+      cy.openProduct(product, true)
     }
 
     cy.get('.vtex-reviews-and-ratings-3-x-writeReviewButton', {
       timeout: 40000,
     }).should('be.visible')
+    cy.get('div[class*=postalCode]', { timeout: 30000 }).should('be.visible')
     cy.getAverageRating(user, product, false).then(match => {
       if (!match) {
         cy.get('.vtex-reviews-and-ratings-3-x-writeReviewButton').click()
@@ -98,7 +96,7 @@ Cypress.Commands.add('getAverageRating', (user, product, validate = true) => {
   const { average, verified } = user
 
   if (validate) {
-    cy.openProduct(product)
+    cy.openProduct(product, true)
   }
 
   cy.get('span[class*=average]', { timeout: 40000 })

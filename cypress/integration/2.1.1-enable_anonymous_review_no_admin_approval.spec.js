@@ -15,7 +15,7 @@ describe(title, () => {
 
   describe('Anonymous User', () => {
     it('Adding review to product with location', updateRetry(2), () => {
-      cy.openStoreFront(false)
+      cy.openStoreFront()
       cy.addReview(product, configuration.defaultStarsRating, anonymousUser1)
     })
 
@@ -33,7 +33,7 @@ describe(title, () => {
     testSetup()
 
     it('Verify average ratings for anonymous reviews', updateRetry(2), () => {
-      cy.openStoreFront()
+      cy.openStoreFront(true)
       cy.getAverageRating(anonymousUser2, product)
     })
 

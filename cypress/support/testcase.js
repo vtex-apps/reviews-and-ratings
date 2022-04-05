@@ -9,8 +9,8 @@ export function restrictAnonymousUser(product) {
       `Anonymous user should not be able to add review`,
       updateRetry(3),
       () => {
-        cy.openStoreFront(false)
-        cy.openProduct(product)
+        cy.openStoreFront()
+        cy.openProduct(product, true)
         cy.get(rrselectors.LoginLink).should('be.visible').click()
         cy.get(rrselectors.ForgotPassword).should('be.visible')
       }
