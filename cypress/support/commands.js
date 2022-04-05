@@ -61,11 +61,16 @@ Cypress.Commands.add('addReview', (product, defaultStarsRating, user) => {
 })
 
 Cypress.Commands.add('fillReviewInformation', user => {
-  cy.get(rrselectors.formBottomLine).clear().type(user.line)
-  cy.get(`${rrselectors.ratingStar} > span:nth-child(${user.rating})`).click()
-  cy.get(rrselectors.formName).clear().type(user.name)
-  cy.get(rrselectors.formEmail).clear().type(user.email)
-  cy.get(rrselectors.formTextArea).clear().type(user.review)
+  const { email, line, rating, name, review } = user
+
+  cy.get(rrselectors.formBottomLine).clear().type(line)
+  cy.get(`${rrselectors.ratingStar} > span:nth-child(${rating})`).click()
+  cy.get(rrselectors.formName).clear().type(name)
+  if (email) {
+    cy.get(rrselectors.formEmail).clear().type(email)
+  }
+
+  cy.get(rrselectors.formTextArea).clear().type(review)
   cy.get(rrselectors.formSubmit).click()
   cy.get(rrselectors.submittedReviewText).should(
     'have.text',
