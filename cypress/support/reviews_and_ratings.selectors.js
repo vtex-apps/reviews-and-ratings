@@ -19,4 +19,13 @@ export default {
   inlineContainer: 'vtex-reviews-and-ratings-3-x-inlineContainer',
   summaryTotalReviews: 'vtex-reviews-and-ratings-3-x-summaryTotalReviews',
   summaryButtonContainer: 'vtex-reviews-and-ratings-3-x-summaryButtonContainer',
+
+  // Product Specification Page
+  LoginLink: 'div[class*=review] a[href*=login]',
+  PostalCode: 'div[class*=postalCode]',
+  ForgotPassword: 'a[class*=forgot]',
+  Cropped: '#menu-item-cropped',
+  StarsFilled: 'label[class*=review] .t-heading-4 span[class*=filled]',
+  WriteReview: '.vtex-reviews-and-ratings-3-x-writeReviewButton',
+  Danger: 'div[class*=danger]',
 }
