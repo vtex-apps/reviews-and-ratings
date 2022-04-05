@@ -19,4 +19,11 @@ export default {
   inlineContainer: 'vtex-reviews-and-ratings-3-x-inlineContainer',
   summaryTotalReviews: 'vtex-reviews-and-ratings-3-x-summaryTotalReviews',
   summaryButtonContainer: 'vtex-reviews-and-ratings-3-x-summaryButtonContainer',
+  reviewCommentRating: `vtex-reviews-and-ratings-3-x-reviewCommentRating`,
+  selectSort:
+    '.vtex-reviews-and-ratings-3-x-reviewsOrderBy > div:nth-child(1) > label> div> select',
+  selectFilter:
+    '.vtex-reviews-and-ratings-3-x-reviewsOrderBy > div:nth-child(2) > label> div> select',
+  reviewStarsCount:
+    '.vtex-reviews-and-ratings-3-x-reviewCommentRating > span > span',
 }
