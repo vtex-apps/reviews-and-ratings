@@ -34,30 +34,29 @@ export function addReviewAPI(productId, user) {
         },
       }).then(response => {
         expect(response.status).to.equal(200)
-        // expect(response.body)
+        expect(response.body).to.not.equal('Duplicate Review')
         cy.setReviewItem(`ReviewID-${productId}`, response.body)
       })
-      // .its('status')
-      // .should('equal', 200)
     })
   })
 }
-// https://{{site_url}}/reviews-and-ratings/api/review/{{review_id}}
 
 export function retriveReviewAPI(productId) {
   it('Retrive review for product', () => {
     cy.getVtexItems().then(vtex => {
-      cy.log(vtex)
-      cy.getAPI(
-        ratingsAPI(vtex.baseUrl, `review/${vtex[`ReviewID-${productId}`]}`),
-        {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        }
-      ).then(res => {
-        expect(res.status).to.equal(200)
-        // expect(res.body).to.have.property('average')
-        // expect(res.body).to.have.property('totalCount')
+      cy.getReviewItems().then(review => {
+        cy.log(vtex)
+        cy.getAPI(
+          ratingsAPI(vtex.baseUrl, `review/${review[`ReviewID-${productId}`]}`),
+          {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          }
+        ).then(response => {
+          expect(response.status).to.equal(200)
+          expect(response.body).to.not.equal(null)
+          expect(response.body.productId).to.equal(productId.toString())
+        })
       })
     })
   })

@@ -41,10 +41,10 @@ base:
     pageLoadTimeout: 45000
     browser: chrome
     chromeWebSecurity: false
-  stateFiles: [.orders.json]
+  stateFiles: [.orders.json, .reviews.json]
 
 workspace:
-  name: random
+  name: reviewsandratings0469729
   prefix: reviewsandratings
   linkApp:
     enabled: true
