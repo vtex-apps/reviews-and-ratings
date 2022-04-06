@@ -1,5 +1,5 @@
-import { VTEX_AUTH_HEADER } from './common/constants'
-import { ratingsAPI } from './product.apis'
+import { VTEX_AUTH_HEADER, FAIL_ON_STATUS_CODE } from './common/constants'
+import { ratingsAPI, deleteReviewAPI, deleteReviewAPIs } from './product.apis'
 
 export function getProductRatingsAPI(productId) {
   it('Get rating for product', () => {
@@ -59,5 +59,44 @@ export function retriveReviewAPI(productId) {
         })
       })
     })
+  })
+}
+
+export function deleteReview(reviewEnv) {
+  it('Delete review for this id', () => {
+    cy.getVtexItems().then(vtex => {
+      cy.getReviewItems().then(review => {
+        cy.request({
+          method: 'DELETE',
+          url: deleteReviewAPI(vtex.baseUrl, `review/${review[reviewEnv]}`),
+          headers: {
+            ...VTEX_AUTH_HEADER(vtex.apiKey, vtex.apiToken),
+          },
+          ...FAIL_ON_STATUS_CODE,
+        }).then(response => {
+          expect(response.status).to.equal(200)
+        })
+      })
+    })
+  })
+}
+
+export function deleteReviews(reviews) {
+  it('Delete multiple reviews', () => {
+    cy.getVtexItems().then(vtex => {
+      // cy.getReviewItems().then(review => {
+      cy.request({
+        method: 'DELETE',
+        url: deleteReviewAPIs(vtex.baseUrl),
+        headers: {
+          ...VTEX_AUTH_HEADER(vtex.apiKey, vtex.apiToken),
+        },
+        body: reviews,
+        ...FAIL_ON_STATUS_CODE,
+      }).then(response => {
+        expect(response.status).to.equal(200)
+      })
+    })
+    // })
   })
 }
