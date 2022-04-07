@@ -71,11 +71,25 @@ Cypress.Commands.add('fillReviewInformation', user => {
   }
 
   cy.get(rrselectors.formTextArea).clear().type(review)
-  cy.get(rrselectors.formSubmit).click()
-  cy.get(rrselectors.submittedReviewText).should(
-    'have.text',
-    'Your review has been submitted.'
-  )
+
+  const operationName = 'NewReview'
+
+  cy.getVtexItems().then(vtex => {
+    cy.intercept('POST', `${vtex.baseUrl}/**`, req => {
+      if (req.body.operationName === operationName) {
+        req.continue()
+      }
+    }).as(operationName)
+    cy.get(rrselectors.formSubmit).click()
+    cy.get(rrselectors.submittedReviewText).should(
+      'have.text',
+      'Your review has been submitted.'
+    )
+    cy.wait(`@${operationName}`, { timeout: 40000 }).then(req => {
+      // On submission of new review, store its id in .reviews.json
+      cy.setReviewItem(name, req.response.body.data.newReview.id)
+    })
+  })
 })
 
 Cypress.Commands.add('getAverageRating', (user, product, validate = true) => {
