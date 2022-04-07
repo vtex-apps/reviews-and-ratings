@@ -11,7 +11,11 @@ on:
       - chore/*
   pull_request:
     types: [opened, synchronize, reopened]
-    
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
 jobs:
   sonarcloud:
     name: SonarCloud
