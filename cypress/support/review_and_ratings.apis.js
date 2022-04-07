@@ -17,36 +17,47 @@ export function getProductRatingsAPI(productId) {
   })
 }
 
-export function addReviewAPI(productId, user) {
+export function addReviewAPI(env, user, duplicate = false) {
+  const { product, reviewapienv } = env
+
   it('Add review and rating for product', () => {
     cy.getVtexItems().then(vtex => {
       cy.request({
         method: 'POST',
         url: ratingsAPI(vtex.baseUrl, 'review'),
         headers: {
-          VtexIdclientAutCookie: vtex.adminAuthCookieValue,
+          VtexIdclientAutCookie: vtex.userAuthCookieValue,
         },
         body: {
-          ProductId: productId,
+          ProductId: product,
           Rating: user.rating,
-          Title: '',
+          Title: 'Testing',
           Text: user.review,
         },
       }).then(response => {
         expect(response.status).to.equal(200)
-        expect(response.body).to.not.equal('Duplicate Review')
-        cy.setReviewItem(`ReviewID-${productId}`, response.body)
+        if (!duplicate) {
+          expect(response.body).to.not.equal('Duplicate Review')
+          cy.setReviewItem(`${reviewapienv}-${product}`, response.body)
+        } else {
+          expect(response.body).to.equal('Duplicate Review')
+        }
       })
     })
   })
 }
 
-export function retriveReviewAPI(productId) {
-  it('Retrive review for product', () => {
+export function retriveReviewAPI(env) {
+  const { product, reviewapienv } = env
+
+  it('Retrive review for product', updateRetry(5), () => {
     cy.getVtexItems().then(vtex => {
       cy.getReviewItems().then(review => {
         cy.getAPI(
-          ratingsAPI(vtex.baseUrl, `review/${review[`ReviewID-${productId}`]}`),
+          ratingsAPI(
+            vtex.baseUrl,
+            `review/${review[`${reviewapienv}-${product}`]}`
+          ),
           {
             Accept: 'application/json',
             'Content-Type': 'application/json',
@@ -54,7 +65,7 @@ export function retriveReviewAPI(productId) {
         ).then(response => {
           expect(response.status).to.equal(200)
           expect(response.body).to.not.equal(null)
-          expect(response.body.productId).to.equal(productId.toString())
+          expect(response.body.productId).to.equal(product.toString())
         })
       })
     })
@@ -67,36 +78,32 @@ export function retriveReviewsListAPI(productId) {
     updateRetry(4),
     () => {
       cy.getVtexItems().then(vtex => {
-        cy.getReviewItems().then(review => {
-          // cy.wait(3000)
-          cy.getAPI(
-            ratingsAPI(vtex.baseUrl, `reviews?product_id=${productId}`),
-            {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            }
-          ).then(response => {
-            expect(response.status).to.equal(200)
-            expect(response.body).to.not.equal(null)
-            expect(response.body.data[0].id).to.equal(
-              review[`ReviewID-${productId}`]
-            )
-          })
+        cy.getAPI(ratingsAPI(vtex.baseUrl, `reviews?product_id=${productId}`), {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        }).then(response => {
+          expect(response.status).to.equal(200)
+          expect(response.body).to.not.equal(null)
         })
       })
     }
   )
 }
 
-export function deleteReview(reviewEnv) {
+export function deleteReview(env) {
+  const { product, reviewapienv } = env
+
   it('Delete review for this id', () => {
     cy.getVtexItems().then(vtex => {
       cy.getReviewItems().then(review => {
         cy.request({
           method: 'DELETE',
-          url: deleteReviewAPI(vtex.baseUrl, `review/${review[reviewEnv]}`),
+          url: deleteReviewAPI(
+            vtex.baseUrl,
+            `${review[`${reviewapienv}-${product}`]}`
+          ),
           headers: {
-            ...VTEX_AUTH_HEADER(vtex.apiKey, vtex.apiToken),
+            VtexIdclientAutCookie: vtex.userAuthCookieValue,
           },
           ...FAIL_ON_STATUS_CODE,
         }).then(response => {
@@ -107,22 +114,28 @@ export function deleteReview(reviewEnv) {
   })
 }
 
-export function deleteReviews(reviews) {
+export function deleteReviews() {
   it('Delete multiple reviews', () => {
     cy.getVtexItems().then(vtex => {
-      // cy.getReviewItems().then(review => {
-      cy.request({
-        method: 'DELETE',
-        url: deleteReviewAPIs(vtex.baseUrl),
-        headers: {
-          ...VTEX_AUTH_HEADER(vtex.apiKey, vtex.apiToken),
-        },
-        body: reviews,
-        ...FAIL_ON_STATUS_CODE,
-      }).then(response => {
-        expect(response.status).to.equal(200)
+      cy.getReviewItems().then(review => {
+        const reviewIds = []
+
+        for (const [key, value] of Object.entries(review)) {
+          reviewIds.push(value)
+        }
+
+        cy.request({
+          method: 'DELETE',
+          url: deleteReviewAPIs(vtex.baseUrl),
+          headers: {
+            ...VTEX_AUTH_HEADER(vtex.apiKey, vtex.apiToken),
+          },
+          body: reviewIds,
+          ...FAIL_ON_STATUS_CODE,
+        }).then(response => {
+          expect(response.status).to.equal(200)
+        })
       })
     })
-    // })
   })
 }

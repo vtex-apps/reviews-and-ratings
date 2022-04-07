@@ -5,15 +5,19 @@ const TESTCASE = {
   testCase2: 'testCase2',
   testCase3: 'testCase3',
   testCase4: 'testCase4',
+  testCase5: 'testCase5',
 }
+
 const ANONYMOUS_USER = {
   a1: 'a1',
   a2: 'a2',
 }
+
 const USER = {
   u1: 'u1',
   u2: 'u2',
 }
+
 export default {
   testCase1: {
     title: 'Enable Anonymous review with no admin approval',
@@ -144,5 +148,46 @@ export default {
       average: 4,
       verified: true,
     },
+  },
+  testCase5: {
+    title: 'Enable Anonymous review with no admin approval',
+    product: PRODUCTS.coconut,
+    productId1: 880030, // coconut product id
+    productId2: 880031, // watermelon product id
+    configuration: {
+      allowAnonymousReviews: true,
+      requireApproval: false,
+      defaultStarsRating: '3',
+    },
+    anonymousUser1: {
+      name: `shashi-${TESTCASE.testCase5}-${ANONYMOUS_USER.a1}`,
+      line: 'Test',
+      location: 'California', // optional
+      email: 'shashi@bitcot.com',
+      rating: 3,
+      review: 'Good',
+      average: 3,
+    },
+    anonymousUser2: {
+      name: `shashi-${TESTCASE.testCase5}-${ANONYMOUS_USER.a2}`,
+      line: 'Test',
+      location: null,
+      email: 'shashi@bitcot.com',
+      rating: 5,
+      review: 'Excellent Product',
+      average: 4,
+    },
+    user1: {
+      name: `syed-${TESTCASE.testCase5}-${USER.u1}`,
+      line: 'Bottom Line',
+      location: null,
+      rating: 5,
+      review: 'Excellent Product',
+      average: 4.33,
+    },
+  },
+  reviewsViaAPI: {
+    reviewapi1: 'reviewapi1',
+    reviewapi2: 'reviewapi2',
   },
 }
