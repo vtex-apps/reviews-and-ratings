@@ -25,7 +25,7 @@ export default {
   selectFilter:
     '.vtex-reviews-and-ratings-3-x-reviewsOrderBy > div:nth-child(2) > label> div> select',
   reviewStarsCount:
-    '.vtex-reviews-and-ratings-3-x-reviewCommentRating > span > span',
+    '.vtex-reviews-and-ratings-3-x-reviewCommentRating > span > span[class*=filled]',
 
   // Product Specification Page
   LoginLink: 'div[class*=review] a[href*=login]',
@@ -35,4 +35,8 @@ export default {
   StarsFilled: 'label[class*=review] .t-heading-4 span[class*=filled]',
   WriteReview: '.vtex-reviews-and-ratings-3-x-writeReviewButton',
   Danger: 'div[class*=danger]',
+  ReviewContainer: 'div[class*=reviewCommentRating]',
+  GetReviewByIndex: index => {
+    return `div[class*=reviewCommentsContainer] div[class*=reviewComment]:nth-child(${index}) div[class*=reviewCommentRating] span[class*=filled]`
+  },
 }
