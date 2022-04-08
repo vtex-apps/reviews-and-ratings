@@ -6,7 +6,7 @@ const config = Cypress.env()
 const { vtex } = config.base
 
 export function graphql(getQuery, validateResponseFn) {
-  const { query, queryVariables } = getQuery()
+  const { query, queryVariables } = getQuery
 
   // Define constants
   const APP_NAME = 'vtex.reviews-and-ratings'
@@ -42,4 +42,86 @@ export function getShopperIdQuery() {
 
 export function ValidateShopperIdResponse(response) {
   expect(response.body.data.reviewsByShopperId.data).to.have.length(3)
+}
+
+export function getReview(reviewId) {
+  const ob = { id: reviewId }
+  const query =
+    'query' +
+    '($id:ID!)' +
+    '{ review(id: $id){id,title,text,rating,approved,productId,shopperId, verifiedPurchaser}}'
+
+  return {
+    query,
+    queryVariables: ob,
+  }
+}
+
+export function getReviews() {
+  const ob = {
+    from: 1,
+    to: 10,
+  }
+
+  const query =
+    'query' +
+    '($from:Int, $to: Int)' +
+    '{ reviews(from: $from, to: $to) {data {id, productId,rating, text}}}'
+
+  return {
+    query,
+    queryVariables: ob,
+  }
+}
+
+export function getAverageRatingByProductId(productId) {
+  const ob = {
+    productId,
+  }
+
+  const query =
+    'query' +
+    '($productId: String!)' +
+    '{ averageRatingByProductId(productId: $productId)}'
+
+  return {
+    query,
+    queryVariables: ob,
+  }
+}
+
+export function reviewsByProductId(productId) {
+  const ob = {
+    productId,
+  }
+
+  const query =
+    'query' +
+    '($productId: String!)' +
+    '{ reviewsByProductId(productId: $productId) {data {id, productId,rating, text}}}'
+
+  return {
+    query,
+    queryVariables: ob,
+  }
+}
+
+export function totalReviewsByProductId(productId) {
+  const ob = {
+    productId,
+  }
+
+  const query =
+    'query' +
+    '($productId: String!)' +
+    '{ totalReviewsByProductId(productId: $productId)}'
+
+  return {
+    query,
+    queryVariables: ob,
+  }
+}
+
+export function validateGetReviewResponse(response) {
+  expect(response.status).to.equal(200)
 }
