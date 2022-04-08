@@ -24,6 +24,7 @@ export function graphql(getQuery, validateResponseFn) {
     },
   }).then(response => {
     expect(response.status).to.equal(200)
+    expect(response.body.data).to.not.equal(null)
     validateResponseFn(response)
   })
 }
@@ -123,5 +124,21 @@ export function totalReviewsByProductId(productId) {
 }
 
 export function validateGetReviewResponse(response) {
-  expect(response.status).to.equal(200)
+  expect(response.body.data.review).to.not.equal(null)
+}
+
+export function validateGetReviewsResponse(response) {
+  expect(response.body.data.reviews).to.not.equal(null)
+}
+
+export function validateReviewsByProductResponse(response) {
+  expect(response.body.data.reviewsByProductId).to.not.equal(null)
+}
+
+export function validateAverageRatingByProductResponse(response) {
+  expect(response.body.data.averageRatingByProductId).to.not.equal(null)
+}
+
+export function validateTotalReviewsByProductResponse(response) {
+  expect(response.body.data.totalReviewsByProduct).to.not.equal(null)
 }
