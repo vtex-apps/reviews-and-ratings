@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.8.4] - 2022-04-08
+
 ### Fixed
 
 - Change the query arguments to be strings in order to match the types.
