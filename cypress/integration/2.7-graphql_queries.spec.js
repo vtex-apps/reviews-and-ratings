@@ -14,13 +14,9 @@ import {
   validateAverageRatingByProductResponse,
   validateTotalReviewsByProductResponse,
 } from '../support/graphql_queries.js'
-import {
-  testCase5,
-  reviewsViaAPI,
-} from '../support/review_and_ratings.outputvalidation.js'
+import { testCase5 } from '../support/review_and_ratings.outputvalidation.js'
 
-const { productId1 } = testCase5
-const { reviewapi1 } = reviewsViaAPI
+const { productId1, anonymousUser1 } = testCase5
 
 describe('Graphql queries', () => {
   testSetup()
@@ -30,10 +26,7 @@ describe('Graphql queries', () => {
 
   it('Verify get review query', () => {
     cy.getReviewItems().then(review => {
-      graphql(
-        getReview(review[`${reviewapi1}-${productId1}`]),
-        validateGetReviewResponse
-      )
+      graphql(getReview(review[anonymousUser1.name]), validateGetReviewResponse)
     })
   })
 
