@@ -160,7 +160,7 @@ export default {
       defaultStarsRating: '3',
     },
     anonymousUser1: {
-      name: `shashi-${TESTCASE.testCase5}-${ANONYMOUS_USER.a1}`,
+      name: `reviewapi-${TESTCASE.testCase5}-${ANONYMOUS_USER.a1}`,
       line: 'Test',
       location: 'California', // optional
       email: 'shashi@bitcot.com',
@@ -169,7 +169,7 @@ export default {
       average: 3,
     },
     anonymousUser2: {
-      name: `shashi-${TESTCASE.testCase5}-${ANONYMOUS_USER.a2}`,
+      name: `reviewapi-${TESTCASE.testCase5}-${ANONYMOUS_USER.a2}`,
       line: 'Test',
       location: null,
       email: 'shashi@bitcot.com',
@@ -177,17 +177,5 @@ export default {
       review: 'Excellent Product',
       average: 4,
     },
-    user1: {
-      name: `syed-${TESTCASE.testCase5}-${USER.u1}`,
-      line: 'Bottom Line',
-      location: null,
-      rating: 5,
-      review: 'Excellent Product',
-      average: 4.33,
-    },
-  },
-  reviewsViaAPI: {
-    reviewapi1: 'reviewapi1',
-    reviewapi2: 'reviewapi2',
   },
 }
