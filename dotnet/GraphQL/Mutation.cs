@@ -28,7 +28,7 @@ namespace ReviewsRatings.GraphQL
             Field<ReviewType>(
                 "editReview",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IdGraphType>> {Name = "id"},
+                    new QueryArgument<NonNullGraphType<StringGraphType>> {Name = "id"},
                     new QueryArgument<NonNullGraphType<ReviewInputType>> {Name = "review"}
                 ),
                 resolve: context =>
@@ -42,7 +42,7 @@ namespace ReviewsRatings.GraphQL
             Field<BooleanGraphType>(
                 "deleteReview",
                 arguments: new QueryArguments(
-                    new QueryArgument<ListGraphType<IdGraphType>> { Name = "ids"}
+                    new QueryArgument<ListGraphType<StringGraphType>> { Name = "ids"}
                 ),
                 resolve: context =>
                 {
@@ -53,7 +53,7 @@ namespace ReviewsRatings.GraphQL
             Field<BooleanGraphType>(
                 "moderateReview",
                 arguments: new QueryArguments(
-                    new QueryArgument<ListGraphType<IdGraphType>> { Name = "ids" },
+                    new QueryArgument<ListGraphType<StringGraphType>> { Name = "ids" },
                     new QueryArgument<BooleanGraphType> { Name = "approved"}
                 ),
                 resolve: context =>

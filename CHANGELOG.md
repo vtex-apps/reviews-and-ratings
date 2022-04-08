@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Change the query arguments to be strings in order to match the types.
+
 ## [3.8.3] - 2022-04-07
 
 ### Fixed
@@ -14,11 +18,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [3.8.2] - 2022-03-24
 
-## [3.8.1] - 2022-03-24
-
 ### Fixed
 
 - Remove the UTC string to avoid returning invalid date for new Date.
+
+## [3.8.1] - 2022-03-24
 
 ### Fixed
 
@@ -26,12 +30,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [3.8.0] - 2022-03-11
 
-## [3.7.5] - 2022-03-07
-
 ### Fixed
 
 - Change the order of the PUT calls, i put first the verify schema and then the hashed one in vBase.
-- Throw Exception message if the first put schema status code !IsSuccessStatusCode or NotModified
+- Throw Exception message if the first put schema status code !IsSuccessStatusCode or NotModified.
+
+## [3.7.5] - 2022-03-07
 
 ### Fixed
 
