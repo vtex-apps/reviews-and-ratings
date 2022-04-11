@@ -18,7 +18,7 @@ export function restrictAnonymousUser(product) {
   })
 }
 
-export function verifyUserShouldBeAbletoAddReview() {
+export function verifyUserIsNotAbletoAddReviewAgain() {
   it('User should not be able to add review again', () => {
     cy.get(rrselectors.WriteReview).click()
     cy.get(rrselectors.Danger).contains('already')
@@ -26,6 +26,7 @@ export function verifyUserShouldBeAbletoAddReview() {
 }
 
 export function orderTheProduct(product, postalCode) {
+  testSetup()
   it('Adding Product to Cart', updateRetry(3), () => {
     // Search the product
     cy.searchProduct(product)
