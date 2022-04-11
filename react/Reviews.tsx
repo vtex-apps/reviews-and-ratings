@@ -478,7 +478,18 @@ function Reviews() {
   }))
 
   const getTimeAgo = (time: string) => {
-    const before = new Date(time)
+    const newTime = new Date(time)
+    const before = new Date(
+      Date.UTC(
+        newTime.getUTCFullYear(),
+        newTime.getUTCMonth(),
+        newTime.getUTCDate(),
+        newTime.getUTCHours(),
+        newTime.getUTCMinutes(),
+        newTime.getUTCSeconds()
+      )
+    )
+
     const now = new Date()
     const diff = new Date(now.valueOf() - before.valueOf())
 
