@@ -178,4 +178,13 @@ export default {
       average: 4,
     },
   },
+  testCase6: {
+    newReview1: {
+      productId: '880012',
+      rating: 5,
+      reviewerName: 'Saravanan',
+      title: '',
+      text: 'Excellent product',
+    },
+  },
 }

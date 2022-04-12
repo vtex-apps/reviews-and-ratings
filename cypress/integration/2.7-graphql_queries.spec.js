@@ -13,13 +13,19 @@ import {
   validateReviewsByProductResponse,
   validateAverageRatingByProductResponse,
   validateTotalReviewsByProductResponse,
+  addReviewQuery,
+  validateAddReviewResponse,
 } from '../support/graphql_queries.js'
-import { testCase5 } from '../support/review_and_ratings.outputvalidation.js'
+import {
+  testCase5,
+  testCase6,
+} from '../support/review_and_ratings.outputvalidation.js'
 
 const { productId1, anonymousUser1 } = testCase5
+const { newReview1 } = testCase6
 
 describe('Graphql queries', () => {
-  testSetup()
+  testSetup(false)
   it('Verify reviews by shopperId query', () => {
     graphql(getShopperIdQuery(), ValidateShopperIdResponse)
   })
@@ -50,5 +56,9 @@ describe('Graphql queries', () => {
       totalReviewsByProductId(productId1),
       validateTotalReviewsByProductResponse
     )
+  })
+
+  it('Verify adding review for product', () => {
+    graphql(addReviewQuery(newReview1), validateAddReviewResponse)
   })
 })

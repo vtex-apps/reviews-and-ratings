@@ -123,6 +123,47 @@ export function totalReviewsByProductId(productId) {
   }
 }
 
+export function addReviewQuery(review) {
+  const ob = {
+    review,
+  }
+
+  const query =
+    'mutation' +
+    '($review:ReviewInput!)' +
+    '{ newReview(review: $review){id, productId, rating, text} }'
+
+  return {
+    query,
+    queryVariables: ob,
+  }
+}
+
+export function validateAddReviewResponse(response) {
+  expect(response.body.data.newReview).to.not.equal(null)
+}
+
+// export function editReviewQuery(review, reviewId) {
+//   const ob = {
+//     id: reviewId,
+//     review,
+//   }
+
+//   const query =
+//     'mutation' +
+//     '($id: String!, $review:EditReviewInput!)' +
+//     '{ editReview(id: $id, review: $review){id, productId, rating, text} }'
+
+//   return {
+//     query,
+//     queryVariables: ob,
+//   }
+// }
+
+// export function validateEditReviewResponse(response) {
+//   expect(response.body.data.review).to.not.equal(null)
+// }
+
 export function validateGetReviewResponse(response) {
   expect(response.body.data.review).to.not.equal(null)
 }
