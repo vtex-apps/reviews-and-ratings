@@ -10,7 +10,7 @@ base:
     urlExternalSeller: https://productusqaseller.myvtex.com
     vtexIdUrl: https://vtexid.vtex.com.br/api/vtexid/pub/authenticate/default
     deployCli:
-      enabled: false
+      enabled: true
       git: https://github.com/vtex/toolbelt.git
       branch: qe/cypress
   twilio:
@@ -24,7 +24,7 @@ base:
     enabled: false
     channel: some-channel
   cypress:
-    devMode: true
+    devMode: false
     runHeaded: false
     enabled: false
     projectId: xyza
@@ -41,10 +41,10 @@ base:
     pageLoadTimeout: 45000
     browser: chrome
     chromeWebSecurity: false
-  stateFiles: [.orders.json, .reviews.json]
+  stateFiles: [.reviews.json]
 
 workspace:
-  name: reviewsandratings0469729
+  name: random
   prefix: reviewsandratings
   linkApp:
     enabled: true
@@ -53,19 +53,88 @@ workspace:
   installApps: []
   removeApps: []
   wipe:
-    enabled: false
+    enabled: true
     stopOnFail: false
-    spec: cypress-shared/integration/pass.spec.js
+    spec: cypress/integration/wipe.spec.js
   teardown:
-    enabled: false
+    enabled: true
 
 strategy:
-  sku:
+  anonymous_review_no_approval:
     enabled: true
     sendDashboard: false
-    hardTries: 0
+    hardTries: 1
     stopOnFail: false
     parallel: false
     runInOrder: true
     specs:
-      - cy-runner/cypress/integration/sample.spec.js
+      - cypress/integration/2.1.1-*
+      - cypress/integration/2.1.2-*
+      - cypress/integration/2.1.3-*
+  disable_anonymous_review_no_approval:
+    enabled: true
+    sendDashboard: false
+    hardTries: 1
+    stopOnFail: false
+    parallel: false
+    runInOrder: true
+    specs:
+      - cypress/integration/2.2.1-*
+      - cypress/integration/2.2.2-*
+      - cypress/integration/2.2.3-*
+    dependency:
+      - anonymous_review_no_approval
+  enable_anonymous_review_with_approval:
+    enabled: true
+    sendDashboard: false
+    hardTries: 1
+    stopOnFail: false
+    parallel: false
+    runInOrder: true
+    specs:
+      - cypress/integration/2.3.1-*
+      - cypress/integration/2.3.2-*
+    dependency:
+      - disable_anonymous_review_no_approval
+  disable_anonymous_review_with_approval:
+    enabled: true
+    sendDashboard: false
+    hardTries: 1
+    stopOnFail: false
+    parallel: false
+    runInOrder: true
+    specs:
+      - cypress/integration/2.4.1-*
+      - cypress/integration/2.4.2-*
+    dependency:
+      - enable_anonymous_review_with_approval
+  rest_api_testcase:
+    enabled: true
+    sendDashboard: false
+    hardTries: 1
+    stopOnFail: false
+    parallel: false
+    runInOrder: true
+    specs:
+      - cypress/integration/2.5-*
+  graphql_api_testcase:
+    enabled: true
+    sendDashboard: false
+    hardTries: 1
+    stopOnFail: false
+    parallel: false
+    runInOrder: true
+    specs:
+      - cypress/integration/2.6-*
+    dependency:
+      - anonymous_review_no_approval
+  display_settings:
+    enabled: true
+    sendDashboard: false
+    hardTries: 1
+    stopOnFail: false
+    parallel: false
+    runInOrder: true
+    specs:
+      - cypress/integration/2.7.1-*
+      - cypress/integration/2.7.2-*

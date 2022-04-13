@@ -6,6 +6,7 @@ const TESTCASE = {
   testCase3: 'testCase3',
   testCase4: 'testCase4',
   testCase5: 'testCase5',
+  testCase6: 'testCase6',
 }
 
 const ANONYMOUS_USER = {
@@ -106,9 +107,9 @@ export default {
       name: `syed-${TESTCASE.testCase3}-${USER.u2}`,
       line: 'Bottom Line',
       location: null,
-      rating: 4,
+      rating: 3,
       review: 'Excellent Product',
-      average: 4,
+      average: 3,
     },
   },
   testCase4: {
@@ -150,15 +151,9 @@ export default {
     },
   },
   testCase5: {
-    title: 'Enable Anonymous review with no admin approval',
     product: PRODUCTS.coconut,
     productId1: 880030, // coconut product id
     productId2: 880031, // watermelon product id
-    configuration: {
-      allowAnonymousReviews: true,
-      requireApproval: false,
-      defaultStarsRating: '3',
-    },
     anonymousUser1: {
       name: `reviewapi-${TESTCASE.testCase5}-${ANONYMOUS_USER.a1}`,
       line: 'Test',
@@ -179,11 +174,12 @@ export default {
     },
   },
   testCase6: {
-    newReview1: {
-      productId: '880012',
-      rating: 5,
-      reviewerName: 'Saravanan',
-      title: '',
+    product: PRODUCTS.coconut,
+    anonymousUser1: {
+      title: `graphql-${TESTCASE.testCase6}-${ANONYMOUS_USER.a1}`,
+      rating: 3,
+      productId: 880030, // coconut product id
+      reviewerName: `graphql-${TESTCASE.testCase6}-${ANONYMOUS_USER.a1}`,
       text: 'Excellent product',
     },
   },

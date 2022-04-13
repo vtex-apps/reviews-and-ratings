@@ -1,15 +1,13 @@
-import { preserveCookie, testSetup } from '../support/common/support.js'
+import { testSetup } from '../support/common/support.js'
 import { updateSettings } from '../support/review_and_ratings_settings.js'
 import { verifySettings } from '../support/review_and_ratings.js'
 
-describe('Verify display settings as logged in user', () => {
+describe('Testing as anonymous user', () => {
   let type = 'Enable'
 
-  testSetup()
-  preserveCookie()
-
   describe('Enable display setting and test', () => {
-    updateSettings('testcase', {
+    testSetup(false)
+    updateSettings('Anonymous user enable all display setting', {
       allowAnonymousReviews: true,
       showGraph: true,
       displaySummaryIfNone: true,
@@ -18,20 +16,14 @@ describe('Verify display settings as logged in user', () => {
       displaySummaryAddButton: true,
     })
 
-    verifySettings(type, true, true)
+    verifySettings(type, true, false)
   })
 
   describe('Disable display setting and test', () => {
-    testSetup()
     type = 'Disable'
-    updateSettings('testcase', {
-      showGraph: false,
-      displaySummaryIfNone: false,
-      displayInlineIfNone: false,
-      displaySummaryTotalReviews: false,
-      displaySummaryAddButton: false,
-    })
+    testSetup(false)
+    updateSettings('Anonymous user disable all display setting')
 
-    verifySettings(type, false, true)
+    verifySettings(type, false, false)
   })
 })

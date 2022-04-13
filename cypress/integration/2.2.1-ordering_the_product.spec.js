@@ -5,15 +5,13 @@ import { updateSettings } from '../support/review_and_ratings_settings.js'
 
 const { title, configuration, product, user1, postalCode } = testCase2
 
-describe(title, () => {
+describe(`${title} - Anonymous User`, () => {
   testSetup(false)
-
   updateSettings(title, configuration)
-
   restrictAnonymousUser(product)
+})
 
-  describe('Order the product with Signed User', () => {
-    orderTheProduct(product, postalCode, configuration, user1)
-    preserveCookie()
-  })
+describe('Order the product with Signed User', () => {
+  orderTheProduct(product, postalCode, configuration, user1)
+  preserveCookie()
 })

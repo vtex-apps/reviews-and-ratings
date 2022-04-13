@@ -3,9 +3,9 @@ import { testCase2 } from '../support/review_and_ratings.outputvalidation.js'
 import { verifyUserIsNotAbletoAddReviewAgain } from '../support/testcase.js'
 import rrselectors from '../support/reviews_and_ratings.selectors.js'
 
-const { product, user1 } = testCase2
+const { product, user1, title } = testCase2
 
-describe('Verify review with Signed User', () => {
+describe(`${title} - Verify review with Signed User`, () => {
   testSetup()
 
   it('Added review should show immediately to the user', () => {

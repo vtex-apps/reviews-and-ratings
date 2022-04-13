@@ -1,29 +1,31 @@
 import {
   testSetup,
-  preserveCookie,
   updateRetry,
+  preserveCookie,
 } from '../support/common/support.js'
+import { approveReviews } from '../support/graphql_testcase.js'
 import { testCase1 } from '../support/review_and_ratings.outputvalidation.js'
-import { verifyUserIsNotAbletoAddReviewAgain } from '../support/testcase.js'
-import rrselectors from '../support/reviews_and_ratings.selectors.js'
+import { updateSettings } from '../support/review_and_ratings_settings.js'
 
-const { product, user1 } = testCase1
+const { title, configuration, product, anonymousUser1, anonymousUser2, user1 } =
+  testCase1
 
-describe('Verify review with Signed User', () => {
-  testSetup()
+describe(title, () => {
+  testSetup(false)
+  updateSettings(title, configuration)
 
-  it('Added review should show immediately to the user', updateRetry(2), () => {
-    cy.openStoreFront(true)
-    cy.openProduct(product, true)
-    cy.get(rrselectors.PostalCode, { timeout: 20000 }).should('be.visible')
-    cy.get('span[class*=reviewComment]').contains(user1.line)
+  describe(`Signed User`, () => {
+    testSetup()
+
+    it('Adding review to product with location', updateRetry(2), () => {
+      cy.openStoreFront(true)
+      cy.addReview(product, configuration.defaultStarsRating, user1)
+    })
+
+    // If we disable admin approval, review been shown to UI
+    // but review status is still pending so approving it via graphql
+    approveReviews(anonymousUser1.name, anonymousUser2.name, user1.name)
+
+    preserveCookie()
   })
-
-  it('Verify average ratings', () => {
-    cy.getAverageRating(user1, product)
-  })
-
-  verifyUserIsNotAbletoAddReviewAgain()
-
-  preserveCookie()
 })

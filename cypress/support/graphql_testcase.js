@@ -1,4 +1,5 @@
-import { graphql } from './graphql_queries.js'
+import { graphql, getReview } from './graphql_queries.js'
+import { updateRetry } from './common/support.js'
 
 export function moderateReview(ids) {
   return {
@@ -13,27 +14,54 @@ export function moderateReview(ids) {
   }
 }
 
-export function ValidateModerateReviewResponse(response) {
-  expect(response.body.data.moderateReview).to.be.true
+export function validateModerateReviewResponse(response) {
+  // console.log(response.body.data)
+  expect(response.body.data).to.have.property('moderateReview')
 }
 
 export function approveReviews(...ids) {
-  it(`Approve all the reviews ${ids.toString()}`, () => {
+  it(`Approve all the reviews ${ids.toString()}`, updateRetry(2), () => {
     cy.getReviewItems().then(reviews => {
       const reviewIds = ids.map(id => reviews[id])
 
-      graphql(moderateReview(reviewIds), ValidateModerateReviewResponse)
+      graphql(moderateReview(reviewIds), validateModerateReviewResponse)
     })
   })
 }
 
-// export function deleteReviews(...ids) {
-//   it(`Delete all the reviews ${ids.toString()}`, () => {
-//     console.log(ids)
-//     cy.getReviewItems().then(reviews => {
-//       const reviewIds = ids.map(id => reviews[id])
+export function deleteReviewMutation(ids) {
+  return {
+    query: 'mutation' + '($ids: [String!])' + '{deleteReview(ids:$ids)}',
+    queryVariables: {
+      ids,
+    },
+  }
+}
 
-//       graphql(moderateReview(reviewIds), ValidateModerateReviewResponse)
-//     })
-//   })
-// }
+export function validateDeleteReviewResponse(response) {
+  expect(response.body.data.deleteReview).to.be.true
+}
+
+export function performDeleteReviews(ids) {
+  graphql(deleteReviewMutation(ids), validateDeleteReviewResponse)
+}
+
+export function deleteReviews(...ids) {
+  it(`Delete all the reviews ${ids.toString()}`, updateRetry(2), () => {
+    cy.getReviewItems().then(reviews => {
+      const reviewIds = ids.map(id => reviews[id])
+
+      performDeleteReviews(reviewIds)
+    })
+  })
+}
+
+export function verifyReviewIsDeleted(searchTerm) {
+  it(`Verify reviews are deleted ${searchTerm}`, updateRetry(2), () => {
+    cy.getReviewItems().then(review => {
+      graphql(getReview(review[searchTerm]), response => {
+        expect(response.body.data.review).to.equal(null)
+      })
+    })
+  })
+}

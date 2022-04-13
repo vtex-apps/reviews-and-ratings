@@ -8,4 +8,7 @@ export default {
   deleteReviewAPIs: baseUrl => {
     return `${baseUrl}/reviews-and-ratings/api/reviews`
   },
+  editReviewAPI: baseUrl => {
+    return `${baseUrl}/reviews-and-ratings/api/review`
+  },
 }

@@ -5,7 +5,7 @@ const config = Cypress.env()
 // Constants
 const { vtex } = config.base
 
-export function graphql(getQuery, validateResponseFn) {
+export function graphql(getQuery, validateResponseFn = null) {
   const { query, queryVariables } = getQuery
 
   // Define constants
@@ -22,11 +22,17 @@ export function graphql(getQuery, validateResponseFn) {
       query,
       variables: queryVariables,
     },
-  }).then(response => {
-    expect(response.status).to.equal(200)
-    expect(response.body.data).to.not.equal(null)
-    validateResponseFn(response)
-  })
+  }).as('RESPONSE')
+
+  if (validateResponseFn) {
+    cy.get('@RESPONSE').then(response => {
+      expect(response.status).to.equal(200)
+      expect(response.body.data).to.not.equal(null)
+      validateResponseFn(response)
+    })
+  } else {
+    return cy.get('@RESPONSE')
+  }
 }
 
 export function getShopperIdQuery() {
@@ -42,7 +48,60 @@ export function getShopperIdQuery() {
 }
 
 export function ValidateShopperIdResponse(response) {
-  expect(response.body.data.reviewsByShopperId.data).to.have.length(3)
+  expect(response.body.data.reviewsByShopperId.data).to.not.have.length(0)
+}
+
+export function gethasShopperReviewedQuery() {
+  return {
+    query:
+      'query' +
+      '($shopperId: String!,$productId: String!)' +
+      '{hasShopperReviewed(shopperId: $shopperId,productId: $productId)}',
+    queryVariables: {
+      shopperId: vtex.robotMail,
+      productId: '880026',
+    },
+  }
+}
+
+export function ValidateHasShopperReviewedResponse(response) {
+  expect(response.body.data.hasShopperReviewed).to.be.true
+}
+
+export function getreviewByreviewDateTimeQuery(reviewDateTime) {
+  return {
+    query:
+      'query' +
+      '($reviewDateTime:String!)' +
+      '{reviewByreviewDateTime(reviewDateTime: $reviewDateTime){data{id}}}',
+    queryVariables: {
+      reviewDateTime,
+    },
+  }
+}
+
+export function ValidateGetreviewByreviewDateTimeQueryResponse(response) {
+  expect(response.body.data.reviewByreviewDateTime.data).to.not.have.length(0)
+}
+
+export function getreviewByDateRangeQuery(reviewDateTime) {
+  const date = reviewDateTime.split(' ')
+
+  return {
+    query:
+      'query' +
+      '($fromDate:String!,$toDate: String!)' +
+      '{reviewByDateRange(fromDate: $fromDate,toDate:$toDate){data{id}}}',
+
+    queryVariables: {
+      fromDate: date[0],
+      toDate: date[0],
+    },
+  }
+}
+
+export function ValidateGetreviewByDateRangeQueryResponse(response) {
+  expect(response.body.data.reviewByDateRange.data).to.not.have.length(0)
 }
 
 export function getReview(reviewId) {
@@ -50,7 +109,7 @@ export function getReview(reviewId) {
   const query =
     'query' +
     '($id:ID!)' +
-    '{ review(id: $id){id,title,text,rating,approved,productId,shopperId, verifiedPurchaser}}'
+    '{ review(id: $id){id,title,text,rating,approved,productId,verifiedPurchaser,reviewDateTime}}'
 
   return {
     query,
@@ -58,16 +117,29 @@ export function getReview(reviewId) {
   }
 }
 
-export function getReviews() {
+export function getReviews(searchTerm = false) {
   const ob = {
-    from: 1,
-    to: 10,
+    from: 0,
+    to: 40,
   }
 
-  const query =
-    'query' +
-    '($from:Int, $to: Int)' +
-    '{ reviews(from: $from, to: $to) {data {id, productId,rating, text}}}'
+  if (searchTerm) {
+    ob.searchTerm = searchTerm
+  }
+
+  let query
+
+  if (searchTerm) {
+    query =
+      'query' +
+      '($from:Int, $to: Int,$searchTerm: String)' +
+      '{ reviews(from: $from, to: $to,searchTerm: $searchTerm) {data {id,reviewerName}}}'
+  } else {
+    query =
+      'query' +
+      '($from:Int, $to: Int)' +
+      '{ reviews(from: $from, to: $to) {data {id, productId,rating, text}}}'
+  }
 
   return {
     query,
@@ -99,7 +171,7 @@ export function reviewsByProductId(productId) {
   const query =
     'query' +
     '($productId: String!)' +
-    '{ reviewsByProductId(productId: $productId) {data {id, productId,rating, text}}}'
+    '{ reviewsByProductId(productId: $productId) {data {id, productId,reviewerName}}}'
 
   return {
     query,
@@ -123,63 +195,27 @@ export function totalReviewsByProductId(productId) {
   }
 }
 
-export function addReviewQuery(review) {
-  const ob = {
-    review,
-  }
-
-  const query =
-    'mutation' +
-    '($review:ReviewInput!)' +
-    '{ newReview(review: $review){id, productId, rating, text} }'
-
-  return {
-    query,
-    queryVariables: ob,
-  }
-}
-
-export function validateAddReviewResponse(response) {
-  expect(response.body.data.newReview).to.not.equal(null)
-}
-
-// export function editReviewQuery(review, reviewId) {
-//   const ob = {
-//     id: reviewId,
-//     review,
-//   }
-
-//   const query =
-//     'mutation' +
-//     '($id: String!, $review:EditReviewInput!)' +
-//     '{ editReview(id: $id, review: $review){id, productId, rating, text} }'
-
-//   return {
-//     query,
-//     queryVariables: ob,
-//   }
-// }
-
-// export function validateEditReviewResponse(response) {
-//   expect(response.body.data.review).to.not.equal(null)
-// }
-
-export function validateGetReviewResponse(response) {
-  expect(response.body.data.review).to.not.equal(null)
-}
-
 export function validateGetReviewsResponse(response) {
   expect(response.body.data.reviews).to.not.equal(null)
+  expect(response.body.data.reviews.data).to.not.have.lengthOf(0)
 }
 
 export function validateReviewsByProductResponse(response) {
   expect(response.body.data.reviewsByProductId).to.not.equal(null)
 }
 
-export function validateAverageRatingByProductResponse(response) {
-  expect(response.body.data.averageRatingByProductId).to.not.equal(null)
-}
-
 export function validateTotalReviewsByProductResponse(response) {
   expect(response.body.data.totalReviewsByProduct).to.not.equal(null)
+}
+
+export function addReviewQuery(review) {
+  const query =
+    'mutation' + '($review:ReviewInput!)' + '{newReview(review: $review){id}}'
+
+  return {
+    query,
+    queryVariables: {
+      review,
+    },
+  }
 }
