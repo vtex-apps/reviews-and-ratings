@@ -8,7 +8,7 @@ import {
 } from './product.apis'
 
 export function getProductRatingsAPI(productId) {
-  it('Get rating for product', () => {
+  it('Get rating for product', updateRetry(2), () => {
     cy.getVtexItems().then(vtex => {
       cy.getAPI(ratingsAPI(vtex.baseUrl, `rating/${productId}`)).then(res => {
         expect(res.status).to.equal(200)
@@ -88,7 +88,7 @@ export function retrieveReviewsListAPI(productId) {
 }
 
 export function deleteReview({ name }) {
-  it(`Delete review for this ${name}`, () => {
+  it(`Delete review for this ${name}`, updateRetry(5), () => {
     cy.getVtexItems().then(vtex => {
       cy.getReviewItems().then(review => {
         cy.request({
@@ -108,7 +108,7 @@ export function deleteReview({ name }) {
 }
 
 export function deleteReviews(user1, user2, user3) {
-  it('Delete multiple reviews', () => {
+  it('Delete multiple reviews', updateRetry(5), () => {
     cy.getVtexItems().then(vtex => {
       cy.getReviewItems().then(review => {
         const reviewIds = [
@@ -135,7 +135,7 @@ export function deleteReviews(user1, user2, user3) {
 }
 
 export function editReview({ name }, env) {
-  it(`Approve a review ${name}`, () => {
+  it(`Approve a review ${name}`, updateRetry(2), () => {
     cy.getVtexItems().then(vtex => {
       cy.getReviewItems().then(review => {
         const body = review[`${name}-review`]

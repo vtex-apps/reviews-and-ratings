@@ -82,7 +82,7 @@ Cypress.Commands.add('fillReviewInformation', user => {
 
   cy.get(rrselectors.formTextArea).clear().type(review)
   cy.get(rrselectors.formSubmit).should('be.visible').click()
-  cy.get(rrselectors.submittedReviewText)
+  cy.get(rrselectors.submittedReviewText, { timeout: 30000 })
     .should('be.visible')
     .should('have.text', 'Your review has been submitted.')
 })

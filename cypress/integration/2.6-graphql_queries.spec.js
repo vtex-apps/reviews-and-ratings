@@ -58,15 +58,6 @@ describe('Graphql queries', () => {
     graphql(reviewsByProductId(productId), validateReviewsByProductResponse)
   })
 
-  it('Verify get average of product by id query', updateRetry(2), () => {
-    graphql(getAverageRatingByProductId(productId), response => {
-      expect(response.body.data.averageRatingByProductId).to.not.equal(null)
-      expect(response.body.data.averageRatingByProductId).to.equal(
-        anonymousUser1.rating
-      )
-    })
-  })
-
   it('Verify get review for review created via graphql', updateRetry(2), () => {
     cy.getReviewItems().then(review => {
       graphql(getReview(review[title]), response => {
@@ -99,6 +90,15 @@ describe('Graphql queries', () => {
       graphql(
         getreviewByreviewDateTimeQuery(review[reviewDateTimeEnv]),
         ValidateGetreviewByreviewDateTimeQueryResponse
+      )
+    })
+  })
+
+  it('Verify get average of product by id query', updateRetry(2), () => {
+    graphql(getAverageRatingByProductId(productId), response => {
+      expect(response.body.data.averageRatingByProductId).to.not.equal(null)
+      expect(response.body.data.averageRatingByProductId).to.equal(
+        anonymousUser1.rating
       )
     })
   })

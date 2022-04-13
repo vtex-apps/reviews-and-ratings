@@ -19,23 +19,15 @@ export function verifySettings(type, enableSettings = false, login = false) {
     }
   )
 
-  it(`${type} Display stars in product rating summary`, updateRetry(2), () => {
+  it(`${type} Display stars in product rating summary`, () => {
     cy.verifyStarsInProductRatingSummary(enableSettings)
   })
 
-  it(
-    `${type} display total reviews number in product rating summary`,
-    updateRetry(2),
-    () => {
-      cy.verifyTotalReviewsInProductRatingSummary(enableSettings)
-    }
-  )
+  it(`${type} display total reviews number in product rating summary`, () => {
+    cy.verifyTotalReviewsInProductRatingSummary(enableSettings)
+  })
 
-  it(
-    `${type} display add review button in product rating summary`,
-    updateRetry(2),
-    () => {
-      cy.verifyAddReviewButtonInProductRatingSummary(enableSettings)
-    }
-  )
+  it(`${type} display add review button in product rating summary`, () => {
+    cy.verifyAddReviewButtonInProductRatingSummary(enableSettings)
+  })
 }

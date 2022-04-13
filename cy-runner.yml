@@ -116,7 +116,7 @@ strategy:
     specs:
       - cypress/integration/2.2.2-*
     dependency:
-      - anonymous_user1
+      - signed_in_user1
       - order_the_product
   signed_in_user_2:
     enabled: true
@@ -131,7 +131,7 @@ strategy:
     dependency:
       - anonymous_user2
   # Enable Anonymous review with admin approval
-  enable_anonymous_review_with_approval:
+  anonymous_user3:
     enabled: true
     sendDashboard: false
     hardTries: 1
@@ -140,11 +140,21 @@ strategy:
     runInOrder: true
     specs:
       - cypress/integration/2.3.1-*
+    dependency:
+      - signed_in_user_2
+  signed_in_user_3:
+    enabled: true
+    sendDashboard: false
+    hardTries: 1
+    stopOnFail: false
+    parallel: false
+    runInOrder: true
+    specs:
       - cypress/integration/2.3.2-*
     dependency:
-      - anonymous_user2
+      - anonymous_user3
   # Disable Anonymous review with admin approval
-  disable_anonymous_review_with_approval:
+  anonymous_user4:
     enabled: true
     sendDashboard: false
     hardTries: 1
@@ -153,9 +163,19 @@ strategy:
     runInOrder: true
     specs:
       - cypress/integration/2.4.1-*
+    dependency:
+      - signed_in_user_3
+  signed_in_user_4:
+    enabled: true
+    sendDashboard: false
+    hardTries: 1
+    stopOnFail: false
+    parallel: false
+    runInOrder: true
+    specs:
       - cypress/integration/2.4.2-*
     dependency:
-      - enable_anonymous_review_with_approval
+      - anonymous_user4
   rest_api_testcase:
     enabled: true
     sendDashboard: false
