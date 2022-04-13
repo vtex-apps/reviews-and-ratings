@@ -179,7 +179,7 @@ strategy:
   rest_api_testcase:
     enabled: true
     sendDashboard: false
-    hardTries: 1
+    hardTries: 3
     stopOnFail: false
     parallel: false
     runInOrder: true

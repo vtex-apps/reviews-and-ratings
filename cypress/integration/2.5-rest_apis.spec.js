@@ -30,11 +30,11 @@ describe('Reviews REST API testcases', () => {
 
   addReviewAPI(productId1, anonymousUser1)
   getProductRatingsAPI(productId1)
+  addReviewAPI(productId1, anonymousUser1, true)
+  addReviewAPI(productId2, anonymousUser2)
   retrieveReviewAPI(productId1, anonymousUser1)
   retrieveReviewsListAPI(productId1)
-  addReviewAPI(productId1, anonymousUser1, true)
   deleteReview(anonymousUser1)
-  addReviewAPI(productId2, anonymousUser2)
   addReviewAPI(productId1, anonymousUser1)
   retrieveReviewAPI(productId2, anonymousUser2)
   editReview(anonymousUser2, patchReviewEnv)

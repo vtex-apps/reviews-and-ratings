@@ -24,7 +24,7 @@ export function addReviewAPI(
   { name, rating, review },
   duplicate = false
 ) {
-  it(`Add review ${name}`, () => {
+  it(`Add review ${name}`, updateRetry(3), () => {
     cy.getVtexItems().then(vtex => {
       cy.request({
         method: 'POST',
