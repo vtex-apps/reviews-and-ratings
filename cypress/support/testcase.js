@@ -69,7 +69,7 @@ export function verifySorting(sort) {
 }
 
 export function verifiedReviewTestCase({ verifiedProduct }, user = false) {
-  const title = user ? 'signed' : 'anonymous'
+  const title = user ? 'signed in' : 'anonymous'
 
   it(`Validate verified user added comments shown to ${title} user`, () => {
     cy.openProduct(verifiedProduct, true)
@@ -78,7 +78,7 @@ export function verifiedReviewTestCase({ verifiedProduct }, user = false) {
 }
 
 export function reviewTestCase({ otherProduct }, user = false) {
-  const title = user ? 'signed' : 'anonymous'
+  const title = user ? 'signed in' : 'anonymous'
 
   it(`Validate user added comments shown to this ${title} user`, () => {
     reload()

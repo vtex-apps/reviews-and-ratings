@@ -14,7 +14,7 @@ describe(title, () => {
   testSetup(false)
   updateSettings(title, configuration)
 
-  describe(`Verify review with Signed User`, () => {
+  describe(`Verify review with Signed In User`, () => {
     testSetup()
 
     it(

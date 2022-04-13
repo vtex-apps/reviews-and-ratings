@@ -14,7 +14,7 @@ import { reviewsAndRatingsConstants } from '../support/reviews_and_ratings.const
 
 const { title, configuration, product, user1 } = testCase4
 
-describe(`${title} - Signed User`, () => {
+describe(`${title} - Signed In User`, () => {
   testSetup()
 
   updateSettings(title, configuration)

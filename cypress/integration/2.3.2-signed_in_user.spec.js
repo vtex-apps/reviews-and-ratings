@@ -22,7 +22,7 @@ import {
 const { title, configuration, product, user1, verifiedProduct, user2 } =
   testCase3
 
-describe(`${title} - Signed user`, () => {
+describe(`${title} - Signed In user`, () => {
   testSetup()
   updateSettings(title, configuration)
 

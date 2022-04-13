@@ -5,7 +5,7 @@ import rrselectors from '../support/reviews_and_ratings.selectors.js'
 
 const { product, user1, title } = testCase2
 
-describe(`${title} - Verify review with Signed User`, () => {
+describe(`${title} - Verify review with Signed In User`, () => {
   testSetup()
 
   it('Added review should show immediately to the user', () => {

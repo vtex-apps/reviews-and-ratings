@@ -14,7 +14,7 @@ describe(title, () => {
   testSetup(false)
   updateSettings(title, configuration)
 
-  describe(`Signed User`, () => {
+  describe(`Signed in User`, () => {
     testSetup()
 
     it('Adding review to product with location', updateRetry(2), () => {

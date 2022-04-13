@@ -8,7 +8,7 @@ import selectors from '../support/common/selectors.js'
 
 const { product, postalCode } = testCase2
 
-describe('Order the product with Signed User', () => {
+describe('Order the product with Signed In User', () => {
   testSetup()
   it('Adding Product to Cart', updateRetry(3), () => {
     // Search the product
