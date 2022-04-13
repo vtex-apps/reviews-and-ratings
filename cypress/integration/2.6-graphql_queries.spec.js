@@ -30,7 +30,7 @@ const reviewDateTimeEnv = 'reviewDateTimeEnv'
 describe('Graphql queries', () => {
   testSetup(false)
 
-  it('Verify adding review for product', () => {
+  it('Verify adding review for product', updateRetry(2), () => {
     graphql(addReviewQuery(anonymousUser1), response => {
       expect(response.body.data.newReview).to.not.equal(null)
       cy.setReviewItem(title, response.body.data.newReview.id)
@@ -43,11 +43,11 @@ describe('Graphql queries', () => {
     graphql(getShopperIdQuery(), ValidateShopperIdResponse)
   })
 
-  it('Verify hasShopperReviewed', () => {
+  it('Verify hasShopperReviewed', updateRetry(2), () => {
     graphql(gethasShopperReviewedQuery(), ValidateHasShopperReviewedResponse)
   })
 
-  it('Verify total reviews of product by id query', () => {
+  it('Verify total reviews of product by id query', updateRetry(2), () => {
     graphql(
       totalReviewsByProductId(productId),
       validateTotalReviewsByProductResponse
@@ -58,7 +58,7 @@ describe('Graphql queries', () => {
     graphql(reviewsByProductId(productId), validateReviewsByProductResponse)
   })
 
-  it('Verify get average of product by id query', () => {
+  it('Verify get average of product by id query', updateRetry(2), () => {
     graphql(getAverageRatingByProductId(productId), response => {
       expect(response.body.data.averageRatingByProductId).to.not.equal(null)
       expect(response.body.data.averageRatingByProductId).to.equal(

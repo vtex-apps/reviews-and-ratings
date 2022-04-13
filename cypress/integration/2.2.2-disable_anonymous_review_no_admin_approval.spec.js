@@ -1,22 +1,12 @@
-import { testSetup, updateRetry } from '../support/common/support.js'
+import { testSetup } from '../support/common/support.js'
+import { restrictAnonymousUser } from '../support/testcase.js'
+import { updateSettings } from '../support/review_and_ratings_settings.js'
 import { testCase2 } from '../support/review_and_ratings.outputvalidation'
-import { approveReviews } from '../support/graphql_testcase.js'
 
-const { title, configuration, product, user1 } = testCase2
+const { title, configuration, product } = testCase2
 
-describe(`${title} - Add review in ordered product`, () => {
-  testSetup()
-
-  it(
-    'Go to product detail page, verify default stars and add review',
-    updateRetry(2),
-    () => {
-      cy.openStoreFront(true)
-      cy.addReview(product, configuration.defaultStarsRating, user1)
-    }
-  )
-
-  // If we disable admin approval, review been shown to UI
-  // but review status is still pending so approving it via graphql
-  approveReviews(user1.name)
+describe(`${title} - Anonymous User`, () => {
+  testSetup(false)
+  updateSettings(title, configuration)
+  restrictAnonymousUser(product)
 })

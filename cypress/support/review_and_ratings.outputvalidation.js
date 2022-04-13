@@ -178,7 +178,7 @@ export default {
     anonymousUser1: {
       title: `graphql-${TESTCASE.testCase6}-${ANONYMOUS_USER.a1}`,
       rating: 3,
-      productId: 880030, // coconut product id
+      productId: '880030', // coconut product id
       reviewerName: `graphql-${TESTCASE.testCase6}-${ANONYMOUS_USER.a1}`,
       text: 'Excellent product',
     },

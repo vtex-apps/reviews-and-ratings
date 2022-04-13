@@ -26,7 +26,7 @@ describe(`${title} - Signed user`, () => {
   testSetup()
   updateSettings(title, configuration)
 
-  it('Login & add review', () => {
+  it('Login & add review', updateRetry(3), () => {
     cy.getVtexItems().then(vtex => {
       loginAsUser(vtex.email, vtex.password)
       cy.openStoreFront()

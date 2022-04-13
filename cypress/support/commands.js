@@ -27,8 +27,6 @@ Cypress.Commands.add('openProduct', (product, detailPage = false) => {
 
   if (detailPage) {
     cy.gotoProductDetailPage()
-    // TODO: now reviews works fine without postal code gets loaded
-    // cy.get(rrselectors.PostalCode, { timeout: 20000 }).should('be.visible')
   } else {
     cy.log('Visiting detail page is disabled')
   }
@@ -52,15 +50,10 @@ Cypress.Commands.add(
           }
 
           cy.get(rrselectors.WriteReview, {
-            timeout: 30000,
+            timeout: 20000,
           })
             .should('be.visible')
             .click()
-          // TODO: now reviews works fine without postal code gets loaded
-          // cy.get('div[class*=postalCode]', { timeout: 30000 }).should('be.visible')
-          // cy.get(rrselectors.WriteReview, { timeout: 10000 }).should(
-          //   'be.visible'
-          // )
 
           cy.fillReviewInformation(user, product)
           cy.addReview(product, defaultStarsRating, user, true)
