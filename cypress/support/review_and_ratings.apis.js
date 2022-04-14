@@ -25,6 +25,7 @@ export function addReviewAPI(
   duplicate = false
 ) {
   it(`Add review ${name}`, updateRetry(3), () => {
+    cy.addDelayBetweenRetries(2000)
     cy.getVtexItems().then(vtex => {
       cy.request({
         method: 'POST',
@@ -42,6 +43,7 @@ export function addReviewAPI(
         expect(response.status).to.equal(200)
         if (!duplicate) {
           expect(response.body).to.not.equal('Duplicate Review')
+          expect(response.body).to.contain('-')
           cy.setReviewItem(name, response.body)
         } else {
           expect(response.body).to.equal('Duplicate Review')
