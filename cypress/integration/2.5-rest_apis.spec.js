@@ -21,17 +21,21 @@ describe('Reviews REST API testcases', () => {
   for (const productId of [productId1, productId2]) {
     it(`Delete all the for product ${productId}`, updateRetry(5), () => {
       graphql(getReviews(productId), resp => {
-        const ids = resp.body.data.reviews.data.map(({ id }) => id)
+        const { reviews } = resp.body.data
 
-        performDeleteReviews(ids)
+        if (reviews) {
+          const ids = reviews.data.map(({ id }) => id)
+
+          performDeleteReviews(ids)
+        }
       })
     })
   }
 
   addReviewAPI(productId1, anonymousUser1)
-  getProductRatingsAPI(productId1)
   addReviewAPI(productId1, anonymousUser1, true)
   addReviewAPI(productId2, anonymousUser2)
+  getProductRatingsAPI(productId1)
   retrieveReviewAPI(productId1, anonymousUser1)
   retrieveReviewsListAPI(productId1)
   deleteReview(anonymousUser1)

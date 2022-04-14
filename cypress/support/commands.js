@@ -35,6 +35,7 @@ Cypress.Commands.add('openProduct', (product, detailPage = false) => {
 Cypress.Commands.add(
   'addReview',
   (product, defaultStarsRating, user, reviewSubmitted = false) => {
+    cy.addDelayBetweenRetries(1000)
     // Search the product
     cy.get('body').then($body => {
       graphql(getReviews(PRODUCT_ID_MAPPING[product]), resp => {
