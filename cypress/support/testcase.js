@@ -22,7 +22,7 @@ export function verifyUserIsNotAbletoAddReviewAgain() {
 
 export function verifyFilter(filter, reviews = true) {
   it(
-    `Filter by ${filter} should  ${reviews ? '' : 'not'} show reviews`,
+    `Filter by ${filter} should ${reviews ? '' : 'not'} show reviews`,
     updateRetry(2),
     () => {
       cy.get(rrselectors.selectFilter).select(filter)

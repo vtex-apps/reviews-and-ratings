@@ -29,7 +29,7 @@ base:
     enabled: false
     projectId: xyza
     video: true
-    videoCompression: 32
+    videoCompression: false
     videoUploadOnPasses: false
     screenshotOnRunFailure: true
     trashAssetsBeforeRuns: false

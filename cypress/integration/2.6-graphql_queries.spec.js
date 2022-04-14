@@ -94,7 +94,8 @@ describe('Graphql queries', () => {
     })
   })
 
-  it('Verify get average of product by id query', updateRetry(2), () => {
+  it('Verify get average of product by id query', updateRetry(6), () => {
+    cy.addDelayBetweenRetries(2000)
     graphql(getAverageRatingByProductId(productId), response => {
       expect(response.body.data.averageRatingByProductId).to.not.equal(null)
       expect(response.body.data.averageRatingByProductId).to.equal(
