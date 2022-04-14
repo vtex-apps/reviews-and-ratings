@@ -15,7 +15,6 @@ export function moderateReview(ids) {
 }
 
 export function validateModerateReviewResponse(response) {
-  // console.log(response.body.data)
   expect(response.body.data).to.have.property('moderateReview')
 }
 

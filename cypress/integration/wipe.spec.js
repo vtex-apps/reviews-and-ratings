@@ -3,12 +3,16 @@ import { performDeleteReviews } from '../support/graphql_testcase.js'
 import { updateRetry, testSetup } from '../support/common/support.js'
 
 describe('Wipe the reviews/ratings', () => {
-  testSetup()
+  testSetup(false)
   it('Delete all the reviews/ratings', updateRetry(5), () => {
     graphql(getReviews(''), resp => {
-      const ids = resp.body.data.reviews.data.map(({ id }) => id)
+      const { reviews } = resp.body.data
 
-      performDeleteReviews(ids)
+      if (reviews) {
+        const ids = reviews.data.map(({ id }) => id)
+
+        performDeleteReviews(ids)
+      }
     })
   })
 })

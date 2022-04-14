@@ -33,6 +33,7 @@ describe('Graphql queries', () => {
   it('Verify adding review for product', updateRetry(2), () => {
     graphql(addReviewQuery(anonymousUser1), response => {
       expect(response.body.data.newReview).to.not.equal(null)
+      expect(response.body.data.newReview.id).to.contain('-')
       cy.setReviewItem(title, response.body.data.newReview.id)
     })
   })
