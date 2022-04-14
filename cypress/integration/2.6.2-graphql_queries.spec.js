@@ -15,13 +15,11 @@ import {
   ValidateGetreviewByreviewDateTimeQueryResponse,
   gethasShopperReviewedQuery,
   ValidateHasShopperReviewedResponse,
-  addReviewQuery,
 } from '../support/graphql_queries.js'
 import {
   testCase6,
   testCase1,
 } from '../support/review_and_ratings.outputvalidation.js'
-import { approveReviews } from '../support/graphql_testcase.js'
 
 const { anonymousUser1 } = testCase6
 const { productId, title } = anonymousUser1
@@ -29,15 +27,6 @@ const reviewDateTimeEnv = 'reviewDateTimeEnv'
 
 describe('Graphql queries', () => {
   testSetup(false)
-
-  it('Verify adding review for product', updateRetry(2), () => {
-    graphql(addReviewQuery(anonymousUser1), response => {
-      expect(response.body.data.newReview).to.not.equal(null)
-      cy.setReviewItem(title, response.body.data.newReview.id)
-    })
-  })
-
-  approveReviews(title)
 
   it('Verify reviews by shopperId query', updateRetry(2), () => {
     graphql(getShopperIdQuery(), ValidateShopperIdResponse)

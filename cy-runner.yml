@@ -185,17 +185,29 @@ strategy:
     runInOrder: true
     specs:
       - cypress/integration/2.5-*
-  graphql_api_testcase:
+  graphql_add_and_approve_review_testcase:
     enabled: true
     sendDashboard: false
-    hardTries: 1
+    hardTries: 3
     stopOnFail: false
     parallel: false
     runInOrder: true
     specs:
-      - cypress/integration/2.6-*
+      - cypress/integration/2.6.1-*
     dependency:
       - signed_in_user1
+  graphql_verify_review_testcase:
+    enabled: true
+    sendDashboard: false
+    hardTries: 3
+    stopOnFail: false
+    parallel: false
+    runInOrder: true
+    specs:
+      - cypress/integration/2.6.2-*
+    dependency:
+      - signed_in_user1
+      - graphql_add_and_approve_review_testcase
   display_settings_anonymous_user:
     enabled: true
     sendDashboard: false
