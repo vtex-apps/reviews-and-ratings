@@ -164,7 +164,7 @@ Cypress.Commands.add('openStoreFront', (login = false) => {
   cy.visit('/')
   cy.wait('@events')
   if (login === true) {
-    cy.get(selectors.ProfileLabel)
+    cy.get(selectors.ProfileLabel, { timeout: 20000 })
       .should('be.visible')
       .should('have.contain', `Hello,`)
   }

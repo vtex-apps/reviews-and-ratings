@@ -1,4 +1,8 @@
-import { testSetup, updateRetry } from '../support/common/support.js'
+import {
+  testSetup,
+  updateRetry,
+  preserveCookie,
+} from '../support/common/support.js'
 import { testCase2 } from '../support/review_and_ratings.outputvalidation'
 import { approveReviews } from '../support/graphql_testcase.js'
 
@@ -19,4 +23,6 @@ describe(`${title} - Add review in ordered product`, () => {
   // If we disable admin approval, review been shown to UI
   // but review status is still pending so approving it via graphql
   approveReviews(user1.name)
+
+  preserveCookie()
 })

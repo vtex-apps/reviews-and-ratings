@@ -196,7 +196,7 @@ strategy:
       - cypress/integration/2.6-*
     dependency:
       - signed_in_user1
-  display_settings_enabled_anonymous_user:
+  display_settings_anonymous_user:
     enabled: true
     sendDashboard: false
     hardTries: 1
@@ -211,16 +211,16 @@ strategy:
     hardTries: 1
     stopOnFail: false
     parallel: false
-    runInOrder: false
+    runInOrder: true
     specs:
       - cypress/integration/2.7.2-*
-  display_settings_enabled_signed_in_user:
+  display_settings_signed_in_user:
     enabled: true
     sendDashboard: false
     hardTries: 1
     stopOnFail: false
     parallel: false
-    runInOrder: false
+    runInOrder: true
     specs:
       - cypress/integration/2.7.3-*
   display_settings_disabled_signed_in_user:
@@ -229,6 +229,6 @@ strategy:
     hardTries: 1
     stopOnFail: false
     parallel: false
-    runInOrder: false
+    runInOrder: true
     specs:
       - cypress/integration/2.7.4-*
