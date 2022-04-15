@@ -148,10 +148,6 @@ export function getReviews(searchTerm = false) {
 }
 
 export function getAverageRatingByProductId(productId) {
-  const ob = {
-    productId,
-  }
-
   const query =
     'query' +
     '($productId: String!)' +
@@ -159,7 +155,9 @@ export function getAverageRatingByProductId(productId) {
 
   return {
     query,
-    queryVariables: ob,
+    queryVariables: {
+      productId,
+    },
   }
 }
 

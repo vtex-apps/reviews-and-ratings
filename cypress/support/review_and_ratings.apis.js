@@ -39,6 +39,7 @@ export function addReviewAPI(
           Title: name,
           Text: review,
         },
+        ...FAIL_ON_STATUS_CODE,
       }).then(response => {
         expect(response.status).to.equal(200)
         if (!duplicate) {
@@ -57,15 +58,14 @@ export function retrieveReviewAPI(product, { name }) {
   it(`Retrieve review ${name}`, updateRetry(5), () => {
     cy.getVtexItems().then(vtex => {
       cy.getReviewItems().then(review => {
-        cy.getAPI(ratingsAPI(vtex.baseUrl, `review/${review[name]}`), {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        }).then(response => {
-          expect(response.status).to.equal(200)
-          expect(response.body).to.not.equal(null)
-          expect(response.body.productId).to.equal(product.toString())
-          cy.setReviewItem(`${name}-review`, response.body)
-        })
+        cy.getAPI(ratingsAPI(vtex.baseUrl, `review/${review[name]}`)).then(
+          response => {
+            expect(response.status).to.equal(200)
+            expect(response.body).to.not.equal(null)
+            expect(response.body.productId).to.equal(product.toString())
+            cy.setReviewItem(`${name}-review`, response.body)
+          }
+        )
       })
     })
   })
@@ -77,10 +77,9 @@ export function retrieveReviewsListAPI(productId) {
     updateRetry(4),
     () => {
       cy.getVtexItems().then(vtex => {
-        cy.getAPI(ratingsAPI(vtex.baseUrl, `reviews?product_id=${productId}`), {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        }).then(response => {
+        cy.getAPI(
+          ratingsAPI(vtex.baseUrl, `reviews?product_id=${productId}`)
+        ).then(response => {
           expect(response.status).to.equal(200)
           expect(response.body).to.not.equal(null)
         })

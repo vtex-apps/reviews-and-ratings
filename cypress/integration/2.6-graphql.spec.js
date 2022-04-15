@@ -44,8 +44,14 @@ describe('Graphql queries', () => {
     graphql(getShopperIdQuery(), ValidateShopperIdResponse)
   })
 
-  it('Verify hasShopperReviewed', updateRetry(2), () => {
-    graphql(gethasShopperReviewedQuery(), ValidateHasShopperReviewedResponse)
+  it('Verify get average of product by id query', updateRetry(6), () => {
+    cy.addDelayBetweenRetries(2000)
+    graphql(getAverageRatingByProductId(productId), response => {
+      expect(response.body.data.averageRatingByProductId).to.not.equal(null)
+      expect(response.body.data.averageRatingByProductId).to.equal(
+        anonymousUser1.rating
+      )
+    })
   })
 
   it('Verify total reviews of product by id query', updateRetry(2), () => {
@@ -65,6 +71,10 @@ describe('Graphql queries', () => {
         expect(response.body.data.review).to.not.equal(null)
       })
     })
+  })
+
+  it('Verify hasShopperReviewed', updateRetry(2), () => {
+    graphql(gethasShopperReviewedQuery(), ValidateHasShopperReviewedResponse)
   })
 
   it('Verify get review for review created via UI', updateRetry(2), () => {
@@ -91,16 +101,6 @@ describe('Graphql queries', () => {
       graphql(
         getreviewByreviewDateTimeQuery(review[reviewDateTimeEnv]),
         ValidateGetreviewByreviewDateTimeQueryResponse
-      )
-    })
-  })
-
-  it('Verify get average of product by id query', updateRetry(6), () => {
-    cy.addDelayBetweenRetries(2000)
-    graphql(getAverageRatingByProductId(productId), response => {
-      expect(response.body.data.averageRatingByProductId).to.not.equal(null)
-      expect(response.body.data.averageRatingByProductId).to.equal(
-        anonymousUser1.rating
       )
     })
   })
