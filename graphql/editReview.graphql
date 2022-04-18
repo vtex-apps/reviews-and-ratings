@@ -1,4 +1,4 @@
-mutation EditReview($id: String!, $review: ReviewInput!) {
+mutation EditReview($id: String!, $review: EditReviewInput!) {
   editReview(id: $id, review: $review) {
     id
     productId

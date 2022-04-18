@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Create the EditReviewInputType for the editReview mutation.
+- Set default values to from and to variables in the graphQL schema.
+
 ## [3.8.4] - 2022-04-08
 
 ### Fixed
