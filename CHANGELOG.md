@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.8.5] - 2022-04-18
+
 ### Fixed
 
 - Create the EditReviewInputType for the editReview mutation.
