@@ -96,11 +96,13 @@ const reducer = (state: State, action: ReducerActions) => {
         ...state,
         location: action.args.location,
       }
+
     case 'SET_LOCALE':
       return {
         ...state,
         locale: action.args.locale,
       }
+
     case 'SET_NAME':
       return {
         ...state,
@@ -221,6 +223,7 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
   const { productId } = product ?? {}
 
   let defaultRating = 5
+
   if (settings?.defaultStarsRating !== undefined) {
     defaultRating = settings?.defaultStarsRating
   }
@@ -230,7 +233,7 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
     title: '',
     text: '',
     location: '',
-    locale: '',
+    locale: null,
     reviewerName: '',
     shopperId: '',
     reviewSubmitted: false,
@@ -375,7 +378,7 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
               title: state.title,
               text: state.text,
               reviewerName: state.reviewerName,
-              locale: state.locale,
+              locale: state.locale ?? null,
             },
           },
         })
