@@ -188,7 +188,7 @@ strategy:
   graphql_api_testcase:
     enabled: true
     sendDashboard: false
-    hardTries: 3
+    hardTries: 5
     stopOnFail: false
     parallel: false
     runInOrder: true
