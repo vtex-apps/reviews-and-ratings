@@ -61,8 +61,8 @@ type Query {
   review(id: ID!): Review
   reviews(
     searchTerm: String
-    from: Int
-    to: Int
+    from: Int = 0
+    to: Int = 9
     orderBy: String
     status: String
   ): ReviewsResult
@@ -71,8 +71,8 @@ type Query {
     rating: Int
     locale: String
     pastReviews: Boolean
-    from: Int
-    to: Int
+    from: Int = 0
+    to: Int = 9
     orderBy: String
     status: String
   ): ReviewsResult
@@ -80,15 +80,15 @@ type Query {
   totalReviewsByProductId(productId: String!): Int
   reviewsByShopperId(
     shopperId: String!
-    from: Int
-    to: Int
+    from: Int = 0
+    to: Int = 9
     orderBy: String
     status: String
   ): ReviewsResult
   reviewByreviewDateTime(
     reviewDateTime: String!
-    from: Int
-    to: Int
+    from: Int = 0
+    to: Int = 9
     orderBy: String
     status: String
   ): ReviewsResult

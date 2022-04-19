@@ -29,7 +29,7 @@ namespace ReviewsRatings.GraphQL
                 "editReview",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>> {Name = "id"},
-                    new QueryArgument<NonNullGraphType<ReviewInputType>> {Name = "review"}
+                    new QueryArgument<NonNullGraphType<EditReviewInputType>> {Name = "review"}
                 ),
                 resolve: context =>
                 {

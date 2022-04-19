@@ -43,7 +43,7 @@ namespace ReviewsRatings.GraphQL
                 {
                     string searchTerm = context.GetArgument<string>("searchTerm");
                     int from = context.GetArgument<int>("from");
-                    int to = context.GetArgument<int>("to");
+                    int to = context.GetArgument<int>("to") + 1;
                     string orderBy = context.GetArgument<string>("orderBy");
                     string status = context.GetArgument<string>("status");
                     var searchResult = await productReviewService.GetReviews(searchTerm, from, to, orderBy, status);
@@ -78,7 +78,7 @@ namespace ReviewsRatings.GraphQL
                     bool pastReviews = context.GetArgument<bool>("pastReviews");
                     string searchTerm = context.GetArgument<string>("searchTerm");
                     int from = context.GetArgument<int>("from");
-                    int to = context.GetArgument<int>("to");
+                    int to = context.GetArgument<int>("to") + 1;
                     string orderBy = context.GetArgument<string>("orderBy");
                     string status = context.GetArgument<string>("status");
 
@@ -143,7 +143,7 @@ namespace ReviewsRatings.GraphQL
                     string shopperId = context.GetArgument<string>("shopperId");
                     string searchTerm = context.GetArgument<string>("searchTerm");
                     int from = context.GetArgument<int>("from");
-                    int to = context.GetArgument<int>("to");
+                    int to = context.GetArgument<int>("to") + 1;
                     string orderBy = context.GetArgument<string>("orderBy");
                     string status = context.GetArgument<string>("status");
 
