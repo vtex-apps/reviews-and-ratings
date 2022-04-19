@@ -86,7 +86,7 @@ describe('Graphql queries', () => {
     })
   })
 
-  it('Verify reviewByreviewDateTime query', updateRetry(2), () => {
+  it.skip('Verify reviewByreviewDateTime query', updateRetry(2), () => {
     cy.getReviewItems().then(review => {
       graphql(
         getreviewByreviewDateTimeQuery(review[reviewDateTimeEnv]),
