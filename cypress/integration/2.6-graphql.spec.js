@@ -16,6 +16,7 @@ import {
   gethasShopperReviewedQuery,
   ValidateHasShopperReviewedResponse,
   addReviewQuery,
+  editReview,
 } from '../support/graphql_queries.js'
 import {
   testCase6,
@@ -23,7 +24,7 @@ import {
 } from '../support/review_and_ratings.outputvalidation.js'
 import { approveReviews } from '../support/graphql_testcase.js'
 
-const { anonymousUser1 } = testCase6
+const { anonymousUser1, anonymousUser2 } = testCase6
 const { productId, title } = anonymousUser1
 const reviewDateTimeEnv = 'reviewDateTimeEnv'
 
@@ -63,6 +64,18 @@ describe('Graphql queries', () => {
     })
   })
 
+  it(
+    'Verify edit review for review created via graphql',
+    updateRetry(2),
+    () => {
+      cy.getReviewItems().then(review => {
+        graphql(editReview(review[title], anonymousUser2), response => {
+          expect(response.body.data.review).to.not.equal(null)
+        })
+      })
+    }
+  )
+
   it('Verify hasShopperReviewed', updateRetry(2), () => {
     graphql(gethasShopperReviewedQuery(), ValidateHasShopperReviewedResponse)
   })
@@ -100,7 +113,7 @@ describe('Graphql queries', () => {
     graphql(getAverageRatingByProductId(productId), response => {
       expect(response.body.data.averageRatingByProductId).to.not.equal(null)
       expect(response.body.data.averageRatingByProductId).to.equal(
-        anonymousUser1.rating
+        anonymousUser2.rating
       )
     })
   })

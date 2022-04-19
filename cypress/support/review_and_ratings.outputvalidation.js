@@ -182,5 +182,10 @@ export default {
       reviewerName: `graphql-${TESTCASE.testCase6}-${ANONYMOUS_USER.a1}`,
       text: 'Excellent product',
     },
+    anonymousUser2: {
+      rating: 5,
+      productId: '880030', // coconut product id
+      text: 'Good product',
+    },
   },
 }

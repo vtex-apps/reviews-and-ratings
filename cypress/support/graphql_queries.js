@@ -217,3 +217,18 @@ export function addReviewQuery(review) {
     },
   }
 }
+
+export function editReview(reviewId, review) {
+  const query =
+    'mutation' +
+    '($id: String!, $review:EditReviewInput!)' +
+    '{editReview(id:$id,review: $review){id}}'
+
+  return {
+    query,
+    queryVariables: {
+      id: reviewId,
+      review,
+    },
+  }
+}
