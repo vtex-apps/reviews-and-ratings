@@ -9,7 +9,7 @@ export interface Review {
   reviewerName: string
   shopperId: string
   location: string
-  locale: string
+  locale: string | null
   reviewDateTime: string
   verifiedPurchaser: boolean
   sku: string
