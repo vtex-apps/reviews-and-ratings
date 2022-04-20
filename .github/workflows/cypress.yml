@@ -27,6 +27,7 @@ concurrency:
 jobs:
   Cypress:
     runs-on: ubuntu-latest
+    if: ${{ github.actor != 'dependabot[bot]' }}
     steps:
       - name: Install Chrome
         uses: browser-actions/setup-chrome@latest
