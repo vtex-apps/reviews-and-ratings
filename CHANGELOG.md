@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.8.6] - 2022-04-19
+
+### Fixed
+
+- Fixed newReview mutation to avoid locale equal to "".
+
 ## [3.8.5] - 2022-04-18
 
 ### Fixed
