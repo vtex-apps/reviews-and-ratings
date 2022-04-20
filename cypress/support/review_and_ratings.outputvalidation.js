@@ -172,6 +172,26 @@ export default {
       review: 'Excellent Product',
       average: 4,
     },
+    addReviews: [
+      {
+        ProductId: 880030,
+        Rating: 4,
+        Title: 'test multiple reviews',
+        Text: 'test multiple reviews',
+        reviewerName: 'Syed',
+        Approved: false,
+        VerifiedPurchaser: false,
+      },
+      {
+        ProductId: 880031,
+        Rating: 4,
+        Title: 'test review 2 multiple reviews',
+        Text: 'test review 2 multiple reviews',
+        reviewerName: 'Syed',
+        Approved: false,
+        VerifiedPurchaser: false,
+      },
+    ],
   },
   testCase6: {
     product: PRODUCTS.coconut,

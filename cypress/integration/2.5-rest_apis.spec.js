@@ -6,14 +6,17 @@ import {
   retrieveReviewAPI,
   retrieveReviewsListAPI,
   editReview,
+  addReviewsAPI,
 } from '../support/review_and_ratings.apis'
 import { testCase5 } from '../support/review_and_ratings.outputvalidation.js'
 import { testSetup, updateRetry } from '../support/common/support.js'
 import { graphql, getReviews } from '../support/graphql_queries.js'
 import { performDeleteReviews } from '../support/graphql_testcase.js'
 
-const { productId1, productId2, anonymousUser1, anonymousUser2 } = testCase5
+const { productId1, productId2, anonymousUser1, anonymousUser2, addReviews } =
+  testCase5
 const patchReviewEnv = 'patchReviewEnv'
+const addReviewsEnv = 'addReviewsEnv'
 
 describe('Reviews REST API testcases', () => {
   testSetup(false)
@@ -34,6 +37,7 @@ describe('Reviews REST API testcases', () => {
 
   addReviewAPI(productId1, anonymousUser1)
   addReviewAPI(productId2, anonymousUser2)
+  addReviewsAPI(addReviews, addReviewsEnv)
   addReviewAPI(productId1, anonymousUser1, true)
   getProductRatingsAPI(productId1)
   retrieveReviewAPI(productId1, anonymousUser1)
@@ -42,5 +46,8 @@ describe('Reviews REST API testcases', () => {
   retrieveReviewAPI(productId2, anonymousUser2)
   editReview(anonymousUser2, patchReviewEnv)
   addReviewAPI(productId1, anonymousUser1)
-  deleteReviews(anonymousUser2, anonymousUser1, patchReviewEnv)
+  deleteReviews(anonymousUser2, anonymousUser1, {
+    patchReviewEnv,
+    addReviewsEnv,
+  })
 })

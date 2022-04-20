@@ -54,6 +54,29 @@ export function addReviewAPI(
   })
 }
 
+export function addReviewsAPI(reviews, env) {
+  it(`Adding multuple reviews`, updateRetry(3), () => {
+    cy.addDelayBetweenRetries(2000)
+    cy.getVtexItems().then(vtex => {
+      cy.request({
+        method: 'POST',
+        url: ratingsAPI(vtex.baseUrl, 'reviews'),
+        headers: {
+          ...VTEX_AUTH_HEADER(vtex.apiKey, vtex.apiToken),
+        },
+        body: reviews,
+        ...FAIL_ON_STATUS_CODE,
+      }).then(response => {
+        expect(response.status).to.equal(200)
+        // eslint-disable-next-line array-callback-return
+        response.body.map((review, i) => {
+          cy.setReviewItem(env + i, review)
+        })
+      })
+    })
+  })
+}
+
 export function retrieveReviewAPI(product, { name }) {
   it(`Retrieve review ${name}`, updateRetry(5), () => {
     cy.getVtexItems().then(vtex => {
@@ -108,14 +131,18 @@ export function deleteReview({ name }) {
   })
 }
 
-export function deleteReviews(user1, user2, user3) {
+export function deleteReviews(user1, user2, env) {
   it('Delete multiple reviews', updateRetry(5), () => {
+    const { patchReviewEnv, addReviewsEnv } = env
+
     cy.getVtexItems().then(vtex => {
       cy.getReviewItems().then(review => {
         const reviewIds = [
           review[user1.name],
           review[user2.name],
-          review[user3],
+          review[patchReviewEnv],
+          review[addReviewsEnv + 0],
+          review[addReviewsEnv + 1],
         ]
 
         cy.request({
