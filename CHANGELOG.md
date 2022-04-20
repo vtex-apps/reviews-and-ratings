@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Update reviews list without refresh the page when save a new review.
+- Set a default value as 5 if the reviews has no rating.
+- Fix the time of the review in case of invalid date.
+
 ## [3.8.8] - 2022-04-22
 
 ### Fixed

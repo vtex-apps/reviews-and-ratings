@@ -16,6 +16,7 @@ import {
   // Button,
 } from 'vtex.styleguide'
 
+import type { Review } from './typings'
 import Stars from './components/Stars'
 import ReviewForm from './ReviewForm'
 import AppSettings from '../graphql/appSettings.graphql'
@@ -24,20 +25,6 @@ import AverageRatingByProductId from '../graphql/averageRatingByProductId.graphq
 import ReviewsGraph from './ReviewsGraph'
 import { getBaseUrl } from './utils/baseUrl'
 import getBindings from './queries/bindings.graphql'
-
-interface Review {
-  approved: boolean
-  id: string
-  productId: string
-  rating: number
-  locale: string | null
-  title: string
-  text: string
-  location: string | null
-  reviewerName: string
-  reviewDateTime: string
-  verifiedPurchaser: boolean
-}
 
 interface Range {
   total: number
@@ -478,17 +465,9 @@ function Reviews() {
   }))
 
   const getTimeAgo = (time: string) => {
-    const newTime = new Date(time)
-    const before = new Date(
-      Date.UTC(
-        newTime.getUTCFullYear(),
-        newTime.getUTCMonth(),
-        newTime.getUTCDate(),
-        newTime.getUTCHours(),
-        newTime.getUTCMinutes(),
-        newTime.getUTCSeconds()
-      )
-    )
+    const newTime = new Date(`${time} UTC`)
+    const before =
+      newTime.toString() === 'Invalid Date' ? new Date(time) : newTime
 
     const now = new Date()
     const diff = new Date(now.valueOf() - before.valueOf())
@@ -740,7 +719,11 @@ function Reviews() {
             }}
             isOpen={state.showForm}
           >
-            <ReviewForm settings={state.settings} />
+            <ReviewForm
+              settings={state.settings}
+              reviewsDispatch={dispatch}
+              reviewsState={state}
+            />
           </Collapsible>
         ) : (
           <Link
@@ -817,7 +800,7 @@ function Reviews() {
                         review: {
                           '@type': 'Review',
                           reviewRating: {
-                            ratingValue: review.rating.toString(),
+                            ratingValue: review?.rating?.toString() || '5',
                             bestRating: '5',
                           },
                           author: {
