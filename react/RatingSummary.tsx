@@ -230,7 +230,7 @@ function RatingSummary() {
 
   return (
     <div className={`${handles.summaryContainer} review-summary mw8 center`}>
-      {!state.hasTotal || !state.hasAverage ? (
+      {!productId || !state.hasTotal || !state.hasAverage ? (
         <Fragment>{intl.formatMessage(messages.loadingReviews)}</Fragment>
       ) : state.total === 0 && !state.settings.displaySummaryIfNone ? null : (
         <Fragment>
