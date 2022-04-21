@@ -118,6 +118,7 @@ input ReviewInput {
   reviewerName: String
   reviewDateTime: String
   sku: String
+  approved: Boolean
 }
 
 input EditReviewInput {

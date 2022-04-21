@@ -379,6 +379,7 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
               text: state.text,
               reviewerName: state.reviewerName,
               locale: state.locale ?? null,
+              approved: !settings?.requireApproval,
             },
           },
         })
