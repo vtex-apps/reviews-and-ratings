@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.8.7] - 2022-04-21
+
 ### Fixed
 
 -If adminApproval is false set approved to true when save review.
