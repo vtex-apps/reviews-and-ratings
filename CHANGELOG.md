@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Render loading message before product page completely loads.
+
 ## [3.8.7] - 2022-04-21
 
 ### Fixed
