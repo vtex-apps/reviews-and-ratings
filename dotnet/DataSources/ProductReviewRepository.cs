@@ -647,6 +647,10 @@
             IList<Review> reviews = new List<Review>();
             DateTime dtFromDate = DateTime.Parse(fromDate);
             fromDate = dtFromDate.ToString("yyyy-MM-ddTHH:mm:ssZ");
+            if (!toDate.Contains(" ")) 
+            {
+                toDate = toDate + " 23:59:59";
+            }
             DateTime dtToDate = DateTime.Parse(toDate);
             toDate = dtToDate.ToString("yyyy-MM-ddTHH:mm:ssZ");
             string total = "0";
