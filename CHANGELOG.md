@@ -6,6 +6,32 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.8.9] - 2022-04-22
+
+### Fixed
+
+- Update reviews list without refresh the page when save a new review.
+- Set a default value as 5 if the reviews has no rating.
+- Fix the time of the review in case of invalid date.
+
+## [3.8.8] - 2022-04-22
+
+### Fixed
+
+- Render loading message before product page completely loads.
+
+## [3.8.7] - 2022-04-21
+
+### Fixed
+
+-If adminApproval is false set approved to true when save review.
+
+## [3.8.6] - 2022-04-19
+
+### Fixed
+
+- Fixed newReview mutation to avoid locale equal to "".
+
 ## [3.8.5] - 2022-04-18
 
 ### Fixed

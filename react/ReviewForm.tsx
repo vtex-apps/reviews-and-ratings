@@ -7,6 +7,7 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 import { useCssHandles } from 'vtex.css-handles'
 import { Card, Input, Button, Textarea } from 'vtex.styleguide'
 
+import type { Review } from './typings'
 import getOrders from './queries/orders.graphql'
 import NewReview from '../graphql/newReview.graphql'
 import HasShopperReviewed from '../graphql/hasShopperReviewed.graphql'
@@ -96,11 +97,13 @@ const reducer = (state: State, action: ReducerActions) => {
         ...state,
         location: action.args.location,
       }
+
     case 'SET_LOCALE':
       return {
         ...state,
         locale: action.args.locale,
       }
+
     case 'SET_NAME':
       return {
         ...state,
@@ -211,7 +214,15 @@ const CSS_HANDLES = [
   'formInvalidMessage',
 ] as const
 
-export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
+export function ReviewForm({
+  settings,
+  reviewsDispatch,
+  reviewsState,
+}: {
+  settings?: Partial<AppSettings>
+  reviewsDispatch?: any
+  reviewsState?: any
+}) {
   const client = useApolloClient()
   const intl = useIntl()
 
@@ -221,6 +232,7 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
   const { productId } = product ?? {}
 
   let defaultRating = 5
+
   if (settings?.defaultStarsRating !== undefined) {
     defaultRating = settings?.defaultStarsRating
   }
@@ -230,7 +242,7 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
     title: '',
     text: '',
     location: '',
-    locale: '',
+    locale: null,
     reviewerName: '',
     shopperId: '',
     reviewSubmitted: false,
@@ -375,11 +387,46 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
               title: state.title,
               text: state.text,
               reviewerName: state.reviewerName,
-              locale: state.locale,
+              locale: state.locale ?? null,
+              approved: !settings?.requireApproval,
             },
           },
         })
-        .then(() => {
+        .then(res => {
+          if (res.data.newReview.id) {
+            const { newReview } = res.data
+            const reviews = [newReview, ...reviewsState.reviews]
+            const { total } = reviewsState
+            const graphArray = [0, 0, 0, 0, 0, 0]
+            const average =
+              reviews.reduce(
+                (acc, review) => Number(acc) + Number(review.rating),
+                0
+              ) /
+              (Number(total) + 1)
+
+            graphArray[0] = total
+
+            reviews.forEach((review: Review) => {
+              const thisRating = review.rating
+
+              graphArray[thisRating] += 1
+            })
+
+            reviewsDispatch({
+              type: 'SET_REVIEWS',
+              args: {
+                reviews: [newReview, ...reviewsState.reviews],
+                total: ++reviewsState.total,
+                graphArray,
+              },
+            })
+            reviewsDispatch({
+              type: 'SET_AVERAGE',
+              args: { average: average.toFixed(2) },
+            })
+          }
+
           dispatch({
             type: 'SET_SUBMITTED',
           })
