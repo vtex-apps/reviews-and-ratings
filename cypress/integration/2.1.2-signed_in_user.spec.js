@@ -6,6 +6,7 @@ import {
 import { approveReviews } from '../support/graphql_testcase.js'
 import { testCase1 } from '../support/review_and_ratings.outputvalidation.js'
 import { updateSettings } from '../support/review_and_ratings_settings.js'
+import { reviewTestCase } from '../support/testcase.js'
 
 const { title, configuration, product, anonymousUser1, anonymousUser2, user1 } =
   testCase1
@@ -25,7 +26,7 @@ describe(title, () => {
     // If we disable admin approval, review been shown to UI
     // but review status is still pending so approving it via graphql
     approveReviews(anonymousUser1.name, anonymousUser2.name, user1.name)
-
+    reviewTestCase(testCase1, true)
     preserveCookie()
   })
 })

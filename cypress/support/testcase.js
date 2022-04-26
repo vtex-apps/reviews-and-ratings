@@ -1,6 +1,6 @@
 import { testSetup, updateRetry } from './common/support.js'
 import rrselectors from './reviews_and_ratings.selectors.js'
-import { reload } from './utils.js'
+// import { reload } from './utils.js'
 import { reviewsAndRatingsConstants } from './reviews_and_ratings.constants.js'
 
 export function restrictAnonymousUser(product) {
@@ -81,8 +81,9 @@ export function reviewTestCase({ otherProduct }, user = false) {
   const title = user ? 'signed in' : 'anonymous'
 
   it(`Validate user added comments shown to this ${title} user`, () => {
-    reload()
-    cy.openProduct(otherProduct, true)
+    cy.log(otherProduct)
+    // reload()
+    // cy.openProduct(otherProduct, true)
     cy.get('h5').should('not.contain', 'No reviews.')
   })
 }
