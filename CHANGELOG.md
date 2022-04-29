@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-- Added and updated API documentation to readme file.
+- Updated readme file for API documentation and graphQL endpoints.
 
 ## [3.8.10] - 2022-05-04
 
