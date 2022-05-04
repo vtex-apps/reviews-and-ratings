@@ -81,7 +81,7 @@ strategy:
     parallel: true
     specs:
       - cypress/integration/2.1.1-anonymous_user*
-      - cypress/integration/2.1.2-signed*
+      - cypress/integration/2.1.2-*
     dependency:
       - cypress/integration/wipe.spec.js
   verify_testcase1:
@@ -94,7 +94,7 @@ strategy:
       - cypress/integration/2.1.3-verify*
     dependency:
       - cypress/integration/2.1.1-anonymous_user*
-      - cypress/integration/2.1.2-signed*
+      - cypress/integration/2.1.2-*
   parallel_tests:
     enabled: true
     sendDashboard: true
@@ -107,7 +107,7 @@ strategy:
       - cypress/integration/2.6-*
     dependency:
       - cypress/integration/wipe.spec.js
-      - cypress/integration/2.1.2-signed*
+      - cypress/integration/2.1.2-*
   # Disable Anonymous review with no admin approval
   disable_anonymous_review_with_no_admin_approval:
     enabled: true
@@ -119,7 +119,7 @@ strategy:
       - cypress/integration/2.2.2-anonymous_user*
       - cypress/integration/2.2.3-signed*
     dependency:
-      - cypress/integration/2.1.2-signed*
+      - cypress/integration/2.1.2-*
       - cypress/integration/2.1.3-verify*
       - cypress/integration/2.2.1-*
   verify_testcase2:
