@@ -204,7 +204,8 @@ strategy:
     parallel: false
     runInOrder: true
     specs:
-      - cypress/integration/2.6-*
+      - cypress/integration/2.6.1-*
+      - cypress/integration/2.6.2-*
     dependency:
       - cypress/integration/2.1.2-*
       - cypress/integration/2.1.3-*
