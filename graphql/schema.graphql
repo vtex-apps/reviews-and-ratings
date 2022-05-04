@@ -92,6 +92,7 @@ type Query {
     orderBy: String
     status: String
   ): ReviewsResult
+    @deprecated(reason: "This query was deprecated, please use reviewByDateRange instead.")
   reviewByDateRange(
     fromDate: String!
     toDate: String!

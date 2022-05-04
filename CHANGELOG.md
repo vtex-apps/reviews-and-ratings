@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Deprecate the reviewByDateTime graphQL service.
+- Set a default time to 23:59:59 in reviewByDateRange if no time received in toDate param.
+
 ## [3.8.9] - 2022-04-22
 
 ### Fixed
