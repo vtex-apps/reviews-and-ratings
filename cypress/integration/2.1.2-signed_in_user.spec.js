@@ -15,10 +15,14 @@ describe(title, () => {
   describe(`Signed in User`, () => {
     testSetup()
 
-    it('Adding review to product with location', updateRetry(2), () => {
-      cy.openStoreFront(true)
-      cy.addReview(product, configuration.defaultStarsRating, user1)
-    })
+    it(
+      'Signed User - Adding review to product with location',
+      updateRetry(2),
+      () => {
+        cy.openStoreFront(true)
+        cy.addReview(product, configuration.defaultStarsRating, user1)
+      }
+    )
 
     preserveCookie()
   })

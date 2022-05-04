@@ -12,13 +12,17 @@ describe(title, () => {
 
   describe('Anonymous User', () => {
     testSetup(false)
-    it('Adding review to product with location', updateRetry(2), () => {
-      cy.openStoreFront()
-      cy.addReview(product, configuration.defaultStarsRating, anonymousUser1)
-    })
+    it(
+      'Anonymous user - Adding review to product with location',
+      updateRetry(2),
+      () => {
+        cy.openStoreFront()
+        cy.addReview(product, configuration.defaultStarsRating, anonymousUser1)
+      }
+    )
 
     it(
-      'Verify anonymous user is able to add review again without location',
+      'Anonymous user - Verify anonymous user is able to add review again without location',
       updateRetry(2),
       () => {
         reload(anonymousUser2)
