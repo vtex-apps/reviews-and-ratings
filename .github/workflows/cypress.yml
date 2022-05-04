@@ -10,6 +10,10 @@ on:
       - synchronize
       - reopened
       - ready_for_review
+    paths-ignore: 
+      - docs/**
+      - README.md     
+      - CHANGELOG.md
   workflow_dispatch:
     inputs:
       branch:
@@ -18,7 +22,7 @@ on:
         default: master
   schedule:
     # 8:00 AM UTC = 4:00 AM EDT
-    - cron: "0 8 * * *"
+    - cron: "0 8 * * MON-FRI"
 
 concurrency:
   group: ${{ github.workflow }}
