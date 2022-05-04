@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.8.10] - 2022-05-04
+
 ### Fixed
 
 - Deprecate the reviewByDateTime graphQL service.
