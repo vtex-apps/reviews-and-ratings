@@ -155,7 +155,7 @@ In order to apply CSS customizations in this and other blocks, follow the instru
 | `writeReviewButton`       |
 
 # Rest APIs
-In order to see how to use the list of REST APIs go to [Reviews and Ratings API catalog](https://developers.vtex.com/vtex-rest-api/reference/reviews-and-ratings-api-overview).
+In order to see how to use the list of REST APIs go to [Reviews and Ratings API overview](https://developers.vtex.com/vtex-rest-api/reference/reviews-and-ratings-api-overview).
 
 # GraphQL IDE
 In order to see how to use the graphQL queries and mutations you can go through the next steps:
