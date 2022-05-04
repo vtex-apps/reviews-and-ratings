@@ -120,7 +120,7 @@ strategy:
       - cypress/integration/2.2.3-signed*
     dependency:
       - cypress/integration/2.1.2-signed*
-      - cypress/integration/2.1.3-order*
+      - cypress/integration/2.1.3-verify*
       - cypress/integration/2.2.1-order*
   verify_testcase2:
     enabled: true
