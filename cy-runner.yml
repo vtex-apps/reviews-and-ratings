@@ -27,8 +27,11 @@ base:
     devMode: false
     runHeaded: false
     enabled: false
-    projectId: xyza
-    video: true
+    projectId: 964exx
+    getCookies: true
+    maxJobs: 1
+    quiet: true
+    video: false
     videoCompression: false
     videoUploadOnPasses: false
     screenshotOnRunFailure: true
