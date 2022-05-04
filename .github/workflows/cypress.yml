@@ -58,6 +58,7 @@ jobs:
         env:
           VTEX_QE: ${{ secrets.VTEX_QE }}
           NODE_NO_WARNINGS: 1
+          DEBUG: cypress:server:util:process_profiler
 
       - name: Save results
         uses: actions/upload-artifact@master
