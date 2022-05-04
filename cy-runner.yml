@@ -30,7 +30,7 @@ base:
     maxJobs: 3
     quiet: true
     projectId: 964exx
-    video: true
+    video: false
     videoCompression: false
     videoUploadOnPasses: false
     screenshotOnRunFailure: true
