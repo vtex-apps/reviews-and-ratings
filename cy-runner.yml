@@ -55,7 +55,8 @@ workspace:
   wipe:
     enabled: true
     stopOnFail: false
-    spec: cypress/integration/wipe.spec.js
+    specs: 
+    - cypress/integration/wipe.spec.js
   teardown:
     enabled: true
 
