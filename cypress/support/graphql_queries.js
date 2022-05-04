@@ -28,6 +28,7 @@ export function graphql(getQuery, validateResponseFn = null) {
     cy.get('@RESPONSE').then(response => {
       expect(response.status).to.equal(200)
       expect(response.body.data).to.not.equal(null)
+      expect(response.body).to.not.have.own.property('errors')
       validateResponseFn(response)
     })
   } else {
@@ -151,7 +152,7 @@ export function getAverageRatingByProductId(productId) {
   const query =
     'query' +
     '($productId: String!)' +
-    '{ averageRatingByProductId(productId: $productId)}'
+    '{averageRatingByProductId(productId: $productId)}'
 
   return {
     query,
