@@ -29,7 +29,7 @@ base:
     getCookies: true
     maxJobs: 3
     quiet: true
-    projectId: xyza
+    projectId: 964exx
     video: true
     videoCompression: false
     videoUploadOnPasses: false
@@ -76,11 +76,10 @@ strategy:
   # Enable Anonymous review with no admin approval
   anonymous_user1:
     enabled: true
-    sendDashboard: false
+    sendDashboard: true
     hardTries: 1
     stopOnFail: false
     parallel: true
-    runInOrder: true
     specs:
       - cypress/integration/2.1.1-*
       - cypress/integration/2.1.2-*
@@ -103,7 +102,6 @@ strategy:
     hardTries: 1
     stopOnFail: false
     parallel: true
-    runInOrder: true
     specs:
       - cypress/integration/2.2.1-*
     dependency:
@@ -114,8 +112,7 @@ strategy:
     sendDashboard: false
     hardTries: 1
     stopOnFail: false
-    parallel: false
-    runInOrder: true
+    parallel: true
     specs:
       - cypress/integration/2.2.2-*
       - cypress/integration/2.2.3-*
@@ -186,7 +183,6 @@ strategy:
     hardTries: 3
     stopOnFail: false
     parallel: true
-    runInOrder: true
     specs:
       - cypress/integration/2.5-*
   graphql_api_testcase:
