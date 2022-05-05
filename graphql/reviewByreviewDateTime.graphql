@@ -1,27 +1,34 @@
 query ReviewByreviewDateTime(
   $reviewDateTime: String!
-  $offset: Int
-  $limit: Int
+  $from: Int
+  $to: Int
   $orderBy: String
   $status: String
 ) {
   reviewByreviewDateTime(
     reviewDateTime: $reviewDateTime
-    offset: $offset
-    limit: $limit
-    orderBy: $orderBy
+    from: $from,
+    to: $to,
+    orderBy: $orderBy,
     status: $status
   ) {
-    id
-    productId
-    rating
-    title
-    text
-    reviewerName
-    location
-    locale
-    shopperId
-    reviewDateTime
-    verifiedPurchaser
+    data {
+      id
+      productId
+      rating
+      title
+      text
+      reviewerName
+      location
+      locale
+      shopperId
+      reviewDateTime
+      verifiedPurchaser
+    }
+    range {
+      total
+      from
+      to
+    }
   }
 }
