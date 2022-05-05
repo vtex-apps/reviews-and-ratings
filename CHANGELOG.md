@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.8.11] - 2022-05-05
+
+### Added
+
+- Updated readme file for API documentation and graphQL endpoints.
+
 ## [3.8.10] - 2022-05-04
 
 ### Fixed

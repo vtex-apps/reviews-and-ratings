@@ -154,6 +154,20 @@ In order to apply CSS customizations in this and other blocks, follow the instru
 | `writeReviewContainer`    |
 | `writeReviewButton`       |
 
+# Rest APIs
+In order to see how to use the list of REST APIs go to [Reviews and Ratings API overview](https://developers.vtex.com/vtex-rest-api/reference/reviews-and-ratings-api-overview).
+
+# GraphQL IDE
+In order to see how to use the graphQL queries and mutations you can go through the next steps:
+1. Open the Admin [GraphQL IDE app](https://developers.vtex.com/vtex-developer-docs/docs/vtex-admin-graphql-ide). 
+2. Select vtex.reviews-and-ratings app.
+3. Click on `docs` at the top right corner.
+![reviews-and-ratings-app](/public/metadata/images/screenshots/graphQL_docs.png)
+
+You will see the list of all available queries and mutations, including schemas and variable descriptions.
+
+
+
 <!-- DOCS-IGNORE:start -->
 
 ## Contributors ✨
@@ -167,6 +181,8 @@ Thanks goes to these wonderful people:
   <tr>
     <td align="center"><a href="https://github.com/khrizzcristian"><img src="https://avatars1.githubusercontent.com/u/43498488?v=4" width="100px;" alt=""/><br /><sub><b>khrizzcristian</b></sub></a><br /><a href="https://github.com/vtex-apps/reviews-and-ratings/commits?author=khrizzcristian" title="Code">💻</a></td>
     <td align="center"><a href="https://juliomoreira.pro"><img src="https://avatars2.githubusercontent.com/u/1207017?v=4" width="100px;" alt=""/><br /><sub><b>Julio Moreira</b></sub></a><br /><a href="https://github.com/vtex-apps/reviews-and-ratings/commits?author=juliomoreira" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/btalma"><img src="https://avatars.githubusercontent.com/u/47258865?v=4" width="100px;" alt=""/><br /><sub><b>Brian Talma</b></sub></a><br /><a href="https://github.com/vtex-apps/reviews-and-ratings/commits?author=btalma" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/arturo777"><img src="https://avatars.githubusercontent.com/u/49737670?v=4" width="100px;" alt=""/><br /><sub><b>Arturo Castillo</b></sub></a><br /><a href="https://github.com/vtex-apps/reviews-and-ratings/commits?author=arturo777" title="Code">💻</a></td>
   </tr>
 </table>
 
