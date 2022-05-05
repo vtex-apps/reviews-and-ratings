@@ -15,6 +15,7 @@ import {
   gethasShopperReviewedQuery,
   ValidateHasShopperReviewedResponse,
   addReviewQuery,
+  getAverageRatingByProductId,
   editReview,
 } from '../support/graphql_queries.js'
 import {
@@ -104,6 +105,17 @@ describe('Graphql queries', () => {
       graphql(
         getreviewByreviewDateTimeQuery(review[reviewDateTimeEnv]),
         ValidateGetreviewByreviewDateTimeQueryResponse
+      )
+    })
+  })
+
+  it('Verify get average of product by id query', updateRetry(4), () => {
+    cy.addDelayBetweenRetries(2000)
+    graphql(getAverageRatingByProductId(productId), response => {
+      expect(response.body).to.not.have.own.property('errors')
+      expect(response.body.data.averageRatingByProductId).to.not.equal(null)
+      expect(response.body.data.averageRatingByProductId).to.equal(
+        anonymousUser2.rating
       )
     })
   })
