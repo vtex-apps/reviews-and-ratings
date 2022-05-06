@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Use useQuery graphQL hook to destructure refetch in Reviews component.
+- Passed refetchReviews to ReviewForm  component to refetch after a new review is saved.
+
 ## [3.8.11] - 2022-05-05
 
 ### Added

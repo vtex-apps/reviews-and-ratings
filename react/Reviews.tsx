@@ -2,7 +2,7 @@
 import React, { Fragment, useEffect, useReducer } from 'react'
 import { Helmet } from 'react-helmet'
 import type { ApolloQueryResult } from 'apollo-client'
-import { useApolloClient } from 'react-apollo'
+import { useApolloClient, useQuery } from 'react-apollo'
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 import { useProduct } from 'vtex.product-context'
 import { Link, canUseDOM } from 'vtex.render-runtime'
@@ -393,6 +393,39 @@ function Reviews() {
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
+  const {
+    data: dataReviews,
+    loading: loadingReviews,
+    refetch: refetchReviews,
+  } = useQuery<ReviewsData>(ReviewsByProductId, {
+    variables: {
+      productId,
+      rating: state.ratingFilter,
+      locale: state.localeFilter,
+      pastReviews: state.pastReviews,
+      from: state.from - 1,
+      to: state.to - 1,
+      orderBy: state.sort,
+      status: !state.settings?.requireApproval ? '' : 'true',
+    },
+    skip: !productId,
+    fetchPolicy: 'network-only',
+    ssr: false,
+  })
+
+  const {
+    data: dataAverage,
+    loading: loadingAverage,
+    refetch: refetchAverage,
+  } = useQuery<AverageData>(AverageRatingByProductId, {
+    variables: {
+      productId,
+    },
+    skip: !productId,
+    fetchPolicy: 'network-only',
+    ssr: false,
+  })
+
   const options = [
     {
       label: intl.formatMessage(messages.sortMostRecent),
@@ -532,8 +565,8 @@ function Reviews() {
   const { url } = getLocation()
 
   useEffect(() => {
-    window.__RENDER_8_SESSION__.sessionPromise.then((data: any) => {
-      const sessionRespose = data.response
+    window.__RENDER_8_SESSION__.sessionPromise.then((sessionData: any) => {
+      const sessionRespose = sessionData.response
 
       if (!sessionRespose || !sessionRespose.namespaces) {
         return
@@ -569,88 +602,51 @@ function Reviews() {
   }, [client])
 
   useEffect(() => {
-    if (!productId) {
-      return
-    }
+    if (loadingAverage || !dataAverage) return
 
-    client
-      .query({
-        query: AverageRatingByProductId,
-        variables: {
-          productId,
-        },
-      })
-      .then((response: ApolloQueryResult<AverageData>) => {
-        const average = response.data.averageRatingByProductId
+    const average = dataAverage.averageRatingByProductId
 
-        dispatch({
-          type: 'SET_AVERAGE',
-          args: { average },
-        })
-      })
-  }, [client, productId])
+    dispatch({
+      type: 'SET_AVERAGE',
+      args: { average },
+    })
+  }, [dataAverage, loadingAverage])
 
   useEffect(() => {
-    if (!productId) {
-      return
+    if (loadingReviews || !dataReviews) return
+    const reviews = dataReviews.reviewsByProductId.data
+    const { total } = dataReviews.reviewsByProductId.range
+    const graphArray = [0, 0, 0, 0, 0, 0]
+
+    graphArray[0] = total
+    if (reviews) {
+      reviews.forEach((review: Review) => {
+        const thisRating = review.rating
+
+        graphArray[thisRating] += 1
+      })
     }
 
-    client
-      .query({
-        query: ReviewsByProductId,
-        variables: {
-          productId,
-          rating: state.ratingFilter,
-          locale: state.localeFilter,
-          pastReviews: state.pastReviews,
-          from: state.from - 1,
-          to: state.to - 1,
-          orderBy: state.sort,
-          status:
-            state.settings && !state.settings.requireApproval ? '' : 'true',
-        },
-      })
-      .then((response: ApolloQueryResult<ReviewsData>) => {
-        const reviews = response.data.reviewsByProductId.data
-        const { total } = response.data.reviewsByProductId.range
-        const graphArray = [0, 0, 0, 0, 0, 0]
+    dispatch({
+      type: 'SET_REVIEWS',
+      args: { reviews, total, graphArray },
+    })
 
-        graphArray[0] = total
-        if (reviews) {
-          reviews.forEach((review: Review) => {
-            const thisRating = review.rating
+    const defaultOpenCount = Math.min(state.settings.defaultOpenCount, total)
 
-            graphArray[thisRating] += 1
-          })
-        }
+    dispatch({
+      type: 'SET_OPEN_REVIEWS',
+      args: {
+        reviewNumbers: [...Array(defaultOpenCount).keys()],
+      },
+    })
 
-        dispatch({
-          type: 'SET_REVIEWS',
-          args: { reviews, total, graphArray },
-        })
-
-        const defaultOpenCount = Math.min(
-          state.settings.defaultOpenCount,
-          total
-        )
-
-        dispatch({
-          type: 'SET_OPEN_REVIEWS',
-          args: {
-            reviewNumbers: [...Array(defaultOpenCount).keys()],
-          },
-        })
-      })
+    refetchAverage()
   }, [
-    client,
-    productId,
-    state.from,
-    state.to,
-    state.sort,
-    state.ratingFilter,
-    state.localeFilter,
-    state.pastReviews,
-    state.settings,
+    dataReviews,
+    loadingReviews,
+    state.settings.defaultOpenCount,
+    refetchAverage,
   ])
 
   const baseUrl = getBaseUrl()
@@ -721,8 +717,7 @@ function Reviews() {
           >
             <ReviewForm
               settings={state.settings}
-              reviewsDispatch={dispatch}
-              reviewsState={state}
+              refetchReviews={refetchReviews}
             />
           </Collapsible>
         ) : (

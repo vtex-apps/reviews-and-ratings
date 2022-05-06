@@ -7,7 +7,6 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 import { useCssHandles } from 'vtex.css-handles'
 import { Card, Input, Button, Textarea } from 'vtex.styleguide'
 
-import type { Review } from './typings'
 import getOrders from './queries/orders.graphql'
 import NewReview from '../graphql/newReview.graphql'
 import HasShopperReviewed from '../graphql/hasShopperReviewed.graphql'
@@ -216,12 +215,10 @@ const CSS_HANDLES = [
 
 export function ReviewForm({
   settings,
-  reviewsDispatch,
-  reviewsState,
+  refetchReviews,
 }: {
   settings?: Partial<AppSettings>
-  reviewsDispatch?: any
-  reviewsState?: any
+  refetchReviews: any
 }) {
   const client = useApolloClient()
   const intl = useIntl()
@@ -394,46 +391,17 @@ export function ReviewForm({
         })
         .then(res => {
           if (res.data.newReview.id) {
-            const { newReview } = res.data
-            const reviews = [newReview, ...reviewsState.reviews]
-            const { total } = reviewsState
-            const graphArray = [0, 0, 0, 0, 0, 0]
-            const average =
-              reviews.reduce(
-                (acc, review) => Number(acc) + Number(review.rating),
-                0
-              ) /
-              (Number(total) + 1)
-
-            graphArray[0] = total
-
-            reviews.forEach((review: Review) => {
-              const thisRating = review.rating
-
-              graphArray[thisRating] += 1
-            })
-
-            reviewsDispatch({
-              type: 'SET_REVIEWS',
-              args: {
-                reviews: [newReview, ...reviewsState.reviews],
-                total: ++reviewsState.total,
-                graphArray,
-              },
-            })
-            reviewsDispatch({
-              type: 'SET_AVERAGE',
-              args: { average: average.toFixed(2) },
-            })
+            setTimeout(() => {
+              refetchReviews()
+              dispatch({
+                type: 'SET_SUBMITTED',
+              })
+              dispatch({
+                type: 'SET_SUBMITTING',
+                args: { isSubmitting: false },
+              })
+            }, 2000)
           }
-
-          dispatch({
-            type: 'SET_SUBMITTED',
-          })
-          dispatch({
-            type: 'SET_SUBMITTING',
-            args: { isSubmitting: false },
-          })
         })
     } else {
       dispatch({
