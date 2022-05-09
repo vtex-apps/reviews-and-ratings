@@ -29,6 +29,7 @@ export function graphql(getQuery, validateResponseFn = null) {
       expect(response.status).to.equal(200)
       expect(response.body.data).to.not.equal(null)
       expect(response.body).to.not.have.own.property('errors')
+      expect(response.body).to.not.equal('OK')
       validateResponseFn(response)
     })
   } else {
@@ -69,22 +70,6 @@ export function ValidateHasShopperReviewedResponse(response) {
   expect(response.body.data.hasShopperReviewed).to.be.true
 }
 
-export function getreviewByreviewDateTimeQuery(reviewDateTime) {
-  return {
-    query:
-      'query' +
-      '($reviewDateTime:String!)' +
-      '{reviewByreviewDateTime(reviewDateTime: $reviewDateTime){data{id}}}',
-    queryVariables: {
-      reviewDateTime,
-    },
-  }
-}
-
-export function ValidateGetreviewByreviewDateTimeQueryResponse(response) {
-  expect(response.body.data.reviewByreviewDateTime.data).to.not.have.length(0)
-}
-
 export function getreviewByDateRangeQuery(reviewDateTime) {
   const date = reviewDateTime.split(' ')
 
@@ -102,7 +87,8 @@ export function getreviewByDateRangeQuery(reviewDateTime) {
 }
 
 export function ValidateGetreviewByDateRangeQueryResponse(response) {
-  expect(response.body.data.reviewByDateRange.data).to.not.have.length(0)
+  // expect(true).to.be.true
+  expect(response.body.data.reviewByDateRange.data).to.not.have.lengthOf(0)
 }
 
 export function getReview(reviewId) {

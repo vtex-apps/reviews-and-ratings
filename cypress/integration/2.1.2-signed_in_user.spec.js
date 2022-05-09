@@ -3,12 +3,10 @@ import {
   updateRetry,
   preserveCookie,
 } from '../support/common/support.js'
-import { approveReviews } from '../support/graphql_testcase.js'
 import { testCase1 } from '../support/review_and_ratings.outputvalidation.js'
 import { updateSettings } from '../support/review_and_ratings_settings.js'
 
-const { title, configuration, product, anonymousUser1, anonymousUser2, user1 } =
-  testCase1
+const { title, configuration, product, user1 } = testCase1
 
 describe(title, () => {
   testSetup(false)
@@ -21,10 +19,6 @@ describe(title, () => {
       cy.openStoreFront(true)
       cy.addReview(product, configuration.defaultStarsRating, user1)
     })
-
-    // If we disable admin approval, review been shown to UI
-    // but review status is still pending so approving it via graphql
-    approveReviews(anonymousUser1.name, anonymousUser2.name, user1.name)
 
     preserveCookie()
   })
