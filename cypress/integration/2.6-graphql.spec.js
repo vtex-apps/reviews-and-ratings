@@ -10,8 +10,8 @@ import {
   validateGetReviewsResponse,
   validateReviewsByProductResponse,
   validateTotalReviewsByProductResponse,
-  getreviewByreviewDateTimeQuery,
-  ValidateGetreviewByreviewDateTimeQueryResponse,
+  getreviewByDateRangeQuery,
+  ValidateGetreviewByDateRangeQueryResponse,
   gethasShopperReviewedQuery,
   ValidateHasShopperReviewedResponse,
   addReviewQuery,
@@ -100,11 +100,11 @@ describe('Graphql queries', () => {
     })
   })
 
-  it.skip('Verify reviewByreviewDateTime query', updateRetry(2), () => {
+  it('Verify reviewByDateRange query', updateRetry(2), () => {
     cy.getReviewItems().then(review => {
       graphql(
-        getreviewByreviewDateTimeQuery(review[reviewDateTimeEnv]),
-        ValidateGetreviewByreviewDateTimeQueryResponse
+        getreviewByDateRangeQuery(review[reviewDateTimeEnv]),
+        ValidateGetreviewByDateRangeQueryResponse
       )
     })
   })
