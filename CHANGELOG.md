@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Create a review saved custom event to update the RatingSummary component.
+- Use useQuery graphQL hook to destructure refetch in RatingSummary component.
+
 ## [3.8.12] - 2022-05-10
 
 ### Fixed

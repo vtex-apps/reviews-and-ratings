@@ -4,7 +4,6 @@ import type { FC } from 'react'
 import React, { useState, useEffect } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { useApolloClient } from 'react-apollo'
-import type { RenderContext } from 'vtex.render-runtime'
 import { useRuntime } from 'vtex.render-runtime'
 import {
   Layout,
@@ -36,7 +35,7 @@ const IconArrowForward: FC = () => (
 )
 
 const ReviewIndex: FC = props => {
-  const { navigate, route } = useRuntime() as RenderContext.RenderContext
+  const { navigate, route } = useRuntime()
   const [activeTab, setActiveTab] = useState(route.id)
   const [needsMigrate, setNeedsMigrate] = useState(false)
   const [isMigrationloading, setIsMigrationloading] = useState(false)

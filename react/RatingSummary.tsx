@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useReducer } from 'react'
 import { Helmet } from 'react-helmet'
 import type { ApolloQueryResult } from 'apollo-client'
-import { useApolloClient } from 'react-apollo'
+import { useApolloClient, useQuery } from 'react-apollo'
 import { useProduct } from 'vtex.product-context'
 import { useCssHandles } from 'vtex.css-handles'
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
@@ -13,6 +13,7 @@ import Stars from './components/Stars'
 import TotalReviewsByProductId from '../graphql/totalReviewsByProductId.graphql'
 import AverageRatingByProductId from '../graphql/averageRatingByProductId.graphql'
 import { getBaseUrl } from './utils/baseUrl'
+import { eventBus } from './utils/eventBus'
 
 interface TotalData {
   totalReviewsByProductId: number
@@ -147,43 +148,33 @@ function RatingSummary() {
 
   const { url } = getLocation()
 
+  const {
+    data: totalReviewsByProductId,
+    loading: loadingTotalReviewsByProductId,
+    refetch: refetchTotalReviewsByProductId,
+  } = useQuery<TotalData>(TotalReviewsByProductId, {
+    variables: {
+      productId,
+    },
+    skip: !productId,
+    fetchPolicy: 'network-only',
+    ssr: false,
+  })
+
+  const {
+    data: averageRatingByProductId,
+    loading: loadingAverageRatingByProductId,
+    refetch: refetchAverageRatingByProductId,
+  } = useQuery<AverageData>(AverageRatingByProductId, {
+    variables: {
+      productId,
+    },
+    skip: !productId,
+    fetchPolicy: 'network-only',
+    ssr: false,
+  })
+
   useEffect(() => {
-    if (!productId) {
-      return
-    }
-
-    client
-      .query({
-        query: TotalReviewsByProductId,
-        variables: {
-          productId,
-        },
-      })
-      .then((response: ApolloQueryResult<TotalData>) => {
-        const total = response.data.totalReviewsByProductId
-
-        dispatch({
-          type: 'SET_TOTAL',
-          args: { total },
-        })
-      })
-
-    client
-      .query({
-        query: AverageRatingByProductId,
-        variables: {
-          productId,
-        },
-      })
-      .then((response: ApolloQueryResult<AverageData>) => {
-        const average = response.data.averageRatingByProductId
-
-        dispatch({
-          type: 'SET_AVERAGE',
-          args: { average },
-        })
-      })
-
     client
       .query({
         query: AppSettings,
@@ -196,9 +187,44 @@ function RatingSummary() {
           args: { settings },
         })
       })
-  }, [client, productId])
+  }, [client])
 
   useEffect(() => {
+    if (loadingTotalReviewsByProductId || !totalReviewsByProductId) return
+    const { totalReviewsByProductId: total } = totalReviewsByProductId
+
+    dispatch({
+      type: 'SET_TOTAL',
+      args: { total },
+    })
+  }, [
+    totalReviewsByProductId,
+    loadingTotalReviewsByProductId,
+    refetchTotalReviewsByProductId,
+  ])
+
+  useEffect(() => {
+    if (loadingAverageRatingByProductId || !averageRatingByProductId) return
+    const { averageRatingByProductId: average } = averageRatingByProductId
+
+    dispatch({
+      type: 'SET_AVERAGE',
+      args: { average },
+    })
+  }, [
+    averageRatingByProductId,
+    loadingAverageRatingByProductId,
+    refetchAverageRatingByProductId,
+  ])
+
+  useEffect(() => {
+    const onReviewSaved = () => {
+      refetchTotalReviewsByProductId()
+      refetchAverageRatingByProductId()
+    }
+
+    eventBus.on('reviewSaved', onReviewSaved)
+
     window.__RENDER_8_SESSION__.sessionPromise.then((data: any) => {
       const sessionRespose = data.response
 
@@ -218,7 +244,9 @@ function RatingSummary() {
         args: { authenticated: true },
       })
     })
-  }, [])
+
+    return () => eventBus.remove('reviewSaved', onReviewSaved)
+  }, [refetchTotalReviewsByProductId, refetchAverageRatingByProductId])
 
   const scrollToForm = () => {
     const reviewsContainer = document.getElementById('reviews-main-container')
