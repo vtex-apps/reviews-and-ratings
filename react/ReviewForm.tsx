@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { Fragment, useEffect, useReducer } from 'react'
 import { useProduct } from 'vtex.product-context'
 import type { ApolloQueryResult } from 'apollo-client'
@@ -11,6 +10,7 @@ import getOrders from './queries/orders.graphql'
 import NewReview from '../graphql/newReview.graphql'
 import HasShopperReviewed from '../graphql/hasShopperReviewed.graphql'
 import StarPicker from './components/StarPicker'
+import { eventBus } from './utils/eventBus'
 
 interface AppSettings {
   allowAnonymousReviews: boolean
@@ -258,6 +258,8 @@ export function ReviewForm({
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
+  const reviewSavedEvent = () => eventBus.dispatch('reviewSaved')
+
   useEffect(() => {
     if (!productId) {
       return
@@ -392,7 +394,14 @@ export function ReviewForm({
         .then(res => {
           if (res.data.newReview.id) {
             setTimeout(() => {
-              refetchReviews()
+              if (
+                !settings?.requireApproval &&
+                settings?.allowAnonymousReviews
+              ) {
+                refetchReviews()
+                reviewSavedEvent()
+              }
+
               dispatch({
                 type: 'SET_SUBMITTED',
               })
