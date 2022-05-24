@@ -53,12 +53,9 @@ namespace ReviewsRatings.Controllers
             if (!string.IsNullOrEmpty(vtexCookie))
             {
                 validatedUser = await this._productReviewsService.ValidateUserToken(vtexCookie);
-                if (validatedUser != null)
+                if (validatedUser != null && validatedUser.AuthStatus.Equals(AUTH_SUCCESS))
                 {
-                    if (validatedUser.AuthStatus.Equals(AUTH_SUCCESS))
-                    {
-                        userValidated = true;
-                    }
+                    userValidated = true;
                 }
             }
 

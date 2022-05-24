@@ -7,6 +7,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using Models;
+    using Newtonsoft.Json;
     using ReviewsRatings.DataSources;
     using Vtex.Api.Context;
 
@@ -45,7 +46,7 @@
                 if (!string.IsNullOrEmpty(productId))
                 {
                     IList<LegacyReview> reviews = await this._productReviewRepository.GetProductReviewsAsync(productId);
-                    LegacyReview reviewToRemove = reviews.Where(r => r.Id == id).FirstOrDefault();
+                    LegacyReview reviewToRemove = reviews.FirstOrDefault(r => r.Id == id);
                     if (reviewToRemove != null && reviews.Remove(reviewToRemove))
                     {
                         await this._productReviewRepository.SaveProductReviewsAsync(productId, reviews);
@@ -145,7 +146,6 @@
             if (lookup != null)
             {
                 List<string> productIds = lookup.Values.Distinct().ToList();
-                int maxProducts = maximumReturnedRecords;
                 int productsCounter = 0;
                 foreach (string productId in productIds)
                 {
@@ -186,11 +186,6 @@
                             _context.Vtex.Logger.Error("GetReviews", null, $"Error removing broken lookup ids for product id {productId}", ex);
                         }
                     }
-
-                    //if (productsCounter > maxProducts)
-                    //{
-                    //    break;
-                    //}
                 }
             }
 
@@ -370,47 +365,50 @@
 
         public async Task<Review> NewReview(Review review, bool doValidation)
         {
-            bool success = false;
             if (review != null)
             {
                 if (doValidation)
                 {
-                    bool userValidated = false;
-                    bool hasShopperReviewed = false;
-                    bool hasShopperPurchased = false;
-                    string userId = string.Empty;
-                    ValidatedUser validatedUser = null;
                     try
                     {
-                        validatedUser = await this.ValidateUserToken(_context.Vtex.StoreUserAuthToken);
-                    }
-                    catch (Exception ex)
-                    {
-                        _context.Vtex.Logger.Error("NewReview", null, "Error Validating User", ex);
-                    }
+                        bool userValidated = false;
+                        bool hasShopperReviewed = false;
+                        bool hasShopperPurchased = false;
+                        string userId = string.Empty;
+                        ValidatedUser validatedUser = null;
+                        try
+                        {
+                            validatedUser = await this.ValidateUserToken(_context.Vtex.StoreUserAuthToken);
+                        }
+                        catch (Exception ex)
+                        {
+                            _context.Vtex.Logger.Error("NewReview", null, "Error Validating User", ex);
+                        }
 
-                    if (validatedUser != null)
-                    {
-                        if (validatedUser.AuthStatus.Equals("Success"))
+                        if (validatedUser != null && validatedUser.AuthStatus.Equals("Success"))
                         {
                             userValidated = true;
                         }
-                    }
 
-                    if (userValidated)
-                    {
-                        userId = validatedUser.User;
-                        hasShopperReviewed = await this.HasShopperReviewed(userId, review.ProductId);
-                        if (hasShopperReviewed)
+                        if (userValidated)
                         {
-                            return null;
+                            userId = validatedUser.User;
+                            hasShopperReviewed = await this.HasShopperReviewed(userId, review.ProductId);
+                            if (hasShopperReviewed)
+                            {
+                                return null;
+                            }
+
+                            hasShopperPurchased = await this.ShopperHasPurchasedProduct(userId, review.ProductId);
                         }
 
-                        hasShopperPurchased = await this.ShopperHasPurchasedProduct(userId, review.ProductId);
+                        review.ShopperId = userId;
+                        review.VerifiedPurchaser = hasShopperPurchased;
                     }
-
-                    review.ShopperId = userId;
-                    review.VerifiedPurchaser = hasShopperPurchased;
+                    catch (Exception ex)
+                    {
+                        _context.Vtex.Logger.Error("NewReview", null, "Validation Error", ex, new[] { ("review", JsonConvert.SerializeObject(review)) });
+                    }
                 }
 
                 if (review.Approved == null)
@@ -418,39 +416,11 @@
                     review.Approved = false;
                 }
 
-                //IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
-
-                //int maxKeyValue = 0;
-                //if (lookup != null && lookup.Count > 0)
-                //{
-                //    maxKeyValue = lookup.Keys.Max();
-                //}
-                //else
-                //{
-                //    lookup = new Dictionary<int, string>();
-                //}
-
-                //review.Id = ++maxKeyValue;
-                //review.CacheId = review.Id;
-
                 if (string.IsNullOrWhiteSpace(review.ReviewDateTime))
                 {
                     // TODO: Check timezone for store
                     review.ReviewDateTime = DateTime.Now.ToString();
                 }
-
-                //string productId = review.ProductId;
-
-                //IList<Review> reviews = await this._productReviewRepository.GetProductReviewsAsync(productId);
-                //if (reviews == null)
-                //{
-                //    reviews = new List<Review>();
-                //}
-
-                //reviews.Add(review);
-                //await this._productReviewRepository.SaveProductReviewsAsync(productId, reviews);
-                //lookup.Add(review.Id, review.ProductId);
-                //await this._productReviewRepository.SaveLookupAsync(lookup);
 
                 string id = await this._productReviewRepository.SaveProductReviewMD(review);
                 if (string.IsNullOrEmpty(id))
@@ -501,26 +471,6 @@
             await _productReviewRepository.SaveLookupAsync(null);
         }
 
-        private async Task<string> LookupProductById(int Id)
-        {
-            IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
-            string productId = string.Empty;
-            lookup.TryGetValue(Id, out productId);
-            return productId;
-        }
-
-        private async Task<int> GetNewId()
-        {
-            IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
-            int maxKeyValue = 0;
-            if (lookup != null)
-            {
-                maxKeyValue = lookup.Keys.Max();
-            }
-
-            return ++maxKeyValue;
-        }
-
         public async Task<bool> ModerateReview(string[] ids, bool approved)
         {
             bool retval = true;
@@ -528,7 +478,7 @@
             foreach (string id in ids)
             {
                 ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD($"id={id}", null, null);
-                Review reviewToModerate = wrapper.Reviews.Where(r => r.Id == id).FirstOrDefault();
+                Review reviewToModerate = wrapper.Reviews.FirstOrDefault(r => r.Id == id);
                 if (reviewToModerate != null)
                 {
                     reviewToModerate.Approved = approved;
@@ -561,7 +511,7 @@
             }
             catch(Exception ex)
             {
-                _context.Vtex.Logger.Error("HasShopperReviewed", null, "Request Error", ex);
+                _context.Vtex.Logger.Error("HasShopperReviewed", null, "Request Error", ex, new[] { ("shopperId", shopperId), ("productId", productId) });
             }
 
             return retval;
@@ -602,7 +552,7 @@
             }
             catch(Exception ex)
             {
-                _context.Vtex.Logger.Error("ShopperHasPurchasedProduct", null, "Request Error", ex);
+                _context.Vtex.Logger.Error("ShopperHasPurchasedProduct", null, "Request Error", ex, new[] { ("shopperId", shopperId), ("productId", productId) });
             }
 
             return hasPurchased;
