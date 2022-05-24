@@ -435,79 +435,87 @@
             // https://{{accountName}}.vtexcommercestable.com.br/api/dataentities/{{data_entity_name}}/schemas/{{schema_name}}
             
             bool verifyResult = false;
-            var request = new HttpRequestMessage
+            try
             {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri($"http://infra.io.vtex.com/vbase/v2/{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_ACCOUNT]}/master/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{HASHED_SCHEMA}"),
-            };
+                var request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri($"http://infra.io.vtex.com/vbase/v2/{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_ACCOUNT]}/master/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{HASHED_SCHEMA}"),
+                };
 
-            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
-            if (authToken != null)
-            {
-                request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
-            }
-            request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
-            
-            var client = _clientFactory.CreateClient();
-            var response = await client.SendAsync(request);
-            string responseContent = await response.Content.ReadAsStringAsync();
+                string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+                if (authToken != null)
+                {
+                    request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
+                }
+                request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
 
-            string GetSHA256(string str)
-            {
-                SHA256 sha256 = SHA256Managed.Create();
-                ASCIIEncoding encoding = new ASCIIEncoding();
-                byte[] stream = null;
-                StringBuilder sb = new StringBuilder();
-                stream = sha256.ComputeHash(encoding.GetBytes(str));
-                for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
-                return sb.ToString();
-            }
+                var client = _clientFactory.CreateClient();
+                var response = await client.SendAsync(request);
+                string responseContent = await response.Content.ReadAsStringAsync();
 
-            verifyResult = response.IsSuccessStatusCode
-                && responseContent.Equals(GetSHA256(SCHEMA_JSON));
+                string GetSHA256(string str)
+                {
+                    SHA256 sha256 = SHA256Managed.Create();
+                    ASCIIEncoding encoding = new ASCIIEncoding();
+                    byte[] stream = null;
+                    StringBuilder sb = new StringBuilder();
+                    stream = sha256.ComputeHash(encoding.GetBytes(str));
+                    for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
+                    return sb.ToString();
+                }
 
-            if (!verifyResult) {
-                try {
-                    request = new HttpRequestMessage
+                verifyResult = response.IsSuccessStatusCode
+                    && responseContent.Equals(GetSHA256(SCHEMA_JSON));
+
+                if (!verifyResult)
+                {
+                    try
                     {
-                        Method = HttpMethod.Put,
-                        RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/schemas/{SCHEMA}"),
-                        Content = new StringContent(SCHEMA_JSON, Encoding.UTF8, APPLICATION_JSON)
-                    };
+                        request = new HttpRequestMessage
+                        {
+                            Method = HttpMethod.Put,
+                            RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/schemas/{SCHEMA}"),
+                            Content = new StringContent(SCHEMA_JSON, Encoding.UTF8, APPLICATION_JSON)
+                        };
 
-                    request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, _context.Vtex.AuthToken);
-                    request.Headers.Add(VTEX_ID_HEADER_NAME, _context.Vtex.AdminUserAuthToken);
-                    request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
+                        request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, _context.Vtex.AuthToken);
+                        request.Headers.Add(VTEX_ID_HEADER_NAME, _context.Vtex.AdminUserAuthToken);
+                        request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
 
-                    response = await client.SendAsync(request);
-                    responseContent = await response.Content.ReadAsStringAsync();
+                        response = await client.SendAsync(request);
+                        responseContent = await response.Content.ReadAsStringAsync();
 
-                    if (!response.IsSuccessStatusCode && response.StatusCode != HttpStatusCode.NotModified)
+                        if (!response.IsSuccessStatusCode && response.StatusCode != HttpStatusCode.NotModified)
+                        {
+                            throw new Exception(responseContent);
+                        }
+
+                        request = new HttpRequestMessage
+                        {
+                            Method = HttpMethod.Put,
+                            RequestUri = new Uri($"http://infra.io.vtex.com/vbase/v2/{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}/master/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{HASHED_SCHEMA}"),
+                            Content = new StringContent(GetSHA256(SCHEMA_JSON), Encoding.UTF8, APPLICATION_JSON)
+                        };
+
+                        request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, _context.Vtex.AuthToken);
+                        request.Headers.Add(VTEX_ID_HEADER_NAME, _context.Vtex.AdminUserAuthToken);
+                        request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
+
+                        response = await client.SendAsync(request);
+                    }
+                    catch (Exception ex)
                     {
-                        throw new Exception(responseContent);
+                        _context.Vtex.Logger.Error("VerifySchema", null, "Request Error", ex);
                     }
 
-                    request = new HttpRequestMessage
-                    {
-                        Method = HttpMethod.Put,
-                        RequestUri = new Uri($"http://infra.io.vtex.com/vbase/v2/{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}/master/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{HASHED_SCHEMA}"),
-                        Content = new StringContent(GetSHA256(SCHEMA_JSON), Encoding.UTF8, APPLICATION_JSON)
-                    };
-
-                    request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, _context.Vtex.AuthToken);
-                    request.Headers.Add(VTEX_ID_HEADER_NAME, _context.Vtex.AdminUserAuthToken);
-                    request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
-
-                    response = await client.SendAsync(request);
-                    responseContent = await response.Content.ReadAsStringAsync();
+                    verifyResult = response.ReasonPhrase == "OK";
                 }
-                catch (Exception ex)
-                {
-                    _context.Vtex.Logger.Error("VerifySchema", null, "Request Error", ex);
-                }
-                
-                verifyResult = response.ReasonPhrase == "OK";
-            } 
+            }
+            catch(Exception ex)
+            {
+                _context.Vtex.Logger.Error("VerifySchema", null, "Error Verifying Schema", ex);
+            }
             
             return verifyResult ? "Schema is up to date!" : "Schema is NOT up to date";
             
@@ -749,33 +757,40 @@
                 review.SearchDate = dtSearchDate.ToString("yyyy-MM-ddTHH:mm:ssZ");
             }
 
-            var jsonSerializedReview = JsonConvert.SerializeObject(review);
-            var request = new HttpRequestMessage
+            try
             {
-                Method = HttpMethod.Put,
-                RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/documents?_schema={SCHEMA}"),
-                Content = new StringContent(jsonSerializedReview, Encoding.UTF8, APPLICATION_JSON)
-            };
+                var jsonSerializedReview = JsonConvert.SerializeObject(review);
+                var request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Put,
+                    RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/documents?_schema={SCHEMA}"),
+                    Content = new StringContent(jsonSerializedReview, Encoding.UTF8, APPLICATION_JSON)
+                };
 
-            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
-            if (authToken != null)
-            {
-                request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
-                request.Headers.Add(VTEX_ID_HEADER_NAME, authToken);
-                request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, authToken);
-            }
+                string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+                if (authToken != null)
+                {
+                    request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
+                    request.Headers.Add(VTEX_ID_HEADER_NAME, authToken);
+                    request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, authToken);
+                }
 
-            var client = _clientFactory.CreateClient();
-            var response = await client.SendAsync(request);
-            string responseContent = await response.Content.ReadAsStringAsync();
-            if (response.IsSuccessStatusCode)
-            {
-                dynamic savedReview = JsonConvert.DeserializeObject<dynamic>(responseContent);
-                id = savedReview.DocumentId;
+                var client = _clientFactory.CreateClient();
+                var response = await client.SendAsync(request);
+                string responseContent = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    dynamic savedReview = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                    id = savedReview.DocumentId;
+                }
+                else
+                {
+                    _context.Vtex.Logger.Warn("SaveProductReview", null, $"Did not save review [{response.StatusCode}] '{responseContent}'\n{jsonSerializedReview}");
+                }
             }
-            else
+            catch(Exception ex)
             {
-                _context.Vtex.Logger.Warn("SaveProductReview", null, $"Did not save review [{response.StatusCode}] '{responseContent}'\n{jsonSerializedReview}");
+                _context.Vtex.Logger.Error("SaveProductReview", null, "Error saving review", ex, new[] { ("review", JsonConvert.SerializeObject(review)) });
             }
 
             return id;
