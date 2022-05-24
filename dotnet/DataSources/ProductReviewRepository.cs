@@ -582,56 +582,66 @@
             string responseFrom = string.Empty;
             string responseTo = string.Empty;
 
-            if (string.IsNullOrEmpty(from))
-                from = "0";
-            if (string.IsNullOrEmpty(to))
-                to = "300";
-            if(!string.IsNullOrEmpty(searchQuery))
+            try
             {
-                if(!searchQuery.First().Equals('&'))
+                if (string.IsNullOrEmpty(from))
+                {
+                    from = "0";
+                }
+
+                if (string.IsNullOrEmpty(to))
+                {
+                    to = "300";
+                }
+
+                if (!string.IsNullOrEmpty(searchQuery) && !searchQuery.First().Equals('&'))
                 {
                     searchQuery = $"&{searchQuery}";
                 }
+
+                var request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/search?_fields=_all&_schema={SCHEMA}{searchQuery}")
+                };
+
+                request.Headers.Add("REST-Range", $"resources={from}-{to}");
+
+                string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+                if (authToken != null)
+                {
+                    request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
+                    request.Headers.Add(VTEX_ID_HEADER_NAME, authToken);
+                    request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, authToken);
+                }
+
+                var client = _clientFactory.CreateClient();
+                var response = await client.SendAsync(request);
+                string responseContent = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    reviews = JsonConvert.DeserializeObject<IList<Review>>(responseContent);
+                }
+
+                HttpHeaders headers = response.Headers;
+                IEnumerable<string> values;
+                if (headers.TryGetValues("REST-Content-Range", out values))
+                {
+                    // resources 0-10/168
+                    string resources = values.First();
+                    string[] split = resources.Split(' ');
+                    string ranges = split[1];
+                    string[] splitRanges = ranges.Split('/');
+                    string fromTo = splitRanges[0];
+                    total = splitRanges[1];
+                    string[] splitFromTo = fromTo.Split('-');
+                    responseFrom = splitFromTo[0];
+                    responseTo = splitFromTo[1];
+                }
             }
-
-            var request = new HttpRequestMessage
+            catch (Exception ex)
             {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/search?_fields=_all&_schema={SCHEMA}{searchQuery}")
-            };
-
-            request.Headers.Add("REST-Range", $"resources={from}-{to}");
-
-            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
-            if (authToken != null)
-            {
-                request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
-                request.Headers.Add(VTEX_ID_HEADER_NAME, authToken);
-                request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, authToken);
-            }
-
-            var client = _clientFactory.CreateClient();
-            var response = await client.SendAsync(request);
-            string responseContent = await response.Content.ReadAsStringAsync();
-            if (response.IsSuccessStatusCode)
-            {
-                reviews = JsonConvert.DeserializeObject<IList<Review>>(responseContent);
-            }
-
-            HttpHeaders headers = response.Headers;
-            IEnumerable<string> values;
-            if (headers.TryGetValues("REST-Content-Range", out values))
-            {
-                // resources 0-10/168
-                string resources = values.First();
-                string[] split = resources.Split(' ');
-                string ranges = split[1];
-                string[] splitRanges = ranges.Split('/');
-                string fromTo = splitRanges[0];
-                total = splitRanges[1];
-                string[] splitFromTo = fromTo.Split('-');
-                responseFrom = splitFromTo[0];
-                responseTo = splitFromTo[1];
+                _context.Vtex.Logger.Error("GetProductReviewsMD", null, "Error getting reviews", ex, new[] { ("searchQuery", searchQuery), ("from", from), ("to", to) });
             }
 
             reviewsResponse = new ReviewsResponseWrapper
@@ -659,6 +669,7 @@
             {
                 toDate = toDate + " 23:59:59";
             }
+
             DateTime dtToDate = DateTime.Parse(toDate);
             toDate = dtToDate.ToString("yyyy-MM-ddTHH:mm:ssZ");
             string total = "0";
@@ -667,44 +678,51 @@
             fromDate = HttpUtility.UrlEncode(fromDate);
             toDate = HttpUtility.UrlEncode(toDate);
 
-            var request = new HttpRequestMessage
+            try
             {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/search?_fields=_all&_schema={SCHEMA}&_where=searchDate between {fromDate} AND {toDate}")
-            };
+                var request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/search?_fields=_all&_schema={SCHEMA}&_where=searchDate between {fromDate} AND {toDate}")
+                };
 
-            request.Headers.Add("REST-Range", $"resources={0}-{800}");
+                request.Headers.Add("REST-Range", $"resources={0}-{800}");
 
-            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
-            if (authToken != null)
-            {
-                request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
-                request.Headers.Add(VTEX_ID_HEADER_NAME, authToken);
-                request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, authToken);
+                string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+                if (authToken != null)
+                {
+                    request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
+                    request.Headers.Add(VTEX_ID_HEADER_NAME, authToken);
+                    request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, authToken);
+                }
+
+                var client = _clientFactory.CreateClient();
+                var response = await client.SendAsync(request);
+                string responseContent = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    reviews = JsonConvert.DeserializeObject<IList<Review>>(responseContent);
+                }
+
+                HttpHeaders headers = response.Headers;
+                IEnumerable<string> values;
+                if (headers.TryGetValues("REST-Content-Range", out values))
+                {
+                    // resources 0-10/168
+                    string resources = values.First();
+                    string[] split = resources.Split(' ');
+                    string ranges = split[1];
+                    string[] splitRanges = ranges.Split('/');
+                    string fromTo = splitRanges[0];
+                    total = splitRanges[1];
+                    string[] splitFromTo = fromTo.Split('-');
+                    responseFrom = splitFromTo[0];
+                    responseTo = splitFromTo[1];
+                }
             }
-
-            var client = _clientFactory.CreateClient();
-            var response = await client.SendAsync(request);
-            string responseContent = await response.Content.ReadAsStringAsync();
-            if (response.IsSuccessStatusCode)
+            catch (Exception ex)
             {
-                reviews = JsonConvert.DeserializeObject<IList<Review>>(responseContent);
-            }
-
-            HttpHeaders headers = response.Headers;
-            IEnumerable<string> values;
-            if (headers.TryGetValues("REST-Content-Range", out values))
-            {
-                // resources 0-10/168
-                string resources = values.First();
-                string[] split = resources.Split(' ');
-                string ranges = split[1];
-                string[] splitRanges = ranges.Split('/');
-                string fromTo = splitRanges[0];
-                total = splitRanges[1];
-                string[] splitFromTo = fromTo.Split('-');
-                responseFrom = splitFromTo[0];
-                responseTo = splitFromTo[1];
+                _context.Vtex.Logger.Error("GetRangeReviewsMD", null, "Error getting review range", ex, new[] { ("fromDate", fromDate), ("toDate", toDate) });
             }
 
             reviewsResponse = new ReviewsResponseWrapper
@@ -724,25 +742,33 @@
         public async Task<bool> DeleteProductReviewMD(string documentId)
         {
             await this.VerifySchema();
-            var request = new HttpRequestMessage
+            bool success = false;
+            try
             {
-                Method = HttpMethod.Delete,
-                RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/documents/{documentId}")
-            };
+                var request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Delete,
+                    RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/documents/{documentId}")
+                };
 
-            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
-            if (authToken != null)
+                string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+                if (authToken != null)
+                {
+                    request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
+                    request.Headers.Add(VTEX_ID_HEADER_NAME, authToken);
+                    request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, authToken);
+                }
+
+                var client = _clientFactory.CreateClient();
+                var response = await client.SendAsync(request);
+                success = response.IsSuccessStatusCode;
+            }
+            catch(Exception ex)
             {
-                request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
-                request.Headers.Add(VTEX_ID_HEADER_NAME, authToken);
-                request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, authToken);
+                _context.Vtex.Logger.Error("DeleteProductReviewMD", null, "Error deleting review", ex, new[] { ("documentId", documentId) });
             }
 
-            var client = _clientFactory.CreateClient();
-            var response = await client.SendAsync(request);
-            string responseContent = await response.Content.ReadAsStringAsync();
-
-            return response.IsSuccessStatusCode;
+            return success;
         }
 
         public async Task<string> SaveProductReviewMD(Review review)
