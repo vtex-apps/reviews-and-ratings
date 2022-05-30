@@ -29,7 +29,7 @@ base:
     enabled: false
     projectId: 964exx
     getCookies: true
-    maxJobs: 1
+    maxJobs: 3
     quiet: true
     video: false
     videoCompression: false
