@@ -82,6 +82,32 @@ namespace ReviewsRatings.Controllers
                         }
 
                         Review newReview = JsonConvert.DeserializeObject<Review>(bodyAsText);
+
+                        if(newReview.ProductId == null)
+                        {
+                            return BadRequest("ProductId is missing.");
+                        }
+                        if(newReview.Rating == null)
+                        {
+                            return BadRequest("Rating is missing.");
+                        }
+                        if(newReview.Title == null)
+                        {
+                            return BadRequest("Title is missing.");
+                        }
+                        if(newReview.Text == null)
+                        {
+                            return BadRequest("Text is missing.");
+                        }
+                        if(newReview.ReviewerName == null)
+                        {
+                            return BadRequest("ReviewerName is missing.");
+                        }
+                        if(newReview.Approved == null)
+                        {
+                            return BadRequest("Approved is missing.");
+                        }
+
                         bool hasShopperReviewed = await _productReviewsService.HasShopperReviewed(validatedUser.User, newReview.ProductId);
                         if (hasShopperReviewed)
                         {
@@ -113,6 +139,37 @@ namespace ReviewsRatings.Controllers
 
                         IList<Review> reviews = JsonConvert.DeserializeObject<IList<Review>>(bodyAsText);
                         List<string> ids = new List<string>();
+                        foreach (Review review in reviews)
+                        {
+                            if(review.VerifiedPurchaser == null)
+                            {
+                                review.VerifiedPurchaser = false;
+                            }
+                            if(review.ProductId == null)
+                            {
+                                return BadRequest("ProductId is missing for one or more reviews.");
+                            }
+                            if(review.Rating == null)
+                            {
+                                return BadRequest("Rating is missing for one or more reviews.");
+                            }
+                            if(review.Title == null)
+                            {
+                                return BadRequest("Title is missing for one or more reviews.");
+                            }
+                            if(review.Text == null)
+                            {
+                                return BadRequest("Text is missing for one or more reviews.");
+                            }
+                            if(review.ReviewerName == null)
+                            {
+                                return BadRequest("ReviewerName is missing for one or more reviews.");
+                            }
+                            if(review.Approved == null)
+                            {
+                                return BadRequest("Approved is missing for one or more reviews.");
+                            }
+                        }
                         foreach (Review review in reviews)
                         {
                             var reviewsResponse = await this._productReviewsService.NewReview(review, false);
