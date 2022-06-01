@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - French translations.
 
+## [3.8.15] - 2022-06-01
+
+### Fixed
+
+- Added body fields validations for post methods rest api.
+
 ## [3.8.14] - 2022-05-24
 
 ### Added
