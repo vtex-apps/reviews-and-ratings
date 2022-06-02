@@ -68,7 +68,7 @@ strategy:
   # Clear reviews before testcase
   wipe:
     enabled: true
-    sendDashboard: true
+    sendDashboard: false
     hardTries: 1
     stopOnFail: false
     parallel: true
@@ -90,7 +90,7 @@ strategy:
     sendDashboard: true
     hardTries: 1
     stopOnFail: false
-    parallel: true
+    parallel: false
     specs:
       - cypress/integration/2.1.2-*
       - cypress/integration/2.1.3-*
@@ -124,7 +124,7 @@ strategy:
     sendDashboard: true
     hardTries: 1
     stopOnFail: false
-    parallel: true
+    parallel: false
     specs:
       - cypress/integration/2.2.3-*
       - cypress/integration/2.2.4-*
@@ -197,14 +197,39 @@ strategy:
     dependency:
       - cypress/integration/2.1.2-*
       - cypress/integration/2.1.3-*
-  display_settings:
+  display_settings_anonymous_user:
     enabled: true
     sendDashboard: true
     hardTries: 1
     stopOnFail: false
-    parallel: true
+    parallel: false
+    runInOrder: true
     specs:
       - cypress/integration/2.7.1-*
+  display_settings_disabled_anonymous_user:
+    enabled: true
+    sendDashboard: true
+    hardTries: 1
+    stopOnFail: false
+    parallel: false
+    runInOrder: true
+    specs:
       - cypress/integration/2.7.2-*
+  display_settings_signed_in_user:
+    enabled: true
+    sendDashboard: true
+    hardTries: 1
+    stopOnFail: false
+    parallel: false
+    runInOrder: true
+    specs:
       - cypress/integration/2.7.3-*
+  display_settings_disabled_signed_in_user:
+    enabled: true
+    sendDashboard: true
+    hardTries: 1
+    stopOnFail: false
+    parallel: false
+    runInOrder: true
+    specs:
       - cypress/integration/2.7.4-*
