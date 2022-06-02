@@ -7,13 +7,14 @@ import {
   retrieveReviewsListAPI,
   editReview,
   addReviewsAPI,
+  invalidPayloadInAddReview
 } from '../support/review_and_ratings.apis'
 import { testCase5 } from '../support/review_and_ratings.outputvalidation.js'
 import { testSetup, updateRetry } from '../support/common/support.js'
 import { graphql, getReviews } from '../support/graphql_queries.js'
 import { performDeleteReviews } from '../support/graphql_testcase.js'
 
-const { productId1, productId2, anonymousUser1, anonymousUser2, addReviews } =
+const { productId1, productId2, anonymousUser1, anonymousUser2, addReviews,invalidReview,invalidReviews } =
   testCase5
 const patchReviewEnv = 'patchReviewEnv'
 const addReviewsEnv = 'addReviewsEnv'
@@ -35,6 +36,13 @@ describe('Reviews REST API testcases', () => {
     })
   }
 
+  for(const review of invalidReview){
+    invalidPayloadInAddReview(review)
+  }
+
+  for(const review of invalidReviews){
+    invalidPayloadInAddReview(review,true)
+  }
   addReviewAPI(productId1, anonymousUser1)
   addReviewAPI(productId2, anonymousUser2)
   addReviewsAPI(addReviews, addReviewsEnv)
