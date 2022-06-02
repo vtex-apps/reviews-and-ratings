@@ -38,8 +38,8 @@ export function addReviewAPI(
           Rating: rating,
           Title: name,
           Text: review,
-          ReviewerName: "Syed",
-          Approved: true
+          ReviewerName: 'Syed',
+          Approved: true,
         },
         ...FAIL_ON_STATUS_CODE,
       }).then(response => {
@@ -57,42 +57,49 @@ export function addReviewAPI(
 }
 
 export function invalidPayloadInAddReview(
-  {payload,message},
-  multiple=false
+  { payload, message },
+  multiple = false
 ) {
-  it(`Add review${multiple ? 's':''} API should return response ${message}`, updateRetry(3), () => {
-    const { ProductId,Title, Rating, Text,ReviewerName,Approved}=payload
-    const endpoint = multiple? 'reviews': 'review'
-    const body = multiple ? payload : {
-      ProductId,
-      Rating,
-      Title,
-      Text,
-      ReviewerName,
-      Approved,
-    }
+  it(
+    `Add review${multiple ? 's' : ''} API should return response ${message}`,
+    updateRetry(3),
+    () => {
+      const { ProductId, Title, Rating, Text, ReviewerName, Approved } = payload
+      const endpoint = multiple ? 'reviews' : 'review'
+      const body = multiple
+        ? payload
+        : {
+            ProductId,
+            Rating,
+            Title,
+            Text,
+            ReviewerName,
+            Approved,
+          }
 
-    cy.getVtexItems().then(vtex => {
+      cy.getVtexItems().then(vtex => {
+        const headers = multiple
+          ? {
+              ...VTEX_AUTH_HEADER(vtex.apiKey, vtex.apiToken),
+            }
+          : {
+              VtexIdclientAutCookie: vtex.userAuthCookieValue,
+            }
 
-    const headers = multiple ?  {
-      ...VTEX_AUTH_HEADER(vtex.apiKey, vtex.apiToken),
-    } :{
-      VtexIdclientAutCookie: vtex.userAuthCookieValue,
-    }
-
-    cy.addDelayBetweenRetries(2000)
-      cy.request({
-        method: 'POST',
-        url: ratingsAPI(vtex.baseUrl, endpoint),
-        headers,
-        body,
-        ...FAIL_ON_STATUS_CODE,
-      }).then(response => {
-        expect(response.status).to.equal(400)
-        expect(response.body).to.contain(message)
+        cy.addDelayBetweenRetries(2000)
+        cy.request({
+          method: 'POST',
+          url: ratingsAPI(vtex.baseUrl, endpoint),
+          headers,
+          body,
+          ...FAIL_ON_STATUS_CODE,
+        }).then(response => {
+          expect(response.status).to.equal(400)
+          expect(response.body).to.contain(message)
+        })
       })
-    })
-  })
+    }
+  )
 }
 
 export function addReviewsAPI(reviews, env) {

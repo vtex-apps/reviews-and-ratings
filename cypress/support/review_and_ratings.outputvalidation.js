@@ -18,6 +18,7 @@ const USER = {
   u1: 'u1',
   u2: 'u2',
 }
+
 const REVIEW_880030 = {
   ProductId: 880030,
   Rating: 4,
@@ -37,6 +38,7 @@ const REVIEW_880031 = {
   Approved: false,
   VerifiedPurchaser: false,
 }
+
 const invalidPayloads = [
   {
     MissingField: 'ProductId',
@@ -86,15 +88,18 @@ const invalidPayloads = [
 
 function generatePayload(addReviews = 'for one or more reviews.') {
   const result = []
+
   for (const { Payload, MissingField } of invalidPayloads) {
     result.push({
       payload: addReviews ? [REVIEW_880030, Payload] : Payload,
-      message: `${MissingField} is missing${addReviews ? ' '+addReviews : ''}`,
+      message: `${MissingField} is missing${
+        addReviews ? ` ${addReviews}` : ''
+      }`,
     })
   }
+
   return result
 }
-
 
 export default {
   testCase1: {
@@ -249,12 +254,9 @@ export default {
       review: 'Excellent Product',
       average: 4,
     },
-    addReviews: [
-      REVIEW_880030,
-      REVIEW_880031,
-    ],
+    addReviews: [REVIEW_880030, REVIEW_880031],
     invalidReviews: generatePayload(),
-    invalidReview: generatePayload(null)
+    invalidReview: generatePayload(null),
   },
   testCase6: {
     product: PRODUCTS.coconut,
