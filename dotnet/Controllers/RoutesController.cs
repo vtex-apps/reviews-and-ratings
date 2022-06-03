@@ -83,7 +83,7 @@ namespace ReviewsRatings.Controllers
 
                         Review newReview = JsonConvert.DeserializeObject<Review>(bodyAsText);
 
-                        if(newReview.ProductId == null)
+                        if(string.IsNullOrEmpty(newReview.ProductId))
                         {
                             return BadRequest("ProductId is missing.");
                         }
@@ -91,15 +91,15 @@ namespace ReviewsRatings.Controllers
                         {
                             return BadRequest("Rating is missing.");
                         }
-                        if(newReview.Title == null)
+                        if(string.IsNullOrEmpty(newReview.Title))
                         {
                             return BadRequest("Title is missing.");
                         }
-                        if(newReview.Text == null)
+                        if(string.IsNullOrEmpty(newReview.Text))
                         {
                             return BadRequest("Text is missing.");
                         }
-                        if(newReview.ReviewerName == null)
+                        if(string.IsNullOrEmpty(newReview.ReviewerName))
                         {
                             return BadRequest("ReviewerName is missing.");
                         }
@@ -145,7 +145,7 @@ namespace ReviewsRatings.Controllers
                             {
                                 review.VerifiedPurchaser = false;
                             }
-                            if(review.ProductId == null)
+                            if(string.IsNullOrEmpty(review.ProductId))
                             {
                                 return BadRequest("ProductId is missing for one or more reviews.");
                             }
@@ -153,15 +153,15 @@ namespace ReviewsRatings.Controllers
                             {
                                 return BadRequest("Rating is missing for one or more reviews.");
                             }
-                            if(review.Title == null)
+                            if(string.IsNullOrEmpty(review.Title))
                             {
                                 return BadRequest("Title is missing for one or more reviews.");
                             }
-                            if(review.Text == null)
+                            if(string.IsNullOrEmpty(review.Text))
                             {
                                 return BadRequest("Text is missing for one or more reviews.");
                             }
-                            if(review.ReviewerName == null)
+                            if(string.IsNullOrEmpty(review.ReviewerName))
                             {
                                 return BadRequest("ReviewerName is missing for one or more reviews.");
                             }

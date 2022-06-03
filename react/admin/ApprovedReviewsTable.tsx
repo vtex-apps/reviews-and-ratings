@@ -5,6 +5,7 @@ import type { IntlShape } from 'react-intl'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { Box, ToastConsumer } from 'vtex.styleguide'
 
+import { toLocalDate } from './utils/dates'
 import type {
   Review,
   ReviewTableRowData,
@@ -65,10 +66,11 @@ export const ApprovedReviewsTable: FC = () => {
       sku,
     } = review
 
+    const { formatDate, formatTime } = intl
+    const localDate = toLocalDate(reviewDateTime)
+
     return {
-      date: `${intl.formatDate(reviewDateTime)} ${intl.formatTime(
-        reviewDateTime
-      )}`,
+      date: `${formatDate(localDate)} ${formatTime(localDate)}`,
       product: {
         productId,
         sku,
