@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Convert to review date to local time in the front pending and approved tables.
+- Use IsNullOrEmpty for validations in rest APIs.
+
 ## [3.9.0] - 2022-06-02
 
 ### Added

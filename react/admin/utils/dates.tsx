@@ -15,3 +15,11 @@ export function currentDate() {
 
   return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`
 }
+
+export const toLocalDate = (reviewDate: string) => {
+  const newDate = new Date(`${reviewDate} UTC`)
+  const date =
+    newDate.toString() === 'Invalid Date' ? new Date(reviewDate) : newDate
+
+  return date
+}
