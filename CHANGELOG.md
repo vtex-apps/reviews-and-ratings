@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.9.1] - 2022-06-03
+
 ### Fixed
 
 - Convert to review date to local time in the front pending and approved tables.
