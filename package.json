@@ -6,7 +6,7 @@
     "lint": "eslint --ext js,jsx,ts,tsx .",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json}\"",
     "test": "yarn --cwd react test",
-    "cy-r": "cd cy-runner && git pull && node cy-runner"
+    "cy-r": "cd cy-runner && node cy-runner"
   },
   "husky": {
     "hooks": {
