@@ -4,5 +4,10 @@
     "browser": true,
     "es6": true,
     "jest": true
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }
