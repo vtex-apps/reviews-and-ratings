@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- (REVIEWS-102) Updated VerifySchema function
+
 ## [3.9.1] - 2022-06-03
 
 ### Fixed
