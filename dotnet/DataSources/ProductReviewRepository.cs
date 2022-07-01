@@ -448,22 +448,12 @@
                 {
                     request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
                 }
+
                 request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
 
                 var client = _clientFactory.CreateClient();
                 var response = await client.SendAsync(request);
                 string responseContent = await response.Content.ReadAsStringAsync();
-
-                string GetSHA256(string str)
-                {
-                    SHA256 sha256 = SHA256Managed.Create();
-                    ASCIIEncoding encoding = new ASCIIEncoding();
-                    byte[] stream = null;
-                    StringBuilder sb = new StringBuilder();
-                    stream = sha256.ComputeHash(encoding.GetBytes(str));
-                    for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
-                    return sb.ToString();
-                }
 
                 verifyResult = response.IsSuccessStatusCode
                     && responseContent.Equals(GetSHA256(SCHEMA_JSON));
@@ -484,11 +474,11 @@
                         request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
 
                         response = await client.SendAsync(request);
-                        responseContent = await response.Content.ReadAsStringAsync();
 
                         if (!response.IsSuccessStatusCode && response.StatusCode != HttpStatusCode.NotModified)
                         {
-                            throw new Exception(responseContent);
+                            _context.Vtex.Logger.Error("VerifySchema", null, $"Failed to apply schema. [{response.StatusCode}] ");
+                            return "Schema is NOT up to date";
                         }
 
                         request = new HttpRequestMessage
@@ -503,13 +493,16 @@
                         request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
 
                         response = await client.SendAsync(request);
+                        verifyResult = response.StatusCode.Equals(HttpStatusCode.OK);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            _context.Vtex.Logger.Warn("VerifySchema", null, $"Failed to update schema hash. [{response.StatusCode}] ");
+                        }
                     }
                     catch (Exception ex)
                     {
                         _context.Vtex.Logger.Error("VerifySchema", null, "Request Error", ex);
                     }
-
-                    verifyResult = response.ReasonPhrase == "OK";
                 }
             }
             catch(Exception ex)
@@ -518,7 +511,6 @@
             }
             
             return verifyResult ? "Schema is up to date!" : "Schema is NOT up to date";
-            
         }
 
         public async Task<string> VerifyMigration()
@@ -822,5 +814,19 @@
             return id;
         }
 
+        private string GetSHA256(string str)
+        {
+            SHA256 sha256 = SHA256Managed.Create();
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            byte[] stream = null;
+            StringBuilder sb = new StringBuilder();
+            stream = sha256.ComputeHash(encoding.GetBytes(str));
+            for (int i = 0; i < stream.Length; i++)
+            {
+                sb.AppendFormat("{0:x2}", stream[i]);
+            }
+
+            return sb.ToString();
+        }
     }
 }
