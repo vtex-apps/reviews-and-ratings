@@ -51,6 +51,7 @@
   "admin/reviews.table.productCell.SKU": "SKU: {sku}",
   "admin/reviews.table.reviewCell.author": "{author} による投稿",
   "admin/reviews.table.reviewCell.anonymous": "匿名",
+  "admin/reviews.migrateData": "データの移行",
   "store/reviews.form.title": "レビューを追加する",
   "store/reviews.form.reviewSubmitted": "レビューが提出されました。",
   "store/reviews.form.alreadySubmitted": "この製品へのレビューを提出済みです。",

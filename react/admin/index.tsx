@@ -135,7 +135,11 @@ const ReviewIndex: FC = props => {
             {needsMigrate && (
               <div className="pa7-ns pt0-m">
                 <Button onClick={migrateData}>
-                  {isMigrationloading ? <Spinner /> : 'Migrate Data'}
+                  {isMigrationloading ? (
+                    <Spinner />
+                  ) : (
+                    <FormattedMessage id="admin/reviews.migrateData" />
+                  )}
                 </Button>
               </div>
             )}

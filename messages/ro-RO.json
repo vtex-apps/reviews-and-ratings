@@ -51,6 +51,7 @@
   "admin/reviews.table.productCell.SKU": "SKU: {sku}",
   "admin/reviews.table.reviewCell.author": "Postat de {author}",
   "admin/reviews.table.reviewCell.anonymous": "anonim",
+  "admin/reviews.migrateData": "Migrați Datele",
   "store/reviews.form.title": "Adaugă recenzie",
   "store/reviews.form.reviewSubmitted": "Recenzia ta a fost transmisă.",
   "store/reviews.form.alreadySubmitted": "Ai trimis deja o recenzie pentru acest produs.",

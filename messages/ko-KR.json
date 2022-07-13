@@ -51,6 +51,7 @@
   "admin/reviews.table.productCell.SKU": "SKU: {sku}",
   "admin/reviews.table.reviewCell.author": "작성자 {author}",
   "admin/reviews.table.reviewCell.anonymous": "익명",
+  "admin/reviews.migrateData": "데이터 마이그레이션",
   "store/reviews.form.title": "리뷰 추가",
   "store/reviews.form.reviewSubmitted": "리뷰가 제출되었습니다.",
   "store/reviews.form.alreadySubmitted": "이 제품에 대한 리뷰를 이미 제출했습니다.",
