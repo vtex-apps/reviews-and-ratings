@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Added Auth to edit/delete/moderate reviews
+
 ## [3.9.2] - 2022-07-01
 
 ### Changed
