@@ -3,7 +3,7 @@ using GraphQL.Types;
 using ReviewsRatings.GraphQL.Types;
 using ReviewsRatings.Models;
 using ReviewsRatings.Services;
-using System;
+using System.Net;
 
 namespace ReviewsRatings.GraphQL
 {
@@ -25,43 +25,86 @@ namespace ReviewsRatings.GraphQL
                     return productReviewService.NewReview(review, true);
                 });
 
-            Field<ReviewType>(
+            FieldAsync<ReviewType>(
                 "editReview",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>> {Name = "id"},
                     new QueryArgument<NonNullGraphType<EditReviewInputType>> {Name = "review"}
                 ),
-                resolve: context =>
+                resolve: async context =>
                 {
                     var id = context.GetArgument<string>("id");
                     var review = context.GetArgument<Review>("review");
                     review.Id = id;
-                    return productReviewService.EditReview(review);
+                    (Review review, HttpStatusCode status) prodEditResult = await productReviewService.EditReview(review);
+
+                    if (prodEditResult.status == HttpStatusCode.OK)
+                    {
+                        return prodEditResult.review;
+                    }
+                    else
+                    {
+                        context.Errors.Add(new ExecutionError(prodEditResult.status.ToString())
+                        {
+                            Code = prodEditResult.status.ToString()
+                        });
+                        
+                        return default;
+                    }
                 });
 
-            Field<BooleanGraphType>(
+            FieldAsync<BooleanGraphType>(
                 "deleteReview",
                 arguments: new QueryArguments(
                     new QueryArgument<ListGraphType<StringGraphType>> { Name = "ids"}
                 ),
-                resolve: context =>
+                resolve: async context =>
                 {
                     var ids = context.GetArgument<string[]>("ids");
-                    return productReviewService.DeleteReview(ids);
+                    (bool retval, HttpStatusCode status) prodDelResult = await productReviewService.DeleteReview(ids);
+
+                    if (prodDelResult.status == HttpStatusCode.OK)
+                    {
+                        return prodDelResult.retval;
+                    }
+                    else
+                    {
+                        context.Errors.Add(new ExecutionError(prodDelResult.status.ToString())
+                        {
+                            Code = prodDelResult.status.ToString()
+                        });
+                        
+                        return default;
+                    }
                 });
 
-            Field<BooleanGraphType>(
+            FieldAsync<BooleanGraphType>(
                 "moderateReview",
                 arguments: new QueryArguments(
                     new QueryArgument<ListGraphType<StringGraphType>> { Name = "ids" },
                     new QueryArgument<BooleanGraphType> { Name = "approved"}
                 ),
-                resolve: context =>
+                resolve: async context =>
                 {
                     var ids = context.GetArgument<string[]>("ids");
                     var approved = context.GetArgument<bool>("approved");
-                    return productReviewService.ModerateReview(ids, approved);
-                });
+                    (bool retval, HttpStatusCode status) prodReviewResult = await productReviewService.ModerateReview(ids, approved);
+
+                    if (prodReviewResult.status == HttpStatusCode.OK)
+                    {
+                        return prodReviewResult.retval;
+                    }
+                    else
+                    {
+                        context.Errors.Add(new ExecutionError(prodReviewResult.status.ToString())
+                        {
+                            Code = prodReviewResult.status.ToString()
+                        });
+                        
+                        return default;
+                    }
+                }
+            );
         }
     }
 }

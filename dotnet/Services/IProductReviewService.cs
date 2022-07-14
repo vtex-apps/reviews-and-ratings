@@ -3,6 +3,7 @@
     using Models;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using System.Net;
 
     public interface IProductReviewService
     {
@@ -21,9 +22,9 @@
 
         Task<Review> NewReview(Review review, bool doValidation);
 
-        Task<Review> EditReview(Review review);
+        Task<(Review, HttpStatusCode)> EditReview(Review review);
 
-        Task<bool> DeleteReview(string[] ids);
+        Task<(bool, HttpStatusCode)> DeleteReview(string[] ids);
 
         Task<ReviewsResponseWrapper> GetReviewsByShopperId(string shopperId);
 
@@ -33,7 +34,7 @@
 
         Task ClearData();
 
-        Task<bool> ModerateReview(string[] ids, bool approved);
+        Task<(bool, HttpStatusCode)> ModerateReview(string[] ids, bool approved);
 
         Task<bool> HasShopperReviewed(string shopperId, string productId);
 
