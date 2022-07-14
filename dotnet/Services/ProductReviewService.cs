@@ -70,16 +70,8 @@
             return retval;
         }
 
-        public async Task<(Review, HttpStatusCode)> EditReview(Review review)
+        public async Task<Review> EditReview(Review review)
         {
-
-            HttpStatusCode isValidAuthUser = await IsValidAuthUser();
-            
-            if (isValidAuthUser != HttpStatusCode.OK)
-            {
-                return (null, isValidAuthUser);
-            }
-
             ReviewsResponseWrapper wrapper = await _productReviewRepository.GetProductReviewsMD($"id={review.Id}", null, null);
             Review oldReview = wrapper.Reviews.FirstOrDefault();
 
@@ -106,7 +98,7 @@
                 review.Id = id;
             }
 
-            return (review, isValidAuthUser);
+            return review;
         }
 
         public async Task<decimal> GetAverageRatingByProductId(string productId)
@@ -479,15 +471,8 @@
             await _productReviewRepository.SaveLookupAsync(null);
         }
 
-        public async Task<(bool, HttpStatusCode)> ModerateReview(string[] ids, bool approved)
+        public async Task<bool> ModerateReview(string[] ids, bool approved)
         {
-            HttpStatusCode isValidAuthUser = await IsValidAuthUser();
-            
-            if (isValidAuthUser != HttpStatusCode.OK)
-            {
-                return (false, isValidAuthUser);
-            }
-
             bool retval = true;
             IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
             foreach (string id in ids)
@@ -509,7 +494,7 @@
                 }
             }
 
-            return (retval, isValidAuthUser);
+            return retval;
         }
 
         public async Task<bool> HasShopperReviewed(string shopperId, string productId)
@@ -555,7 +540,7 @@
             }
             catch (Exception ex)
             {
-                _context.Vtex.Logger.Error("ModerateReview", null, "Error fetching user", ex);
+                _context.Vtex.Logger.Error("IsValidAuthUser", null, "Error fetching user", ex);
                 return HttpStatusCode.BadRequest;
             }
 
@@ -563,7 +548,7 @@
             
             if (!hasPermission)
             {
-                _context.Vtex.Logger.Warn("ModerateReview", null, "User Does Not Have Permission");
+                _context.Vtex.Logger.Warn("IsValidAuthUser", null, "User Does Not Have Permission");
                 return HttpStatusCode.Forbidden;
             }
 
@@ -783,21 +768,15 @@
             return await _productReviewRepository.GetProductReviewsMD(string.Empty, from.ToString(), to.ToString());
         }
 
-        public async Task<(bool, HttpStatusCode)> DeleteReview(string[] ids)
+        public async Task<bool> DeleteReview(string[] ids)
         {
-            HttpStatusCode isValidAuthUser = await IsValidAuthUser();
-            if (isValidAuthUser != HttpStatusCode.OK)
-            {
-                return (false, isValidAuthUser);
-            }
-
             bool retval = true;
             foreach (string id in ids)
             {
                 retval &= await _productReviewRepository.DeleteProductReviewMD(id);
             }
 
-            return (retval, isValidAuthUser);
+            return retval;
         }
 
         private async Task<string> GetSortQuery(string orderBy)

@@ -33,24 +33,22 @@ namespace ReviewsRatings.GraphQL
                 ),
                 resolve: async context =>
                 {
-                    var id = context.GetArgument<string>("id");
-                    var review = context.GetArgument<Review>("review");
-                    review.Id = id;
-                    (Review review, HttpStatusCode status) prodEditResult = await productReviewService.EditReview(review);
-
-                    if (prodEditResult.status == HttpStatusCode.OK)
+                    HttpStatusCode isValidAuthUser = await productReviewService.IsValidAuthUser();
+            
+                    if (isValidAuthUser != HttpStatusCode.OK)
                     {
-                        return prodEditResult.review;
-                    }
-                    else
-                    {
-                        context.Errors.Add(new ExecutionError(prodEditResult.status.ToString())
+                        context.Errors.Add(new ExecutionError(isValidAuthUser.ToString())
                         {
-                            Code = prodEditResult.status.ToString()
+                            Code = isValidAuthUser.ToString()
                         });
                         
                         return default;
                     }
+
+                    var id = context.GetArgument<string>("id");
+                    var review = context.GetArgument<Review>("review");
+                    review.Id = id;
+                    return await productReviewService.EditReview(review);
                 });
 
             FieldAsync<BooleanGraphType>(
@@ -60,22 +58,20 @@ namespace ReviewsRatings.GraphQL
                 ),
                 resolve: async context =>
                 {
-                    var ids = context.GetArgument<string[]>("ids");
-                    (bool retval, HttpStatusCode status) prodDelResult = await productReviewService.DeleteReview(ids);
-
-                    if (prodDelResult.status == HttpStatusCode.OK)
+                    HttpStatusCode isValidAuthUser = await productReviewService.IsValidAuthUser();
+            
+                    if (isValidAuthUser != HttpStatusCode.OK)
                     {
-                        return prodDelResult.retval;
-                    }
-                    else
-                    {
-                        context.Errors.Add(new ExecutionError(prodDelResult.status.ToString())
+                        context.Errors.Add(new ExecutionError(isValidAuthUser.ToString())
                         {
-                            Code = prodDelResult.status.ToString()
+                            Code = isValidAuthUser.ToString()
                         });
                         
                         return default;
                     }
+
+                    var ids = context.GetArgument<string[]>("ids");
+                    return await productReviewService.DeleteReview(ids);
                 });
 
             FieldAsync<BooleanGraphType>(
@@ -86,23 +82,22 @@ namespace ReviewsRatings.GraphQL
                 ),
                 resolve: async context =>
                 {
-                    var ids = context.GetArgument<string[]>("ids");
-                    var approved = context.GetArgument<bool>("approved");
-                    (bool retval, HttpStatusCode status) prodReviewResult = await productReviewService.ModerateReview(ids, approved);
-
-                    if (prodReviewResult.status == HttpStatusCode.OK)
+                    HttpStatusCode isValidAuthUser = await productReviewService.IsValidAuthUser();
+            
+                    if (isValidAuthUser != HttpStatusCode.OK)
                     {
-                        return prodReviewResult.retval;
-                    }
-                    else
-                    {
-                        context.Errors.Add(new ExecutionError(prodReviewResult.status.ToString())
+                        context.Errors.Add(new ExecutionError(isValidAuthUser.ToString())
                         {
-                            Code = prodReviewResult.status.ToString()
+                            Code = isValidAuthUser.ToString()
                         });
                         
                         return default;
                     }
+
+                    var ids = context.GetArgument<string[]>("ids");
+                    var approved = context.GetArgument<bool>("approved");
+
+                    return await productReviewService.ModerateReview(ids, approved);
                 }
             );
         }

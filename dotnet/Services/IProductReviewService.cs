@@ -22,9 +22,11 @@
 
         Task<Review> NewReview(Review review, bool doValidation);
 
-        Task<(Review, HttpStatusCode)> EditReview(Review review);
+        Task<Review> EditReview(Review review);
 
-        Task<(bool, HttpStatusCode)> DeleteReview(string[] ids);
+        Task<bool> DeleteReview(string[] ids);
+
+        Task<HttpStatusCode> IsValidAuthUser();
 
         Task<ReviewsResponseWrapper> GetReviewsByShopperId(string shopperId);
 
@@ -34,7 +36,7 @@
 
         Task ClearData();
 
-        Task<(bool, HttpStatusCode)> ModerateReview(string[] ids, bool approved);
+        Task<bool> ModerateReview(string[] ids, bool approved);
 
         Task<bool> HasShopperReviewed(string shopperId, string productId);
 
