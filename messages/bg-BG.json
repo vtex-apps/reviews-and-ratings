@@ -51,7 +51,7 @@
   "admin/reviews.table.productCell.SKU": "ИЕ: {sku}",
   "admin/reviews.table.reviewCell.author": "Публикувано от {author}",
   "admin/reviews.table.reviewCell.anonymous": "анонимен",
-  "admin/reviews.migrateData": "мигриране на данни",
+  "admin/reviews.migrateData": "Прехвърляне на данните",
   "store/reviews.form.title": "Добавяне на отзив",
   "store/reviews.form.reviewSubmitted": "Вашият отзив е подаден.",
   "store/reviews.form.alreadySubmitted": "Вече сте подали отзив за този продукт.",
