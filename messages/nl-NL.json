@@ -51,7 +51,7 @@
   "admin/reviews.table.productCell.SKU": "SKU: {sku}",
   "admin/reviews.table.reviewCell.author": "Geplaatst door {author}",
   "admin/reviews.table.reviewCell.anonymous": "anoniem",
-  "admin/reviews.migrateData": "Gegevens Migreren",
+  "admin/reviews.migrateData": "Gegevens migreren",
   "store/reviews.form.title": "Beoordeling toevoegen",
   "store/reviews.form.reviewSubmitted": "Uw beoordeling is ingediend.",
   "store/reviews.form.alreadySubmitted": "U hebt al een beoordeling voor dit product ingediend.",
