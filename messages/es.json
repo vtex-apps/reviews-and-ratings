@@ -51,7 +51,7 @@
   "admin/reviews.table.productCell.SKU": "SKU: {sku}",
   "admin/reviews.table.reviewCell.author": "Enviado por {author}",
   "admin/reviews.table.reviewCell.anonymous": "anónimo",
-  "admin/reviews.migrateData": "Migrar Datos",
+  "admin/reviews.migrateData": "Migrar datos",
   "store/reviews.form.title": "Agregar comentario",
   "store/reviews.form.reviewSubmitted": "Su comentario ha sido enviado",
   "store/reviews.form.alreadySubmitted": "Usted ya envió un comentario para este producto",
