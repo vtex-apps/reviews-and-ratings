@@ -51,6 +51,7 @@
   "admin/reviews.table.productCell.SKU": "SKU: {sku}",
   "admin/reviews.table.reviewCell.author": "โพสต์โดย {author}",
   "admin/reviews.table.reviewCell.anonymous": "ไม่ระบุชื่อ",
+  "admin/reviews.migrateData": "ย้ายข้อมูล",
   "store/reviews.form.title": "เพิ่มรีวิว",
   "store/reviews.form.reviewSubmitted": "ส่งรีวิวของคุณแล้ว",
   "store/reviews.form.alreadySubmitted": "คุณส่งรีวิวสำหรับผลิตภัณฑ์นี้แล้ว",

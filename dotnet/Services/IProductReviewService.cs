@@ -3,6 +3,7 @@
     using Models;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using System.Net;
 
     public interface IProductReviewService
     {
@@ -24,6 +25,8 @@
         Task<Review> EditReview(Review review);
 
         Task<bool> DeleteReview(string[] ids);
+
+        Task<HttpStatusCode> IsValidAuthUser();
 
         Task<ReviewsResponseWrapper> GetReviewsByShopperId(string shopperId);
 

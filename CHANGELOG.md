@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.10.1] - 2022-07-25
+
+### Changed
+
+- (REVIEWS-107) Translate 'Migrate Data' button to all languages.
+
+## [3.10.0] - 2022-07-14
+
+### Added
+
+- Added Auth to edit/delete/moderate reviews
+
 ## [3.9.2] - 2022-07-01
 
 ### Changed

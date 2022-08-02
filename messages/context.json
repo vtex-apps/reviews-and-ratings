@@ -51,6 +51,7 @@
   "admin/reviews.table.productCell.SKU": "admin/reviews.table.productCell.SKU",
   "admin/reviews.table.reviewCell.author": "admin/reviews.table.reviewCell.author",
   "admin/reviews.table.reviewCell.anonymous": "admin/reviews.table.reviewCell.anonymous",
+  "admin/reviews.migrateData": "admin/reviews.migrateData",
   "store/reviews.form.title": "store/reviews.form.addReview",
   "store/reviews.form.reviewSubmitted": "store/reviews.form.reviewSubmitted",
   "store/reviews.form.alreadySubmitted": "store/reviews.form.alreadySubmitted",
