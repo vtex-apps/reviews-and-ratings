@@ -1,4 +1,4 @@
-import { testSetup } from '../support/common/support.js'
+import { loginViaCookies } from '../support/common/support.js'
 import { testCase4 } from '../support/review_and_ratings.outputvalidation'
 import { updateSettings } from '../support/review_and_ratings_settings.js'
 import {
@@ -12,7 +12,7 @@ import { reviewsAndRatingsConstants } from '../support/reviews_and_ratings.const
 const { title, configuration, product } = testCase4
 
 describe(`${title} - Anonymous User`, () => {
-  testSetup(false)
+  loginViaCookies({ storeFrontCookie: false })
   updateSettings(title, configuration)
   restrictAnonymousUser(product)
   verifiedReviewTestCase(testCase4)
