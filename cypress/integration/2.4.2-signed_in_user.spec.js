@@ -1,5 +1,5 @@
 import {
-  testSetup,
+  loginViaCookies,
   updateRetry,
   preserveCookie,
 } from '../support/common/support.js'
@@ -15,7 +15,7 @@ import { reviewsAndRatingsConstants } from '../support/reviews_and_ratings.const
 const { title, configuration, product, user1 } = testCase4
 
 describe(`${title} - Signed In User`, () => {
-  testSetup()
+  loginViaCookies()
 
   updateSettings(title, configuration)
 

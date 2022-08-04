@@ -1,4 +1,4 @@
-import { testSetup, updateRetry } from '../support/common/support.js'
+import { loginViaCookies, updateRetry } from '../support/common/support.js'
 import {
   graphql,
   getShopperIdQuery,
@@ -29,7 +29,7 @@ const { productId, title } = anonymousUser1
 const reviewDateTimeEnv = 'reviewDateTimeEnv'
 
 describe('Graphql queries', () => {
-  testSetup(false)
+  loginViaCookies({ storeFrontCookie: false })
 
   it('Verify adding review for product', updateRetry(2), () => {
     graphql(addReviewQuery(anonymousUser1), response => {

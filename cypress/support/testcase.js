@@ -1,10 +1,10 @@
-import { testSetup, updateRetry } from './common/support.js'
+import { loginViaCookies, updateRetry } from './common/support.js'
 import rrselectors from './reviews_and_ratings.selectors.js'
 import { reload } from './utils.js'
 import { reviewsAndRatingsConstants } from './reviews_and_ratings.constants.js'
 
 export function restrictAnonymousUser(product) {
-  testSetup(false)
+  loginViaCookies({ storeFrontCookie: false })
   it(`Anonymous user should not be able to add review`, updateRetry(3), () => {
     cy.openStoreFront()
     cy.openProduct(product, true)
