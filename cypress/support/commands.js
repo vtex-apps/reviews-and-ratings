@@ -90,6 +90,12 @@ Cypress.Commands.add('fillReviewInformation', user => {
     .should('have.text', 'Your review has been submitted.')
 })
 
+function justNumbers(string) {
+  const regex = /[+-]?\d+(\.\d+)?/g
+
+  return parseFloat(string.match(regex)[0])
+}
+
 Cypress.Commands.add('getAverageRating', (user, product, validate = true) => {
   const { average, verified } = user
 
@@ -100,11 +106,11 @@ Cypress.Commands.add('getAverageRating', (user, product, validate = true) => {
   cy.get('span[class*=average]', { timeout: 40000 })
     .invoke('text')
     .then(averageText => {
-      const getAverage = averageText.split(' ')
+      const averageRating = justNumbers(averageText)
 
       if (validate) {
-        expect(average).to.equal(+getAverage[0])
-      } else if (average === +getAverage[0]) {
+        expect(average).to.equal(averageRating)
+      } else if (average === averageRating[0]) {
         return cy.wrap(true)
       } else {
         return cy.wrap(false)
