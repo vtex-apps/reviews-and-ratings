@@ -74,7 +74,7 @@ strategy:
     parallel: true
     specs:
       - cypress/integration/wipe.spec.js
-  # Enable Anonymous review with no admin approval
+  # Enable Anonymous review with no admin approval & Order Product
   anonymous_user1:
     enabled: true
     sendDashboard: true
@@ -83,6 +83,7 @@ strategy:
     parallel: true
     specs:
       - cypress/integration/2.1.1-*
+      - cypress/integration/2.2.1-*
     dependency:
       - cypress/integration/wipe.spec.js
   signed_in_user1:
@@ -96,16 +97,6 @@ strategy:
       - cypress/integration/2.1.3-*
     dependency:
       - cypress/integration/2.1.1-*
-  order_the_product:
-    enabled: true
-    sendDashboard: true
-    hardTries: 1
-    stopOnFail: false
-    parallel: true
-    specs:
-      - cypress/integration/2.2.1-*
-    dependency:
-      - cypress/integration/wipe.spec.js
   # Disable Anonymous review with no admin approval
   anonymous_user2:
     enabled: true

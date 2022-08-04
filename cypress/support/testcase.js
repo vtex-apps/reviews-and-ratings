@@ -73,7 +73,7 @@ export function verifiedReviewTestCase({ verifiedProduct }, user = false) {
 
   it(`Validate verified user added comments shown to ${title} user`, () => {
     cy.openProduct(verifiedProduct, true)
-    cy.contains('Verified Purchaser')
+    cy.contains('Verified', { matchCase: false })
   })
 }
 

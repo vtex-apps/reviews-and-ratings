@@ -74,11 +74,13 @@ Cypress.Commands.add(
 Cypress.Commands.add('fillReviewInformation', user => {
   const { email, line, rating, name, review } = user
 
-  cy.get(rrselectors.formBottomLine).clear().type(line)
-  cy.get(`${rrselectors.ratingStar} > span:nth-child(${rating})`).click()
-  cy.get(rrselectors.formName).clear().type(name)
+  cy.get(rrselectors.formBottomLine, { timeout: 20000 }).clear().type(line)
+  cy.get(`${rrselectors.ratingStar} > span:nth-child(${rating})`, {
+    timeout: 20000,
+  }).click()
+  cy.get(rrselectors.formName, { timeout: 20000 }).clear().type(name)
   if (email) {
-    cy.get(rrselectors.formEmail).clear().type(email)
+    cy.get(rrselectors.formEmail, { timeout: 20000 }).clear().type(email)
   }
 
   cy.get(rrselectors.formTextArea).clear().type(review)
@@ -109,7 +111,7 @@ Cypress.Commands.add('getAverageRating', (user, product, validate = true) => {
       }
 
       if (verified) {
-        cy.contains('Verified Purchaser')
+        cy.contains('Verified', { matchCase: false })
       }
     })
 })
