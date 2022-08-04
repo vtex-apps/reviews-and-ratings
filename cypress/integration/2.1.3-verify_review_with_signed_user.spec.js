@@ -1,5 +1,5 @@
 import {
-  testSetup,
+  loginViaCookies,
   preserveCookie,
   updateRetry,
 } from '../support/common/support.js'
@@ -11,11 +11,11 @@ import { updateSettings } from '../support/review_and_ratings_settings.js'
 const { product, user1, title, configuration } = testCase1
 
 describe(title, () => {
-  testSetup(false)
+  loginViaCookies({ storeFrontCookie: false })
   updateSettings(title, configuration)
 
   describe(`Verify review with Signed In User`, () => {
-    testSetup()
+    loginViaCookies()
 
     it(
       'Added review should show immediately to the user',

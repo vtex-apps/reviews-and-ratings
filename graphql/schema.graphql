@@ -136,7 +136,7 @@ input EditReviewInput {
 
 type Mutation {
   newReview(review: ReviewInput!): Review
-  editReview(id: String!, review: EditReviewInput!): Review
-  deleteReview(ids: [String!]): Boolean
-  moderateReview(ids: [String!], approved: Boolean!): Boolean
+  editReview(id: String!, review: EditReviewInput!): Review @cacheControl(scope: PRIVATE)
+  deleteReview(ids: [String!]): Boolean @cacheControl(scope: PRIVATE)
+  moderateReview(ids: [String!], approved: Boolean!): Boolean @cacheControl(scope: PRIVATE)
 }

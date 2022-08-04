@@ -51,6 +51,7 @@
   "admin/reviews.table.productCell.SKU": "SKU: {sku}",
   "admin/reviews.table.reviewCell.author": "تم النشر بواسطة {author}",
   "admin/reviews.table.reviewCell.anonymous": "مجهول",
+  "admin/reviews.migrateData": "ترحيل البيانات",
   "store/reviews.form.title": "أضف تعليقًا",
   "store/reviews.form.reviewSubmitted": "تم تقديم تعليقك.",
   "store/reviews.form.alreadySubmitted": "لقد قمت بالفعل بإرسال تعليق لهذا المنتج.",

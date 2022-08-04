@@ -1,4 +1,4 @@
-import { testSetup, updateRetry } from '../support/common/support.js'
+import { loginViaCookies, updateRetry } from '../support/common/support.js'
 import { updateSettings } from '../support/review_and_ratings_settings.js'
 import { testCase3 } from '../support/review_and_ratings.outputvalidation'
 import { verifyFilter, verifiedReviewTestCase } from '../support/testcase.js'
@@ -11,7 +11,7 @@ import {
 const { title, configuration, product, anonymousUser1 } = testCase3
 
 describe(`${title} - Anonymous User`, () => {
-  testSetup(false)
+  loginViaCookies({ storeFrontCookie: false })
   updateSettings(title, configuration)
   it('Adding review to product with location', updateRetry(2), () => {
     cy.openStoreFront()

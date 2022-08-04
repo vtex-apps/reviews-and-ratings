@@ -8,6 +8,7 @@
     using System.Threading.Tasks;
     using Models;
     using Newtonsoft.Json;
+    using System.Net;
     using ReviewsRatings.DataSources;
     using Vtex.Api.Context;
 
@@ -71,7 +72,6 @@
 
         public async Task<Review> EditReview(Review review)
         {
-
             ReviewsResponseWrapper wrapper = await _productReviewRepository.GetProductReviewsMD($"id={review.Id}", null, null);
             Review oldReview = wrapper.Reviews.FirstOrDefault();
 
@@ -525,6 +525,34 @@
         public async Task<ValidatedUser> ValidateUserToken(string token)
         {
             return await this._productReviewRepository.ValidateUserToken(token);
+        }
+
+        public async Task<HttpStatusCode> IsValidAuthUser()
+        {
+            if (string.IsNullOrEmpty(_context.Vtex.AdminUserAuthToken))
+            {
+                return HttpStatusCode.Unauthorized;
+            }
+
+            ValidatedUser validatedUser = null;
+            try {
+                validatedUser = await ValidateUserToken(_context.Vtex.AdminUserAuthToken);
+            }
+            catch (Exception ex)
+            {
+                _context.Vtex.Logger.Error("IsValidAuthUser", null, "Error fetching user", ex);
+                return HttpStatusCode.BadRequest;
+            }
+
+            bool hasPermission = validatedUser != null && validatedUser.AuthStatus.Equals("Success");
+            
+            if (!hasPermission)
+            {
+                _context.Vtex.Logger.Warn("IsValidAuthUser", null, "User Does Not Have Permission");
+                return HttpStatusCode.Forbidden;
+            }
+
+            return HttpStatusCode.OK;
         }
 
         public async Task<bool> ValidateKeyAndToken(string key, string token, string baseUrl)
