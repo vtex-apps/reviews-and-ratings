@@ -1,4 +1,4 @@
-import { testSetup, preserveCookie } from '../support/common/support.js'
+import { loginViaCookies, preserveCookie } from '../support/common/support.js'
 import { testCase2 } from '../support/review_and_ratings.outputvalidation.js'
 import { verifyUserIsNotAbletoAddReviewAgain } from '../support/testcase.js'
 import rrselectors from '../support/reviews_and_ratings.selectors.js'
@@ -6,7 +6,7 @@ import rrselectors from '../support/reviews_and_ratings.selectors.js'
 const { product, user1, title } = testCase2
 
 describe(`${title} - Verify review with Signed In User`, () => {
-  testSetup()
+  loginViaCookies()
 
   it('Added review should show immediately to the user', () => {
     cy.openStoreFront(true)

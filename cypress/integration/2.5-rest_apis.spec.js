@@ -10,7 +10,7 @@ import {
   invalidPayloadInAddReview,
 } from '../support/review_and_ratings.apis'
 import { testCase5 } from '../support/review_and_ratings.outputvalidation.js'
-import { testSetup, updateRetry } from '../support/common/support.js'
+import { loginViaCookies, updateRetry } from '../support/common/support.js'
 import { graphql, getReviews } from '../support/graphql_queries.js'
 import { performDeleteReviews } from '../support/graphql_testcase.js'
 
@@ -28,7 +28,7 @@ const patchReviewEnv = 'patchReviewEnv'
 const addReviewsEnv = 'addReviewsEnv'
 
 describe('Reviews REST API testcases', () => {
-  testSetup(false)
+  loginViaCookies({ storeFrontCookie: false })
 
   for (const productId of [productId1, productId2]) {
     it(`Delete all the for product ${productId}`, updateRetry(5), () => {

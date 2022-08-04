@@ -1,5 +1,5 @@
 import {
-  testSetup,
+  loginViaCookies,
   updateRetry,
   preserveCookie,
   loginAsUser,
@@ -23,7 +23,7 @@ const { title, configuration, product, user1, verifiedProduct, user2 } =
   testCase3
 
 describe(`${title} - Signed In user`, () => {
-  testSetup()
+  loginViaCookies()
   updateSettings(title, configuration)
 
   it('Login & add review', updateRetry(3), () => {
