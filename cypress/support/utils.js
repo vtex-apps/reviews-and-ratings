@@ -1,5 +1,6 @@
-import rrselectors from './reviews_and_ratings.selectors.js'
+import rrselectors from './selectors.js'
 import { PRODUCTS } from './common/utils.js'
+import messages from '../../messages/en.json'
 
 export function reload(user = null) {
   cy.get('body').then($body => {
@@ -16,6 +17,13 @@ export function reload(user = null) {
       }
     })
   })
+}
+
+export const MESSAGES = {
+  AlreadySubmitted: messages['store/reviews.form.alreadySubmitted'],
+  NoReviews: messages['store/reviews.list.emptyState'],
+  VerifiedPurchaser: messages['store/reviews.list.verifiedPurchaser'],
+  ReviewSubmitted: messages['store/reviews.form.reviewSubmitted'],
 }
 
 export const PRODUCT_ID_MAPPING = {

@@ -3,7 +3,7 @@ import {
   preserveCookie,
   updateRetry,
 } from '../support/common/support.js'
-import { testCase2 } from '../support/review_and_ratings.outputvalidation'
+import { testCase2 } from '../support/outputvalidation.js'
 import selectors from '../support/common/selectors.js'
 
 const { product, postalCode } = testCase2

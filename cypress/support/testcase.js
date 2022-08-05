@@ -1,7 +1,8 @@
 import { loginViaCookies, updateRetry } from './common/support.js'
-import rrselectors from './reviews_and_ratings.selectors.js'
-import { reload } from './utils.js'
-import { reviewsAndRatingsConstants } from './reviews_and_ratings.constants.js'
+import rrselectors from './selectors.js'
+import { reload, MESSAGES } from './utils.js'
+import { reviewsAndRatingsConstants } from './constants.js'
+import { PRODUCTS } from './common/utils.js'
 
 export function restrictAnonymousUser(product) {
   loginViaCookies({ storeFrontCookie: false })
@@ -16,7 +17,7 @@ export function restrictAnonymousUser(product) {
 export function verifyUserIsNotAbletoAddReviewAgain() {
   it('User should not be able to add review again', () => {
     cy.get(rrselectors.WriteReview).click()
-    cy.get(rrselectors.Danger).contains('already')
+    cy.get(rrselectors.Danger).contains(MESSAGES.AlreadySubmitted)
   })
 }
 
@@ -38,7 +39,7 @@ export function verifyFilter(filter, reviews = true) {
           }
         })
       } else {
-        cy.get('h5').should('contain', 'No reviews.')
+        cy.get('h5').should('contain', MESSAGES.NoReviews)
       }
     }
   )
@@ -73,7 +74,7 @@ export function verifiedReviewTestCase({ verifiedProduct }, user = false) {
 
   it(`Validate verified user added comments shown to ${title} user`, () => {
     cy.openProduct(verifiedProduct, true)
-    cy.contains('Verified', { matchCase: false })
+    cy.contains(MESSAGES.VerifiedPurchaser)
   })
 }
 
@@ -83,6 +84,52 @@ export function reviewTestCase({ otherProduct }, user = false) {
   it(`Validate user added comments shown to this ${title} user`, () => {
     reload()
     cy.openProduct(otherProduct, true)
-    cy.get('h5').should('not.contain', 'No reviews.')
+    cy.get('h5').should('not.contain', MESSAGES.NoReviews)
+  })
+}
+
+export function addedReviewShouldShowToTheUser(product, line) {
+  it('Added review should show immediately to the user', updateRetry(2), () => {
+    cy.openStoreFront(true)
+    cy.openProduct(product, true)
+    cy.get(rrselectors.PostalCode, { timeout: 20000 }).should('be.visible')
+    cy.get(rrselectors.ReviewComment).contains(line)
+  })
+}
+
+export function verifySettings(type, enableSettings = false, login = false) {
+  it(`${type} display stars in product rating inline`, updateRetry(2), () => {
+    cy.openStoreFront(login)
+    cy.openProduct(PRODUCTS.waterMelon, false)
+    cy.verifyStarsInProductRatingInline(enableSettings)
+  })
+
+  it(
+    `${type} display graph and verify graph content is ${
+      enableSettings ? '' : 'not '
+    }displayed for anonymous user`,
+    updateRetry(2),
+    () => {
+      cy.openProduct(PRODUCTS.waterMelon, true)
+      cy.verifyGraphUI(enableSettings)
+    }
+  )
+
+  it(`${type} Display stars in product rating summary`, () => {
+    cy.verifyStarsInProductRatingSummary(enableSettings)
+  })
+
+  it(`${type} display total reviews number in product rating summary`, () => {
+    cy.verifyTotalReviewsInProductRatingSummary(enableSettings)
+  })
+
+  it(`${type} display add review button in product rating summary`, () => {
+    cy.verifyAddReviewButtonInProductRatingSummary(enableSettings)
+  })
+}
+
+export function verifyAverageRatings(product, user) {
+  it('Verify average ratings', () => {
+    cy.getAverageRating(user, product)
   })
 }

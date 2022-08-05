@@ -22,7 +22,7 @@ export default {
     'div[class*=reviewsOrderBy] > div:nth-child(2) > label> div> select',
   reviewStarsCount:
     'div[class*=reviewCommentRating] > span > span[class*=filled]',
-
+  ReviewComment: 'span[class*=reviewComment]',
   // Product Specification Page
   LoginLink: 'div[class*=review] a[href*=login]',
   PostalCode: 'div[class*=postalCode]',
