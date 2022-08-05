@@ -1,11 +1,11 @@
 import { loginViaCookies, updateRetry } from '../support/common/support.js'
-import { updateSettings } from '../support/review_and_ratings_settings.js'
-import { testCase3 } from '../support/review_and_ratings.outputvalidation'
+import { testCase3 } from '../support/outputvalidation.js'
 import { verifyFilter, verifiedReviewTestCase } from '../support/testcase.js'
-import { reviewsAndRatingsConstants } from '../support/reviews_and_ratings.constants.js'
+import { reviewsAndRatingsConstants } from '../support/constants.js'
 import {
   deleteReviews,
   verifyReviewIsDeleted,
+  updateSettings,
 } from '../support/graphql_testcase.js'
 
 const { title, configuration, product, anonymousUser1 } = testCase3

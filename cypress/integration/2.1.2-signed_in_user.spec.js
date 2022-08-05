@@ -3,8 +3,8 @@ import {
   updateRetry,
   preserveCookie,
 } from '../support/common/support.js'
-import { testCase1 } from '../support/review_and_ratings.outputvalidation.js'
-import { updateSettings } from '../support/review_and_ratings_settings.js'
+import { testCase1 } from '../support/outputvalidation.js'
+import { updateSettings } from '../support/graphql_testcase.js'
 
 const { title, configuration, product, user1 } = testCase1
 

@@ -17,12 +17,9 @@ import {
   addReviewQuery,
   getAverageRatingByProductId,
   editReview,
-} from '../support/graphql_queries.js'
-import {
-  testCase6,
-  testCase1,
-} from '../support/review_and_ratings.outputvalidation.js'
-import { approveReviews } from '../support/graphql_testcase.js'
+  approveReviews,
+} from '../support/graphql_testcase.js'
+import { testCase6, testCase1 } from '../support/outputvalidation.js'
 
 const { anonymousUser1, anonymousUser2 } = testCase6
 const { productId, title } = anonymousUser1

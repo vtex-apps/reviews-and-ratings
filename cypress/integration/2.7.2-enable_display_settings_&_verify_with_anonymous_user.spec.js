@@ -1,6 +1,6 @@
 import { loginViaCookies } from '../support/common/support.js'
-import { updateSettings } from '../support/review_and_ratings_settings.js'
-import { verifySettings } from '../support/review_and_ratings.js'
+import { updateSettings } from '../support/graphql_testcase.js'
+import { verifySettings } from '../support/testcase.js'
 
 describe('Testing as anonymous user -> Enable display setting and test', () => {
   loginViaCookies({ storeFrontCookie: false })

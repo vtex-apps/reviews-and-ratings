@@ -5,7 +5,7 @@ import {
   deleteReviewAPI,
   deleteReviewAPIs,
   editReviewAPI,
-} from './product.apis'
+} from './apis.js'
 
 export function getProductRatingsAPI(productId) {
   it('Get rating for product', updateRetry(2), () => {

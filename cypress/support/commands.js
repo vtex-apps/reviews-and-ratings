@@ -1,9 +1,9 @@
 import selectors from './common/selectors'
 import { generateAddtoCartCardSelector } from './common/utils'
-import rrselectors from './reviews_and_ratings.selectors.js'
+import rrselectors from './selectors.js'
 import { promissoryPayment, buyProduct } from './common/support.js'
-import { graphql, getReviews } from './graphql_queries.js'
-import { PRODUCT_ID_MAPPING } from './utils.js'
+import { graphql, getReviews } from './graphql_testcase.js'
+import { PRODUCT_ID_MAPPING, MESSAGES } from './utils.js'
 
 Cypress.Commands.add('promissoryPayment', promissoryPayment)
 Cypress.Commands.add('buyProduct', buyProduct)
@@ -35,6 +35,7 @@ Cypress.Commands.add('openProduct', (product, detailPage = false) => {
 Cypress.Commands.add(
   'addReview',
   (product, defaultStarsRating, user, reviewSubmitted = false) => {
+    // eslint-disable-line
     cy.addDelayBetweenRetries(1000)
     // Search the product
     cy.get('body').then($body => {
@@ -85,7 +86,7 @@ Cypress.Commands.add('fillReviewInformation', user => {
   cy.get(rrselectors.formSubmit).should('be.visible').click()
   cy.get(rrselectors.submittedReviewText, { timeout: 30000 })
     .should('be.visible')
-    .should('have.text', 'Your review has been submitted.')
+    .should('have.text', MESSAGES.ReviewSubmitted)
 })
 
 function justNumbers(string) {
@@ -115,7 +116,7 @@ Cypress.Commands.add('getAverageRating', (user, product, validate = true) => {
       }
 
       if (verified) {
-        cy.contains('Verified Purchaser')
+        cy.contains(MESSAGES.VerifiedPurchaser)
       }
     })
 })

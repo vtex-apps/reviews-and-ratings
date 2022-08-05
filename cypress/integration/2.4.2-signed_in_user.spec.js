@@ -3,14 +3,14 @@ import {
   updateRetry,
   preserveCookie,
 } from '../support/common/support.js'
-import { testCase4 } from '../support/review_and_ratings.outputvalidation'
-import { updateSettings } from '../support/review_and_ratings_settings.js'
+import { testCase4 } from '../support/outputvalidation.js'
+import { updateSettings } from '../support/graphql_testcase.js'
 import {
   verifiedReviewTestCase,
   reviewTestCase,
   verifySorting,
 } from '../support/testcase.js'
-import { reviewsAndRatingsConstants } from '../support/reviews_and_ratings.constants.js'
+import { reviewsAndRatingsConstants } from '../support/constants.js'
 
 const { title, configuration, product, user1 } = testCase4
 

@@ -3,7 +3,7 @@ import {
   updateRetry,
   preserveCookie,
 } from '../support/common/support.js'
-import { testCase2 } from '../support/review_and_ratings.outputvalidation'
+import { testCase2 } from '../support/outputvalidation.js'
 
 const { title, configuration, product, user1 } = testCase2
 

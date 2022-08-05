@@ -1,5 +1,8 @@
-import { graphql, getReviews } from '../support/graphql_queries.js'
-import { performDeleteReviews } from '../support/graphql_testcase.js'
+import {
+  graphql,
+  getReviews,
+  performDeleteReviews,
+} from '../support/graphql_testcase.js'
 import { updateRetry, loginViaCookies } from '../support/common/support.js'
 
 describe('Wipe the reviews/ratings', () => {

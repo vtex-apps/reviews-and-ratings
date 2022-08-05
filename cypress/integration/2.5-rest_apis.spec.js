@@ -8,11 +8,14 @@ import {
   editReview,
   addReviewsAPI,
   invalidPayloadInAddReview,
-} from '../support/review_and_ratings.apis'
-import { testCase5 } from '../support/review_and_ratings.outputvalidation.js'
+} from '../support/api_testcase.js'
+import { testCase5 } from '../support/outputvalidation.js'
 import { loginViaCookies, updateRetry } from '../support/common/support.js'
-import { graphql, getReviews } from '../support/graphql_queries.js'
-import { performDeleteReviews } from '../support/graphql_testcase.js'
+import {
+  graphql,
+  getReviews,
+  performDeleteReviews,
+} from '../support/graphql_testcase.js'
 
 const {
   productId1,
