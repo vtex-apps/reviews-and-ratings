@@ -1,6 +1,6 @@
 import { preserveCookie, loginViaCookies } from '../support/common/support.js'
-import { updateSettings } from '../support/review_and_ratings_settings.js'
-import { verifySettings } from '../support/review_and_ratings.js'
+import { updateSettings } from '../support/graphql_testcase.js'
+import { verifySettings } from '../support/testcase.js'
 
 describe('Enable display setting and test with signed in user', () => {
   loginViaCookies()

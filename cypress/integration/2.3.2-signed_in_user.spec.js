@@ -4,19 +4,19 @@ import {
   preserveCookie,
   loginAsUser,
 } from '../support/common/support.js'
-import { updateSettings } from '../support/review_and_ratings_settings.js'
-import { testCase3 } from '../support/review_and_ratings.outputvalidation'
+import { testCase3 } from '../support/outputvalidation.js'
 import {
   verifyFilter,
   verifiedReviewTestCase,
   reviewTestCase,
 } from '../support/testcase.js'
 import { reload } from '../support/utils.js'
-import { reviewsAndRatingsConstants } from '../support/reviews_and_ratings.constants.js'
+import { reviewsAndRatingsConstants } from '../support/constants.js'
 import {
   deleteReviews,
   verifyReviewIsDeleted,
   approveReviews,
+  updateSettings,
 } from '../support/graphql_testcase.js'
 
 const { title, configuration, product, user1, verifiedProduct, user2 } =

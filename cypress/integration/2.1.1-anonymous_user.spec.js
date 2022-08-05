@@ -1,6 +1,6 @@
 import { loginViaCookies, updateRetry } from '../support/common/support.js'
-import { updateSettings } from '../support/review_and_ratings_settings.js'
-import { testCase1 } from '../support/review_and_ratings.outputvalidation.js'
+import { updateSettings } from '../support/graphql_testcase.js'
+import { testCase1 } from '../support/outputvalidation.js'
 import { reload } from '../support/utils.js'
 import { syncCheckoutUICustom } from '../support/common/testcase.js'
 
