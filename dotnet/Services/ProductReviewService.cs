@@ -303,7 +303,13 @@
 
         public async Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId)
         {
-            return await this.GetReviewsByProductId(productId, 0, maximumReturnedRecords, string.Empty, string.Empty, 0, string.Empty, true);
+            ReviewsResponseWrapper wrapper = await this.GetReviewsByProductId(productId, 0, maximumReturnedRecords, string.Empty, string.Empty, 0, string.Empty, true);
+            if (wrapper != null)
+            {
+                _context.Vtex.Logger.Info("GetReviewsByProductId", null, $"Getting reviews", new[] { ("productId", productId), ("Total", wrapper.Range.Total.ToString()) });
+            }
+
+            return wrapper;
         }
 
         public async Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId, int from, int to, string orderBy, string searchTerm, int rating, string locale, bool pastReviews)

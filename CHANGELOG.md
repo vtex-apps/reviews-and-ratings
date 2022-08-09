@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- (REVIEWS-108)
+- Reduced calls to Verify Schema to instances when we should have valid credentials
+- Changed Task Cancelled errors to warnings.
+
 ## [3.10.2] - 2022-08-08
 
 ### Fixed

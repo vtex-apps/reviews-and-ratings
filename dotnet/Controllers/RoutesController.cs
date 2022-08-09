@@ -63,6 +63,10 @@ namespace ReviewsRatings.Controllers
             {
                 string baseUrl = HttpContext.Request.Headers[FORWARDED_HOST];
                 keyAndTokenValid = await this._productReviewsService.ValidateKeyAndToken(vtexAppKey, vtexAppToken, baseUrl);
+                if(keyAndTokenValid)
+                {
+                    await VerifySchema();
+                }
             }
 
             if (string.IsNullOrEmpty(requestedAction))

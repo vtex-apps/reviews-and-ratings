@@ -567,7 +567,6 @@
 
         public async Task<ReviewsResponseWrapper> GetProductReviewsMD(string searchQuery, string from, string to)
         {
-            await this.VerifySchema();
             ReviewsResponseWrapper reviewsResponse = null;
             IList<Review> reviews = null;
             string total = string.Empty;
@@ -631,6 +630,10 @@
                     responseTo = splitFromTo[1];
                 }
             }
+            catch(TaskCanceledException)
+            {
+                _context.Vtex.Logger.Warn("GetProductReviewsMD", null, "Error getting reviews - Task Cancelled.", new[] { ("searchQuery", searchQuery), ("from", from), ("to", to) });
+            }
             catch (Exception ex)
             {
                 _context.Vtex.Logger.Error("GetProductReviewsMD", null, "Error getting reviews", ex, new[] { ("searchQuery", searchQuery), ("from", from), ("to", to) });
@@ -652,7 +655,6 @@
  
         public async Task<ReviewsResponseWrapper> GetRangeReviewsMD(string fromDate, string toDate)
         {
-            await this.VerifySchema();
             ReviewsResponseWrapper reviewsResponse = null;
             IList<Review> reviews = new List<Review>();
             DateTime dtFromDate = DateTime.Parse(fromDate);
@@ -765,7 +767,6 @@
 
         public async Task<string> SaveProductReviewMD(Review review)
         {
-            await this.VerifySchema();
             string id = string.Empty;
 
             // before SerializeObject
