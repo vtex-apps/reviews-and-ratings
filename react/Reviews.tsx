@@ -257,57 +257,30 @@ const messages = defineMessages({
     id: 'store/reviews.list.filterOptions.five-stars',
     defaultMessage: '5 stars',
   },
-  timeAgo: {
-    id: 'store/reviews.list.timeAgo',
-    defaultMessage: 'ago',
-  },
-  timeAgoYear: {
-    id: 'store/reviews.list.timeAgo.year',
-    defaultMessage: 'year',
-  },
   timeAgoYears: {
     id: 'store/reviews.list.timeAgo.years',
-    defaultMessage: 'years',
-  },
-  timeAgoMonth: {
-    id: 'store/reviews.list.timeAgo.month',
-    defaultMessage: 'month',
+    defaultMessage:
+      '{timeUnits} {timeUnits, plural, =1 {year} other {years}} ago',
   },
   timeAgoMonths: {
     id: 'store/reviews.list.timeAgo.months',
-    defaultMessage: 'months',
-  },
-  timeAgoWeek: {
-    id: 'store/reviews.list.timeAgo.week',
-    defaultMessage: 'week',
-  },
-  timeAgoWeeks: {
-    id: 'store/reviews.list.timeAgo.weeks',
-    defaultMessage: 'weeks',
-  },
-  timeAgoDay: {
-    id: 'store/reviews.list.timeAgo.day',
-    defaultMessage: 'day',
+    defaultMessage:
+      '{timeUnits} {timeUnits, plural, =1 {month} other {months}} ago',
   },
   timeAgoDays: {
     id: 'store/reviews.list.timeAgo.days',
-    defaultMessage: 'days',
-  },
-  timeAgoHour: {
-    id: 'store/reviews.list.timeAgo.hour',
-    defaultMessage: 'hour',
+    defaultMessage:
+      '{timeUnits} {timeUnits, plural, =1 {day} other {days}} ago',
   },
   timeAgoHours: {
     id: 'store/reviews.list.timeAgo.hours',
-    defaultMessage: 'hours',
-  },
-  timeAgoMinute: {
-    id: 'store/reviews.list.timeAgo.minute',
-    defaultMessage: 'minute',
+    defaultMessage:
+      '{timeUnits} {timeUnits, plural, =1 {hour} other {hours}} ago',
   },
   timeAgoMinutes: {
     id: 'store/reviews.list.timeAgo.minutes',
-    defaultMessage: 'minutes',
+    defaultMessage:
+      '{timeUnits} {timeUnits, plural, =1 {minute} other {minutes}} ago',
   },
   timeAgoJustNow: {
     id: 'store/reviews.list.timeAgo.justNow',
@@ -356,6 +329,54 @@ const CSS_HANDLES = [
   'graphBar',
   'graphBarPercent',
 ] as const
+
+const getTimeAgo = (time: string, intl: any) => {
+  const newTime = new Date(`${time} UTC`)
+
+  const before =
+    newTime.toString() === 'Invalid Date' ? new Date(time) : newTime
+
+  const now = new Date()
+  const diff = new Date(now.valueOf() - before.valueOf())
+
+  const minutes = diff.getUTCMinutes()
+  const hours = diff.getUTCHours()
+  const days = diff.getUTCDate() - 1
+  const months = diff.getUTCMonth()
+  const years = diff.getUTCFullYear() - 1970
+
+  if (years > 0) {
+    return intl.formatMessage(messages.timeAgoYears, {
+      years,
+    })
+  }
+
+  if (months > 0) {
+    return intl.formatMessage(messages.timeAgoMonths, {
+      months,
+    })
+  }
+
+  if (days > 0) {
+    return intl.formatMessage(messages.timeAgoDays, {
+      days,
+    })
+  }
+
+  if (hours > 0) {
+    return intl.formatMessage(messages.timeAgoHours, {
+      hours,
+    })
+  }
+
+  if (minutes > 0) {
+    return intl.formatMessage(messages.timeAgoMinutes, {
+      minutes,
+    })
+  }
+
+  return intl.formatMessage(messages.timeAgoJustNow)
+}
 
 function Reviews() {
   const client = useApolloClient()
@@ -496,63 +517,6 @@ function Reviews() {
     label: str.toUpperCase(),
     value: str,
   }))
-
-  const getTimeAgo = (time: string) => {
-    const newTime = new Date(`${time} UTC`)
-    const before =
-      newTime.toString() === 'Invalid Date' ? new Date(time) : newTime
-
-    const now = new Date()
-    const diff = new Date(now.valueOf() - before.valueOf())
-
-    const minutes = diff.getUTCMinutes()
-    const hours = diff.getUTCHours()
-    const days = diff.getUTCDate() - 1
-    const months = diff.getUTCMonth()
-    const years = diff.getUTCFullYear() - 1970
-
-    if (years > 0) {
-      return `${years} ${
-        years > 1
-          ? intl.formatMessage(messages.timeAgoYears)
-          : intl.formatMessage(messages.timeAgoYear)
-      } ${intl.formatMessage(messages.timeAgo)}`
-    }
-
-    if (months > 0) {
-      return `${months} ${
-        months > 1
-          ? intl.formatMessage(messages.timeAgoMonths)
-          : intl.formatMessage(messages.timeAgoMonth)
-      } ${intl.formatMessage(messages.timeAgo)}`
-    }
-
-    if (days > 0) {
-      return `${days} ${
-        days > 1
-          ? intl.formatMessage(messages.timeAgoDays)
-          : intl.formatMessage(messages.timeAgoDay)
-      } ${intl.formatMessage(messages.timeAgo)}`
-    }
-
-    if (hours > 0) {
-      return `${hours} ${
-        hours > 1
-          ? intl.formatMessage(messages.timeAgoHours)
-          : intl.formatMessage(messages.timeAgoHour)
-      } ${intl.formatMessage(messages.timeAgo)}`
-    }
-
-    if (minutes > 0) {
-      return `${minutes} ${
-        minutes > 1
-          ? intl.formatMessage(messages.timeAgoMinutes)
-          : intl.formatMessage(messages.timeAgoMinute)
-      } ${intl.formatMessage(messages.timeAgo)}`
-    }
-
-    return intl.formatMessage(messages.timeAgoJustNow)
-  }
 
   const getLocation = () =>
     canUseDOM
@@ -839,7 +803,7 @@ function Reviews() {
                             <FormattedMessage id="store/reviews.list.submitted" />
                           </span>
                           <strong className={handles.reviewDateValue}>
-                            {getTimeAgo(review.reviewDateTime)}
+                            {getTimeAgo(review.reviewDateTime, intl)}
                           </strong>
                         </span>
                         <span className={`${handles.reviewAuthor} dib mr5`}>
@@ -901,7 +865,9 @@ function Reviews() {
                         ) : null}
                         <li className="dib mr2">
                           <FormattedMessage id="store/reviews.list.submitted" />{' '}
-                          <strong>{getTimeAgo(review.reviewDateTime)}</strong>
+                          <strong>
+                            {getTimeAgo(review.reviewDateTime, intl)}
+                          </strong>
                         </li>
                         <li className="dib mr5">
                           <FormattedMessage id="store/reviews.list.by" />{' '}

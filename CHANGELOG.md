@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- (REVIEWS-112) Fixed time ago sencences.
+
 ## [3.10.3] - 2022-08-09
 
 ### Changed
