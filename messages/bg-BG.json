@@ -78,11 +78,11 @@
   "store/reviews.list.emptyState": "Няма отзиви.",
   "store/reviews.list.timeAgo.justNow": "току-що",
 
-  "store/reviews.list.timeAgo.years": "{timeUnits} {timeUnits, plural, =1 {година} other {години}} преди",
-  "store/reviews.list.timeAgo.months": "{timeUnits} {timeUnits, plural, =1 {месец} other {месеца}} преди",
-  "store/reviews.list.timeAgo.days": "{timeUnits} {timeUnits, plural, =1 {ден} other {дни}} преди",
-  "store/reviews.list.timeAgo.hours": "{timeUnits} {timeUnits, plural, =1 {час} other {часове}} преди",
-  "store/reviews.list.timeAgo.minutes": "{timeUnits} {timeUnits, plural, =1 {минута} other {минути}} преди",
+  "store/reviews.list.timeAgo.years": "дни {timeUnits} {timeUnits, plural, =1 {година} other {години}}",
+  "store/reviews.list.timeAgo.months": "дни {timeUnits} {timeUnits, plural, =1 {месец} other {месеца}}",
+  "store/reviews.list.timeAgo.days": "дни {timeUnits} {timeUnits, plural, =1 {ден} other {дни}}",
+  "store/reviews.list.timeAgo.hours": "дни {timeUnits} {timeUnits, plural, =1 {час} other {часове}}",
+  "store/reviews.list.timeAgo.minutes": "дни {timeUnits} {timeUnits, plural, =1 {минута} other {минути}}",
 
   "store/reviews.list.sortOptions.placeholder": "Сортиране по:",
   "store/reviews.list.sortOptions.mostRecent": "Най-скорошни",
