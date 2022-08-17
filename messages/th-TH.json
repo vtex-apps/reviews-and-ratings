@@ -118,6 +118,7 @@
   "admin/reviews.filterToDate": "ถึงวันที่",
   "admin/reviews.filterResults": "ใช้",
   "admin/reviews.clearFilters": "ล้าง",
+  "admin/reviews.migrateData": "Migrate Data",
   "store/reviews.list.filterOptions.placeholder": "กรองตาม:",
   "store/reviews.list.filterOptions.all": "ทั้งหมด",
   "store/reviews.list.filterOptions.one-star": "1 ดาว",
