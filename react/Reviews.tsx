@@ -347,31 +347,31 @@ const getTimeAgo = (time: string, intl: any) => {
 
   if (years > 0) {
     return intl.formatMessage(messages.timeAgoYears, {
-      years,
+      timeUnits: years,
     })
   }
 
   if (months > 0) {
     return intl.formatMessage(messages.timeAgoMonths, {
-      months,
+      timeUnits: months,
     })
   }
 
   if (days > 0) {
     return intl.formatMessage(messages.timeAgoDays, {
-      days,
+      timeUnits: days,
     })
   }
 
   if (hours > 0) {
     return intl.formatMessage(messages.timeAgoHours, {
-      hours,
+      timeUnits: hours,
     })
   }
 
   if (minutes > 0) {
     return intl.formatMessage(messages.timeAgoMinutes, {
-      minutes,
+      timeUnits: minutes,
     })
   }
 

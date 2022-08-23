@@ -10,7 +10,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-- (REVIEWS-112) Fixed time ago sencences.
+- (REVIEWS-112) Fixed time ago intl variables.
+
+### Fixed
+
+- (REVIEWS-112) Fixed time ago messages.
 
 ## [3.10.3] - 2022-08-09
 
