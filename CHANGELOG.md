@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- (REVIEWS-111) Added vtex error loggers.
+
 ## [3.10.5] - 2022-08-23
 
 ## [3.10.4] - 2022-08-15
