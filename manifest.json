@@ -66,8 +66,8 @@
         "default": true
       },
       "defaultStarsRating": {
-        "title": "Default stars of review",
-        "description": "Specified default stars of review on product page",
+        "title": "Review default stars",
+        "description": "Specified review default stars on product page",
         "type": "string",
         "enum": [
           "0",
