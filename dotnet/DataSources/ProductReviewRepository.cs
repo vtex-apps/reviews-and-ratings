@@ -592,9 +592,9 @@
         {
             ReviewsResponseWrapper reviewsResponse = null;
             IList<Review> reviews = null;
-            string total = string.Empty;
-            string responseFrom = string.Empty;
-            string responseTo = string.Empty;
+            string total = "0";
+            string responseFrom = "0";
+            string responseTo = "0";
 
             try
             {
