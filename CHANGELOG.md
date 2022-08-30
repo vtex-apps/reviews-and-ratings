@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.10.8] - 2022-08-30
+
 ### Fixed
 
 - Fixed empty strings to "0".
