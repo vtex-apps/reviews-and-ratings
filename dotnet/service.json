@@ -1,6 +1,6 @@
 {
   "stack": "dotnet",
-  "memory": 256,
+  "memory": 1024,
   "timeout": 300,
   "cpu": {
     "type": "shared",
