@@ -36,36 +36,50 @@
         public async Task<bool> DeleteLegacyReview(int[] ids, string productId = null)
         {
             bool retval = true;
-            IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
-            foreach (int id in ids)
-            {
-                if (string.IsNullOrEmpty(productId))
-                {
-                    lookup.TryGetValue(id, out productId);
-                }
 
-                if (!string.IsNullOrEmpty(productId))
+            try
+            {
+                IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
+                foreach (int id in ids)
                 {
-                    IList<LegacyReview> reviews = await this._productReviewRepository.GetProductReviewsAsync(productId);
-                    LegacyReview reviewToRemove = reviews.FirstOrDefault(r => r.Id == id);
-                    if (reviewToRemove != null && reviews.Remove(reviewToRemove))
+                    if (string.IsNullOrEmpty(productId))
                     {
-                        await this._productReviewRepository.SaveProductReviewsAsync(productId, reviews);
+                        lookup.TryGetValue(id, out productId);
+                    }
+
+                    if (!string.IsNullOrEmpty(productId))
+                    {
+                        IList<LegacyReview> reviews = await this._productReviewRepository.GetProductReviewsAsync(productId);
+                        LegacyReview reviewToRemove = reviews.FirstOrDefault(r => r.Id == id);
+                        if (reviewToRemove != null && reviews.Remove(reviewToRemove))
+                        {
+                            await this._productReviewRepository.SaveProductReviewsAsync(productId, reviews);
+                        }
+                    }
+                    else
+                    {
+                        retval = false;
+                    }
+
+                    // also remove the reference to the review from the loopup
+                    if (lookup != null && lookup.Keys.Contains(id))
+                    {
+                        lookup.Remove(id);
                     }
                 }
-                else
-                {
-                    retval = false;
-                }
 
-                // also remove the reference to the review from the loopup
-                if (lookup != null && lookup.Keys.Contains(id))
-                {
-                    lookup.Remove(id);
-                }
+                await _productReviewRepository.SaveLookupAsync(lookup);
             }
-
-            await _productReviewRepository.SaveLookupAsync(lookup);
+            catch (Exception ex)
+            {
+                _context.Vtex.Logger.Error("DeleteLegacyReview", null, 
+                "Error:", ex,
+                new[]
+                {
+                    ( "ids", JsonConvert.SerializeObject(ids) ),
+                    ( "productId", productId )
+                });
+            }
 
             return retval;
         }
@@ -103,8 +117,9 @@
 
         public async Task<decimal> GetAverageRatingByProductId(string productId)
         {
-            string searchQuery = $"productId={productId}";
             decimal averageRating = 0m;
+
+            string searchQuery = $"productId={productId}";
             AppSettings settings = await GetAppSettings();
             if (settings.RequireApproval)
             {
@@ -131,6 +146,7 @@
             Review review = null;
             ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD($"id={Id}", null, null);
             IList<Review> reviews = wrapper.Reviews;
+
             if (reviews != null)
             {
                 review = reviews.FirstOrDefault();
@@ -282,31 +298,63 @@
         /// query Reviews($searchTerm: String, $from: Int, $to: Int, $orderBy: String, $status: Boolean)
         public async Task<ReviewsResponseWrapper> GetReviews(string searchTerm, int from, int to, string orderBy, string status)
         {
-            string searchQuery = string.Empty;
-            string statusQuery = string.Empty;
-            if (!string.IsNullOrEmpty(searchTerm))
+            ReviewsResponseWrapper wrapper = new ReviewsResponseWrapper();
+
+            try
             {
-                searchQuery = $"&_keyword={searchTerm}";
-            }
+                string searchQuery = string.Empty;
+                string statusQuery = string.Empty;
+                if (!string.IsNullOrEmpty(searchTerm))
+                {
+                    searchQuery = $"&_keyword={searchTerm}";
+                }
 
-            if (!string.IsNullOrEmpty(status))
+                if (!string.IsNullOrEmpty(status))
+                {
+                    statusQuery = $"&approved={status}";
+                }
+
+                string sortQuery = await this.GetSortQuery(orderBy);
+
+                wrapper = await _productReviewRepository.GetProductReviewsMD($"{searchQuery}{sortQuery}{statusQuery}", Convert.ToString(from), Convert.ToString(to));
+            }
+            catch (Exception ex)
             {
-                statusQuery = $"&approved={status}";
+                _context.Vtex.Logger.Error("GetReviews", null, 
+                "Error:", ex,
+                new[]
+                {
+                    ( "searchTerm", searchTerm ),
+                    ( "from", from.ToString() ),
+                    ( "to", to.ToString() ),
+                    ( "orderBy", orderBy ),
+                    ( "status", status )
+                });
             }
-
-            string sortQuery = await this.GetSortQuery(orderBy);
-
-            ReviewsResponseWrapper wrapper = await _productReviewRepository.GetProductReviewsMD($"{searchQuery}{sortQuery}{statusQuery}", Convert.ToString(from), Convert.ToString(to));
             
             return wrapper;
         }
 
         public async Task<ReviewsResponseWrapper> GetReviewsByProductId(string productId)
         {
-            ReviewsResponseWrapper wrapper = await this.GetReviewsByProductId(productId, 0, maximumReturnedRecords, string.Empty, string.Empty, 0, string.Empty, true);
-            if (wrapper != null)
+            ReviewsResponseWrapper wrapper = new ReviewsResponseWrapper();
+
+            try
             {
-                _context.Vtex.Logger.Info("GetReviewsByProductId", null, $"Getting reviews", new[] { ("productId", productId), ("Total", wrapper.Range.Total.ToString()) });
+                wrapper = await this.GetReviewsByProductId(productId, 0, maximumReturnedRecords, string.Empty, string.Empty, 0, string.Empty, true);
+                if (wrapper != null)
+                {
+                    _context.Vtex.Logger.Info("GetReviewsByProductId", null, $"Getting reviews", new[] { ("productId", productId), ("Total", wrapper.Range.Total.ToString()) });
+                }
+            }
+            catch (Exception ex)
+            {
+                _context.Vtex.Logger.Error("GetReviewsByProductId", null, 
+                "Error:", ex,
+                new[]
+                {
+                    ( "productId", productId )
+                });
             }
 
             return wrapper;
@@ -317,53 +365,73 @@
             string searchQuery = string.Empty;
             string ratingQuery = string.Empty;
             string localeQuery = string.Empty;
-            string sort = await this.GetSortQuery(orderBy);
             bool ratingFilter = rating > 0 && rating <= 5;
             bool pastRevNLocale = pastReviews && !string.IsNullOrEmpty(locale);
-            ReviewsResponseWrapper wrapper;
+            ReviewsResponseWrapper wrapper = new ReviewsResponseWrapper();
 
-            if (!string.IsNullOrEmpty(searchTerm))
+            try
             {
-                searchQuery = $"&_keyword={searchTerm}";
+                string sort = await this.GetSortQuery(orderBy);
+
+                if (!string.IsNullOrEmpty(searchTerm))
+                {
+                    searchQuery = $"&_keyword={searchTerm}";
+                }
+
+                if (to == 0 || to < from) {
+                    to = maximumReturnedRecords;
+                }
+
+                AppSettings settings = await GetAppSettings();
+
+                if (pastRevNLocale)
+                {
+                    if (settings.RequireApproval)
+                    {
+                        searchQuery = $" AND approved=true";
+                    }
+                    localeQuery = $"((locale=*{locale}-*) OR (locale is null))";
+                    if (ratingFilter)
+                    {
+                        ratingQuery = $" AND rating={rating}";
+                    }
+                    string productQuery = $" AND productId={productId}";
+
+                    wrapper = await this._productReviewRepository.GetProductReviewsMD($"_where={localeQuery}{ratingQuery}{productQuery}{searchQuery}{sort}", from.ToString(), to.ToString());
+                }
+                else
+                {
+                    if (ratingFilter)
+                    {
+                        ratingQuery = $"&rating={rating}";
+                    }
+                    if (settings.RequireApproval)
+                    {
+                        searchQuery = $"{searchQuery}&approved=true";
+                    }
+                    if (!string.IsNullOrEmpty(locale))
+                    {
+                        localeQuery = $"&locale=*{locale}-*";
+                    }
+
+                    wrapper = await this._productReviewRepository.GetProductReviewsMD($"productId={productId}{sort}{searchQuery}{ratingQuery}{localeQuery}", from.ToString(), to.ToString());
+                }
             }
-
-            if (to == 0 || to < from) {
-                to = maximumReturnedRecords;
-            }
-
-            AppSettings settings = await GetAppSettings();
-
-            if (pastRevNLocale)
+            catch (Exception ex)
             {
-                if (settings.RequireApproval)
+                _context.Vtex.Logger.Error("GetReviewsByProductId", null, 
+                "Error:", ex,
+                new[]
                 {
-                    searchQuery = $" AND approved=true";
-                }
-                localeQuery = $"((locale=*{locale}-*) OR (locale is null))";
-                if (ratingFilter)
-                {
-                    ratingQuery = $" AND rating={rating}";
-                }
-                string productQuery = $" AND productId={productId}";
-
-                wrapper = await this._productReviewRepository.GetProductReviewsMD($"_where={localeQuery}{ratingQuery}{productQuery}{searchQuery}{sort}", from.ToString(), to.ToString());
-            }
-            else
-            {
-                if (ratingFilter)
-                {
-                    ratingQuery = $"&rating={rating}";
-                }
-                if (settings.RequireApproval)
-                {
-                    searchQuery = $"{searchQuery}&approved=true";
-                }
-                if (!string.IsNullOrEmpty(locale))
-                {
-                    localeQuery = $"&locale=*{locale}-*";
-                }
-
-                wrapper = await this._productReviewRepository.GetProductReviewsMD($"productId={productId}{sort}{searchQuery}{ratingQuery}{localeQuery}", from.ToString(), to.ToString());
+                    ( "productId", productId ),
+                    ( "from", from.ToString() ),
+                    ( "to", to.ToString() ),
+                    ( "orderBy", orderBy ),
+                    ( "searchTerm", searchTerm ),
+                    ( "rating", rating.ToString() ),
+                    ( "locale", locale ),
+                    ( "pastReviews", pastReviews.ToString() )
+                });
             }
 
             return wrapper;
@@ -371,25 +439,18 @@
 
         public async Task<Review> NewReview(Review review, bool doValidation)
         {
-            if (review != null)
+            try
             {
-                if (doValidation)
+                if (review != null)
                 {
-                    try
+                    if (doValidation)
                     {
                         bool userValidated = false;
                         bool hasShopperReviewed = false;
                         bool hasShopperPurchased = false;
                         string userId = string.Empty;
                         ValidatedUser validatedUser = null;
-                        try
-                        {
-                            validatedUser = await this.ValidateUserToken(_context.Vtex.StoreUserAuthToken);
-                        }
-                        catch (Exception ex)
-                        {
-                            _context.Vtex.Logger.Error("NewReview", null, "Error Validating User", ex);
-                        }
+                        validatedUser = await this.ValidateUserToken(_context.Vtex.StoreUserAuthToken);
 
                         if (validatedUser != null && validatedUser.AuthStatus.Equals("Success"))
                         {
@@ -411,32 +472,38 @@
                         review.ShopperId = userId;
                         review.VerifiedPurchaser = hasShopperPurchased;
                     }
-                    catch (Exception ex)
+
+                    if (review.Approved == null)
                     {
-                        _context.Vtex.Logger.Error("NewReview", null, "Validation Error", ex, new[] { ("review", JsonConvert.SerializeObject(review)) });
+                        review.Approved = false;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(review.ReviewDateTime))
+                    {
+                        // TODO: Check timezone for store
+                        review.ReviewDateTime = DateTime.Now.ToString();
+                    }
+
+                    string id = await this._productReviewRepository.SaveProductReviewMD(review);
+                    if (string.IsNullOrEmpty(id))
+                    {
+                        review = null;
+                    }
+                    else
+                    {
+                        review.Id = id;
                     }
                 }
-
-                if (review.Approved == null)
+            }
+            catch (Exception ex)
+            {
+                _context.Vtex.Logger.Error("NewReview", null, 
+                "Error:", ex,
+                new[]
                 {
-                    review.Approved = false;
-                }
-
-                if (string.IsNullOrWhiteSpace(review.ReviewDateTime))
-                {
-                    // TODO: Check timezone for store
-                    review.ReviewDateTime = DateTime.Now.ToString();
-                }
-
-                string id = await this._productReviewRepository.SaveProductReviewMD(review);
-                if (string.IsNullOrEmpty(id))
-                {
-                    review = null;
-                }
-                else
-                {
-                    review.Id = id;
-                }
+                    ( "review", JsonConvert.SerializeObject(review) ),
+                    ( "doValidation", doValidation.ToString() )
+                });
             }
 
             return review;
@@ -444,42 +511,47 @@
 
         public async Task<ReviewsResponseWrapper> GetReviewsByShopperId(string shopperId)
         {
-            ReviewsResponseWrapper wrapper = await _productReviewRepository.GetProductReviewsMD($"shopperId={shopperId}", null, null);
-
-            return wrapper;
+            return await _productReviewRepository.GetProductReviewsMD($"shopperId={shopperId}", null, null);;
         }
 
         public async Task<ReviewsResponseWrapper> GetReviewsByreviewDateTime(string reviewDateTime)
         {
-            ReviewsResponseWrapper wrapper = await _productReviewRepository.GetProductReviewsMD($"reviewDateTime={reviewDateTime}",null, null);
-
-            return wrapper;
+            return await _productReviewRepository.GetProductReviewsMD($"reviewDateTime={reviewDateTime}",null, null);
         }
 
         public async Task<ReviewsResponseWrapper> GetReviewsByDateRange(string fromDate, string toDate)
         {
-            ReviewsResponseWrapper wrapper = await _productReviewRepository.GetRangeReviewsMD(fromDate, toDate);
-            return wrapper;
+            return await _productReviewRepository.GetRangeReviewsMD(fromDate, toDate);
         }
 
         public async Task ClearData()
         {
-            IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
-            if (lookup != null)
+            try
             {
-                List<string> productIds = lookup.Values.Distinct().ToList();
-                foreach (string productId in productIds)
-                {
-                    await this._productReviewRepository.SaveProductReviewsAsync(productId, null);
-                }
-            }
+                IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
 
-            await _productReviewRepository.SaveLookupAsync(null);
+                if (lookup != null)
+                {
+                    List<string> productIds = lookup.Values.Distinct().ToList();
+                    foreach (string productId in productIds)
+                    {
+                        await this._productReviewRepository.SaveProductReviewsAsync(productId, null);
+                    }
+                }
+
+                await _productReviewRepository.SaveLookupAsync(null);
+            }
+            catch (Exception ex)
+            {
+                _context.Vtex.Logger.Error("ClearData", null, "Error:", ex);
+            }
         }
 
         public async Task<bool> ModerateReview(string[] ids, bool approved)
         {
             bool retval = true;
+
+            
             IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
             foreach (string id in ids)
             {
@@ -506,18 +578,11 @@
         public async Task<bool> HasShopperReviewed(string shopperId, string productId)
         {
             bool retval = false;
-            try
+            ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD($"shopperId={shopperId}&productId={productId}", null, null);
+            IList<Review> reviews = wrapper.Reviews;
+            if (reviews != null && reviews.Count > 0)
             {
-                ReviewsResponseWrapper wrapper = await this._productReviewRepository.GetProductReviewsMD($"shopperId={shopperId}&productId={productId}", null, null);
-                IList<Review> reviews = wrapper.Reviews;
-                if (reviews != null && reviews.Count > 0)
-                {
-                    retval = true;
-                }
-            }
-            catch(Exception ex)
-            {
-                _context.Vtex.Logger.Error("HasShopperReviewed", null, "Request Error", ex, new[] { ("shopperId", shopperId), ("productId", productId) });
+                retval = true;
             }
 
             return retval;
@@ -594,53 +659,17 @@
 
         public async Task<string> VerifySchema()
         {
-            
-            string verified = string.Empty;
-            try
-            {
-                verified = await _productReviewRepository.VerifySchema();
-            }
-            catch(Exception ex)
-            {
-                verified = ex.InnerException.Message;
-                _context.Vtex.Logger.Error("VerifySchema", null, "Error verifing schema", ex);
-            }
-
-            return verified;
+            return await _productReviewRepository.VerifySchema();
         }
 
         public async Task<string> VerifyMigration()
         {
-            
-            string verified = string.Empty;
-            try
-            {
-                verified = await _productReviewRepository.VerifyMigration();
-            }
-            catch(Exception ex)
-            {
-                verified = ex.InnerException.Message;
-                _context.Vtex.Logger.Error("VerifyMigration", null, "Error verifing Migration", ex);
-            }
-
-            return verified;
+            return await _productReviewRepository.VerifyMigration();
         }
 
         public async Task<string> SuccessfulMigration()
         {
-            
-            string verified = string.Empty;
-            try
-            {
-                verified = await _productReviewRepository.SuccessfulMigration();
-            }
-            catch(Exception ex)
-            {
-                verified = ex.InnerException.Message;
-                _context.Vtex.Logger.Error("SuccessfulMigration", null, "Error successing Migration", ex);
-            }
-
-            return verified;
+            return await _productReviewRepository.SuccessfulMigration();
         }
 
         private async Task<Review> ConvertLegacyReview(LegacyReview review)
@@ -718,7 +747,6 @@
         public async Task<string> MigrateData(List<string> productIds)
         {
             StringBuilder sb = new StringBuilder();
-
             await this.VerifySchema();
 
             foreach (string productId in productIds)
@@ -735,14 +763,7 @@
                             Review result = await this.NewReview(newReview, false);
                             if (result != null)
                             {
-                                try
-                                {
-                                    await this.DeleteLegacyReview(new[] { review.Id }, productId);
-                                }
-                                catch(Exception ex)
-                                {
-                                    sb.AppendLine($"Error Deleting Review {review.Id} : {ex.Message}");
-                                }
+                                await this.DeleteLegacyReview(new[] { review.Id }, productId);
                             }
                             else
                             {
@@ -751,6 +772,15 @@
                         }
                         catch(Exception ex)
                         {
+                            _context.Vtex.Logger.Error("Error Migrating", null, 
+                            "Error:", ex,
+                            new[]
+                            {
+                                ( "review.Id", review.Id.ToString() ),
+                                ( "review.ProductId", review.ProductId.ToString() ),
+                                ( "review.ShopperId", review.ShopperId.ToString() ),
+                            });
+
                             sb.AppendLine($"Error Migrating {review.Id} {review.ProductId} {review.ShopperId} : {ex.Message}");
                         }
                     }
@@ -777,6 +807,7 @@
         public async Task<bool> DeleteReview(string[] ids)
         {
             bool retval = true;
+            
             foreach (string id in ids)
             {
                 retval &= await _productReviewRepository.DeleteProductReviewMD(id);
