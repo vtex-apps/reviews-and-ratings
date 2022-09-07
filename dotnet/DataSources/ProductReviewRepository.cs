@@ -15,6 +15,7 @@
     using ReviewsRatings.Services;
     using Vtex.Api.Context;
     using System.Web;
+    using System.Globalization;
 
     public class ProductReviewRepository : IProductReviewRepository
     {
@@ -95,12 +96,12 @@
                     _context.Vtex.Logger.Info("GetProductReviewsAsync", null, $"[{response.StatusCode}] {responseContent}");
                     return null;
                 }
-                
+
                 productReviews = JsonConvert.DeserializeObject<IList<LegacyReview>>(responseContent);
             }
             catch (Exception ex)
             {
-                _context.Vtex.Logger.Error("GetProductReviewsAsync", null, 
+                _context.Vtex.Logger.Error("GetProductReviewsAsync", null,
                 "Error:", ex,
                 new[]
                 {
@@ -142,7 +143,7 @@
             }
             catch (Exception ex)
             {
-                _context.Vtex.Logger.Error("SaveProductReviewsAsync", null, 
+                _context.Vtex.Logger.Error("SaveProductReviewsAsync", null,
                 "Error:", ex,
                 new[]
                 {
@@ -328,8 +329,8 @@
                         _context.Vtex.Logger.Warn("ValidateKeyAndToken", null, $"Error validating key and token '{key}'");
                         if (++count == max)
                         {
-                         _context.Vtex.Logger.Error("ValidateKeyAndToken", null, $"Maximum retries reached validating key and token '{key}'", ex);
-                         throw ex;
+                            _context.Vtex.Logger.Error("ValidateKeyAndToken", null, $"Maximum retries reached validating key and token '{key}'", ex);
+                            throw ex;
                         }
                     }
                 }
@@ -394,7 +395,7 @@
             }
             catch (Exception ex)
             {
-                _context.Vtex.Logger.Error("GetOrderInformation", null, 
+                _context.Vtex.Logger.Error("GetOrderInformation", null,
                 "Error:", ex,
                 new[]
                 {
@@ -436,7 +437,7 @@
             }
             catch (Exception ex)
             {
-                _context.Vtex.Logger.Error("ListOrders", null, 
+                _context.Vtex.Logger.Error("ListOrders", null,
                 "Error:", ex,
                 new[]
                 {
@@ -514,11 +515,11 @@
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _context.Vtex.Logger.Error("VerifySchema", null, "Error Verifying Schema", ex);
             }
-            
+
             return verifyResult ? "Schema is up to date!" : "Schema is NOT up to date";
         }
 
@@ -540,12 +541,12 @@
                     request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
                 }
                 request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
-                
+
                 var client = _clientFactory.CreateClient();
                 var response = await client.SendAsync(request);
                 string responseContent = await response.Content.ReadAsStringAsync();
 
-                result = response.StatusCode == HttpStatusCode.NotFound 
+                result = response.StatusCode == HttpStatusCode.NotFound
                     ? "0"
                     : responseContent;
             }
@@ -560,8 +561,9 @@
         public async Task<string> SuccessfulMigration()
         {
             string responseContent = string.Empty;
-            
-            try {
+
+            try
+            {
                 var request = new HttpRequestMessage
                 {
                     Method = HttpMethod.Put,
@@ -572,16 +574,16 @@
                 request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, _context.Vtex.AuthToken);
                 request.Headers.Add(VTEX_ID_HEADER_NAME, _context.Vtex.AdminUserAuthToken);
                 request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
-                
+
                 var client = _clientFactory.CreateClient();
                 var response = await client.SendAsync(request);
                 responseContent = await response.Content.ReadAsStringAsync();
-                
+
             }
             catch (Exception ex)
             {
                 _context.Vtex.Logger.Error("SuccessfulMigration", null, "Error:", ex);
-                
+
                 return ex.InnerException.Message;
             }
 
@@ -653,7 +655,7 @@
                     responseTo = splitFromTo[1];
                 }
             }
-            catch(TaskCanceledException)
+            catch (TaskCanceledException)
             {
                 _context.Vtex.Logger.Warn("GetProductReviewsMD", null, "Error getting reviews - Task Cancelled.", new[] { ("searchQuery", searchQuery), ("from", from), ("to", to) });
             }
@@ -675,14 +677,14 @@
 
             return reviewsResponse;
         }
- 
+
         public async Task<ReviewsResponseWrapper> GetRangeReviewsMD(string fromDate, string toDate)
         {
             ReviewsResponseWrapper reviewsResponse = null;
             IList<Review> reviews = new List<Review>();
             DateTime dtFromDate = DateTime.Parse(fromDate);
             fromDate = dtFromDate.ToString("yyyy-MM-ddTHH:mm:ssZ");
-            if (!toDate.Contains(" ")) 
+            if (!toDate.Contains(" "))
             {
                 toDate = toDate + " 23:59:59";
             }
@@ -780,7 +782,7 @@
                 var response = await client.SendAsync(request);
                 success = response.IsSuccessStatusCode;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _context.Vtex.Logger.Error("DeleteProductReviewMD", null, "Error deleting review", ex, new[] { ("documentId", documentId) });
             }
@@ -793,9 +795,15 @@
             string id = string.Empty;
 
             // before SerializeObject
-            if(string.IsNullOrEmpty(review.SearchDate)) 
+            if (string.IsNullOrEmpty(review.SearchDate))
             {
-                DateTime dtSearchDate = DateTime.Parse(review.ReviewDateTime);
+                DateTime dtSearchDate;
+                if(!DateTime.TryParse(review.ReviewDateTime, out dtSearchDate))
+                {
+                    DateTime? dtSearchDateParsed = this.ParseReviewDate(review.ReviewDateTime);
+                    dtSearchDate = dtSearchDateParsed ?? DateTime.Now;
+                }
+
                 review.SearchDate = dtSearchDate.ToString("yyyy-MM-ddTHH:mm:ssZ");
             }
 
@@ -830,7 +838,7 @@
                     _context.Vtex.Logger.Warn("SaveProductReview", null, $"Did not save review [{response.StatusCode}] '{responseContent}'\n{jsonSerializedReview}");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _context.Vtex.Logger.Error("SaveProductReview", null, "Error saving review", ex, new[] { ("review", JsonConvert.SerializeObject(review)) });
             }
@@ -851,6 +859,30 @@
             }
 
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// This will attempt to parse the data in all culture formats and return the most popular
+        /// </summary>
+        /// <param name="testDateTime"></param>
+        /// <returns></returns>
+        private DateTime? ParseReviewDate(string testDateTime)
+        {
+            return CultureInfo.GetCultures(CultureTypes.AllCultures).Select(culture =>
+            {
+                DateTime result;
+                return DateTime.TryParse(
+                    testDateTime,
+                    culture,
+                    DateTimeStyles.None,
+                    out result
+                ) ? result : default(DateTime?);
+            })
+            .Where(d => d != null)
+            .GroupBy(d => d)
+            .OrderByDescending(g => g.Count())
+            .FirstOrDefault()
+            .Key;
         }
     }
 }
