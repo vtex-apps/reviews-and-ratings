@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.10.9] - 2022-09-07
+
 ### Fixed
 - (REVIEWS-118) If datetime parsing fails, attempt parsing by cultureinfo
 
