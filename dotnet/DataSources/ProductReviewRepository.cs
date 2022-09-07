@@ -798,10 +798,13 @@
             if (string.IsNullOrEmpty(review.SearchDate))
             {
                 DateTime dtSearchDate;
-                if(!DateTime.TryParse(review.ReviewDateTime, out dtSearchDate))
+                CultureInfo cultureInfo = CultureInfo.CurrentCulture;
+                if(!DateTime.TryParse(review.ReviewDateTime, cultureInfo, DateTimeStyles.None, out dtSearchDate))
                 {
-                    DateTime? dtSearchDateParsed = this.ParseReviewDate(review.ReviewDateTime);
-                    dtSearchDate = dtSearchDateParsed ?? DateTime.Now;
+                    if (!this.TryParseAnyDate(review.ReviewDateTime, out dtSearchDate))
+                    {
+                        dtSearchDate = DateTime.Now;
+                    }
                 }
 
                 review.SearchDate = dtSearchDate.ToString("yyyy-MM-ddTHH:mm:ssZ");
@@ -883,6 +886,19 @@
             .OrderByDescending(g => g.Count())
             .FirstOrDefault()
             .Key;
+        }
+
+        public bool TryParseAnyDate(string dateValue, out DateTime result)
+        {
+            result = DateTime.MinValue;
+            foreach (CultureInfo cultureInfo in CultureInfo.GetCultures(CultureTypes.AllCultures))
+            {
+                if (DateTime.TryParse(dateValue, cultureInfo, DateTimeStyles.None, out result))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
