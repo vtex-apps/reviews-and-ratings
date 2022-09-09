@@ -58,14 +58,14 @@ type AppSettings {
 }
 
 type Query {
-  review(id: ID!): Review
+  review(id: ID!): Review @cacheControl(scope: PUBLIC, maxAge: MEDIUM)
   reviews(
     searchTerm: String
     from: Int = 0
     to: Int = 9
     orderBy: String
     status: String
-  ): ReviewsResult
+  ): ReviewsResult @cacheControl(scope: PRIVATE)
   reviewsByProductId(
     productId: String!
     rating: Int
@@ -75,16 +75,18 @@ type Query {
     to: Int = 9
     orderBy: String
     status: String
-  ): ReviewsResult
+  ): ReviewsResult @cacheControl(scope: PUBLIC, maxAge: SHORT)
   averageRatingByProductId(productId: String!): Float
+    @cacheControl(scope: PUBLIC, maxAge: SHORT)
   totalReviewsByProductId(productId: String!): Int
+    @cacheControl(scope: PUBLIC, maxAge: SHORT)
   reviewsByShopperId(
     shopperId: String!
     from: Int = 0
     to: Int = 9
     orderBy: String
     status: String
-  ): ReviewsResult
+  ): ReviewsResult @cacheControl(scope: PUBLIC, maxAge: SHORT)
   reviewByreviewDateTime(
     reviewDateTime: String!
     from: Int = 0
@@ -92,20 +94,23 @@ type Query {
     orderBy: String
     status: String
   ): ReviewsResult
-    @deprecated(reason: "This query was deprecated, please use reviewByDateRange instead.")
+    @cacheControl(scope: PUBLIC, maxAge: MEDIUM)
+    @deprecated(
+      reason: "This query was deprecated, please use reviewByDateRange instead."
+    )
   reviewByDateRange(
     fromDate: String!
     toDate: String!
     orderBy: String
     status: String
-  ): ReviewsResult
+  ): ReviewsResult @cacheControl(scope: PUBLIC, maxAge: MEDIUM)
   hasShopperReviewed(shopperId: String!, productId: String!): Boolean
     @cacheControl(scope: PRIVATE)
-  appSettings: AppSettings
-  verifySchema: String
-  migrateData: String
-  verifyMigration: String
-  successfulMigration: String
+  appSettings: AppSettings @cacheControl(scope: PUBLIC, maxAge: SHORT)
+  verifySchema: String @cacheControl(scope: PUBLIC, maxAge: SHORT)
+  migrateData: String @cacheControl(scope: PUBLIC, maxAge: SHORT)
+  verifyMigration: String @cacheControl(scope: PUBLIC, maxAge: SHORT)
+  successfulMigration: String @cacheControl(scope: PUBLIC, maxAge: SHORT)
 }
 
 # Mutations
@@ -136,7 +141,9 @@ input EditReviewInput {
 
 type Mutation {
   newReview(review: ReviewInput!): Review
-  editReview(id: String!, review: EditReviewInput!): Review @cacheControl(scope: PRIVATE)
+  editReview(id: String!, review: EditReviewInput!): Review
+    @cacheControl(scope: PRIVATE)
   deleteReview(ids: [String!]): Boolean @cacheControl(scope: PRIVATE)
-  moderateReview(ids: [String!], approved: Boolean!): Boolean @cacheControl(scope: PRIVATE)
+  moderateReview(ids: [String!], approved: Boolean!): Boolean
+    @cacheControl(scope: PRIVATE)
 }
