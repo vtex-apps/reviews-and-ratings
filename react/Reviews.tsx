@@ -585,7 +585,7 @@ function Reviews() {
       type: 'SET_AVERAGE',
       args: { average },
     })
-  }, [dataAverage, loadingAverage, state])
+  }, [dataAverage, loadingAverage, state.total, state.reviews])
 
   useEffect(() => {
     if (loadingReviews || !dataReviews) return
