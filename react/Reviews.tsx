@@ -444,6 +444,7 @@ function Reviews() {
     },
     skip: !productId,
     fetchPolicy: 'network-only',
+    ssr: false,
   })
 
   const options = [
