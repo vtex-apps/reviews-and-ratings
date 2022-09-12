@@ -444,7 +444,6 @@ function Reviews() {
     },
     skip: !productId,
     fetchPolicy: 'network-only',
-    ssr: false,
   })
 
   const options = [
@@ -497,7 +496,6 @@ function Reviews() {
     client
       .query({
         query: getBindings,
-        variables: null,
       })
       .then((res: any) => {
         const list = res.data.tenantInfo.bindings.map((item: any) => {

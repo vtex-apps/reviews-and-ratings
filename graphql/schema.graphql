@@ -75,7 +75,7 @@ type Query {
     to: Int = 9
     orderBy: String
     status: String
-  ): ReviewsResult @cacheControl(scope: SEGMENT, maxAge: SHORT)
+  ): ReviewsResult @cacheControl(scope: PRIVATE)
   averageRatingByProductId(productId: String!): Float
     @cacheControl(scope: PUBLIC, maxAge: SHORT)
   totalReviewsByProductId(productId: String!): Int

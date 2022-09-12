@@ -158,7 +158,6 @@ function RatingSummary() {
     },
     skip: !productId,
     fetchPolicy: 'network-only',
-    ssr: false,
   })
 
   const {
@@ -171,7 +170,6 @@ function RatingSummary() {
     },
     skip: !productId,
     fetchPolicy: 'network-only',
-    ssr: false,
   })
 
   useEffect(() => {
