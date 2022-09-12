@@ -218,7 +218,7 @@ export function ReviewForm({
   refetchReviews,
 }: {
   settings?: Partial<AppSettings>
-  refetchReviews: any
+  refetchReviews: () => void
 }) {
   const client = useApolloClient()
   const intl = useIntl()

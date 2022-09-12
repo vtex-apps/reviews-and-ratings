@@ -77,9 +77,9 @@ type Query {
     status: String
   ): ReviewsResult @cacheControl(scope: PRIVATE)
   averageRatingByProductId(productId: String!): Float
-    @cacheControl(scope: PUBLIC, maxAge: SHORT)
+    @cacheControl(scope: PUBLIC, maxAge: 30)
   totalReviewsByProductId(productId: String!): Int
-    @cacheControl(scope: PUBLIC, maxAge: SHORT)
+    @cacheControl(scope: PUBLIC, maxAge: 30)
   reviewsByShopperId(
     shopperId: String!
     from: Int = 0

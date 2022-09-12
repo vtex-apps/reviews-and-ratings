@@ -488,7 +488,7 @@ namespace ReviewsRatings.Models
         public string MeasurementUnit { get; set; }
 
         [JsonProperty("unitMultiplier")]
-        public long UnitMultiplier { get; set; }
+        public long? UnitMultiplier { get; set; }
 
         [JsonProperty("manufacturerCode")]
         public string ManufacturerCode { get; set; }
@@ -680,7 +680,7 @@ namespace ReviewsRatings.Models
         public object Description { get; set; }
 
         [JsonProperty("unitMultiplier")]
-        public long UnitMultiplier { get; set; }
+        public long? UnitMultiplier { get; set; }
     }
 
     public class Content
@@ -1249,7 +1249,7 @@ namespace ReviewsRatings.Models
         public long Price { get; set; }
 
         [JsonProperty("unitMultiplier")]
-        public long UnitMultiplier { get; set; }
+        public long? UnitMultiplier { get; set; }
     }
 
     public partial class Receipt
