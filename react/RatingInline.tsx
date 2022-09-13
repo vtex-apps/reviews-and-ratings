@@ -145,6 +145,7 @@ function RatingInline() {
     client
       .query({
         query: AppSettings,
+        fetchPolicy: 'network-only',
       })
       .then((response: ApolloQueryResult<SettingsData>) => {
         const settings = response.data.appSettings

@@ -106,7 +106,7 @@ type Query {
   ): ReviewsResult @cacheControl(scope: PUBLIC, maxAge: MEDIUM)
   hasShopperReviewed(shopperId: String!, productId: String!): Boolean
     @cacheControl(scope: PRIVATE)
-  appSettings: AppSettings @cacheControl(scope: PUBLIC, maxAge: SHORT)
+  appSettings: AppSettings
   verifySchema: String @cacheControl(scope: PUBLIC, maxAge: SHORT)
   migrateData: String @cacheControl(scope: PUBLIC, maxAge: SHORT)
   verifyMigration: String @cacheControl(scope: PUBLIC, maxAge: SHORT)
