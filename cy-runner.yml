@@ -16,10 +16,12 @@ base:
   twilio:
     enabled: true
   jira:
-    enabled: false
-    account: config-dev
-    board: jira-key
-    issueType: task
+    enabled: true
+    account: vtex-dev
+    board: REVIEWS
+    issueType: Bug
+    priority: High
+    testing: true
   slack:
     enabled: false
     channel: some-channel
