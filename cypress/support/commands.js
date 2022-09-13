@@ -102,6 +102,8 @@ Cypress.Commands.add('getAverageRating', (user, product, validate = true) => {
     cy.openProduct(product, true)
   }
 
+  cy.get('span[class*=average]').should('not.contain', '0')
+
   cy.get('span[class*=average]', { timeout: 40000 })
     .invoke('text')
     .then(averageText => {
