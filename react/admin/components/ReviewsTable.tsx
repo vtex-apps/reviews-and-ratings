@@ -120,7 +120,7 @@ export const ReviewsTable: FC<ReviewsTableProps> = ({
           : 'SearchDate:desc',
       }}
       notifyOnNetworkStatusChange
-      fetchPolicy="cache-and-network"
+      fetchPolicy="network-only"
     >
       {({ loading, error, data, fetchMore, networkStatus, variables }) => {
         if (data?.reviews?.range) {

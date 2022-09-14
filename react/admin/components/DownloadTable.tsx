@@ -70,7 +70,7 @@ export const DownloadTable: FC<DownloadTableProps> = ({
           : 'SearchDate:desc',
       }}
       notifyOnNetworkStatusChange
-      fetchPolicy="cache-and-network"
+      fetchPolicy="network-only"
     >
       {({ loading, error, data, networkStatus }) => {
         if (data?.reviews?.range) {

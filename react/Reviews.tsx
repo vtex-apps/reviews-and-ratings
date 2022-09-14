@@ -431,6 +431,7 @@ function Reviews() {
     },
     skip: !productId,
     fetchPolicy: 'network-only',
+    notifyOnNetworkStatusChange: true,
     ssr: false,
   })
 
@@ -444,6 +445,7 @@ function Reviews() {
     },
     skip: !productId,
     fetchPolicy: 'network-only',
+    notifyOnNetworkStatusChange: true,
     ssr: false,
   })
 
@@ -497,7 +499,6 @@ function Reviews() {
     client
       .query({
         query: getBindings,
-        variables: null,
       })
       .then((res: any) => {
         const list = res.data.tenantInfo.bindings.map((item: any) => {
@@ -568,13 +569,23 @@ function Reviews() {
   useEffect(() => {
     if (loadingAverage || !dataAverage) return
 
-    const average = dataAverage.averageRatingByProductId
+    let average = dataAverage.averageRatingByProductId
+
+    if (state.total <= 10) {
+      const summedRating = state.reviews?.reduce(
+        (partialSum, a) => partialSum + a.rating,
+        0
+      )
+
+      average = summedRating ? summedRating / state.total : average
+      average = Math.round((average + Number.EPSILON) * 100) / 100 // limit to 2 decimal places
+    }
 
     dispatch({
       type: 'SET_AVERAGE',
       args: { average },
     })
-  }, [dataAverage, loadingAverage])
+  }, [dataAverage, loadingAverage, state.total, state.reviews])
 
   useEffect(() => {
     if (loadingReviews || !dataReviews) return
@@ -612,6 +623,11 @@ function Reviews() {
     state.settings.defaultOpenCount,
     refetchAverage,
   ])
+
+  const handleRefetch = () => {
+    refetchAverage()
+    refetchReviews()
+  }
 
   const baseUrl = getBaseUrl()
 
@@ -681,7 +697,7 @@ function Reviews() {
           >
             <ReviewForm
               settings={state.settings}
-              refetchReviews={refetchReviews}
+              refetchReviews={handleRefetch}
             />
           </Collapsible>
         ) : (
