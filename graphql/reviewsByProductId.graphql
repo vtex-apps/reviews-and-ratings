@@ -7,7 +7,7 @@ query ReviewsByProductId(
   $to: Int
   $orderBy: String
   $status: String
-) {
+) @context(provider: "vtex.reviews-and-ratings") {
   reviewsByProductId(
     productId: $productId
     rating: $rating

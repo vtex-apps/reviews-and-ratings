@@ -3,7 +3,8 @@ query ReviewByDateRange(
   $toDate: String!
   $orderBy: String
 ) {
-  reviewByDateRange(fromDate: $fromDate, toDate: $toDate, orderBy: $orderBy) {
+  reviewByDateRange(fromDate: $fromDate, toDate: $toDate, orderBy: $orderBy)
+    @context(provider: "vtex.reviews-and-ratings") {
     data {
       id
       productId

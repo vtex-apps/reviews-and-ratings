@@ -4,7 +4,7 @@ query Reviews(
   $to: Int
   $orderBy: String
   $status: String
-) {
+) @context(provider: "vtex.reviews-and-ratings") {
   reviews(
     searchTerm: $searchTerm
     from: $from

@@ -1,5 +1,5 @@
 mutation NewReview($review: ReviewInput!) {
-  newReview(review: $review) {
+  newReview(review: $review) @context(provider: "vtex.reviews-and-ratings") {
     id
     productId
     rating

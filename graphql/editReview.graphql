@@ -1,5 +1,6 @@
 mutation EditReview($id: String!, $review: EditReviewInput!) {
-  editReview(id: $id, review: $review) {
+  editReview(id: $id, review: $review)
+    @context(provider: "vtex.reviews-and-ratings") {
     id
     productId
     rating

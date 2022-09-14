@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace ReviewsRatings.GraphQL
 {
@@ -114,7 +115,7 @@ namespace ReviewsRatings.GraphQL
                 {
                     int count = 0;
                     var searchResult = await productReviewService.GetReviewsByProductId(context.GetArgument<string>("productId"));
-                    if (searchResult != null && searchResult.Reviews.Count > 0)
+                    if (searchResult != null && searchResult.Reviews != null && searchResult.Reviews.Count > 0)
                     {
                         count = searchResult.Reviews.Count;
                         AppSettings appSettings = await productReviewService.GetAppSettings();
