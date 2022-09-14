@@ -346,9 +346,11 @@
                 {
                     _context.Vtex.Logger.Info("GetReviewsByProductId", null, $"Getting reviews", new[] { ("productId", productId), ("Total", wrapper.Range.Total.ToString()) });
                 }
+
             }
             catch (Exception ex)
             {
+
                 _context.Vtex.Logger.Error("GetReviewsByProductId", null, 
                 "Error:", ex,
                 new[]
@@ -872,7 +874,6 @@
             }
 
             review.Id = maxKeyValue;
-            Console.WriteLine($"MAX KEY VALUE = {maxKeyValue}");
 
             IList<LegacyReview> reviews = await this._productReviewRepository.GetProductReviewsAsync(review.ProductId);
             if(reviews == null)

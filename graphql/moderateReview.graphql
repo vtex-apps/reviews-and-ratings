@@ -1,3 +1,4 @@
 mutation ModerateReview($ids: [String!], $approved: Boolean!) {
   moderateReview(ids: $ids, approved: $approved)
+    @context(provider: "vtex.reviews-and-ratings")
 }

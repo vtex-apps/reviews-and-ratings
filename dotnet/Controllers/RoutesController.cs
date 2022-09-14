@@ -203,7 +203,6 @@ namespace ReviewsRatings.Controllers
                         ids = new string[1];
                         ids[0] = id;
                         return Json(await this._productReviewsService.DeleteReview(ids));
-                        break;
                     case REVIEWS:
                         if (!keyAndTokenValid)
                         {
@@ -213,7 +212,6 @@ namespace ReviewsRatings.Controllers
                         string bodyAsText = await new System.IO.StreamReader(HttpContext.Request.Body).ReadToEndAsync();
                         ids = JsonConvert.DeserializeObject<string[]>(bodyAsText);
                         return Json(await this._productReviewsService.DeleteReview(ids));
-                        break;
                 }
             }
             else if ("patch".Equals(HttpContext.Request.Method, StringComparison.OrdinalIgnoreCase))
@@ -230,7 +228,6 @@ namespace ReviewsRatings.Controllers
                         Review review = JsonConvert.DeserializeObject<Review>(bodyAsText);
                         review.Id = id;
                         return Json(await this._productReviewsService.EditReview(review));
-                        break;
                 }
             }
             else if ("get".Equals(HttpContext.Request.Method, StringComparison.OrdinalIgnoreCase))
@@ -259,7 +256,6 @@ namespace ReviewsRatings.Controllers
 
                         Review review = await this._productReviewsService.GetReview(id);
                         return Json(review);
-                        break;
                     case REVIEWS:
                         IList<Review> reviews;
                         if (!string.IsNullOrEmpty(ratingQS))
@@ -296,7 +292,6 @@ namespace ReviewsRatings.Controllers
                         };
 
                         return Json(searchResponse);
-                        break;
                     case RATING:
                         decimal average = await _productReviewsService.GetAverageRatingByProductId(id);
                         wrapper = await _productReviewsService.GetReviewsByProductId(id);

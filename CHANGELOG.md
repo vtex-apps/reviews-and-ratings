@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Added GraphQL provider to queries and mutations
+- Added additional VerifySchema checks
+- VerifySchema now uses the app's token to authenticate
+- Added error log if app is unable to search MasterData
+
 ## [3.11.0] - 2022-09-14
 
 ### Fixed

@@ -4,12 +4,12 @@ query ReviewByreviewDateTime(
   $to: Int
   $orderBy: String
   $status: String
-) {
+) @context(provider: "vtex.reviews-and-ratings") {
   reviewByreviewDateTime(
     reviewDateTime: $reviewDateTime
-    from: $from,
-    to: $to,
-    orderBy: $orderBy,
+    from: $from
+    to: $to
+    orderBy: $orderBy
     status: $status
   ) {
     data {

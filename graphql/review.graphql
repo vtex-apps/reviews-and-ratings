@@ -1,5 +1,5 @@
 query Review($id: ID!) {
-  review(id: $id) {
+  review(id: $id) @context(provider: "vtex.reviews-and-ratings") {
     id
     productId
     rating

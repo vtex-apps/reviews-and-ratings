@@ -79,7 +79,7 @@
                     RequestUri = new Uri($"http://infra.io.vtex.com/vbase/v2/{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_ACCOUNT]}/master/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{productId}"),
                 };
 
-                string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+                string authToken = _context.Vtex.AuthToken;
 
                 if (authToken != null)
                 {
@@ -128,7 +128,7 @@
                 Content = new StringContent(jsonSerializedProducReviews, Encoding.UTF8, APPLICATION_JSON)
             };
 
-            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+            string authToken = _context.Vtex.AuthToken;
             if (authToken != null)
             {
                 request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
@@ -162,7 +162,7 @@
                 //RequestUri = new Uri($"http://infra.io.vtex.com/vbase/v2/{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_ACCOUNT]}/master/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{LOOKUP}"),
             };
 
-            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+            string authToken = _context.Vtex.AuthToken;
             if (authToken != null)
             {
                 request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
@@ -215,7 +215,7 @@
                 Content = new StringContent(jsonSerializedLookup, Encoding.UTF8, APPLICATION_JSON)
             };
 
-            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+            string authToken = _context.Vtex.AuthToken;
             if (authToken != null)
             {
                 request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
@@ -376,7 +376,7 @@
                 };
 
                 request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
-                string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+                string authToken = _context.Vtex.AuthToken;
                 if (authToken != null)
                 {
                     request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
@@ -418,7 +418,7 @@
                     RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.{ENVIRONMENT}.com.br/api/oms/pvt/orders?{queryString}")
                 };
 
-                string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+                string authToken = _context.Vtex.AuthToken;
                 if (authToken != null)
                 {
                     request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
@@ -460,7 +460,7 @@
                     RequestUri = new Uri($"http://infra.io.vtex.com/vbase/v2/{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_ACCOUNT]}/master/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{HASHED_SCHEMA}"),
                 };
 
-                string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+                string authToken = _context.Vtex.AuthToken;
                 if (authToken != null)
                 {
                     request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
@@ -485,7 +485,7 @@
                     };
 
                     request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, _context.Vtex.AuthToken);
-                    request.Headers.Add(VTEX_ID_HEADER_NAME, _context.Vtex.AdminUserAuthToken);
+                    request.Headers.Add(VTEX_ID_HEADER_NAME, _context.Vtex.AuthToken);
                     request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
 
                     response = await client.SendAsync(request);
@@ -504,7 +504,7 @@
                     };
 
                     request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, _context.Vtex.AuthToken);
-                    request.Headers.Add(VTEX_ID_HEADER_NAME, _context.Vtex.AdminUserAuthToken);
+                    request.Headers.Add(VTEX_ID_HEADER_NAME, _context.Vtex.AuthToken);
                     request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
 
                     response = await client.SendAsync(request);
@@ -535,7 +535,7 @@
                     RequestUri = new Uri($"http://infra.io.vtex.com/vbase/v2/{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_ACCOUNT]}/master/buckets/{this._applicationName}/{REVIEWS_BUCKET}/files/{SUCCESSFUL_MIGRATION}"),
                 };
 
-                string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+                string authToken = _context.Vtex.AuthToken;
                 if (authToken != null)
                 {
                     request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
@@ -572,7 +572,7 @@
                 };
 
                 request.Headers.Add(PROXY_AUTHORIZATION_HEADER_NAME, _context.Vtex.AuthToken);
-                request.Headers.Add(VTEX_ID_HEADER_NAME, _context.Vtex.AdminUserAuthToken);
+                request.Headers.Add(VTEX_ID_HEADER_NAME, _context.Vtex.AuthToken);
                 request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
 
                 var client = _clientFactory.CreateClient();
@@ -592,8 +592,10 @@
 
         public async Task<ReviewsResponseWrapper> GetProductReviewsMD(string searchQuery, string from, string to)
         {
+            await this.VerifySchema();
+
             ReviewsResponseWrapper reviewsResponse = null;
-            IList<Review> reviews = null;
+            IList<Review> reviews = new List<Review>();
             string total = "0";
             string responseFrom = "0";
             string responseTo = "0";
@@ -623,7 +625,7 @@
 
                 request.Headers.Add("REST-Range", $"resources={from}-{to}");
 
-                string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+                string authToken = _context.Vtex.AuthToken;
                 if (authToken != null)
                 {
                     request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
@@ -637,6 +639,8 @@
                 if (response.IsSuccessStatusCode)
                 {
                     reviews = JsonConvert.DeserializeObject<IList<Review>>(responseContent);
+                } else {
+                    _context.Vtex.Logger.Error("GetProductReviewsMD", null, "Error getting reviews", null, new[] { ("searchQuery", searchQuery), ("from", from), ("to", to), ("responseContent", responseContent) });
                 }
 
                 HttpHeaders headers = response.Headers;
@@ -680,6 +684,8 @@
 
         public async Task<ReviewsResponseWrapper> GetRangeReviewsMD(string fromDate, string toDate)
         {
+            await this.VerifySchema();
+
             ReviewsResponseWrapper reviewsResponse = null;
             IList<Review> reviews = new List<Review>();
             DateTime dtFromDate = DateTime.Parse(fromDate);
@@ -707,7 +713,7 @@
 
                 request.Headers.Add("REST-Range", $"resources={0}-{800}");
 
-                string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+                string authToken = _context.Vtex.AuthToken;
                 if (authToken != null)
                 {
                     request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
@@ -770,7 +776,7 @@
                     RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/documents/{documentId}")
                 };
 
-                string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+                string authToken = _context.Vtex.AuthToken;
                 if (authToken != null)
                 {
                     request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
@@ -792,6 +798,7 @@
 
         public async Task<string> SaveProductReviewMD(Review review)
         {
+            await this.VerifySchema();
             string id = string.Empty;
 
             // before SerializeObject
@@ -817,7 +824,7 @@
                     Content = new StringContent(jsonSerializedReview, Encoding.UTF8, APPLICATION_JSON)
                 };
 
-                string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+                string authToken = _context.Vtex.AuthToken;
                 if (authToken != null)
                 {
                     request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);

@@ -9,7 +9,7 @@ query ReviewsByShopperId(
     offset: $offset
     limit: $limit
     orderBy: $orderBy
-  ) {
+  ) @context(provider: "vtex.reviews-and-ratings") {
     id
     productId
     rating

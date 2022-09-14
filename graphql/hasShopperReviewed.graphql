@@ -1,3 +1,4 @@
 query HasShopperReviewed($shopperId: String!, $productId: String!) {
-    hasShopperReviewed(shopperId: $shopperId, productId: $productId)
+  hasShopperReviewed(shopperId: $shopperId, productId: $productId)
+    @context(provider: "vtex.reviews-and-ratings")
 }
