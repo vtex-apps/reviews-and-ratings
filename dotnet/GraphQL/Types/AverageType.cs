@@ -20,6 +20,7 @@ namespace ReviewsRatings.GraphQL.Types
             Field(b => b.StarsThree);
             Field(b => b.StarsTwo);
             Field(b => b.StarsOne);
+            Field(b => b.Total);
         }
     }
 }

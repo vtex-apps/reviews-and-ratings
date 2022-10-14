@@ -52,6 +52,7 @@ interface AverageDetail {
   starsThree: number
   starsTwo: number
   starsOne: number
+  total: number
 }
 
 interface SettingsData {
@@ -605,6 +606,7 @@ function Reviews() {
 
     graphArray[0] = total
     if (dataAverage) {
+      graphArray[0] = dataAverage.averageRatingByProductId.total
       graphArray[1] = dataAverage.averageRatingByProductId.starsOne
       graphArray[2] = dataAverage.averageRatingByProductId.starsTwo
       graphArray[3] = dataAverage.averageRatingByProductId.starsThree

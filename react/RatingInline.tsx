@@ -24,6 +24,7 @@ interface AverageDetail {
   starsThree: number
   starsTwo: number
   starsOne: number
+  total: number
 }
 
 interface SettingsData {

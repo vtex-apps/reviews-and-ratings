@@ -24,5 +24,8 @@ namespace ReviewsRatings.Models
 
         [JsonProperty("starsOne")]
         public int StarsOne { get; set; }
+
+        [JsonProperty("total")]
+        public int Total { get; set; }
     }
 }

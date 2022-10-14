@@ -42,7 +42,7 @@
                 IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
                 foreach (int id in ids)
                 {
-                    if (string.IsNullOrEmpty(productId))
+                    if (string.IsNullOrEmpty(productId) && lookup != null)
                     {
                         lookup.TryGetValue(id, out productId);
                     }
@@ -123,6 +123,7 @@
             int stars3 = 0;
             int stars4 = 0;
             int stars5 = 0;
+            int numberOfReviews = 0;
 
             string searchQuery = $"productId={productId}";
             AppSettings settings = await GetAppSettings();
@@ -135,24 +136,22 @@
             IList<Review> reviews = wrapper.Reviews;
             if (reviews != null)
             {
-                int numberOfReviews = reviews.Count;
-                if (numberOfReviews > 0)
+                decimal totalRating = 0;
+
+                foreach(Review review in reviews)
                 {
-                    decimal totalRating = 0;
-                    foreach(Review review in reviews)
+                    if (review.Rating != null && review.Rating >= 0.00 && review.Rating <= 5.00)
                     {
-                        if (review.Rating != null)
-                        {
-                            totalRating = totalRating + review.Rating ?? 0;
-                            if (review.Rating == 5) stars5++;
-                            else if (review.Rating == 4) stars4++;
-                            else if (review.Rating == 3) stars3++;
-                            else if (review.Rating == 2) stars2++;
-                            else stars1++;
-                        }
+                        totalRating = totalRating + review.Rating ?? 0;
+                        numberOfReviews++;
+                        if (review.Rating == 5) stars5++;
+                        else if (review.Rating == 4) stars4++;
+                        else if (review.Rating == 3) stars3++;
+                        else if (review.Rating == 2) stars2++;
+                        else stars1++;
                     }
-                    averageRating = totalRating / numberOfReviews;
                 }
+                averageRating = totalRating / numberOfReviews;
             }
 
             AverageCount avergae = new AverageCount
@@ -162,7 +161,8 @@
                 StarsFour = stars4,
                 StarsThree = stars3,
                 StarsTwo = stars2,
-                StarsOne = stars1
+                StarsOne = stars1,
+                Total = numberOfReviews
             };
             return avergae;
         }

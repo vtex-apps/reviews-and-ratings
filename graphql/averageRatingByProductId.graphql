@@ -7,5 +7,6 @@ query AverageRatingByProductId($productId: String!) {
       starsThree
       starsTwo
       starsOne
+      total
   }
 }

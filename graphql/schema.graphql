@@ -64,6 +64,7 @@ type AverageResponse {
   starsThree: Int
   starsTwo: Int
   starsOne: Int
+  total: Int
 }
 
 type Query {
