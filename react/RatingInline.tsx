@@ -14,7 +14,16 @@ interface TotalData {
 }
 
 interface AverageData {
-  averageRatingByProductId: number
+  averageRatingByProductId: AverageDetail
+}
+
+interface AverageDetail {
+  average: number
+  starsFive: number
+  starsFour: number
+  starsThree: number
+  starsTwo: number
+  starsOne: number
 }
 
 interface SettingsData {
@@ -134,7 +143,7 @@ function RatingInline() {
         },
       })
       .then((response: ApolloQueryResult<AverageData>) => {
-        const average = response.data.averageRatingByProductId
+        const average = response.data.averageRatingByProductId.average
 
         dispatch({
           type: 'SET_AVERAGE',

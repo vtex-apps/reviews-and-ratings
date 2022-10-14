@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+- Count stars within the `averageRatingByProductId` query
+
+### Changed
+
 - GitHub reusable workflow and cy-runner updated to version 2
 
 ## [3.11.1] - 2022-09-14

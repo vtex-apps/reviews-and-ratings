@@ -20,7 +20,16 @@ interface TotalData {
 }
 
 interface AverageData {
-  averageRatingByProductId: number
+  averageRatingByProductId: AverageDetail
+}
+
+interface AverageDetail {
+  average: number
+  starsFive: number
+  starsFour: number
+  starsThree: number
+  starsTwo: number
+  starsOne: number
 }
 
 interface SettingsData {
@@ -205,7 +214,7 @@ function RatingSummary() {
 
   useEffect(() => {
     if (loadingAverageRatingByProductId || !averageRatingByProductId) return
-    const { averageRatingByProductId: average } = averageRatingByProductId
+    const average = averageRatingByProductId.averageRatingByProductId.average
 
     dispatch({
       type: 'SET_AVERAGE',

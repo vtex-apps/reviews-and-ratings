@@ -293,11 +293,11 @@ namespace ReviewsRatings.Controllers
 
                         return Json(searchResponse);
                     case RATING:
-                        decimal average = await _productReviewsService.GetAverageRatingByProductId(id);
+                        AverageCount average = await _productReviewsService.GetAverageRatingByProductId(id);
                         wrapper = await _productReviewsService.GetReviewsByProductId(id);
                         RatingResponse ratingResponse = new RatingResponse
                         {
-                            Average = average,
+                            Average = average.Average,
                             TotalCount = wrapper.Range.Total
                         };
 

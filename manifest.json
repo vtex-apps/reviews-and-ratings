@@ -70,7 +70,6 @@
         "description": "Specified default stars of review on product page",
         "type": "string",
         "enum": [
-          "0",
           "1",
           "2",
           "3",

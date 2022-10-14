@@ -42,8 +42,18 @@ interface ReviewsData {
 }
 
 interface AverageData {
-  averageRatingByProductId: number
+  averageRatingByProductId: AverageDetail
 }
+
+interface AverageDetail {
+  average: number
+  starsFive: number
+  starsFour: number
+  starsThree: number
+  starsTwo: number
+  starsOne: number
+}
+
 interface SettingsData {
   appSettings: AppSettings
 }
@@ -569,7 +579,7 @@ function Reviews() {
   useEffect(() => {
     if (loadingAverage || !dataAverage) return
 
-    let average = dataAverage.averageRatingByProductId
+    let average = dataAverage.averageRatingByProductId.average
 
     if (state.total <= 10) {
       const summedRating = state.reviews?.reduce(
@@ -594,12 +604,12 @@ function Reviews() {
     const graphArray = [0, 0, 0, 0, 0, 0]
 
     graphArray[0] = total
-    if (reviews) {
-      reviews.forEach((review: Review) => {
-        const thisRating = review.rating
-
-        graphArray[thisRating] += 1
-      })
+    if (dataAverage) {
+      graphArray[1] = dataAverage.averageRatingByProductId.starsOne
+      graphArray[2] = dataAverage.averageRatingByProductId.starsTwo
+      graphArray[3] = dataAverage.averageRatingByProductId.starsThree
+      graphArray[4] = dataAverage.averageRatingByProductId.starsFour
+      graphArray[5] = dataAverage.averageRatingByProductId.starsFive
     }
 
     dispatch({
