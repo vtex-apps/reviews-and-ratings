@@ -207,7 +207,7 @@ export function getAverageRatingByProductId(productId) {
   const query =
     'query' +
     '($productId: String!)' +
-    '{averageRatingByProductId(productId: $productId) {data {average}}}'
+    '{averageRatingByProductId(productId: $productId) {average}}'
 
   return {
     query,
