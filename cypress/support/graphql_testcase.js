@@ -73,7 +73,7 @@ export function updateSettings(
         requireApproval: requireApproval || false,
         useLocation: true,
         defaultOpen: defaultOpen || false,
-        defaultStarsRating: defaultStarsRating || '0',
+        defaultStarsRating: defaultStarsRating || '1',
         defaultOpenCount: defaultOpenCount || '4',
         showGraph: showGraph || false,
         displaySummaryIfNone: displaySummaryIfNone || false,
