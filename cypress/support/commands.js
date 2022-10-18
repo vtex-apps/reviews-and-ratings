@@ -102,7 +102,14 @@ Cypress.Commands.add('getAverageRating', (user, product, validate = true) => {
     cy.openProduct(product, true)
   }
 
-  cy.get('span[class*=average]').should('not.contain', '0')
+  cy.getVtexItems().then(vtex => {
+    cy.intercept({
+      url: `${vtex.baseUrl}/**`,
+      query: { operationName: 'AverageRatingByProductId' },
+    }).as('AverageRatingByProductId')
+    cy.get('span[class*=average]').should('not.contain', '0')
+    cy.wait('@AverageRatingByProductId')
+  })
 
   cy.get('span[class*=average]', { timeout: 40000 })
     .invoke('text')
