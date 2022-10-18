@@ -151,7 +151,11 @@
                         else stars1++;
                     }
                 }
-                averageRating = totalRating / numberOfReviews;
+                if (numberOfReviews != 0)
+                {
+                    averageRating = totalRating / numberOfReviews;
+                }
+                
             }
 
             AverageCount avergae = new AverageCount
