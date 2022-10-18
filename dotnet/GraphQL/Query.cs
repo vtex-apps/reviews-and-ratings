@@ -94,7 +94,7 @@ namespace ReviewsRatings.GraphQL
                 }
             );
 
-            FieldAsync<DecimalGraphType>(
+            FieldAsync<AverageType>(
                 "averageRatingByProductId",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "productId", Description = "Product Id" }

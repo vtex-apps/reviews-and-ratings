@@ -57,6 +57,16 @@ type AppSettings {
   displaySummaryAddButton: Boolean
 }
 
+type AverageResponse {
+  average: Float
+  starsFive: Int
+  starsFour: Int
+  starsThree: Int
+  starsTwo: Int
+  starsOne: Int
+  total: Int
+}
+
 type Query {
   review(id: ID!): Review @cacheControl(scope: PUBLIC, maxAge: MEDIUM)
   reviews(
@@ -76,7 +86,7 @@ type Query {
     orderBy: String
     status: String
   ): ReviewsResult @cacheControl(scope: PRIVATE)
-  averageRatingByProductId(productId: String!): Float
+  averageRatingByProductId(productId: String!): AverageResponse
     @cacheControl(scope: PUBLIC, maxAge: 30)
   totalReviewsByProductId(productId: String!): Int
     @cacheControl(scope: PUBLIC, maxAge: 30)

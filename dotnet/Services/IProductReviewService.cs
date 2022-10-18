@@ -18,7 +18,7 @@
 
         Task<ReviewsResponseWrapper> GetReviews(string searchTerm, int from, int to, string orderBy, string status);
 
-        Task<decimal> GetAverageRatingByProductId(string productId);
+        Task<AverageCount> GetAverageRatingByProductId(string productId);
 
         Task<Review> NewReview(Review review, bool doValidation);
 
