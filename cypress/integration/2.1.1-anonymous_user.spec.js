@@ -1,11 +1,21 @@
 import { loginViaCookies, updateRetry } from '../support/common/support.js'
-import { updateSettings } from '../support/graphql_testcase.js'
+import {
+  getAverageRatingByProductId,
+  graphql,
+  updateSettings,
+} from '../support/graphql_testcase.js'
 import { testCase1 } from '../support/outputvalidation.js'
 import { reload } from '../support/utils.js'
 import { syncCheckoutUICustom } from '../support/common/testcase.js'
 
-const { title, configuration, product, anonymousUser1, anonymousUser2 } =
-  testCase1
+const {
+  title,
+  configuration,
+  product,
+  productId,
+  anonymousUser1,
+  anonymousUser2,
+} = testCase1
 
 describe(title, () => {
   loginViaCookies({ storeFrontCookie: false })
@@ -33,5 +43,19 @@ describe(title, () => {
         cy.addReview(product, configuration.defaultStarsRating, anonymousUser2)
       }
     )
+
+    it('Verify get average of product by id query', updateRetry(4), () => {
+      cy.addDelayBetweenRetries(2000)
+      graphql(getAverageRatingByProductId(productId), response => {
+        expect(response.body).to.not.have.own.property('errors')
+        expect(response.body.data.averageRatingByProductId.average).to.equal(4)
+        expect(response.body.data.averageRatingByProductId.starsThree).to.equal(
+          1
+        )
+        expect(response.body.data.averageRatingByProductId.starsFive).to.equal(
+          1
+        )
+      })
+    })
   })
 })

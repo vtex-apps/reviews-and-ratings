@@ -105,7 +105,7 @@ export default {
   testCase1: {
     title: 'Enable Anonymous review with no admin approval',
     product: PRODUCTS.onion,
-    productId: 880030,
+    productId: 880026,
     configuration: {
       allowAnonymousReviews: true,
       requireApproval: false,
