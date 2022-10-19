@@ -9,6 +9,15 @@ const { title, configuration, product, anonymousUser1, anonymousUser2 } =
 
 describe(title, () => {
   loginViaCookies({ storeFrontCookie: false })
+
+  updateSettings(
+    'Update default start to 0 and verify',
+    {
+      defaultStarsRating: '0',
+    },
+    true
+  )
+
   updateSettings(title, configuration)
   syncCheckoutUICustom()
 

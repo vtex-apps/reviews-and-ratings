@@ -51,7 +51,8 @@ export function updateSettings(
     displayInlineIfNone,
     displaySummaryTotalReviews,
     displaySummaryAddButton,
-  } = {}
+  } = {},
+  verifyDefaultStars = false
 ) {
   it(
     `In ${prefix} -Update Reviews and Ratings Settings`,
@@ -98,9 +99,14 @@ export function updateSettings(
         },
       }).then(response => {
         expect(response.status).to.equal(200)
-        expect(response.body.data.saveAppSettings.message).to.equal(
-          JSON.stringify(req)
-        )
+        if (verifyDefaultStars) {
+          expect(response.body.data.saveAppSettings).to.equal(null)
+          expect(response.body).to.have.own.property('errors')
+        } else {
+          expect(response.body.data.saveAppSettings.message).to.equal(
+            JSON.stringify(req)
+          )
+        }
       })
     }
   )

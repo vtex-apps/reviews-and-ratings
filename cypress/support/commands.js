@@ -76,6 +76,7 @@ Cypress.Commands.add('fillReviewInformation', user => {
   const { email, line, rating, name, review } = user
 
   cy.get(rrselectors.formBottomLine).clear().type(line)
+  cy.get(rrselectors.emptyStars).should('not.have.length', 5)
   cy.get(`${rrselectors.ratingStar} > span:nth-child(${rating})`).click()
   cy.get(rrselectors.formName).clear().type(name)
   if (email) {
