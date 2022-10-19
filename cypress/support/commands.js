@@ -57,7 +57,7 @@ Cypress.Commands.add(
             .should('be.visible')
             .click()
 
-          cy.fillReviewInformation(user, product)
+          cy.fillReviewInformation(user, defaultStarsRating)
           cy.addReview(product, defaultStarsRating, user, true)
         } else {
           cy.log('Review is already created storing its order id')
@@ -72,10 +72,12 @@ Cypress.Commands.add(
   }
 )
 
-Cypress.Commands.add('fillReviewInformation', user => {
+Cypress.Commands.add('fillReviewInformation', (user, defaultStarsRating) => {
   const { email, line, rating, name, review } = user
 
   cy.get(rrselectors.formBottomLine).clear().type(line)
+  cy.get(rrselectors.emptyStars).should('not.have.length', 5)
+  cy.get(rrselectors.filledStars).should('have.length', defaultStarsRating)
   cy.get(`${rrselectors.ratingStar} > span:nth-child(${rating})`).click()
   cy.get(rrselectors.formName).clear().type(name)
   if (email) {
