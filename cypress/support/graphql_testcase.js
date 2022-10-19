@@ -51,8 +51,8 @@ export function updateSettings(
     displayInlineIfNone,
     displaySummaryTotalReviews,
     displaySummaryAddButton,
-  } = {},
-  verifyDefaultStars = false
+    verifyDefaultStars = false,
+  } = {}
 ) {
   it(
     `In ${prefix} -Update Reviews and Ratings Settings`,

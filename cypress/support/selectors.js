@@ -5,6 +5,8 @@ export default {
   ratingStar: 'div[class*=formRating] > label > span:nth-child(2)',
   emptyStars:
     'div[class*=formRating] > label > span:nth-child(2) > span[class*=star--empty]',
+  filledStars:
+    'div[class*=formRating] > label > span:nth-child(2) > span[class*=star--filled]',
   formName: 'div[class*=formName] > label > div > input',
   formEmail: 'div[class*=formEmail] > label > div > input',
   formTextArea: 'div[class*=formReview] > label > textarea',
