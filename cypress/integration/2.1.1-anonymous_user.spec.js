@@ -11,8 +11,8 @@ describe(title, () => {
   loginViaCookies({ storeFrontCookie: false })
 
   updateSettings('Update default stars to 0 and verify', {
-    verifyDefaultStars: true,
     defaultStarsRating: '0',
+    validateDefaultStarsErrorMessage: true,
   })
 
   updateSettings(title, configuration)

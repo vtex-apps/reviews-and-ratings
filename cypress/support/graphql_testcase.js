@@ -51,7 +51,7 @@ export function updateSettings(
     displayInlineIfNone,
     displaySummaryTotalReviews,
     displaySummaryAddButton,
-    verifyDefaultStars = false,
+    validateDefaultStarsErrorMessage = false,
   } = {}
 ) {
   it(
@@ -99,9 +99,14 @@ export function updateSettings(
         },
       }).then(response => {
         expect(response.status).to.equal(200)
-        if (verifyDefaultStars) {
+        if (validateDefaultStarsErrorMessage) {
           expect(response.body.data.saveAppSettings).to.equal(null)
           expect(response.body).to.have.own.property('errors')
+          expect(
+            response.body.errors[0].extensions.exception.response.data.message
+          ).to.include(
+            'defaultStarsRating must be one of the following: "1", "2", "3", "4", "5"'
+          )
         } else {
           expect(response.body.data.saveAppSettings.message).to.equal(
             JSON.stringify(req)
