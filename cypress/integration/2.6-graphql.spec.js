@@ -110,8 +110,10 @@ describe('Graphql queries', () => {
     cy.addDelayBetweenRetries(2000)
     graphql(getAverageRatingByProductId(productId), response => {
       expect(response.body).to.not.have.own.property('errors')
-      expect(response.body.data.averageRatingByProductId).to.not.equal(null)
-      expect(response.body.data.averageRatingByProductId).to.equal(
+      expect(response.body.data.averageRatingByProductId.average).to.not.equal(
+        null
+      )
+      expect(response.body.data.averageRatingByProductId.average).to.equal(
         anonymousUser2.rating
       )
     })

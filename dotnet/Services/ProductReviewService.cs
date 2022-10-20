@@ -42,7 +42,7 @@
                 IDictionary<int, string> lookup = await _productReviewRepository.LoadLookupAsync();
                 foreach (int id in ids)
                 {
-                    if (string.IsNullOrEmpty(productId))
+                    if (string.IsNullOrEmpty(productId) && lookup != null)
                     {
                         lookup.TryGetValue(id, out productId);
                     }
@@ -115,9 +115,15 @@
             return review;
         }
 
-        public async Task<decimal> GetAverageRatingByProductId(string productId)
+        public async Task<AverageCount> GetAverageRatingByProductId(string productId)
         {
             decimal averageRating = 0m;
+            int stars1 = 0;
+            int stars2 = 0;
+            int stars3 = 0;
+            int stars4 = 0;
+            int stars5 = 0;
+            int numberOfReviews = 0;
 
             string searchQuery = $"productId={productId}";
             AppSettings settings = await GetAppSettings();
@@ -130,15 +136,39 @@
             IList<Review> reviews = wrapper.Reviews;
             if (reviews != null)
             {
-                int numberOfReviews = reviews.Count;
-                if (numberOfReviews > 0)
+                decimal totalRating = 0;
+
+                foreach(Review review in reviews)
                 {
-                    decimal totalRating = reviews.Sum(r => r.Rating ?? 0);
+                    if (review.Rating != null && review.Rating >= 0.00 && review.Rating <= 5.00)
+                    {
+                        totalRating = totalRating + review.Rating ?? 0;
+                        numberOfReviews++;
+                        if (review.Rating == 5) stars5++;
+                        else if (review.Rating == 4) stars4++;
+                        else if (review.Rating == 3) stars3++;
+                        else if (review.Rating == 2) stars2++;
+                        else stars1++;
+                    }
+                }
+                if (numberOfReviews != 0)
+                {
                     averageRating = totalRating / numberOfReviews;
                 }
+                
             }
 
-            return decimal.Round(averageRating, 2, MidpointRounding.AwayFromZero);
+            AverageCount avergae = new AverageCount
+            {
+                Average = decimal.Round(averageRating, 2, MidpointRounding.AwayFromZero),
+                StarsFive = stars5,
+                StarsFour = stars4,
+                StarsThree = stars3,
+                StarsTwo = stars2,
+                StarsOne = stars1,
+                Total = numberOfReviews
+            };
+            return avergae;
         }
 
         public async Task<Review> GetReview(string Id)
