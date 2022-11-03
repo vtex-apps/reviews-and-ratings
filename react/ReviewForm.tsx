@@ -11,6 +11,7 @@ import NewReview from '../graphql/newReview.graphql'
 import HasShopperReviewed from '../graphql/hasShopperReviewed.graphql'
 import StarPicker from './components/StarPicker'
 import { eventBus } from './utils/eventBus'
+import push from './utils/gtmPush'
 
 interface AppSettings {
   allowAnonymousReviews: boolean
@@ -398,6 +399,12 @@ export function ReviewForm({
         })
         .then(res => {
           if (res.data.newReview.id) {
+            // send review submitted event to GTM
+            push({
+              event: 'reviewSubmitted',
+              productId,
+              rating: state.rating,
+            })
             setTimeout(() => {
               if (
                 !settings?.requireApproval &&
