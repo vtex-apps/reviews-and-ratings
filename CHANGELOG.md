@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.12.0] - 2022-11-04
+
 ### Added
 
 - Custom GTM dataLayer event for when user submits a review
