@@ -11,6 +11,7 @@ import NewReview from '../graphql/newReview.graphql'
 import HasShopperReviewed from '../graphql/hasShopperReviewed.graphql'
 import StarPicker from './components/StarPicker'
 import { eventBus } from './utils/eventBus'
+import push from './utils/gtmPush'
 
 interface AppSettings {
   allowAnonymousReviews: boolean
@@ -228,14 +229,8 @@ export function ReviewForm({
   const { product } = useProduct() ?? {}
   const { productId } = product ?? {}
 
-  let defaultRating = 5
-
-  if (settings?.defaultStarsRating !== undefined) {
-    defaultRating = settings?.defaultStarsRating
-  }
-
   const initialState = {
-    rating: defaultRating,
+    rating: 5,
     title: '',
     text: '',
     location: '',
@@ -259,6 +254,17 @@ export function ReviewForm({
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const reviewSavedEvent = () => eventBus.dispatch('reviewSaved')
+
+  useEffect(() => {
+    if (settings?.defaultStarsRating) {
+      dispatch({
+        type: 'SET_RATING',
+        args: {
+          rating: settings.defaultStarsRating,
+        },
+      })
+    }
+  }, [settings])
 
   useEffect(() => {
     if (!productId) {
@@ -393,6 +399,12 @@ export function ReviewForm({
         })
         .then(res => {
           if (res.data.newReview.id) {
+            // send review submitted event to GTM
+            push({
+              event: 'reviewSubmitted',
+              productId,
+              rating: state.rating,
+            })
             setTimeout(() => {
               if (
                 !settings?.requireApproval &&

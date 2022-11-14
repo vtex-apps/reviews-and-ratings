@@ -17,6 +17,7 @@ declare global {
   interface Window extends Window {
     __RENDER_8_SESSION__: RenderSession
     __RUNTIME__: Runtime
+    dataLayer: any[]
   }
 
   interface RenderSession {
