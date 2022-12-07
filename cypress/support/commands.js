@@ -5,8 +5,7 @@ import { promissoryPayment, buyProduct } from './common/support.js'
 import { getReviews } from './graphql_testcase.js'
 import { graphql } from './common/graphql_utils'
 import { PRODUCT_ID_MAPPING, MESSAGES } from './utils.js'
-
-const APP = 'vtex.reviews-and-ratings'
+import { APP } from './constants'
 
 Cypress.Commands.add('promissoryPayment', promissoryPayment)
 Cypress.Commands.add('buyProduct', buyProduct)

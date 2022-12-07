@@ -16,6 +16,7 @@ import {
   performDeleteReviews,
 } from '../support/graphql_testcase.js'
 import { graphql } from '../support/common/graphql_utils.js'
+import { APP } from '../support/constants.js'
 
 const {
   productId1,
@@ -29,7 +30,6 @@ const {
 
 const patchReviewEnv = 'patchReviewEnv'
 const addReviewsEnv = 'addReviewsEnv'
-const APP = 'vtex.reviews-and-ratings'
 
 describe('Reviews REST API testcases', () => {
   loginViaCookies({ storeFrontCookie: false })

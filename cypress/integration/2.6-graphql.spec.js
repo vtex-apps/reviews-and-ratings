@@ -20,11 +20,11 @@ import {
 } from '../support/graphql_testcase.js'
 import { testCase6, testCase1 } from '../support/outputvalidation.js'
 import { graphql } from '../support/common/graphql_utils.js'
+import { APP } from '../support/constants.js'
 
 const { anonymousUser1, anonymousUser2 } = testCase6
 const { productId, title } = anonymousUser1
 const reviewDateTimeEnv = 'reviewDateTimeEnv'
-const APP = 'vtex.reviews-and-ratings'
 
 describe('Graphql queries', () => {
   loginViaCookies({ storeFrontCookie: false })

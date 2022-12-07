@@ -4,8 +4,7 @@ import {
 } from '../support/graphql_testcase.js'
 import { updateRetry, loginViaCookies } from '../support/common/support.js'
 import { graphql } from '../support/common/graphql_utils'
-
-const APP = 'vtex.reviews-and-ratings'
+import { APP } from '../support/constants.js'
 
 describe('Wipe the reviews/ratings', () => {
   loginViaCookies({ storeFrontCookie: false })
