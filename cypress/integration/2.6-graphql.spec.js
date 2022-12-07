@@ -1,6 +1,5 @@
 import { loginViaCookies, updateRetry } from '../support/common/support.js'
 import {
-  graphql,
   getShopperIdQuery,
   ValidateShopperIdResponse,
   getReview,
@@ -20,16 +19,18 @@ import {
   approveReviews,
 } from '../support/graphql_testcase.js'
 import { testCase6, testCase1 } from '../support/outputvalidation.js'
+import { graphql } from '../support/common/graphql_utils.js'
 
 const { anonymousUser1, anonymousUser2 } = testCase6
 const { productId, title } = anonymousUser1
 const reviewDateTimeEnv = 'reviewDateTimeEnv'
+const APP = 'vtex.reviews-and-ratings'
 
 describe('Graphql queries', () => {
   loginViaCookies({ storeFrontCookie: false })
 
   it('Verify adding review for product', updateRetry(2), () => {
-    graphql(addReviewQuery(anonymousUser1), response => {
+    graphql(APP, addReviewQuery(anonymousUser1), response => {
       expect(response.body).to.not.have.own.property('errors')
       expect(response.body.data.newReview).to.not.equal(null)
       expect(response.body.data.newReview.id).to.contain('-')
@@ -40,23 +41,28 @@ describe('Graphql queries', () => {
   approveReviews(title)
 
   it('Verify reviews by shopperId query', updateRetry(2), () => {
-    graphql(getShopperIdQuery(), ValidateShopperIdResponse)
+    graphql(APP, getShopperIdQuery(), ValidateShopperIdResponse)
   })
 
   it('Verify total reviews of product by id query', updateRetry(2), () => {
     graphql(
+      APP,
       totalReviewsByProductId(productId),
       validateTotalReviewsByProductResponse
     )
   })
 
   it('Verify reviews of product by id query', updateRetry(2), () => {
-    graphql(reviewsByProductId(productId), validateReviewsByProductResponse)
+    graphql(
+      APP,
+      reviewsByProductId(productId),
+      validateReviewsByProductResponse
+    )
   })
 
   it('Verify get review for review created via graphql', updateRetry(2), () => {
     cy.getReviewItems().then(review => {
-      graphql(getReview(review[title]), response => {
+      graphql(APP, getReview(review[title]), response => {
         expect(response.body.data.review).to.not.equal(null)
       })
     })
@@ -67,7 +73,7 @@ describe('Graphql queries', () => {
     updateRetry(2),
     () => {
       cy.getReviewItems().then(review => {
-        graphql(editReview(review[title], anonymousUser2), response => {
+        graphql(APP, editReview(review[title], anonymousUser2), response => {
           expect(response.body).to.not.have.own.property('errors')
           expect(response.body.data.review).to.not.equal(null)
         })
@@ -76,30 +82,39 @@ describe('Graphql queries', () => {
   )
 
   it('Verify hasShopperReviewed', updateRetry(2), () => {
-    graphql(gethasShopperReviewedQuery(), ValidateHasShopperReviewedResponse)
+    graphql(
+      APP,
+      gethasShopperReviewedQuery(),
+      ValidateHasShopperReviewedResponse
+    )
   })
 
   it('Verify get review for review created via UI', updateRetry(2), () => {
     cy.getReviewItems().then(review => {
-      graphql(getReview(review[testCase1.anonymousUser1.name]), response => {
-        expect(response.body.data.review).to.not.equal(null)
-        cy.setReviewItem(
-          reviewDateTimeEnv,
-          response.body.data.review.reviewDateTime
-        )
-      })
+      graphql(
+        APP,
+        getReview(review[testCase1.anonymousUser1.name]),
+        response => {
+          expect(response.body.data.review).to.not.equal(null)
+          cy.setReviewItem(
+            reviewDateTimeEnv,
+            response.body.data.review.reviewDateTime
+          )
+        }
+      )
     })
   })
 
   it('Verify get reviews query', updateRetry(2), () => {
     cy.getReviewItems().then(review => {
-      graphql(getReviews(review[productId]), validateGetReviewsResponse)
+      graphql(APP, getReviews(review[productId]), validateGetReviewsResponse)
     })
   })
 
   it('Verify reviewByDateRange query', updateRetry(2), () => {
     cy.getReviewItems().then(review => {
       graphql(
+        APP,
         getreviewByDateRangeQuery(review[reviewDateTimeEnv]),
         ValidateGetreviewByDateRangeQueryResponse
       )
@@ -108,7 +123,7 @@ describe('Graphql queries', () => {
 
   it('Verify get average of product by id query', updateRetry(4), () => {
     cy.addDelayBetweenRetries(2000)
-    graphql(getAverageRatingByProductId(productId), response => {
+    graphql(APP, getAverageRatingByProductId(productId), response => {
       expect(response.body).to.not.have.own.property('errors')
       expect(response.body.data.averageRatingByProductId.average).to.not.equal(
         null

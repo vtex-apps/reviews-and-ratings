@@ -1,14 +1,16 @@
 import {
-  graphql,
   getReviews,
   performDeleteReviews,
 } from '../support/graphql_testcase.js'
 import { updateRetry, loginViaCookies } from '../support/common/support.js'
+import { graphql } from '../support/common/graphql_utils'
+
+const APP = 'vtex.reviews-and-ratings'
 
 describe('Wipe the reviews/ratings', () => {
   loginViaCookies({ storeFrontCookie: false })
   it('Delete all the reviews/ratings', updateRetry(5), () => {
-    graphql(getReviews(''), resp => {
+    graphql(APP, getReviews(''), resp => {
       const { reviews } = resp.body.data
 
       if (reviews) {

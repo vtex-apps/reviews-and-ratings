@@ -12,10 +12,10 @@ import {
 import { testCase5 } from '../support/outputvalidation.js'
 import { loginViaCookies, updateRetry } from '../support/common/support.js'
 import {
-  graphql,
   getReviews,
   performDeleteReviews,
 } from '../support/graphql_testcase.js'
+import { graphql } from '../support/common/graphql_utils.js'
 
 const {
   productId1,
@@ -29,13 +29,14 @@ const {
 
 const patchReviewEnv = 'patchReviewEnv'
 const addReviewsEnv = 'addReviewsEnv'
+const APP = 'vtex.reviews-and-ratings'
 
 describe('Reviews REST API testcases', () => {
   loginViaCookies({ storeFrontCookie: false })
 
   for (const productId of [productId1, productId2]) {
     it(`Delete all the for product ${productId}`, updateRetry(5), () => {
-      graphql(getReviews(productId), resp => {
+      graphql(APP, getReviews(productId), resp => {
         const { reviews } = resp.body.data
 
         if (reviews) {

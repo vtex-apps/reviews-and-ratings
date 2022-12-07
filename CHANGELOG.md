@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- Updated cy-runner.yml and removed unneccesary selectors
+
+### Added
+
 - Custom GTM dataLayer event for when user submits a review
 
 ## [3.11.2] - 2022-10-20
