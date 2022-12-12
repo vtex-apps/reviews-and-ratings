@@ -1,7 +1,6 @@
 import { updateRetry } from './common/support.js'
 import { FAIL_ON_STATUS_CODE } from './common/constants'
 import { graphql } from './common/graphql_utils.js'
-import { APP } from './constants'
 
 const config = Cypress.env()
 
@@ -287,12 +286,12 @@ export function validateModerateReviewResponse(response) {
   expect(response.body.data).to.have.property('moderateReview')
 }
 
-export function approveReviews(...ids) {
+export function approveReviews(APP, ...ids) {
   it(`Approve all the reviews ${ids.toString()}`, updateRetry(2), () => {
     cy.getReviewItems().then(reviews => {
       const reviewIds = ids.map(id => reviews[id])
 
-      graphql(moderateReview(reviewIds), validateModerateReviewResponse)
+      graphql(APP, moderateReview(reviewIds), validateModerateReviewResponse)
     })
   })
 }
@@ -314,7 +313,7 @@ export function performDeleteReviews(APP, ids) {
   graphql(APP, deleteReviewMutation(ids), validateDeleteReviewResponse)
 }
 
-export function deleteReviews(...ids) {
+export function deleteReviews(APP, ...ids) {
   it(`Delete all the reviews ${ids.toString()}`, updateRetry(2), () => {
     cy.getReviewItems().then(reviews => {
       const reviewIds = ids.map(id => reviews[id])
@@ -324,10 +323,10 @@ export function deleteReviews(...ids) {
   })
 }
 
-export function verifyReviewIsDeleted(searchTerm) {
+export function verifyReviewIsDeleted(APP, searchTerm) {
   it(`Verify reviews are deleted ${searchTerm}`, updateRetry(2), () => {
     cy.getReviewItems().then(review => {
-      graphql(getReview(review[searchTerm]), response => {
+      graphql(APP, getReview(review[searchTerm]), response => {
         expect(response.body.data.review).to.equal(null)
       })
     })
