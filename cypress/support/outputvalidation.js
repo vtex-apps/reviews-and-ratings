@@ -135,7 +135,7 @@ export default {
       location: null,
       rating: 5,
       review: 'Excellent Product',
-      average: 4,
+      average: 4.33,
     },
   },
   testCase2: {

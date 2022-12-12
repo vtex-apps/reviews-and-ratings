@@ -15,7 +15,7 @@ describe('Wipe the reviews/ratings', () => {
       if (reviews) {
         const ids = reviews.data.map(({ id }) => id)
 
-        performDeleteReviews(ids)
+        performDeleteReviews(APP,ids)
       }
     })
   })

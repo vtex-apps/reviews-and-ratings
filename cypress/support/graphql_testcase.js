@@ -169,12 +169,12 @@ export function getReviews(searchTerm = false) {
     query =
       'query' +
       '($from:Int, $to: Int,$searchTerm: String)' +
-      '{ reviews(from: $from, to: $to,searchTerm: $searchTerm) {data {id,reviewerName}}}'
+      '{ reviews(from: $from, to: $to,searchTerm: $searchTerm)@context(provider: "vtex.vtex.reviews-and-ratings@*.x") {data {id,reviewerName}}}'
   } else {
     query =
       'query' +
       '($from:Int, $to: Int)' +
-      '{ reviews(from: $from, to: $to) {data {id, productId,rating, text}}}'
+      '{ reviews(from: $from, to: $to)@context(provider: "vtex.vtex.reviews-and-ratings@*.x") {data {id, productId,rating, text}}}'
   }
 
   return {
@@ -309,8 +309,8 @@ export function validateDeleteReviewResponse(response) {
   expect(response.body.data.deleteReview).to.be.true
 }
 
-export function performDeleteReviews(ids) {
-  graphql(deleteReviewMutation(ids), validateDeleteReviewResponse)
+export function performDeleteReviews(APP,ids) {
+  graphql(APP,deleteReviewMutation(ids), validateDeleteReviewResponse)
 }
 
 export function deleteReviews(...ids) {
