@@ -1,6 +1,7 @@
 import { updateRetry } from './common/support.js'
 import { FAIL_ON_STATUS_CODE } from './common/constants'
 import { graphql } from './common/graphql_utils.js'
+import { APP } from './constants'
 
 const config = Cypress.env()
 
@@ -318,7 +319,7 @@ export function deleteReviews(...ids) {
     cy.getReviewItems().then(reviews => {
       const reviewIds = ids.map(id => reviews[id])
 
-      performDeleteReviews(reviewIds)
+      performDeleteReviews(APP, reviewIds)
     })
   })
 }
