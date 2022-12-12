@@ -4,18 +4,18 @@ import {
 } from '../support/graphql_testcase.js'
 import { updateRetry, loginViaCookies } from '../support/common/support.js'
 import { graphql } from '../support/common/graphql_utils'
-import { App } from '../support/constants.js'
+import { APP } from '../support/constants.js'
 
 describe('Wipe the reviews/ratings', () => {
   loginViaCookies({ storeFrontCookie: false })
   it('Delete all the reviews/ratings', updateRetry(5), () => {
-    graphql(App, getReviews(''), resp => {
+    graphql(APP, getReviews(''), resp => {
       const { reviews } = resp.body.data
 
       if (reviews) {
         const ids = reviews.data.map(({ id }) => id)
 
-        performDeleteReviews(App, ids)
+        performDeleteReviews(APP, ids)
       }
     })
   })
