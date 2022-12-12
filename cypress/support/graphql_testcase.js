@@ -309,8 +309,8 @@ export function validateDeleteReviewResponse(response) {
   expect(response.body.data.deleteReview).to.be.true
 }
 
-export function performDeleteReviews(APP,ids) {
-  graphql(APP,deleteReviewMutation(ids), validateDeleteReviewResponse)
+export function performDeleteReviews(APP, ids) {
+  graphql(APP, deleteReviewMutation(ids), validateDeleteReviewResponse)
 }
 
 export function deleteReviews(...ids) {
