@@ -6,11 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [3.12.1] - 2022-12-05
-
 ### Added
 
 - Updated the App name and using the graphql from common folder
+
+## [3.12.1] - 2022-12-05
+
 
 ### Added
 
