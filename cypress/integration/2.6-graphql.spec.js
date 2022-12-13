@@ -38,7 +38,7 @@ describe('Graphql queries', () => {
     })
   })
 
-  approveReviews(title)
+  approveReviews(APP,title)
 
   it('Verify reviews by shopperId query', updateRetry(2), () => {
     graphql(APP, getShopperIdQuery(), ValidateShopperIdResponse)
