@@ -6,7 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Updated the App name and using the graphql from common folder
+- Updated cy-runner.yml and removed unneccesary selectors
+
 ## [3.12.1] - 2022-12-05
+
 
 ### Added
 
@@ -17,6 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Italian and English translations.
 
 ## [3.12.0] - 2022-11-04
+
 
 ### Added
 

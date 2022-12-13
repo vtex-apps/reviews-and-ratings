@@ -9,3 +9,5 @@ export const reviewsAndRatingsConstants = {
   highRated: 'Highest Rated',
   lowRated: 'Lowest Rated',
 }
+
+export const APP = 'vtex.reviews-and-ratings'
