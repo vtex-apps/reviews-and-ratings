@@ -1,42 +1,11 @@
 import { updateRetry } from './common/support.js'
 import { FAIL_ON_STATUS_CODE } from './common/constants'
+import { graphql } from './common/graphql_utils.js'
 
 const config = Cypress.env()
 
 // Constants
 const { vtex } = config.base
-
-export function graphql(getQuery, validateResponseFn = null) {
-  const { query, queryVariables } = getQuery
-
-  // Define constants
-  const APP_NAME = 'vtex.reviews-and-ratings'
-  const APP_VERSION = '*.x'
-  const APP = `${APP_NAME}@${APP_VERSION}`
-  const CUSTOM_URL = `${vtex.baseUrl}/_v/private/admin-graphql-ide/v0/${APP}`
-
-  cy.request({
-    method: 'POST',
-    url: CUSTOM_URL,
-    ...FAIL_ON_STATUS_CODE,
-    body: {
-      query,
-      variables: queryVariables,
-    },
-  }).as('RESPONSE')
-
-  if (validateResponseFn) {
-    cy.get('@RESPONSE').then(response => {
-      expect(response.status).to.equal(200)
-      expect(response.body.data).to.not.equal(null)
-      expect(response.body).to.not.have.own.property('errors')
-      expect(response.body).to.not.equal('OK')
-      validateResponseFn(response)
-    })
-  } else {
-    return cy.get('@RESPONSE')
-  }
-}
 
 export function updateSettings(
   prefix,
@@ -200,12 +169,12 @@ export function getReviews(searchTerm = false) {
     query =
       'query' +
       '($from:Int, $to: Int,$searchTerm: String)' +
-      '{ reviews(from: $from, to: $to,searchTerm: $searchTerm) {data {id,reviewerName}}}'
+      '{ reviews(from: $from, to: $to,searchTerm: $searchTerm)@context(provider: "vtex.vtex.reviews-and-ratings@*.x") {data {id,reviewerName}}}'
   } else {
     query =
       'query' +
       '($from:Int, $to: Int)' +
-      '{ reviews(from: $from, to: $to) {data {id, productId,rating, text}}}'
+      '{ reviews(from: $from, to: $to)@context(provider: "vtex.vtex.reviews-and-ratings@*.x") {data {id, productId,rating, text}}}'
   }
 
   return {
@@ -317,12 +286,12 @@ export function validateModerateReviewResponse(response) {
   expect(response.body.data).to.have.property('moderateReview')
 }
 
-export function approveReviews(...ids) {
+export function approveReviews(APP, ...ids) {
   it(`Approve all the reviews ${ids.toString()}`, updateRetry(2), () => {
     cy.getReviewItems().then(reviews => {
       const reviewIds = ids.map(id => reviews[id])
 
-      graphql(moderateReview(reviewIds), validateModerateReviewResponse)
+      graphql(APP, moderateReview(reviewIds), validateModerateReviewResponse)
     })
   })
 }
@@ -340,24 +309,24 @@ export function validateDeleteReviewResponse(response) {
   expect(response.body.data.deleteReview).to.be.true
 }
 
-export function performDeleteReviews(ids) {
-  graphql(deleteReviewMutation(ids), validateDeleteReviewResponse)
+export function performDeleteReviews(APP, ids) {
+  graphql(APP, deleteReviewMutation(ids), validateDeleteReviewResponse)
 }
 
-export function deleteReviews(...ids) {
+export function deleteReviews(APP, ...ids) {
   it(`Delete all the reviews ${ids.toString()}`, updateRetry(2), () => {
     cy.getReviewItems().then(reviews => {
       const reviewIds = ids.map(id => reviews[id])
 
-      performDeleteReviews(reviewIds)
+      performDeleteReviews(APP, reviewIds)
     })
   })
 }
 
-export function verifyReviewIsDeleted(searchTerm) {
+export function verifyReviewIsDeleted(APP, searchTerm) {
   it(`Verify reviews are deleted ${searchTerm}`, updateRetry(2), () => {
     cy.getReviewItems().then(review => {
-      graphql(getReview(review[searchTerm]), response => {
+      graphql(APP, getReview(review[searchTerm]), response => {
         expect(response.body.data.review).to.equal(null)
       })
     })

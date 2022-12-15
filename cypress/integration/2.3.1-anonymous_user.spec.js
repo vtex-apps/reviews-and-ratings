@@ -1,7 +1,7 @@
 import { loginViaCookies, updateRetry } from '../support/common/support.js'
 import { testCase3 } from '../support/outputvalidation.js'
 import { verifyFilter, verifiedReviewTestCase } from '../support/testcase.js'
-import { reviewsAndRatingsConstants } from '../support/constants.js'
+import { reviewsAndRatingsConstants, APP } from '../support/constants.js'
 import {
   deleteReviews,
   verifyReviewIsDeleted,
@@ -21,6 +21,6 @@ describe(`${title} - Anonymous User`, () => {
   verifiedReviewTestCase(testCase3, false)
   verifyFilter(reviewsAndRatingsConstants.oneStar, false)
   verifyFilter(reviewsAndRatingsConstants.fourStars, true)
-  deleteReviews(anonymousUser1.name)
-  verifyReviewIsDeleted(anonymousUser1.name)
+  deleteReviews(APP, anonymousUser1.name)
+  verifyReviewIsDeleted(APP, anonymousUser1.name)
 })

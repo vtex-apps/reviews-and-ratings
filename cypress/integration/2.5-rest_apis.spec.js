@@ -12,10 +12,11 @@ import {
 import { testCase5 } from '../support/outputvalidation.js'
 import { loginViaCookies, updateRetry } from '../support/common/support.js'
 import {
-  graphql,
   getReviews,
   performDeleteReviews,
 } from '../support/graphql_testcase.js'
+import { graphql } from '../support/common/graphql_utils.js'
+import { APP } from '../support/constants.js'
 
 const {
   productId1,
@@ -35,13 +36,13 @@ describe('Reviews REST API testcases', () => {
 
   for (const productId of [productId1, productId2]) {
     it(`Delete all the for product ${productId}`, updateRetry(5), () => {
-      graphql(getReviews(productId), resp => {
+      graphql(APP, getReviews(productId), resp => {
         const { reviews } = resp.body.data
 
         if (reviews) {
           const ids = reviews.data.map(({ id }) => id)
 
-          performDeleteReviews(ids)
+          performDeleteReviews(APP, ids)
         }
       })
     })
