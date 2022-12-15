@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed review stars laoding
+
 ## [3.12.1] - 2022-12-05
 
 ### Added

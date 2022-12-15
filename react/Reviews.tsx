@@ -631,6 +631,7 @@ function Reviews() {
     refetchAverage()
   }, [
     dataReviews,
+    dataAverage,
     loadingReviews,
     state.settings.defaultOpenCount,
     refetchAverage,
