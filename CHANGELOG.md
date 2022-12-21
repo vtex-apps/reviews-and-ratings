@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.12.2] - 2022-12-19
+
+### Fixed
+
+- Fixed review stars laoding
+
 ### Added
 
 - Updated the App name and using the graphql from common folder
