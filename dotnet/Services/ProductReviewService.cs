@@ -137,19 +137,16 @@
             if (reviews != null)
             {
                 decimal totalRating = 0;
-
+                numberOfReviews = reviews.Count;
+                
                 foreach(Review review in reviews)
                 {
-                    if (review.Rating != null && review.Rating >= 0.00 && review.Rating <= 5.00)
-                    {
-                        totalRating = totalRating + review.Rating ?? 0;
-                        numberOfReviews++;
-                        if (review.Rating == 5) stars5++;
-                        else if (review.Rating == 4) stars4++;
-                        else if (review.Rating == 3) stars3++;
-                        else if (review.Rating == 2) stars2++;
-                        else stars1++;
-                    }
+                    totalRating = totalRating + review.Rating ?? 0;
+                    if (review.Rating >= 5.00) stars5++;
+                    else if (review.Rating == 4) stars4++;
+                    else if (review.Rating == 3) stars3++;
+                    else if (review.Rating == 2) stars2++;
+                    else stars1++;
                 }
                 if (numberOfReviews != 0)
                 {
