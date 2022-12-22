@@ -602,10 +602,6 @@ function Reviews() {
       type: 'SET_AVERAGE',
       args: { average },
     })
-  }, [dataAverage, loadingAverage, state.total, state.reviews])
-
-  useEffect(() => {
-    if (loadingAverage || !dataAverage) return
 
     const graphArray = [0, 0, 0, 0, 0, 0]
     graphArray[0] = dataAverage.averageRatingByProductId.total
