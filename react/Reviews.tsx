@@ -187,7 +187,7 @@ const reducer = (state: State, action: ReducerActions) => {
         total: action.args.total,
         hasTotal: true,
       }
-    
+
     case 'SET_REVIEW_STATE':
       return {
         ...state,
@@ -639,12 +639,7 @@ function Reviews() {
         reviewNumbers: [...Array(defaultOpenCount).keys()],
       },
     })
-
-  }, [
-    dataReviews,
-    loadingReviews,
-    state.settings.defaultOpenCount,
-  ])
+  }, [dataReviews, loadingReviews, state.settings.defaultOpenCount])
 
   const handleRefetch = () => {
     refetchAverage()
