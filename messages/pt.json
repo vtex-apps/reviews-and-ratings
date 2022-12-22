@@ -67,7 +67,7 @@
   "store/reviews.list.title": "Avaliações",
   "store/reviews.list.summary.loading": "Carregando…",
   "store/reviews.list.summary.averageRating": "Classificação média: {average}",
-  "store/reviews.list.summary.totalReviews": "({total} {total, plural, =1 {avalição} other {avaliações}})",
+  "store/reviews.list.summary.totalReviews": "({total} {total, plural, =1 {avaliação} other {avaliações}})",
   "store/reviews.list.writeReview": "Escreva uma avaliação",
   "store/reviews.list.login": "Faça login para escrever uma avaliação.",
   "store/reviews.list.loading": "Carregando avaliações…",
