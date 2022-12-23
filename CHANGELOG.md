@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Portuguese translations.
+
 ## [2.12.6] - 2022-01-13
 ### Changed
 - Use product's URI as @id on `Product` schema for `RatingSummary` and `Reviews` blocks.
