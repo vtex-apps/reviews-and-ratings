@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed product search
+
 ## [3.12.3] - 2022-12-22
 
 ## [3.12.2] - 2022-12-19
