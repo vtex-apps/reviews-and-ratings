@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [3.12.3] - 2022-12-22
 
+### Fixed
+
+- Fixed product search and added assertions before targeting the search selectors
+
 ## [3.12.2] - 2022-12-19
 
 ### Fixed
