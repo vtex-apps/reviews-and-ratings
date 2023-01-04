@@ -805,7 +805,9 @@
             if (string.IsNullOrEmpty(review.SearchDate))
             {
                 DateTime dtSearchDate;
-                if(!DateTime.TryParse(review.ReviewDateTime, out dtSearchDate))
+                DateTime.TryParse(review.ReviewDateTime, out dtSearchDate);
+
+                if(dtSearchDate == DateTime.MinValue)
                 {
                     DateTime? dtSearchDateParsed = this.ParseReviewDate(review.ReviewDateTime);
                     dtSearchDate = dtSearchDateParsed ?? DateTime.Now;
