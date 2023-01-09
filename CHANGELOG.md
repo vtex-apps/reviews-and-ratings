@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed context provider error on the get review query
+
 ## [3.12.4] - 2023-01-03
 
 ### Fixed
