@@ -6,7 +6,6 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 import { useCssHandles } from 'vtex.css-handles'
 import { Card, Input, Button, Textarea } from 'vtex.styleguide'
 
-import getOrders from './queries/orders.graphql'
 import NewReview from '../graphql/newReview.graphql'
 import HasShopperReviewed from '../graphql/hasShopperReviewed.graphql'
 import StarPicker from './components/StarPicker'
@@ -37,7 +36,6 @@ interface State {
   userAuthenticated: boolean
   alreadySubmitted: boolean
   isSubmitting: boolean
-  verifiedPurchaser: boolean
   validation: Validation
   showValidationErrors: boolean
 }
@@ -58,7 +56,6 @@ type ReducerActions =
   | { type: 'SET_NAME'; args: { name: string } }
   | { type: 'SET_ID'; args: { id: string } }
   | { type: 'SET_AUTHENTICATED'; args: { authenticated: boolean } }
-  | { type: 'SET_VERIFIED' }
   | { type: 'SET_ALREADY_SUBMITTED'; args: { alreadySubmitted: boolean } }
   | { type: 'SET_SUBMITTED' }
   | { type: 'SET_SUBMITTING'; args: { isSubmitting: boolean } }
@@ -141,12 +138,6 @@ const reducer = (state: State, action: ReducerActions) => {
       return {
         ...state,
         userAuthenticated: true,
-      }
-
-    case 'SET_VERIFIED':
-      return {
-        ...state,
-        verifiedPurchaser: true,
       }
 
     case 'SET_ALREADY_SUBMITTED':
@@ -239,7 +230,6 @@ export function ReviewForm({
     shopperId: '',
     reviewSubmitted: false,
     alreadySubmitted: false,
-    verifiedPurchaser: false,
     userAuthenticated: false,
     validation: {
       hasTitle: false,
@@ -325,31 +315,6 @@ export function ReviewForm({
               type: 'SET_ALREADY_SUBMITTED',
               args: { alreadySubmitted: result.data.hasShopperReviewed },
             })
-          }
-        })
-
-      client
-        .query({
-          query: getOrders,
-          variables: null,
-        })
-        .then((res: any) => {
-          // eslint-disable-next-line vtex/prefer-early-return
-          if (res?.data?.orders && res.data.orders.length) {
-            const hasItem = !!res.data.orders.find((order: any) => {
-              return (
-                !!order.isCompleted &&
-                !!order.items.find((item: any) => {
-                  return item.productId === productId
-                })
-              )
-            })
-
-            if (hasItem) {
-              dispatch({
-                type: 'SET_VERIFIED',
-              })
-            }
           }
         })
     })
