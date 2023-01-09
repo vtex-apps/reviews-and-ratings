@@ -51,7 +51,6 @@
   "admin/reviews.table.productCell.SKU": "SKU: {sku}",
   "admin/reviews.table.reviewCell.author": "Pubblicata da {author}",
   "admin/reviews.table.reviewCell.anonymous": "anonimo",
-  "admin/reviews.migrateData": "Migra dati",
   "store/reviews.form.title": "Aggiungi recensione",
   "store/reviews.form.reviewSubmitted": "La tua recensione è stata inviata.",
   "store/reviews.form.alreadySubmitted": "Hai già inviato una recensione per questo prodotto.",
@@ -77,13 +76,11 @@
   "store/reviews.list.by": "da",
   "store/reviews.list.emptyState": "Nessuna recensione.",
   "store/reviews.list.timeAgo.justNow": "ora",
-
   "store/reviews.list.timeAgo.years": "{timeUnits} {timeUnits, plural, =1 {anno} other {anni}} fa",
   "store/reviews.list.timeAgo.months": "{timeUnits} {timeUnits, plural, =1 {mese} other {mesi}} fa",
   "store/reviews.list.timeAgo.days": "{timeUnits} {timeUnits, plural, =1 {giorno} other {giorni}} fa",
   "store/reviews.list.timeAgo.hours": "{timeUnits} {timeUnits, plural, =1 {ora} other {ore}} fa",
   "store/reviews.list.timeAgo.minutes": "{timeUnits} {timeUnits, plural, =1 {minuto} other {minuti}} fa",
-
   "store/reviews.list.sortOptions.placeholder": "Ordina per:",
   "store/reviews.list.sortOptions.mostRecent": "Più recente",
   "store/reviews.list.sortOptions.oldest": "Meno recente",

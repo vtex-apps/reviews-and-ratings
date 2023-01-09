@@ -11,7 +11,7 @@ import {
   reviewTestCase,
 } from '../support/testcase.js'
 import { reload } from '../support/utils.js'
-import { reviewsAndRatingsConstants } from '../support/constants.js'
+import { reviewsAndRatingsConstants, APP } from '../support/constants.js'
 import {
   deleteReviews,
   verifyReviewIsDeleted,
@@ -48,9 +48,9 @@ describe(`${title} - Signed In user`, () => {
   verifyFilter(reviewsAndRatingsConstants.fourStars, true)
   reviewTestCase(testCase3, true)
 
-  approveReviews(user2.name)
-  deleteReviews(user1.name)
-  verifyReviewIsDeleted(user1.name)
+  approveReviews(APP, user2.name)
+  deleteReviews(APP, user1.name)
+  verifyReviewIsDeleted(APP, user1.name)
 
   preserveCookie()
 })

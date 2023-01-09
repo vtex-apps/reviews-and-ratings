@@ -2,8 +2,10 @@ import selectors from './common/selectors'
 import { generateAddtoCartCardSelector } from './common/utils'
 import rrselectors from './selectors.js'
 import { promissoryPayment, buyProduct } from './common/support.js'
-import { graphql, getReviews } from './graphql_testcase.js'
+import { getReviews } from './graphql_testcase.js'
+import { graphql } from './common/graphql_utils'
 import { PRODUCT_ID_MAPPING, MESSAGES } from './utils.js'
+import { APP } from './constants'
 
 Cypress.Commands.add('promissoryPayment', promissoryPayment)
 Cypress.Commands.add('buyProduct', buyProduct)
@@ -18,8 +20,8 @@ Cypress.Commands.add('gotoProductDetailPage', () => {
 
 Cypress.Commands.add('openProduct', (product, detailPage = false) => {
   // Search product in search bar
-  cy.get(selectors.Search).should('be.not.disabled').should('be.visible')
-
+  cy.get(selectors.Search).should('be.visible')
+  cy.get(selectors.Search).should('be.not.disabled')
   cy.get(selectors.Search).type(`${product}{enter}`)
   // Page should load successfully now Filter should be visible
   cy.get(selectors.searchResult).should('have.text', product.toLowerCase())
@@ -39,7 +41,7 @@ Cypress.Commands.add(
     cy.addDelayBetweenRetries(1000)
     // Search the product
     cy.get('body').then($body => {
-      graphql(getReviews(PRODUCT_ID_MAPPING[product]), resp => {
+      graphql(APP, getReviews(PRODUCT_ID_MAPPING[product]), resp => {
         const object = resp.body.data.reviews.data.find(
           ob => ob.reviewerName === user.name
         )

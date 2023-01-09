@@ -106,8 +106,9 @@ type ReducerActions =
   | { type: 'SET_PASTREVIEWS'; args: { pastReviews: boolean } }
   | {
       type: 'SET_REVIEWS'
-      args: { reviews: Review[]; total: number; graphArray: number[] }
+      args: { reviews: Review[]; total: number }
     }
+  | { type: 'SET_REVIEW_STATE'; args: { graphArray: number[] } }
   | { type: 'SET_TOTAL'; args: { total: number } }
   | { type: 'SET_AVERAGE'; args: { average: number } }
   | { type: 'SET_SETTINGS'; args: { settings: AppSettings } }
@@ -184,8 +185,13 @@ const reducer = (state: State, action: ReducerActions) => {
         ...state,
         reviews: action.args.reviews || [],
         total: action.args.total,
-        reviewsStats: action.args.graphArray || [],
         hasTotal: true,
+      }
+
+    case 'SET_REVIEW_STATE':
+      return {
+        ...state,
+        reviewsStats: action.args.graphArray || [],
       }
 
     case 'SET_TOTAL':
@@ -599,24 +605,30 @@ function Reviews() {
   }, [dataAverage, loadingAverage, state.total, state.reviews])
 
   useEffect(() => {
+    if (loadingAverage || !dataAverage) return
+
+    const graphArray = [0, 0, 0, 0, 0, 0]
+    graphArray[0] = dataAverage.averageRatingByProductId.total
+    graphArray[1] = dataAverage.averageRatingByProductId.starsOne
+    graphArray[2] = dataAverage.averageRatingByProductId.starsTwo
+    graphArray[3] = dataAverage.averageRatingByProductId.starsThree
+    graphArray[4] = dataAverage.averageRatingByProductId.starsFour
+    graphArray[5] = dataAverage.averageRatingByProductId.starsFive
+
+    dispatch({
+      type: 'SET_REVIEW_STATE',
+      args: { graphArray },
+    })
+  }, [dataAverage, loadingAverage, state.total, state.reviews])
+
+  useEffect(() => {
     if (loadingReviews || !dataReviews) return
     const reviews = dataReviews.reviewsByProductId.data
     const { total } = dataReviews.reviewsByProductId.range
-    const graphArray = [0, 0, 0, 0, 0, 0]
-
-    graphArray[0] = total
-    if (dataAverage) {
-      graphArray[0] = dataAverage.averageRatingByProductId.total
-      graphArray[1] = dataAverage.averageRatingByProductId.starsOne
-      graphArray[2] = dataAverage.averageRatingByProductId.starsTwo
-      graphArray[3] = dataAverage.averageRatingByProductId.starsThree
-      graphArray[4] = dataAverage.averageRatingByProductId.starsFour
-      graphArray[5] = dataAverage.averageRatingByProductId.starsFive
-    }
 
     dispatch({
       type: 'SET_REVIEWS',
-      args: { reviews, total, graphArray },
+      args: { reviews, total },
     })
 
     const defaultOpenCount = Math.min(state.settings.defaultOpenCount, total)
@@ -627,14 +639,7 @@ function Reviews() {
         reviewNumbers: [...Array(defaultOpenCount).keys()],
       },
     })
-
-    refetchAverage()
-  }, [
-    dataReviews,
-    loadingReviews,
-    state.settings.defaultOpenCount,
-    refetchAverage,
-  ])
+  }, [dataReviews, loadingReviews, state.settings.defaultOpenCount])
 
   const handleRefetch = () => {
     refetchAverage()

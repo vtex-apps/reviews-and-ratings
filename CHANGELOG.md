@@ -6,7 +6,46 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.12.4] - 2023-01-03
+
+### Fixed
+
+- Fixed review state dispatch & improve GetAverageRatingByProductId loading time
+
+## [3.12.3] - 2022-12-22
+
+### Fixed
+
+- Fixed product search and added assertions before targeting the search selectors
+
+## [3.12.2] - 2022-12-19
+
+### Fixed
+
+- Fixed review stars laoding
+
+### Added
+
+- Updated the App name and using the graphql from common folder
+- Updated cy-runner.yml and removed unneccesary selectors
+
+### Fixed
+
+- Portuguese translations.
+
+## [3.12.1] - 2022-12-05
+
+
+### Added
+
+- Indonesian translation.
+
+### Fixed
+
+- Italian and English translations.
+
 ## [3.12.0] - 2022-11-04
+
 
 ### Added
 
