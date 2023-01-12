@@ -1,7 +1,7 @@
 {
   "name": "reviews-and-ratings",
   "vendor": "vtex",
-  "version": "3.12.4",
+  "version": "3.12.5",
   "title": "Reviews and Ratings",
   "description": "admin/reviews.reviewsandratings.description",
   "builders": {
@@ -20,7 +20,6 @@
     "vtex.product-context": "0.x",
     "vtex.store": "2.x",
     "vtex.search-graphql": "0.x",
-    "vtex.store-graphql": "2.x",
     "vtex.tenant-graphql": "0.x",
     "vtex.channels-components": "4.x",
     "vtex.paginated-table": "0.x",
