@@ -129,7 +129,8 @@ export function verifySettings(type, enableSettings = false, login = false) {
 }
 
 export function verifyAverageRatings(product, user) {
-  it('Verify average ratings', () => {
+  it('Verify average ratings', updateRetry(3),() => {
+    cy.addDelayBetweenRetries(2000)
     cy.getAverageRating(user, product)
   })
 }
