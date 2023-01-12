@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.12.5] - 2023-01-09
+
+### Removed
+
+- Removed store-graphql dependency
+
 ### Fixed
 
 - Fixed context provider error on the get review query
