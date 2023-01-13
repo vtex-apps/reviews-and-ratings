@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- Added scroll to verify verifiedBuyer on signed In user review
+
+### Added
+
 - Added updateRetry to verify ratings and some messages
 
 

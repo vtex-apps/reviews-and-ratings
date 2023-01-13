@@ -6,6 +6,7 @@ import { getReviews } from './graphql_testcase.js'
 import { graphql } from './common/graphql_utils'
 import { PRODUCT_ID_MAPPING, MESSAGES } from './utils.js'
 import { APP } from './constants'
+import { scroll } from '../support/common/support'
 
 Cypress.Commands.add('promissoryPayment', promissoryPayment)
 Cypress.Commands.add('buyProduct', buyProduct)
@@ -129,6 +130,7 @@ Cypress.Commands.add('getAverageRating', (user, product, validate = true) => {
       }
 
       if (verified) {
+        scroll()
         cy.contains(MESSAGES.VerifiedPurchaser)
       }
     })
