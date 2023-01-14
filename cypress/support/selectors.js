@@ -35,4 +35,11 @@ export default {
   GetReviewByIndex: index => {
     return `div[class*=reviewCommentsContainer] div[class*=reviewComment]:nth-child(${index}) div[class*=reviewCommentRating] span[class*=filled]`
   },
+  Download: 'div[class*=pal] > .vtex-button]',
+  FromDate: position => {
+    return `:nth-child(${position}) > div[class*=wrapper] > div[class*=_input-container] > label[class*=input] > div[class*=input-prefix__group] > .vtex-styleguide-9-x-input`
+  },
+  SelectDate: day => {
+    return `div[class*=datepicker__day--0${day}]`
+  },
 }

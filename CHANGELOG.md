@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+-  verifying reviews are sorted by xls doc
+
+### Added
+
 - Added updateRetry to verify ratings and some messages
 
 

@@ -134,3 +134,28 @@ export function verifyAverageRatings(product, user) {
     cy.getAverageRating(user, product)
   })
 }
+
+export function selectDate({ day, position }) {
+  cy.get(rrselectors.FromDate(position)).click()
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
+  cy.wait(1000)
+  cy.get(rrselectors.SelectDate(day)).click()
+}
+
+export function verifyExcelFile(fileName) {
+  it('verify the data and extension', updateRetry(3), () => {
+    cy.task('readXlsx', {
+      file: fileName,
+      sheet: 'Sheet1',
+    }).then(rows => {
+      expect(rows.length).to.be.greaterThan(1)
+      // cy.wrap(rows).then(rows => {
+      //   for (let i = 0; i < rows.length - 1; i++) {
+      //     expect(new Date(rows[0].Time)).to.be.lessThan(
+      //       new Date(rows[i + 1].Time)
+      //     )
+      //   }
+      // })
+    })
+  })
+}
