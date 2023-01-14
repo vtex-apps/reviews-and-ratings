@@ -179,16 +179,6 @@ strategy:
       - cypress/integration/2.3.2-signed_in_user.spec.js
       - cypress/integration/2.4.1-anonymous_user.spec.js
       - cypress/integration/2.4.2-signed_in_user.spec.js
-  signed_in_user_4:
-    enabled: true
-    sendDashboard: true
-    hardTries: 1
-    stopOnFail: false
-    parallel: true
-    specs:
-      - cypress/integration/2.4.2-signed_in_user.spec.js
-    dependency:
-      - cypress/integration/2.4.1-anonymous_user.spec.js
   rest_api_testcase:
     enabled: true
     sendDashboard: true
