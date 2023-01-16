@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Removed
+
+- Removed store-graphql dependency
+
 ## [2.12.7] - 2023-01-02
 
 ### Fixed
@@ -13,23 +17,29 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Portuguese translations.
 
 ## [2.12.6] - 2022-01-13
+
 ### Changed
+
 - Use product's URI as @id on `Product` schema for `RatingSummary` and `Reviews` blocks.
 
 ## [2.12.4] - 2021-09-24
 
 ## [2.11.2] - 2021-09-24
+
 ### Added
+
 - Use short cache on GraphQL queries
 
 ## [2.11.1] - 2021-09-24
+
 ### Fixed
+
 - Used metric instead of log to improve efficiency
 - Loading reviews messages translated
 
 ## [2.11.0] - 2021-09-16
 
-### Added 
+### Added
 
 - I18n Bg and pseudo language to implement In Context tool.
 
@@ -53,7 +63,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - Add setting to display stars in `product-rating-inline` block when the product has no reviews
-- Use locale to format review's date in account admin view 
+- Use locale to format review's date in account admin view
 
 ## [2.11.8] - 2021-08-30
 
