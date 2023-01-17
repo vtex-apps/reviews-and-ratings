@@ -1,7 +1,7 @@
 {
   "name": "reviews-and-ratings",
   "vendor": "vtex",
-  "version": "2.12.7",
+  "version": "2.12.8",
   "title": "admin/reviews.reviewsandratings.title",
   "description": "admin/reviews.reviewsandratings.description",
   "builders": {
@@ -31,7 +31,9 @@
     },
     "free": true,
     "type": "free",
-    "availableCountries": ["*"]
+    "availableCountries": [
+      "*"
+    ]
   },
   "settingsSchema": {
     "title": "admin/reviews.reviewsandratings.title",
@@ -65,7 +67,19 @@
         "title": "admin/reviews.defaultOpenCount.tittle",
         "description": "admin/reviews.defaultOpenCount.description",
         "type": "string",
-        "enum": ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+        "enum": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10"
+        ],
         "default": "0"
       },
       "showGraph": {
