@@ -102,17 +102,18 @@ function justNumbers(string) {
 Cypress.Commands.add('getAverageRating', (user, product, validate = true) => {
   const { average, verified } = user
 
-  if (validate) {
-    cy.openProduct(product, true)
-  }
-
   cy.getVtexItems().then(vtex => {
-    cy.intercept({
-      url: `${vtex.baseUrl}/**`,
-      query: { operationName: 'AverageRatingByProductId' },
-    }).as('AverageRatingByProductId')
+    cy.intercept('POST', `${vtex.baseUrl}/**`, req => {
+      if (req.body.operationName === 'HasShopperReviewed') {
+        req.continue()
+      }
+    }).as('HasShopperReviewed')
+
+    if (validate) {
+      cy.openProduct(product, true)
+    }
+
     cy.get('span[class*=average]').should('not.contain', '0')
-    cy.wait('@AverageRatingByProductId')
   })
 
   cy.get('span[class*=average]', { timeout: 40000 })
@@ -129,6 +130,7 @@ Cypress.Commands.add('getAverageRating', (user, product, validate = true) => {
       }
 
       if (verified) {
+        cy.wait('@HasShopperReviewed', { timeout: 20000 })
         cy.contains(MESSAGES.VerifiedPurchaser)
       }
     })
