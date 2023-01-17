@@ -4865,10 +4865,6 @@ verror@1.10.0:
   version "0.37.0"
   resolved "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.search-graphql@0.37.0/public/@types/vtex.search-graphql#c62dd40d8182ee14a554debeb31965d1b53a8783"
 
-"vtex.store-graphql@http://vtex.vtexassets.com/_v/public/typings/v1/vtex.store-graphql@2.136.9/public/@types/vtex.store-graphql":
-  version "2.136.9"
-  resolved "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.store-graphql@2.136.9/public/@types/vtex.store-graphql#23cefbc32cfa03b02a053feb7c1a6e97cefa1c19"
-
 "vtex.store@http://vtex.vtexassets.com/_v/public/typings/v1/vtex.store@2.110.0/public/@types/vtex.store":
   version "2.110.0"
   resolved "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.store@2.110.0/public/@types/vtex.store#b6472e42914bbeaf805b9acf9137fe9302feecb4"

@@ -1,13 +1,12 @@
 /* eslint-disable no-console */
 import React, { Fragment, useEffect, useReducer } from 'react'
 import { useProduct } from 'vtex.product-context'
-import { ApolloQueryResult } from 'apollo-client'
+import type { ApolloQueryResult } from 'apollo-client'
 import { useApolloClient } from 'react-apollo'
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 import { useCssHandles } from 'vtex.css-handles'
 import { Card, Input, Button, Textarea } from 'vtex.styleguide'
 
-import getOrders from './queries/orders.graphql'
 import NewReview from '../graphql/newReview.graphql'
 import HasShopperReviewed from '../graphql/hasShopperReviewed.graphql'
 import StarPicker from './components/StarPicker'
@@ -34,7 +33,6 @@ interface State {
   userAuthenticated: boolean
   alreadySubmitted: boolean
   isSubmitting: boolean
-  verifiedPurchaser: boolean
   validation: Validation
   showValidationErrors: boolean
 }
@@ -54,7 +52,6 @@ type ReducerActions =
   | { type: 'SET_NAME'; args: { name: string } }
   | { type: 'SET_ID'; args: { id: string } }
   | { type: 'SET_AUTHENTICATED'; args: { authenticated: boolean } }
-  | { type: 'SET_VERIFIED' }
   | { type: 'SET_ALREADY_SUBMITTED' }
   | { type: 'SET_SUBMITTED' }
   | { type: 'SET_SUBMITTING'; args: { isSubmitting: boolean } }
@@ -69,7 +66,6 @@ const initialState = {
   shopperId: '',
   reviewSubmitted: false,
   alreadySubmitted: false,
-  verifiedPurchaser: false,
   userAuthenticated: false,
   validation: {
     hasTitle: false,
@@ -88,6 +84,7 @@ const reducer = (state: State, action: ReducerActions) => {
         ...state,
         rating: action.args.rating,
       }
+
     case 'SET_TITLE':
       return {
         ...state,
@@ -97,6 +94,7 @@ const reducer = (state: State, action: ReducerActions) => {
           hasTitle: action.args.title !== '',
         },
       }
+
     case 'SET_TEXT':
       return {
         ...state,
@@ -106,11 +104,13 @@ const reducer = (state: State, action: ReducerActions) => {
           hasText: action.args.text !== '',
         },
       }
+
     case 'SET_LOCATION':
       return {
         ...state,
         location: action.args.location,
       }
+
     case 'SET_NAME':
       return {
         ...state,
@@ -120,6 +120,7 @@ const reducer = (state: State, action: ReducerActions) => {
           hasName: action.args.name !== '',
         },
       }
+
     case 'SET_ID':
       return {
         ...state,
@@ -130,36 +131,37 @@ const reducer = (state: State, action: ReducerActions) => {
             action.args.id.includes('@') && action.args.id.includes('.'),
         },
       }
+
     case 'SET_SUBMITTED':
       return {
         ...state,
         reviewSubmitted: true,
       }
+
     case 'SET_SUBMITTING':
       return {
         ...state,
         isSubmitting: action.args.isSubmitting,
       }
+
     case 'SET_AUTHENTICATED':
       return {
         ...state,
         userAuthenticated: true,
       }
-    case 'SET_VERIFIED':
-      return {
-        ...state,
-        verifiedPurchaser: true,
-      }
+
     case 'SET_ALREADY_SUBMITTED':
       return {
         ...state,
         alreadySubmitted: true,
       }
+
     case 'SHOW_VALIDATION':
       return {
         ...state,
         showValidationErrors: true,
       }
+
     default:
       return state
   }
@@ -277,30 +279,6 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
             })
           }
         })
-
-      client
-        .query({
-          query: getOrders,
-          variables: null,
-        })
-        .then((res: any) => {
-          // eslint-disable-next-line vtex/prefer-early-return
-          if (res?.data?.orders && res.data.orders.length) {
-            const hasItem = !!res.data.orders.find((order: any) => {
-              return (
-                !!order.isCompleted &&
-                !!order.items.find((item: any) => {
-                  return item.productId === productId
-                })
-              )
-            })
-            if (hasItem) {
-              dispatch({
-                type: 'SET_VERIFIED',
-              })
-            }
-          }
-        })
     })
   }, [client, productId])
 
@@ -323,6 +301,7 @@ export function ReviewForm({ settings }: { settings?: Partial<AppSettings> }) {
           }
         })
     }
+
     if (
       state.validation.hasName &&
       state.validation.hasTitle &&
