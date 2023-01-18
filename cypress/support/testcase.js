@@ -148,14 +148,11 @@ export function verifyExcelFile(fileName) {
       file: fileName,
       sheet: 'Sheet1',
     }).then(rows => {
-      expect(rows.length).to.be.greaterThan(1)
-      // cy.wrap(rows).then(rows => {
-      //   for (let i = 0; i < rows.length - 1; i++) {
-      //     expect(new Date(rows[0].Time)).to.be.lessThan(
-      //       new Date(rows[i + 1].Time)
-      //     )
-      //   }
-      // })
+      expect(rows.length).to.be.equal(6)
+      const sortedData = rows.sort(
+        (a, b) => new Date(a.Time) - new Date(b.Time)
+      )
+      expect(rows).to.be.equal(sortedData)
     })
   })
 }
