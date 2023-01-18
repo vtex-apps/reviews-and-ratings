@@ -149,10 +149,14 @@ export function verifyExcelFile(fileName) {
       sheet: 'Sheet1',
     }).then(rows => {
       expect(rows.length).to.be.equal(6)
+      const sheetData = rows.slice()
       const sortedData = rows.sort(
         (a, b) => new Date(a.Time) - new Date(b.Time)
       )
-      expect(rows).to.be.equal(sortedData)
+
+      sheetData.forEach((_, index) => {
+        expect(sheetData[index].Time).to.be.equal(sortedData[index].Time)
+      })
     })
   })
 }

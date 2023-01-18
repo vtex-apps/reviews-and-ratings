@@ -169,7 +169,7 @@ strategy:
     stopOnFail: false
     parallel: true
     specs:
-      - 2.4.3-verify_date_search_sorting.spec.js
+      - cypress/integration/2.4.3-verify_date_search_sorting.spec.js
     dependency:
       - cypress/integration/2.1.1-anonymous_user.spec.js
       - cypress/integration/2.1.2-signed_in_user.spec.js

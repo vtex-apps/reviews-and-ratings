@@ -9,10 +9,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 
 - Improved selectors and sorting
+- In xls doc, verifying reviews are returned in sorted order
 
 ### Added
 
--  verifying reviews are sorted by xls doc
+- For verifiedPurchaser testcase, added HasShopperReviewed intercept
 
 ### Added
 
