@@ -54,8 +54,8 @@ workspace:
   wipe:
     enabled: true
     stopOnFail: false
-    specs: 
-    - cypress/integration/wipe.spec.js
+    specs:
+      - cypress/integration/wipe.spec.js
   teardown:
     enabled: true
 
@@ -161,6 +161,22 @@ strategy:
       - cypress/integration/2.4.2-signed_in_user.spec.js
     dependency:
       - cypress/integration/2.4.1-anonymous_user.spec.js
+  # Verify reviews are sorted in dateTime format
+  Reviews_sorting:
+    enabled: true
+    sendDashboard: true
+    hardTries: 1
+    stopOnFail: false
+    parallel: true
+    specs:
+      - cypress/integration/2.4.3-verify_date_search_sorting.spec.js
+    dependency:
+      - cypress/integration/2.1.1-anonymous_user.spec.js
+      - cypress/integration/2.1.2-signed_in_user.spec.js
+      - cypress/integration/2.2.3-signed_in_user.spec.js
+      - cypress/integration/2.3.1-anonymous_user.spec.js
+      - cypress/integration/2.3.2-signed_in_user.spec.js
+      - cypress/integration/2.4.2-signed_in_user.spec.js
   rest_api_testcase:
     enabled: true
     sendDashboard: true
@@ -170,9 +186,9 @@ strategy:
     specs:
       - cypress/integration/2.5-rest_apis.spec.js
     dependency:
-     - cypress/integration/2.1.2-signed_in_user.spec.js
-     - cypress/integration/2.1.3-verify_review_with_signed_user.spec.js
-     - cypress/integration/2.4.2-signed_in_user.spec.js
+      - cypress/integration/2.1.2-signed_in_user.spec.js
+      - cypress/integration/2.1.3-verify_review_with_signed_user.spec.js
+      - cypress/integration/2.4.2-signed_in_user.spec.js
   graphql_api_testcase:
     enabled: true
     sendDashboard: true
