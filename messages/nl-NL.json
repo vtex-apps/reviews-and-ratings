@@ -128,6 +128,6 @@
   "store/reviews.list.filterOptions.three-stars": "3 sterren",
   "store/reviews.list.filterOptions.four-stars": "4 sterren",
   "store/reviews.list.filterOptions.five-stars": "5 sterren",
-  "store/reviews.show-more": "Bekijk meer",
-  "store/reviews.show-less": "Zie minder"
+  "store/reviews.show-more": "Meer weergeven",
+  "store/reviews.show-less": "Toon minder"
 }

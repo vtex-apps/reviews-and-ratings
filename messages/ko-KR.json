@@ -120,6 +120,6 @@
   "store/reviews.list.filterOptions.three-stars": "별 3개",
   "store/reviews.list.filterOptions.four-stars": "별 4개",
   "store/reviews.list.filterOptions.five-stars": "별 5개",
-  "store/reviews.show-more": "더보기",
-  "store/reviews.show-less": "적게 보기"
+  "store/reviews.show-more": "더 보기",
+  "store/reviews.show-less": "간략히 보기"
 }

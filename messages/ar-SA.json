@@ -124,6 +124,6 @@
   "store/reviews.list.filterOptions.three-stars": "3 نجوم",
   "store/reviews.list.filterOptions.four-stars": "4 نجوم",
   "store/reviews.list.filterOptions.five-stars": "5 نجوم",
-  "store/reviews.show-more": "فيزي ماي مولت",
-  "store/reviews.show-less": "رؤية أقل"
+  "store/reviews.show-more": "اعرض المزيد",
+  "store/reviews.show-less": "اعرض أقل"
 }

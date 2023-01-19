@@ -126,6 +126,6 @@
   "store/reviews.list.filterOptions.three-stars": "3 stelle",
   "store/reviews.list.filterOptions.four-stars": "4 stelle",
   "store/reviews.list.filterOptions.five-stars": "5 stelle",
-  "store/reviews.show-more": "Vedi altro",
-  "store/reviews.show-less": "Vedi meno"
+  "store/reviews.show-more": "Mostra di più",
+  "store/reviews.show-less": "Mostra di meno"
 }
