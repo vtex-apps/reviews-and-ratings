@@ -311,6 +311,14 @@ const messages = defineMessages({
     id: 'store/reviews.list.pagination.textOf',
     defaultMessage: 'of',
   },
+  showMore: {
+    id: 'store/reviews.show-more',
+    defaultMessage: 'Show more',
+  },
+  showLess: {
+    id: 'store/reviews.show-less',
+    defaultMessage: 'Show less',
+  },
 })
 
 const CSS_HANDLES = [
@@ -859,9 +867,9 @@ function Reviews() {
                       >
                         <ShowMore
                           lines={3}
-                          more="Show more"
-                          less="Show less"
-                          anchorClass={`${handles.showMoreButton}`}
+                          more={intl.formatMessage(messages.showMore)}
+                          less={intl.formatMessage(messages.showLess)}
+                          anchorClass={`${handles.showMoreButton} c-link hover-c-link`}
                         >
                           {review.text}
                         </ShowMore>

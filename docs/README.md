@@ -146,6 +146,7 @@ To apply CSS customizations in this and other blocks, follow the instructions gi
 | `summaryTotalReviews`     |
 | `writeReviewContainer`    |
 | `writeReviewButton`       |
+| `showMore`       |
 
 ## Rest APIs
 

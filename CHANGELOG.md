@@ -40,6 +40,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- Translation & handle for Review Show more/Show Less text
+
+### Added
+
 - For verifiedPurchaser testcase, added HasShopperReviewed intercept
 
 ### Added

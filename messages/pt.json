@@ -125,5 +125,7 @@
   "store/reviews.list.filterOptions.two-stars": "2 estrelas",
   "store/reviews.list.filterOptions.three-stars": "3 estrelas",
   "store/reviews.list.filterOptions.four-stars": "4 estrelas",
-  "store/reviews.list.filterOptions.five-stars": "5 estrelas"
+  "store/reviews.list.filterOptions.five-stars": "5 estrelas",
+  "store/reviews.show-more": "Ver mais",
+  "store/reviews.show-less": "Ver menos"
 }

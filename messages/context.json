@@ -126,5 +126,7 @@
   "store/reviews.list.filterOptions.two-stars": "store/reviews.list.filterOptions.two-stars",
   "store/reviews.list.filterOptions.three-stars": "store/reviews.list.filterOptions.three-stars",
   "store/reviews.list.filterOptions.four-stars": "store/reviews.list.filterOptions.four-stars",
-  "store/reviews.list.filterOptions.five-stars": "store/reviews.list.filterOptions.five-stars"
+  "store/reviews.list.filterOptions.five-stars": "store/reviews.list.filterOptions.five-stars",
+  "store/reviews.show-more": "store/reviews.show-more",
+  "store/reviews.show-less": "store/reviews.show-less"
 }

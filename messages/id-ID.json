@@ -125,5 +125,7 @@
   "store/reviews.list.filterOptions.two-stars": "2 bintang",
   "store/reviews.list.filterOptions.three-stars": "3 bintang",
   "store/reviews.list.filterOptions.four-stars": "4 bintang",
-  "store/reviews.list.filterOptions.five-stars": "5 bintang"
+  "store/reviews.list.filterOptions.five-stars": "5 bintang",
+  "store/reviews.show-more": "Lihat lebih banyak",
+  "store/reviews.show-less": "Lihat lebih sedikit"
 }

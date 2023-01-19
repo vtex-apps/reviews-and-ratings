@@ -119,5 +119,7 @@
   "store/reviews.list.filterOptions.two-stars": "2つ星",
   "store/reviews.list.filterOptions.three-stars": "3つ星",
   "store/reviews.list.filterOptions.four-stars": "4つ星",
-  "store/reviews.list.filterOptions.five-stars": "5つ星"
+  "store/reviews.list.filterOptions.five-stars": "5つ星",
+  "store/reviews.show-more": "続きを見る",
+  "store/reviews.show-less": "もっと見る"
 }

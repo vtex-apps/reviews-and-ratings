@@ -127,5 +127,7 @@
   "store/reviews.list.filterOptions.two-stars": "2 звезди",
   "store/reviews.list.filterOptions.three-stars": "3 звезди",
   "store/reviews.list.filterOptions.four-stars": "4 звезди",
-  "store/reviews.list.filterOptions.five-stars": "5 звезди"
+  "store/reviews.list.filterOptions.five-stars": "5 звезди",
+  "store/reviews.show-more": "Виж повече",
+  "store/reviews.show-less": "Виж по-малко"
 }
