@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- Add Hardretries in signed in users while verifiying average rating
+
+### Added
+
 - For verifiedPurchaser testcase, added HasShopperReviewed intercept
 
 ### Added
