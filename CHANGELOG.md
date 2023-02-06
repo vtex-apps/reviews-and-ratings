@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.12.6] - 2023-02-03
+
+
+### Added
+
+- Added ListOrders policy
+
 ### Added
 
 - Add Hardretries in signed in users while verifiying average rating
