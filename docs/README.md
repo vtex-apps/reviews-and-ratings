@@ -153,6 +153,7 @@ In order to apply CSS customizations in this and other blocks, follow the instru
 | `summaryTotalReviews`     |
 | `writeReviewContainer`    |
 | `writeReviewButton`       |
+| `showMoreButton`          |
 
 # Rest APIs
 In order to see how to use the list of REST APIs go to [Reviews and Ratings API overview](https://developers.vtex.com/vtex-rest-api/reference/reviews-and-ratings-api-overview).
