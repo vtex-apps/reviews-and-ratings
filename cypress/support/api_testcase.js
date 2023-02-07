@@ -25,7 +25,7 @@ export function addReviewAPI(
   duplicate = false
 ) {
   it(`Add review ${name}`, updateRetry(3), () => {
-    cy.addDelayBetweenRetries(2000)
+    cy.addDelayBetweenRetries(10000)
     cy.getVtexItems().then(vtex => {
       cy.request({
         method: 'POST',

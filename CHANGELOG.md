@@ -15,12 +15,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- Add Hardretries in signed in users while verifiying average rating
+- Review api allows duplicate reviews. So, created a ticket (REVIEWS-135) and disabled the testcase
+
+### Added
+
 - For verifiedPurchaser testcase, added HasShopperReviewed intercept
 
 ### Added
 
 - Added updateRetry to verify ratings and some messages
-
 
 ## [3.12.5] - 2023-01-09
 
@@ -61,7 +65,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [3.12.1] - 2022-12-05
 
-
 ### Added
 
 - Indonesian translation.
@@ -71,7 +74,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Italian and English translations.
 
 ## [3.12.0] - 2022-11-04
-
 
 ### Added
 
@@ -105,6 +107,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [3.10.9] - 2022-09-07
 
 ### Fixed
+
 - (REVIEWS-118) If datetime parsing fails, attempt parsing by cultureinfo
 
 ## [3.10.8] - 2022-08-30
@@ -204,7 +207,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 
 - Use useQuery graphQL hook to destructure refetch in Reviews component.
-- Passed refetchReviews to ReviewForm  component to refetch after a new review is saved.
+- Passed refetchReviews to ReviewForm component to refetch after a new review is saved.
 
 ## [3.8.11] - 2022-05-05
 
