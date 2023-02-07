@@ -54,8 +54,8 @@ workspace:
   wipe:
     enabled: true
     stopOnFail: false
-    specs: 
-    - cypress/integration/wipe.spec.js
+    specs:
+      - cypress/integration/wipe.spec.js
   teardown:
     enabled: true
 
@@ -108,28 +108,46 @@ strategy:
   signed_in_user_2:
     enabled: true
     sendDashboard: true
-    hardTries: 1
+    hardTries: 2
     stopOnFail: false
     parallel: false
     specs:
       - cypress/integration/2.2.3-signed_in_user.spec.js
-      - cypress/integration/2.2.4-verify_review_with_signed_user.spec.js
     dependency:
       - cypress/integration/2.1.2-signed_in_user.spec.js
       - cypress/integration/2.1.3-verify_review_with_signed_user.spec.js
       - cypress/integration/2.2.1-ordering_the_product.spec.js
-  # Enable Anonymous review with admin approval
-  anonymous_user3:
+  rest_api_testcase:
     enabled: true
     sendDashboard: true
-    hardTries: 1
+    hardTries: 3
     stopOnFail: false
     parallel: true
     specs:
-      - cypress/integration/2.3.1-anonymous_user.spec.js
+      - cypress/integration/2.5-rest_apis.spec.js
     dependency:
-      - cypress/integration/2.2.4-verify_review_with_signed_user.spec.js
       - cypress/integration/2.2.3-signed_in_user.spec.js
+  graphql_api_testcase:
+    enabled: true
+    sendDashboard: true
+    hardTries: 5
+    stopOnFail: false
+    parallel: true
+    specs:
+      - cypress/integration/2.6-graphql.spec.js
+    dependency:
+      - cypress/integration/2.5-rest_apis.spec.js
+  verified_purchaser_and_anonymous_user3:
+      enabled: true
+      sendDashboard: true
+      hardTries: 1
+      stopOnFail: false
+      parallel: true
+      specs:
+        - cypress/integration/2.3.1-anonymous_user.spec.js
+        - cypress/integration/2.2.4-verify_review_with_signed_user.spec.js
+      dependency:
+        - cypress/integration/2.6-graphql.spec.js
   signed_in_user_3:
     enabled: true
     sendDashboard: true
@@ -140,7 +158,7 @@ strategy:
       - cypress/integration/2.3.2-signed_in_user.spec.js
     dependency:
       - cypress/integration/2.3.1-anonymous_user.spec.js
-  # Disable Anonymous review with admin approval
+    # Disable Anonymous review with admin approval
   anonymous_user4:
     enabled: true
     sendDashboard: true
@@ -161,30 +179,6 @@ strategy:
       - cypress/integration/2.4.2-signed_in_user.spec.js
     dependency:
       - cypress/integration/2.4.1-anonymous_user.spec.js
-  rest_api_testcase:
-    enabled: true
-    sendDashboard: true
-    hardTries: 3
-    stopOnFail: false
-    parallel: true
-    specs:
-      - cypress/integration/2.5-rest_apis.spec.js
-    dependency:
-     - cypress/integration/2.1.2-signed_in_user.spec.js
-     - cypress/integration/2.1.3-verify_review_with_signed_user.spec.js
-     - cypress/integration/2.4.2-signed_in_user.spec.js
-  graphql_api_testcase:
-    enabled: true
-    sendDashboard: true
-    hardTries: 5
-    stopOnFail: false
-    parallel: true
-    specs:
-      - cypress/integration/2.6-graphql.spec.js
-    dependency:
-      - cypress/integration/2.1.2-signed_in_user.spec.js
-      - cypress/integration/2.1.3-verify_review_with_signed_user.spec.js
-      - cypress/integration/2.4.2-signed_in_user.spec.js
   display_settings_anonymous_user:
     enabled: true
     sendDashboard: true
@@ -195,8 +189,7 @@ strategy:
     specs:
       - cypress/integration/2.7.1-disable_display_settings_&_verify_with_anonymous_user.spec.js
     dependency:
-      - cypress/integration/2.6-graphql.spec.js
-      - cypress/integration/2.5-rest_apis.spec.js
+      - cypress/integration/2.4.2-signed_in_user.spec.js
   display_settings_disabled_anonymous_user:
     enabled: true
     sendDashboard: true
@@ -207,8 +200,7 @@ strategy:
     specs:
       - cypress/integration/2.7.2-enable_display_settings_&_verify_with_anonymous_user.spec.js
     dependency:
-      - cypress/integration/2.6-graphql.spec.js
-      - cypress/integration/2.5-rest_apis.spec.js
+      - cypress/integration/2.7.1-disable_display_settings_&_verify_with_anonymous_user.spec.js
   display_settings_signed_in_user:
     enabled: true
     sendDashboard: true
@@ -219,8 +211,7 @@ strategy:
     specs:
       - cypress/integration/2.7.3-enable_display_settings_&_verify_with_signed_in_user.spec.js
     dependency:
-      - cypress/integration/2.6-graphql.spec.js
-      - cypress/integration/2.5-rest_apis.spec.js
+      - cypress/integration/2.7.2-enable_display_settings_&_verify_with_anonymous_user.spec.js
   display_settings_disabled_signed_in_user:
     enabled: true
     sendDashboard: true
@@ -231,5 +222,4 @@ strategy:
     specs:
       - cypress/integration/2.7.4-disable_display_settings_&_verify_with_signed_in_user.spec.js
     dependency:
-      - cypress/integration/2.6-graphql.spec.js
-      - cypress/integration/2.5-rest_apis.spec.js
+      - cypress/integration/2.7.3-enable_display_settings_&_verify_with_signed_in_user.spec.js

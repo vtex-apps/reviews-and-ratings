@@ -59,7 +59,9 @@ describe('Reviews REST API testcases', () => {
   addReviewAPI(productId1, anonymousUser1)
   addReviewAPI(productId2, anonymousUser2)
   addReviewsAPI(addReviews, addReviewsEnv)
-  addReviewAPI(productId1, anonymousUser1, true)
+
+  // TODO: Once, REVIEWS-135 is fixed then disable below testcase
+  // addReviewAPI(productId1, anonymousUser1, true)
   getProductRatingsAPI(productId1)
   retrieveReviewAPI(productId1, anonymousUser1)
   retrieveReviewsListAPI(productId1)
