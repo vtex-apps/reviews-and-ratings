@@ -345,6 +345,7 @@ const CSS_HANDLES = [
   'graphBarContainer',
   'graphBar',
   'graphBarPercent',
+  'showMoreButton',
 ] as const
 
 const getTimeAgo = (time: string, intl: any) => {
@@ -586,7 +587,7 @@ function Reviews() {
   useEffect(() => {
     if (loadingAverage || !dataAverage) return
 
-    let average = dataAverage.averageRatingByProductId.average
+    let { average } = dataAverage.averageRatingByProductId
 
     if (state.total <= 10) {
       const summedRating = state.reviews?.reduce(
@@ -608,6 +609,7 @@ function Reviews() {
     if (loadingAverage || !dataAverage) return
 
     const graphArray = [0, 0, 0, 0, 0, 0]
+
     graphArray[0] = dataAverage.averageRatingByProductId.total
     graphArray[1] = dataAverage.averageRatingByProductId.starsOne
     graphArray[2] = dataAverage.averageRatingByProductId.starsTwo
@@ -859,7 +861,7 @@ function Reviews() {
                           lines={3}
                           more="Show more"
                           less="Show less"
-                          anchorClass=""
+                          anchorClass={`${handles.showMoreButton}`}
                         >
                           {review.text}
                         </ShowMore>
