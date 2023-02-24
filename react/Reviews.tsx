@@ -345,6 +345,7 @@ const CSS_HANDLES = [
   'graphBarContainer',
   'graphBar',
   'graphBarPercent',
+  'showMoreButton',
 ] as const
 
 const getTimeAgo = (time: string, intl: any) => {
@@ -860,7 +861,7 @@ function Reviews() {
                           lines={3}
                           more="Show more"
                           less="Show less"
-                          anchorClass="showMoreButton"
+                          anchorClass={`${handles.showMoreButton}`}
                         >
                           {review.text}
                         </ShowMore>
