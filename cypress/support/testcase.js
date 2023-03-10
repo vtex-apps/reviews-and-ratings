@@ -9,14 +9,20 @@ export function restrictAnonymousUser(product) {
   it(`Anonymous user should not be able to add review`, updateRetry(3), () => {
     cy.openStoreFront()
     cy.openProduct(product, true)
+    cy.qe('Click on login link')
     cy.get(rrselectors.LoginLink).should('be.visible').click()
+    cy.qe('Forgot Password should be visible')
     cy.get(rrselectors.ForgotPassword).should('be.visible')
   })
 }
 
 export function verifyUserIsNotAbletoAddReviewAgain() {
   it('User should not be able to add review again', () => {
+    cy.qe('Click on "Write a review"')
     cy.get(rrselectors.WriteReview).click()
+    cy.qe(
+      'It should show a popup message as "You have already submitted a review for this product."'
+    )
     cy.get(rrselectors.Danger).contains(MESSAGES.AlreadySubmitted)
   })
 }
@@ -26,6 +32,7 @@ export function verifyFilter(filter, reviews = true) {
     `Filter by ${filter} should ${reviews ? '' : 'not'} show reviews`,
     updateRetry(2),
     () => {
+      cy.qe('Select the ratings')
       cy.get(rrselectors.selectFilter).select(filter)
       cy.get(rrselectors.reviewCommentRating, {
         timeout: 30000,
@@ -84,6 +91,7 @@ export function reviewTestCase({ otherProduct }, user = false) {
   it(`Validate user added comments shown to this ${title} user`, () => {
     reload()
     cy.openProduct(otherProduct, true)
+    cy.get('Should contain "No reviews"')
     cy.get('h5').should('not.contain', MESSAGES.NoReviews)
   })
 }
@@ -93,6 +101,7 @@ export function addedReviewShouldShowToTheUser(product, line) {
     cy.openStoreFront(true)
     cy.openProduct(product, true)
     cy.get(rrselectors.PostalCode, { timeout: 20000 }).should('be.visible')
+    cy.qe('Should contain added review')
     cy.get(rrselectors.ReviewComment).contains(line)
   })
 }

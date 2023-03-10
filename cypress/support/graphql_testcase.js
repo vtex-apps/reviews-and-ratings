@@ -33,6 +33,10 @@ export function updateSettings(
       const APP = `${APP_NAME}@${APP_VERSION}`
       const CUSTOM_URL = `${vtex.baseUrl}/_v/private/admin-graphql-ide/v0/${APP}`
 
+      cy.qe('Update reviews and ratings settings via graphql')
+      cy.qe(
+        "The graphql mutation is 'mutation' +'($app:String,$version:String,$settings:String)' +'{saveAppSettings(app:$app,version:$version,settings:$settings){message}}'"
+      )
       const GRAPHQL_MUTATION =
         'mutation' +
         '($app:String,$version:String,$settings:String)' +
@@ -87,6 +91,10 @@ export function updateSettings(
 }
 
 export function getShopperIdQuery() {
+  cy.qe('Get reviews added by shopper via graphql')
+  cy.qe(
+    "The graphql query is 'query' +'($shopperId: String!)' +'{reviewsByShopperId(shopperId: $shopperId){data{id}}}'"
+  )
   return {
     query:
       'query' +
@@ -103,6 +111,10 @@ export function ValidateShopperIdResponse(response) {
 }
 
 export function gethasShopperReviewedQuery() {
+  cy.qe('Get shopper reviewed reviews via graphql')
+  cy.qe(
+    "The graphql query is 'query' +'($shopperId: String!,$productId: String!)' +'{hasShopperReviewed(shopperId: $shopperId,productId: $productId)}'"
+  )
   return {
     query:
       'query' +
@@ -121,7 +133,10 @@ export function ValidateHasShopperReviewedResponse(response) {
 
 export function getreviewByDateRangeQuery(reviewDateTime) {
   const date = reviewDateTime.split(' ')
-
+  cy.qe('Get review by date range via graphql')
+  cy.qe(
+    "The graphql query is 'query' +'($fromDate:String!,$toDate: String!)' +'{reviewByDateRange(fromDate: $fromDate,toDate:$toDate){data{id}}}'"
+  )
   return {
     query:
       'query' +
@@ -142,6 +157,10 @@ export function ValidateGetreviewByDateRangeQueryResponse(response) {
 
 export function getReview(reviewId) {
   const ob = { id: reviewId }
+  cy.qe('Getting review by reviewid via graphql')
+  cy.qe(
+    "The graphql query is 'query' +'($id:ID!)' + '{ review(id: $id){id,title,text,rating,approved,productId,verifiedPurchaser,reviewDateTime}}'"
+  )
   const query =
     'query' +
     '($id:ID!)' +
@@ -166,11 +185,19 @@ export function getReviews(searchTerm = false) {
   let query
 
   if (searchTerm) {
+    cy.qe('Getting all reviews via graphql')
+    cy.qe(
+      "The graphql query is 'query' +'($from:Int, $to: Int,$searchTerm: String)' + '{ reviews(from: $from, to: $to,searchTerm: $searchTerm)@context(provider: 'vtex.reviews-and-ratings@*.x') {data {id,reviewerName}}}'"
+    )
     query =
       'query' +
       '($from:Int, $to: Int,$searchTerm: String)' +
       '{ reviews(from: $from, to: $to,searchTerm: $searchTerm)@context(provider: "vtex.reviews-and-ratings@*.x") {data {id,reviewerName}}}'
   } else {
+    cy.qe('Getting all reviews via graphql')
+    cy.qe(
+      "The graphql query is 'query' +c'($from:Int, $to: Int)' + '{ reviews(from: $from, to: $to)@context(provider: 'vtex.reviews-and-ratings@*.x') {data {id, productId,rating, text}}}'"
+    )
     query =
       'query' +
       '($from:Int, $to: Int)' +
@@ -184,11 +211,12 @@ export function getReviews(searchTerm = false) {
 }
 
 export function getAverageRatingByProductId(productId) {
+  cy.qe('Get Average rating by productId via graphql')
   const query =
     'query' +
     '($productId: String!)' +
     '{averageRatingByProductId(productId: $productId) {average}}'
-
+  cy.qe(`The graphql query is ${query}`)
   return {
     query,
     queryVariables: {
@@ -201,12 +229,13 @@ export function reviewsByProductId(productId) {
   const ob = {
     productId,
   }
-
+  cy.qe('Getting product reviews via graphql')
   const query =
     'query' +
     '($productId: String!)' +
     '{ reviewsByProductId(productId: $productId) {data {id, productId,reviewerName}}}'
 
+  cy.qe(`The graphql query is ${query}`)
   return {
     query,
     queryVariables: ob,
@@ -243,9 +272,10 @@ export function validateTotalReviewsByProductResponse(response) {
 }
 
 export function addReviewQuery(review) {
+  cy.qe('Add review via graphql')
   const query =
     'mutation' + '($review:ReviewInput!)' + '{newReview(review: $review){id}}'
-
+  cy.qe(`The graphql mutation is ${query}`)
   return {
     query,
     queryVariables: {
@@ -255,10 +285,12 @@ export function addReviewQuery(review) {
 }
 
 export function editReview(reviewId, review) {
+  cy.qe('Edit review via graphql')
   const query =
     'mutation' +
     '($id: String!, $review:EditReviewInput!)' +
     '{editReview(id:$id,review: $review){id}}'
+  cy.qe(`The graphql mutation is ${query}`)
 
   return {
     query,
@@ -270,6 +302,10 @@ export function editReview(reviewId, review) {
 }
 
 export function moderateReview(ids) {
+  cy.qe('Add review via graphql')
+  cy.qe(
+    "The graphql mutation is 'mutation' +'($ids: [String!],$approved: Boolean!)' +'{moderateReview(ids:$ids,approved:$approved)}'"
+  )
   return {
     query:
       'mutation' +
@@ -297,6 +333,10 @@ export function approveReviews(APP, ...ids) {
 }
 
 export function deleteReviewMutation(ids) {
+  cy.qe('Delete all reviews via graphql')
+  cy.qe(
+    "The graphql mutation is 'mutation' + '($ids: [String!])' + '{deleteReview(ids:$ids)}'"
+  )
   return {
     query: 'mutation' + '($ids: [String!])' + '{deleteReview(ids:$ids)}',
     queryVariables: {

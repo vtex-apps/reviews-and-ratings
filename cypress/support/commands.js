@@ -20,10 +20,14 @@ Cypress.Commands.add('gotoProductDetailPage', () => {
 
 Cypress.Commands.add('openProduct', (product, detailPage = false) => {
   // Search product in search bar
+  cy.qe('Search for a product')
   cy.get(selectors.Search).should('be.visible')
   cy.get(selectors.Search).should('be.not.disabled')
   cy.get(selectors.Search).type(`${product}{enter}`)
   // Page should load successfully now Filter should be visible
+  cy.qe(
+    'Specification page should load successfully and filter should be visible'
+  )
   cy.get(selectors.searchResult).should('have.text', product.toLowerCase())
   cy.get(selectors.FilterHeading, { timeout: 30000 }).should('be.visible')
 
@@ -122,6 +126,7 @@ Cypress.Commands.add('getAverageRating', (user, product, validate = true) => {
       const averageRating = justNumbers(averageText)
 
       if (validate) {
+        cy.qe('Validating average ratings')
         expect(average).to.equal(averageRating)
       } else if (average === averageRating[0]) {
         return cy.wrap(true)
