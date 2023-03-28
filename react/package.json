@@ -40,5 +40,5 @@
     "vtex.store": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.store@2.127.0/public/@types/vtex.store",
     "vtex.tenant-graphql": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.tenant-graphql@0.1.2/public/@types/vtex.tenant-graphql"
   },
-  "version": "3.12.7"
+  "version": "3.13.0"
 }
