@@ -72,7 +72,7 @@ As described above, the app may be configured to use a **review moderation inter
 To access and use the review moderation admin interface, follow the instructions below:
 
 1. Enable the **Require Admin Approval** setting as described above.
-2. In the Admin dashboard, navigate to **Catalog > Reviews** using the Admin sidebar.
+2. Open the Admin and navigate to **Catalog > Reviews** using the Admin sidebar.
 3. You may view either **Pending** or **Approved** reviews using the tabs at the top of the page.
 > ⚠️ Warning
 >
