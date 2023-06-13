@@ -35,7 +35,7 @@ Using your terminal, log in to the desired VTEX account and run the following co
 
 - **Require Admin Approval** - Checking this box activates the review moderation system. Newly submitted reviews will not be displayed on the store until an admin approves them in the Admin account. For more information, see the [App behavior](#app-behavior) section below.
 
-- **Ask For Reviewer Location** - Checking this box activates an optional review field. Customers that submit reviews will be asked to enter their current location (example: "Boston, MA").
+- **Ask For Reviewer Location** - Checking this box activates an optional review field. Customers that submit reviews will be asked to enter their current location (e.g., "Boston, MA").
 
 - **Default all review accordions to open** - The app displays reviews on the product page inside collapsible accordions. Checking this box will cause _all_ review accordions to default to open when the page is loaded, with review text limited to three lines. Reviews with more than three lines of text will be truncated with an ellipsis and a `Show more` link that can be used to display the whole review text.
 
