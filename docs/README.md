@@ -25,7 +25,7 @@ Using your terminal, log in to the desired VTEX account and run the following co
 1. Access the Admin, go to `Apps > My Apps` and then click the `Reviews and Ratings` card:
 
 
-![apps-reviews-and-ratings](https://cdn.jsdelivr.net/gh/vtexdocs/dev-portal-content@main/images/vtex-reviews-and-ratings-2.png) _When using Admin v4_
+![apps-reviews-and-ratings](https://cdn.jsdelivr.net/gh/vtexdocs/dev-portal-content@main/images/vtex-reviews-and-ratings-2.png)
 
 2. On the app settings page, define the following settings based on the desired scenario:
 
