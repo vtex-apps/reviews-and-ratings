@@ -78,8 +78,6 @@ To access and use the review moderation admin interface, follow the instructions
 >
 > You can export reviews to XLS files from the **Download** tab. The export is limited to 800 reviews at a time. Please use the date pickers to choose the time range of reviews you want to export.
 
-> ⚠️ Warning
->
 > If you have updated to version 3.x after using a prior version of **Reviews and Ratings**, you may see the **Migrate Data** button instead of a list of reviews in the **Catalog > Reviews** page. Clicking this button will migrate all existing review data from the previous storage solution (VBASE) to the new solution (Masterdata V2). Once the migration is finished, the page will automatically refresh, and the list of reviews will become available.
 
 Individual pending reviews may be approved or deleted using the kebab menu (3 dots button) in the right column or by selecting the checkbox on the left. Multiple reviews can also be selected using the checkboxes to approve or delete in bulk.
