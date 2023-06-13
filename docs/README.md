@@ -33,7 +33,7 @@ Using your terminal, log in to the desired VTEX account and run the following co
 
 - **Allow Anonymous Reviews** - If unchecked, only logged-in customers will be able to review products.
 
-- **Require Admin Approval** - Checking this box activates the review moderation system. Newly submitted reviews will not be displayed on the store until an admin approves them in the Admin account. For more details, see the App behavior section below.
+- **Require Admin Approval** - Checking this box activates the review moderation system. Newly submitted reviews will not be displayed on the store until an admin approves them in the Admin account. For more information, see the [App behavior](#app-behavior) section below.
 
 - **Ask For Reviewer Location** - Checking this box activates an optional review field. Customers that submit reviews will be asked to enter their current location (example: "Boston, MA").
 
