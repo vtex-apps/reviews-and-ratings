@@ -72,7 +72,7 @@ As described above, the app may be configured to use a **review moderation inter
 To access and use the review moderation admin interface, follow the instructions below:
 
 1. Enable the **Require Admin Approval** setting as described above.
-2. Open the Admin and navigate to **Catalog > Reviews** using the Admin sidebar.
+2. Open the Admin and navigate to **Catalog > Reviews**.
 3. You may view either **Pending** or **Approved** reviews using the tabs at the top of the page.
 > You can export reviews to XLS files from the **Download** tab. The export is limited to 800 reviews at a time. Please use the date pickers to choose the time range of reviews you want to export.
 
