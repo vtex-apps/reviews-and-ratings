@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Translation for Review Show more/Show Less text
+
 ## [3.13.1] - 2023-06-13
 
 ### Fixed
@@ -37,10 +41,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Add Hardretries in signed in users while verifiying average rating
 - Review api allows duplicate reviews. So, created a ticket (REVIEWS-135) and disabled the testcase
-
-### Added
-
-- Translation & handle for Review Show more/Show Less text
 
 ### Added
 
