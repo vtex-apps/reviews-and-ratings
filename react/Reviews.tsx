@@ -318,7 +318,7 @@ const messages = defineMessages({
   showLess: {
     id: 'store/reviews.list.showLess',
     defaultMessage: 'Show less',
-  }
+  },
 })
 
 const CSS_HANDLES = [
