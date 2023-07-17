@@ -89,6 +89,8 @@
   "store/reviews.list.anonymous": "Anônimo",
   "store/reviews.list.pagination.textOf": "de",
   "store/reviews.list.graph.stars": "{value, plural, =0{0 estrelas} =1{1 estrela} other{# estrelas}}",
+  "store/reviews.list.showMore": "Mostrar mais",
+  "store/reviews.list.showLess": "Mostrar menos",
   "store/reviews.summary.add.login": "Faça login para escrever uma avaliação.",
   "store/reviews.summary.add.title": "Adicionar avaliação",
   "store/reviews.list.loadingReviews": "Carregando avaliações...",
