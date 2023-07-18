@@ -227,97 +227,70 @@ const reducer = (state: State, action: ReducerActions) => {
 
 const messages = defineMessages({
   sortPlaceholder: {
-    id: 'store/reviews.list.sortOptions.placeholder',
-    defaultMessage: 'Sort by:',
+    id: 'store/reviews.list.sortOptions.placeholder'
   },
   filterPlaceholder: {
-    id: 'store/reviews.list.filterOptions.placeholder',
-    defaultMessage: 'Filter by:',
+    id: 'store/reviews.list.filterOptions.placeholder'
   },
   sortMostRecent: {
-    id: 'store/reviews.list.sortOptions.mostRecent',
-    defaultMessage: 'Most Recent',
+    id: 'store/reviews.list.sortOptions.mostRecent'
   },
   sortOldest: {
-    id: 'store/reviews.list.sortOptions.oldest',
-    defaultMessage: 'Oldest',
+    id: 'store/reviews.list.sortOptions.oldest'
   },
   sortHighestRated: {
-    id: 'store/reviews.list.sortOptions.highestRated',
-    defaultMessage: 'Highest Rated',
+    id: 'store/reviews.list.sortOptions.highestRated'
   },
   sortLowestRated: {
-    id: 'store/reviews.list.sortOptions.lowestRated',
-    defaultMessage: 'Lowest Rated',
+    id: 'store/reviews.list.sortOptions.lowestRated'
   },
   all: {
-    id: 'store/reviews.list.filterOptions.all',
-    defaultMessage: 'All',
+    id: 'store/reviews.list.filterOptions.all'
   },
   oneStar: {
-    id: 'store/reviews.list.filterOptions.one-star',
-    defaultMessage: '1 star',
+    id: 'store/reviews.list.filterOptions.one-star'
   },
   twoStars: {
-    id: 'store/reviews.list.filterOptions.two-stars',
-    defaultMessage: '2 stars',
+    id: 'store/reviews.list.filterOptions.two-stars'
   },
   threeStars: {
-    id: 'store/reviews.list.filterOptions.three-stars',
-    defaultMessage: '3 stars',
+    id: 'store/reviews.list.filterOptions.three-stars'
   },
   fourStars: {
-    id: 'store/reviews.list.filterOptions.four-stars',
-    defaultMessage: '4 stars',
+    id: 'store/reviews.list.filterOptions.four-stars'
   },
   fiveStars: {
-    id: 'store/reviews.list.filterOptions.five-stars',
-    defaultMessage: '5 stars',
+    id: 'store/reviews.list.filterOptions.five-stars'
   },
   timeAgoYears: {
-    id: 'store/reviews.list.timeAgo.years',
-    defaultMessage:
-      '{timeUnits} {timeUnits, plural, =1 {year} other {years}} ago',
+    id: 'store/reviews.list.timeAgo.years'
   },
   timeAgoMonths: {
-    id: 'store/reviews.list.timeAgo.months',
-    defaultMessage:
-      '{timeUnits} {timeUnits, plural, =1 {month} other {months}} ago',
+    id: 'store/reviews.list.timeAgo.months'
   },
   timeAgoDays: {
-    id: 'store/reviews.list.timeAgo.days',
-    defaultMessage:
-      '{timeUnits} {timeUnits, plural, =1 {day} other {days}} ago',
+    id: 'store/reviews.list.timeAgo.days'
   },
   timeAgoHours: {
-    id: 'store/reviews.list.timeAgo.hours',
-    defaultMessage:
-      '{timeUnits} {timeUnits, plural, =1 {hour} other {hours}} ago',
+    id: 'store/reviews.list.timeAgo.hours'
   },
   timeAgoMinutes: {
-    id: 'store/reviews.list.timeAgo.minutes',
-    defaultMessage:
-      '{timeUnits} {timeUnits, plural, =1 {minute} other {minutes}} ago',
+    id: 'store/reviews.list.timeAgo.minutes'
   },
   timeAgoJustNow: {
-    id: 'store/reviews.list.timeAgo.justNow',
-    defaultMessage: 'just now',
+    id: 'store/reviews.list.timeAgo.justNow'
   },
   anonymous: {
-    id: 'store/reviews.list.anonymous',
-    defaultMessage: 'Anonymous',
+    id: 'store/reviews.list.anonymous'
   },
   textOf: {
-    id: 'store/reviews.list.pagination.textOf',
-    defaultMessage: 'of',
+    id: 'store/reviews.list.pagination.textOf'
   },
   showMore: {
-    id: 'store/reviews.list.showMore',
-    defaultMessage: 'Show more',
+    id: 'store/reviews.list.showMore'
   },
   showLess: {
-    id: 'store/reviews.list.showLess',
-    defaultMessage: 'Show less',
+    id: 'store/reviews.list.showLess'
   },
 })
 
