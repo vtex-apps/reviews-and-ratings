@@ -227,70 +227,70 @@ const reducer = (state: State, action: ReducerActions) => {
 
 const messages = defineMessages({
   sortPlaceholder: {
-    id: 'store/reviews.list.sortOptions.placeholder'
+    id: 'store/reviews.list.sortOptions.placeholder',
   },
   filterPlaceholder: {
-    id: 'store/reviews.list.filterOptions.placeholder'
+    id: 'store/reviews.list.filterOptions.placeholder',
   },
   sortMostRecent: {
-    id: 'store/reviews.list.sortOptions.mostRecent'
+    id: 'store/reviews.list.sortOptions.mostRecent',
   },
   sortOldest: {
-    id: 'store/reviews.list.sortOptions.oldest'
+    id: 'store/reviews.list.sortOptions.oldest',
   },
   sortHighestRated: {
-    id: 'store/reviews.list.sortOptions.highestRated'
+    id: 'store/reviews.list.sortOptions.highestRated',
   },
   sortLowestRated: {
-    id: 'store/reviews.list.sortOptions.lowestRated'
+    id: 'store/reviews.list.sortOptions.lowestRated',
   },
   all: {
-    id: 'store/reviews.list.filterOptions.all'
+    id: 'store/reviews.list.filterOptions.all',
   },
   oneStar: {
-    id: 'store/reviews.list.filterOptions.one-star'
+    id: 'store/reviews.list.filterOptions.one-star',
   },
   twoStars: {
-    id: 'store/reviews.list.filterOptions.two-stars'
+    id: 'store/reviews.list.filterOptions.two-stars',
   },
   threeStars: {
-    id: 'store/reviews.list.filterOptions.three-stars'
+    id: 'store/reviews.list.filterOptions.three-stars',
   },
   fourStars: {
-    id: 'store/reviews.list.filterOptions.four-stars'
+    id: 'store/reviews.list.filterOptions.four-stars',
   },
   fiveStars: {
-    id: 'store/reviews.list.filterOptions.five-stars'
+    id: 'store/reviews.list.filterOptions.five-stars',
   },
   timeAgoYears: {
-    id: 'store/reviews.list.timeAgo.years'
+    id: 'store/reviews.list.timeAgo.years',
   },
   timeAgoMonths: {
-    id: 'store/reviews.list.timeAgo.months'
+    id: 'store/reviews.list.timeAgo.months',
   },
   timeAgoDays: {
-    id: 'store/reviews.list.timeAgo.days'
+    id: 'store/reviews.list.timeAgo.days',
   },
   timeAgoHours: {
-    id: 'store/reviews.list.timeAgo.hours'
+    id: 'store/reviews.list.timeAgo.hours',
   },
   timeAgoMinutes: {
-    id: 'store/reviews.list.timeAgo.minutes'
+    id: 'store/reviews.list.timeAgo.minutes',
   },
   timeAgoJustNow: {
-    id: 'store/reviews.list.timeAgo.justNow'
+    id: 'store/reviews.list.timeAgo.justNow',
   },
   anonymous: {
-    id: 'store/reviews.list.anonymous'
+    id: 'store/reviews.list.anonymous',
   },
   textOf: {
-    id: 'store/reviews.list.pagination.textOf'
+    id: 'store/reviews.list.pagination.textOf',
   },
   showMore: {
-    id: 'store/reviews.list.showMore'
+    id: 'store/reviews.list.showMore',
   },
   showLess: {
-    id: 'store/reviews.list.showLess'
+    id: 'store/reviews.list.showLess',
   },
 })
 
