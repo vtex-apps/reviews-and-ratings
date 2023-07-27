@@ -81,7 +81,7 @@
   "store/reviews.list.timeAgo.days": "{timeUnits} {timeUnits, plural, =1 {day} other {days}} ago",
   "store/reviews.list.timeAgo.hours": "{timeUnits} {timeUnits, plural, =1 {hour} other {hours}} ago",
   "store/reviews.list.timeAgo.minutes": "{timeUnits} {timeUnits, plural, =1 {minute} other {minutes}} ago",
-  "store/reviews.list.sortOptions.placeholder": "Sort by:",
+  "store/reviews.list.sortOptions.placeholder": "Sort by",
   "store/reviews.list.sortOptions.mostRecent": "Most Recent",
   "store/reviews.list.sortOptions.oldest": "Oldest",
   "store/reviews.list.sortOptions.highestRated": "Highest Rated",
