@@ -91,7 +91,7 @@
   "store/reviews.list.graph.stars": "{value, plural, =0{0 stars} =1{1 star} other{# stars}}",
   "store/reviews.summary.add.login": "Please log in to write a review.",
   "store/reviews.summary.add.title": "Add Review",
-  "store/reviews.list.loadingReviews": "Loading reviews...",
+  "store/reviews.list.loadingReviews": "Loading reviews..",
   "admin/reviews.reviewsandratings.title": "Reviews and Ratings",
   "admin/reviews.reviewsandratings.description": "An app for saving and retrieving product reviews and ratings.",
   "admin/reviews.allowsAnonymousReviews.title": "Allow anonymous reviews",
