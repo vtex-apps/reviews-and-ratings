@@ -228,88 +228,69 @@ const reducer = (state: State, action: ReducerActions) => {
 const messages = defineMessages({
   sortPlaceholder: {
     id: 'store/reviews.list.sortOptions.placeholder',
-    defaultMessage: 'Sort by:',
   },
   filterPlaceholder: {
     id: 'store/reviews.list.filterOptions.placeholder',
-    defaultMessage: 'Filter by:',
   },
   sortMostRecent: {
     id: 'store/reviews.list.sortOptions.mostRecent',
-    defaultMessage: 'Most Recent',
   },
   sortOldest: {
     id: 'store/reviews.list.sortOptions.oldest',
-    defaultMessage: 'Oldest',
   },
   sortHighestRated: {
     id: 'store/reviews.list.sortOptions.highestRated',
-    defaultMessage: 'Highest Rated',
   },
   sortLowestRated: {
     id: 'store/reviews.list.sortOptions.lowestRated',
-    defaultMessage: 'Lowest Rated',
   },
   all: {
     id: 'store/reviews.list.filterOptions.all',
-    defaultMessage: 'All',
   },
   oneStar: {
     id: 'store/reviews.list.filterOptions.one-star',
-    defaultMessage: '1 star',
   },
   twoStars: {
     id: 'store/reviews.list.filterOptions.two-stars',
-    defaultMessage: '2 stars',
   },
   threeStars: {
     id: 'store/reviews.list.filterOptions.three-stars',
-    defaultMessage: '3 stars',
   },
   fourStars: {
     id: 'store/reviews.list.filterOptions.four-stars',
-    defaultMessage: '4 stars',
   },
   fiveStars: {
     id: 'store/reviews.list.filterOptions.five-stars',
-    defaultMessage: '5 stars',
   },
   timeAgoYears: {
     id: 'store/reviews.list.timeAgo.years',
-    defaultMessage:
-      '{timeUnits} {timeUnits, plural, =1 {year} other {years}} ago',
   },
   timeAgoMonths: {
     id: 'store/reviews.list.timeAgo.months',
-    defaultMessage:
-      '{timeUnits} {timeUnits, plural, =1 {month} other {months}} ago',
   },
   timeAgoDays: {
     id: 'store/reviews.list.timeAgo.days',
-    defaultMessage:
-      '{timeUnits} {timeUnits, plural, =1 {day} other {days}} ago',
   },
   timeAgoHours: {
     id: 'store/reviews.list.timeAgo.hours',
-    defaultMessage:
-      '{timeUnits} {timeUnits, plural, =1 {hour} other {hours}} ago',
   },
   timeAgoMinutes: {
     id: 'store/reviews.list.timeAgo.minutes',
-    defaultMessage:
-      '{timeUnits} {timeUnits, plural, =1 {minute} other {minutes}} ago',
   },
   timeAgoJustNow: {
     id: 'store/reviews.list.timeAgo.justNow',
-    defaultMessage: 'just now',
   },
   anonymous: {
     id: 'store/reviews.list.anonymous',
-    defaultMessage: 'Anonymous',
   },
   textOf: {
     id: 'store/reviews.list.pagination.textOf',
-    defaultMessage: 'of',
+  },
+  showMore: {
+    id: 'store/reviews.list.showMore',
+  },
+  showLess: {
+    id: 'store/reviews.list.showLess',
   },
 })
 
@@ -859,8 +840,8 @@ function Reviews() {
                       >
                         <ShowMore
                           lines={3}
-                          more="Show more"
-                          less="Show less"
+                          more={intl.formatMessage(messages.showMore)}
+                          less={intl.formatMessage(messages.showLess)}
                           anchorClass={`${handles.showMoreButton}`}
                         >
                           {review.text}

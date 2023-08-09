@@ -124,5 +124,7 @@
   "store/reviews.list.filterOptions.two-stars": "2 ดาว",
   "store/reviews.list.filterOptions.three-stars": "3 ดาว",
   "store/reviews.list.filterOptions.four-stars": "4 ดาว",
-  "store/reviews.list.filterOptions.five-stars": "5 ดาว"
+  "store/reviews.list.filterOptions.five-stars": "5 ดาว",
+  "store/reviews.list.showMore": "แสดงเพิ่มขึ้น",
+  "store/reviews.list.showLess": "แสดงน้อยลง"
 }
