@@ -419,7 +419,7 @@
                     {
                         searchQuery = $" AND approved=true";
                     }
-                    localeQuery = $"((locale=*{locale}-*) OR (locale is null))";
+                    localeQuery = $"((locale={locale}-*) OR (locale is null))";
                     if (ratingFilter)
                     {
                         ratingQuery = $" AND rating={rating}";
@@ -440,7 +440,7 @@
                     }
                     if (!string.IsNullOrEmpty(locale))
                     {
-                        localeQuery = $"&locale=*{locale}-*";
+                        localeQuery = $"&locale={locale}-*";
                     }
 
                     wrapper = await this._productReviewRepository.GetProductReviewsMD($"productId={productId}{sort}{searchQuery}{ratingQuery}{localeQuery}", from.ToString(), to.ToString());
