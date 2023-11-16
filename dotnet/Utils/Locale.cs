@@ -7,10 +7,10 @@ namespace ReviewsRatings.Utils
         public static Dictionary<string, List<string>> localeList = new Dictionary<string, List<string>>() {
 
             { "ca", new List<string>() {"ES", "AD" }},
-            {"ar", new List<string>() {"JO", "KM", "ER", "OM", "EG", "PS", "SY", "DJ", "SA", "SO", "SD", "YE", "LY", "TN", "EH", "MA", "BH", "AE", "KW", "LB", "QA", "IQ", "TD", "MR", "DZ"}},
+            { "ar", new List<string>() {"JO", "KM", "ER", "OM", "EG", "PS", "SY", "DJ", "SA", "SO", "SD", "YE", "LY", "TN", "EH", "MA", "BH", "AE", "KW", "LB", "QA", "IQ", "TD", "MR", "DZ"}},
             { "fa", new List<string>() {"AF", "IR"}},
             { "ps", new List<string>() { "AF"}},
-            {"en", new List<string>() { "PH", "SH", "IM", "LC", "DM", "GY", "NA", "WS", "AS", "IN", "PW", "GM", "FM", "TO", "SG", "SZ", "AI", "IE", "NU", "MW", "FJ", "CX", "NZ", "BB", "SL", "JE", "TK", "PR", "RW", "HK", "PG", "GI", "LS", "SD", "BZ", "KR", "VG", "SB", "MT", "ZA", "VC", "CK", "BW", "NR", "CM", "UG", "MS", "AQ", "HM", "ER", "GG", "LR", "AU", "ZM", "MU", "GB", "IO", "US", "VU", "CC", "TT", "GD", "KI", "UM", "VI", "ZW", "CA", "MH", "GU", "KE", "TC", "PN", "NF", "BM", "BS", "TV", "SC", "KY", "PK", "KN", "SX", "AG", "SS", "GH", "FK", "NG", "TZ", "GS", "JM", "CW", "MP"}},
+            { "en", new List<string>() { "PH", "SH", "IM", "LC", "DM", "GY", "NA", "WS", "AS", "IN", "PW", "GM", "FM", "TO", "SG", "SZ", "AI", "IE", "NU", "MW", "FJ", "CX", "NZ", "BB", "SL", "JE", "TK", "PR", "RW", "HK", "PG", "GI", "LS", "SD", "BZ", "KR", "VG", "SB", "MT", "ZA", "VC", "CK", "BW", "NR", "CM", "UG", "MS", "AQ", "HM", "ER", "GG", "LR", "AU", "ZM", "MU", "GB", "IO", "US", "VU", "CC", "TT", "GD", "KI", "UM", "VI", "ZW", "CA", "MH", "GU", "KE", "TC", "PN", "NF", "BM", "BS", "TV", "SC", "KY", "PK", "KN", "SX", "AG", "SS", "GH", "FK", "NG", "TZ", "GS", "JM", "CW", "MP"}},
             { "sq", new List<string>() { "AL", "ME"}},
             { "hy", new List<string>() { "AM"}},
             { "pt", new List<string>() { "ST", "CV", "TL", "GQ", "BR", "MO", "GW", "MZ", "AO", "PT"}},
