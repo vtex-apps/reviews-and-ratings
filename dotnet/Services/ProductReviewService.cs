@@ -11,6 +11,7 @@
     using System.Net;
     using ReviewsRatings.DataSources;
     using Vtex.Api.Context;
+    using ReviewsRatings.Utils;
 
     /// <summary>
     /// Business logic 
@@ -393,7 +394,7 @@
         {
             string searchQuery = string.Empty;
             string ratingQuery = string.Empty;
-            string localeQuery = string.Empty;
+            string localeQuery = $"(locale={locale}-*)";
             bool ratingFilter = rating > 0 && rating <= 5;
             bool pastRevNLocale = pastReviews && !string.IsNullOrEmpty(locale);
             ReviewsResponseWrapper wrapper = new ReviewsResponseWrapper();
@@ -413,13 +414,23 @@
 
                 AppSettings settings = await GetAppSettings();
 
-                if (pastRevNLocale)
+                if (Locale.localeList.ContainsKey(locale))
                 {
+                    localeQuery = "";
+                    foreach (var language in Locale.localeList[locale])
+                    {
+                        localeQuery += $"(locale={locale}-{language}) OR";
+                    }
+                    localeQuery = localeQuery.Substring(localeQuery.Length - 2);
+                }
+
+                if (pastRevNLocale)
+                {                    
                     if (settings.RequireApproval)
                     {
                         searchQuery = $" AND approved=true";
                     }
-                    localeQuery = $"((locale={locale}-*) OR (locale is null))";
+                    localeQuery = $"({localeQuery} OR (locale is null))";
                     if (ratingFilter)
                     {
                         ratingQuery = $" AND rating={rating}";
@@ -437,10 +448,6 @@
                     if (settings.RequireApproval)
                     {
                         searchQuery = $"{searchQuery}&approved=true";
-                    }
-                    if (!string.IsNullOrEmpty(locale))
-                    {
-                        localeQuery = $"&locale={locale}-*";
                     }
 
                     wrapper = await this._productReviewRepository.GetProductReviewsMD($"productId={productId}{sort}{searchQuery}{ratingQuery}{localeQuery}", from.ToString(), to.ToString());
