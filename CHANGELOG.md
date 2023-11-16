@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Removed
+- Prefix wildcard to query for locale at Master Data's ProductReviews
+
 ## [3.13.2] - 2023-08-09
 
 ### Added
