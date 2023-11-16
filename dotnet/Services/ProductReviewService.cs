@@ -414,7 +414,7 @@
 
                 AppSettings settings = await GetAppSettings();
 
-                if (Locale.localeList.ContainsKey(locale))
+                if (!string.IsNullOrEmpty(locale) && Locale.localeList.ContainsKey(locale))
                 {
                     localeQuery = "";
                     foreach (var language in Locale.localeList[locale])
