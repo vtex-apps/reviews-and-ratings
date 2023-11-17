@@ -462,7 +462,6 @@
                             localeQuery = $"&locale={locale}-*";
                         }
                     }
-                    else
 
                     wrapper = await this._productReviewRepository.GetProductReviewsMD($"productId={productId}{sort}{searchQuery}{ratingQuery}{localeQuery}", from.ToString(), to.ToString());
                 }
