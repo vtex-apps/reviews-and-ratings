@@ -397,6 +397,7 @@
             string localeQuery = string.Empty;
             bool ratingFilter = rating > 0 && rating <= 5;
             bool pastRevNLocale = pastReviews && !string.IsNullOrEmpty(locale);
+            bool isLocaleWildcard = true;
             ReviewsResponseWrapper wrapper = new ReviewsResponseWrapper();
 
             try
@@ -416,7 +417,7 @@
 
                 if (!string.IsNullOrEmpty(locale) && Locale.localeList.ContainsKey(locale))
                 {
-                    localeQuery = "";
+                    isLocaleWildcard = false;
                     foreach (var language in Locale.localeList[locale])
                     {
                         localeQuery += $"(locale={locale}-{language}) OR";
@@ -430,7 +431,11 @@
                     {
                         searchQuery = $" AND approved=true";
                     }
-                    localeQuery = $"((locale={locale}-*) OR (locale is null))";
+                    if(isLocaleWildcard)
+                    {
+                        localeQuery = $"(locale={locale}-*)";
+                    }
+                    localeQuery += "OR(locale is null)";
                     if (ratingFilter)
                     {
                         ratingQuery = $" AND rating={rating}";
@@ -451,8 +456,13 @@
                     }
                     if (!string.IsNullOrEmpty(locale))
                     {
-                        localeQuery = $"&locale={locale}-*";
+                        localeQuery = $"_where={localeQuery}";
+                        if(isLocaleWildcard) 
+                        { 
+                            localeQuery = $"&locale={locale}-*";
+                        }
                     }
+                    else
 
                     wrapper = await this._productReviewRepository.GetProductReviewsMD($"productId={productId}{sort}{searchQuery}{ratingQuery}{localeQuery}", from.ToString(), to.ToString());
                 }
