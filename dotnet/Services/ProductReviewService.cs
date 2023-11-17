@@ -418,6 +418,7 @@
                 if (!string.IsNullOrEmpty(locale) && Locale.localeList.ContainsKey(locale))
                 {
                     isLocaleWildcard = false;
+                    localeQuery = "(";
                     foreach (var language in Locale.localeList[locale])
                     {
                         localeQuery += $"(locale={locale}-{language}) OR";
@@ -433,9 +434,9 @@
                     }
                     if(isLocaleWildcard)
                     {
-                        localeQuery = $"(locale={locale}-*)";
+                        localeQuery = $"((locale={locale}-*)";
                     }
-                    localeQuery += "OR(locale is null)";
+                    localeQuery += "OR(locale is null))";
                     if (ratingFilter)
                     {
                         ratingQuery = $" AND rating={rating}";
@@ -456,7 +457,7 @@
                     }
                     if (!string.IsNullOrEmpty(locale))
                     {
-                        localeQuery = $"_where={localeQuery}";
+                        localeQuery = $"&_where={localeQuery}";
                         if(isLocaleWildcard) 
                         { 
                             localeQuery = $"&locale={locale}-*";
