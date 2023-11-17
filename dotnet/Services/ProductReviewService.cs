@@ -442,7 +442,7 @@
                     }
                     string productQuery = $" AND productId={productId}";
 
-                    wrapper = await this._productReviewRepository.GetProductReviewsMD($"_where={localeQuery}{ratingQuery}{productQuery}{searchQuery}{sort}", from.ToString(), to.ToString());
+                    wrapper = await this._productReviewRepository.GetProductReviewsMD($"_where=({localeQuery}){ratingQuery}{productQuery}{searchQuery}{sort}", from.ToString(), to.ToString());
                 }
                 else
                 {
@@ -456,7 +456,7 @@
                     }
                     if (!string.IsNullOrEmpty(locale))
                     {
-                        localeQuery = $"_where={localeQuery}";
+                        localeQuery = $"&_where={localeQuery}";
                         if(isLocaleWildcard) 
                         { 
                             localeQuery = $"&locale={locale}-*";
