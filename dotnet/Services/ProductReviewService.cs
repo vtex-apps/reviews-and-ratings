@@ -450,7 +450,7 @@
                         searchQuery = $"{searchQuery}&approved=true";
                     }
 
-                    wrapper = await this._productReviewRepository.GetProductReviewsMD($"productId={productId}{sort}{searchQuery}{ratingQuery}{localeQuery}", from.ToString(), to.ToString());
+                    wrapper = await this._productReviewRepository.GetProductReviewsMD($"productId={productId}{sort}{searchQuery}{ratingQuery}&{localeQuery}", from.ToString(), to.ToString());
                 }
             }
             catch (Exception ex)
