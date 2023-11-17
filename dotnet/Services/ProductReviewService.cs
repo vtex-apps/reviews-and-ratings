@@ -425,12 +425,12 @@
                 }
 
                 if (pastRevNLocale)
-                {                    
+                {
                     if (settings.RequireApproval)
                     {
                         searchQuery = $" AND approved=true";
                     }
-                    localeQuery = $"({localeQuery} OR (locale is null))";
+                    localeQuery = $"((locale={locale}-*) OR (locale is null))";
                     if (ratingFilter)
                     {
                         ratingQuery = $" AND rating={rating}";
