@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Missing `&` before query parameter 
+
 ## [3.14.0] - 2023-11-17
 
 ### Changed
