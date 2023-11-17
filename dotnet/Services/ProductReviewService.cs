@@ -394,7 +394,7 @@
         {
             string searchQuery = string.Empty;
             string ratingQuery = string.Empty;
-            string localeQuery = $"(locale={locale}-*)";
+            string localeQuery = string.Empty;
             bool ratingFilter = rating > 0 && rating <= 5;
             bool pastRevNLocale = pastReviews && !string.IsNullOrEmpty(locale);
             ReviewsResponseWrapper wrapper = new ReviewsResponseWrapper();
@@ -425,12 +425,12 @@
                 }
 
                 if (pastRevNLocale)
-                {                    
+                {
                     if (settings.RequireApproval)
                     {
                         searchQuery = $" AND approved=true";
                     }
-                    localeQuery = $"({localeQuery} OR (locale is null))";
+                    localeQuery = $"((locale={locale}-*) OR (locale is null))";
                     if (ratingFilter)
                     {
                         ratingQuery = $" AND rating={rating}";
@@ -448,6 +448,10 @@
                     if (settings.RequireApproval)
                     {
                         searchQuery = $"{searchQuery}&approved=true";
+                    }
+                    if (!string.IsNullOrEmpty(locale))
+                    {
+                        localeQuery = $"&locale={locale}-*";
                     }
 
                     wrapper = await this._productReviewRepository.GetProductReviewsMD($"productId={productId}{sort}{searchQuery}{ratingQuery}{localeQuery}", from.ToString(), to.ToString());
