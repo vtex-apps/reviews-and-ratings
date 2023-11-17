@@ -394,7 +394,7 @@
         {
             string searchQuery = string.Empty;
             string ratingQuery = string.Empty;
-            string localeQuery = $"(locale={locale}-*)";
+            string localeQuery = string.Empty;
             bool ratingFilter = rating > 0 && rating <= 5;
             bool pastRevNLocale = pastReviews && !string.IsNullOrEmpty(locale);
             ReviewsResponseWrapper wrapper = new ReviewsResponseWrapper();
@@ -449,8 +449,12 @@
                     {
                         searchQuery = $"{searchQuery}&approved=true";
                     }
+                    if (!string.IsNullOrEmpty(locale))
+                    {
+                        localeQuery = $"&locale={locale}-*";
+                    }
 
-                    wrapper = await this._productReviewRepository.GetProductReviewsMD($"productId={productId}{sort}{searchQuery}{ratingQuery}&{localeQuery}", from.ToString(), to.ToString());
+                    wrapper = await this._productReviewRepository.GetProductReviewsMD($"productId={productId}{sort}{searchQuery}{ratingQuery}{localeQuery}", from.ToString(), to.ToString());
                 }
             }
             catch (Exception ex)
