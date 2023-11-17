@@ -422,7 +422,7 @@
                     {
                         localeQuery += $"(locale={locale}-{language}) OR";
                     }
-                    localeQuery = localeQuery.Substring(localeQuery.Length - 2);
+                    localeQuery = localeQuery.Substring(0, localeQuery.Length - 2);
                 }
 
                 if (pastRevNLocale)
@@ -462,7 +462,6 @@
                             localeQuery = $"&locale={locale}-*";
                         }
                     }
-                    else
 
                     wrapper = await this._productReviewRepository.GetProductReviewsMD($"productId={productId}{sort}{searchQuery}{ratingQuery}{localeQuery}", from.ToString(), to.ToString());
                 }

@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixes
+
+- Locales substring start index
+
 ## [3.14.3] - 2023-11-17
 
 ### Changed
