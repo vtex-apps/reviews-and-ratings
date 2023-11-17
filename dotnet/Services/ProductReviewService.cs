@@ -421,7 +421,7 @@
                     localeQuery = "(";
                     foreach (var language in Locale.localeList[locale])
                     {
-                        localeQuery += $"(locale={locale}-{language}) OR";
+                        localeQuery += $"locale={locale}-{language}) OR";
                     }
                     localeQuery = localeQuery.Substring(localeQuery.Length - 2);
                 }
@@ -434,16 +434,16 @@
                     }
                     if(isLocaleWildcard)
                     {
-                        localeQuery = $"((locale={locale}-*)";
+                        localeQuery = $"(locale={locale}-*)";
                     }
-                    localeQuery += "OR(locale is null))";
+                    localeQuery += "OR(locale is null)";
                     if (ratingFilter)
                     {
                         ratingQuery = $" AND rating={rating}";
                     }
                     string productQuery = $" AND productId={productId}";
 
-                    wrapper = await this._productReviewRepository.GetProductReviewsMD($"_where={localeQuery}{ratingQuery}{productQuery}{searchQuery}{sort}", from.ToString(), to.ToString());
+                    wrapper = await this._productReviewRepository.GetProductReviewsMD($"_where=({localeQuery}){ratingQuery}{productQuery}{searchQuery}{sort}", from.ToString(), to.ToString());
                 }
                 else
                 {
