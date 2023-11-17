@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-- Missing `&` before query parameter 
+- Rollback last version
 
 ## [3.14.0] - 2023-11-17
 
