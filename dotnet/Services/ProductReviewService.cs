@@ -418,7 +418,6 @@
                 if (!string.IsNullOrEmpty(locale) && Locale.localeList.ContainsKey(locale))
                 {
                     isLocaleWildcard = false;
-                    localeQuery = "(";
                     foreach (var language in Locale.localeList[locale])
                     {
                         localeQuery += $"locale={locale}-{language}) OR";
