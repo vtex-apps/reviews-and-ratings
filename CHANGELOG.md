@@ -6,14 +6,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- Using static language-country pairings derived from the locale and searching for `locale={locale}-*` only as fallback
+
 ## [3.13.3] - 2023-11-16
 
 ### Removed
+
 - Prefix wildcard to query for locale at Master Data's ProductReviews
 
 ## [3.13.2] - 2023-08-09
 
 ### Added
+
 - Translation of the ShowMore component.
 
 ## [3.13.1] - 2023-06-13
