@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.14.3] - 2023-11-17
+
 ### Changed
 
 - Using static language-country pairings derived from the locale and searching for `locale={locale}-*` only as fallback
