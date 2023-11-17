@@ -422,7 +422,7 @@
                     {
                         localeQuery += $"(locale={locale}-{language}) OR";
                     }
-                    localeQuery = localeQuery.Substring(localeQuery.Length - 2);
+                    localeQuery = localeQuery.Substring(0, localeQuery.Length - 2);
                 }
 
                 if (pastRevNLocale)
