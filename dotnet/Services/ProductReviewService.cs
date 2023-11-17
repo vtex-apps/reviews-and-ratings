@@ -420,7 +420,7 @@
                     isLocaleWildcard = false;
                     foreach (var language in Locale.localeList[locale])
                     {
-                        localeQuery += $"locale={locale}-{language}) OR";
+                        localeQuery += $"(locale={locale}-{language}) OR";
                     }
                     localeQuery = localeQuery.Substring(localeQuery.Length - 2);
                 }
