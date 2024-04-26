@@ -8,6 +8,11 @@
 
 # Reviews and Ratings
 
+##  ⚠️ Maintenance ⚠️
+*Starting June 1st 2023, this application will no longer be maintained by VTEX.*
+
+---
+
 **Reviews & Ratings** allows customers to submit reviews and ratings for products and see them while navigating the store.
 
 ![reviews-and-ratings-app](https://cdn.jsdelivr.net/gh/vtexdocs/dev-portal-content@main/images/vtex-reviews-and-ratings-0.png)
