@@ -8,6 +8,8 @@
 
 # Reviews and Ratings
 
+>⚠️ This app is no longer maintained by VTEX. This means support and maintenance are no longer provided.
+
 **Reviews & Ratings** allows customers to submit reviews and ratings for products and see them while navigating the store.
 
 ![reviews-and-ratings-app](https://cdn.jsdelivr.net/gh/vtexdocs/dev-portal-content@main/images/vtex-reviews-and-ratings-0.png)
