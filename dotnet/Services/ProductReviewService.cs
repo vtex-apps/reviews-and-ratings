@@ -12,6 +12,7 @@
     using ReviewsRatings.DataSources;
     using Vtex.Api.Context;
     using ReviewsRatings.Utils;
+    using Microsoft.AspNetCore.Http;
 
     /// <summary>
     /// Business logic 
@@ -20,16 +21,21 @@
     {
         private readonly IProductReviewRepository _productReviewRepository;
         private readonly IAppSettingsRepository _appSettingsRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IIOServiceContext _context;
+
         private const int maximumReturnedRecords = 500;
         private const string DELIMITER = ":";
 
-        public ProductReviewService(IProductReviewRepository productReviewRepository, IAppSettingsRepository appSettingsRepository, IIOServiceContext context)
+        public ProductReviewService(IProductReviewRepository productReviewRepository, IAppSettingsRepository appSettingsRepository, IHttpContextAccessor httpContextAccessor, IIOServiceContext context)
         {
             this._productReviewRepository = productReviewRepository ??
                                             throw new ArgumentNullException(nameof(productReviewRepository));
             this._appSettingsRepository = appSettingsRepository ??
                                             throw new ArgumentNullException(nameof(appSettingsRepository));
+
+            this._httpContextAccessor = httpContextAccessor ??
+                                        throw new ArgumentNullException(nameof(httpContextAccessor));
             this._context = context ??
                             throw new ArgumentNullException(nameof(context));
         }
@@ -649,14 +655,21 @@
 
         public async Task<HttpStatusCode> IsValidAuthUser()
         {
-            if (string.IsNullOrEmpty(_context.Vtex.AdminUserAuthToken))
+            string VtexIdclientAutCookieKey = this._httpContextAccessor.HttpContext.Request.Headers["VtexIdclientAutCookie"];
+
+            if (string.IsNullOrEmpty(_context.Vtex.AdminUserAuthToken) && string.IsNullOrEmpty(VtexIdclientAutCookieKey))
             {
                 return HttpStatusCode.Unauthorized;
             }
 
             ValidatedUser validatedUser = null;
+            ValidatedUser validatedAdminUser = null;
+            ValidatedUser validatedKeyApp = null;
+
             try {
-                validatedUser = await ValidateUserToken(_context.Vtex.AdminUserAuthToken);
+                validatedUser = await ValidateUserToken(_context.Vtex.StoreUserAuthToken);
+                validatedAdminUser = await ValidateUserToken(_context.Vtex.AdminUserAuthToken);
+                validatedKeyApp = await ValidateUserToken(VtexIdclientAutCookieKey);
             }
             catch (Exception ex)
             {
@@ -665,10 +678,42 @@
             }
 
             bool hasPermission = validatedUser != null && validatedUser.AuthStatus.Equals("Success");
+            bool hasAdminPermission = validatedAdminUser != null && validatedAdminUser.AuthStatus.Equals("Success");
+            bool hasPermissionToken = validatedKeyApp != null && validatedKeyApp.AuthStatus.Equals("Success");
             
-            if (!hasPermission)
+            if (!hasPermission && !hasAdminPermission && !hasPermissionToken)
             {
                 _context.Vtex.Logger.Warn("IsValidAuthUser", null, "User Does Not Have Permission");
+                return HttpStatusCode.Forbidden;
+            }
+
+            return HttpStatusCode.OK;
+        }
+
+        public async Task<HttpStatusCode> IsAdminAuthUser()
+        {
+
+            if (string.IsNullOrEmpty(_context.Vtex.AdminUserAuthToken))
+            {
+                return HttpStatusCode.Unauthorized;
+            }
+
+            ValidatedUser validatedAdminUser = null;
+
+            try {
+                validatedAdminUser = await ValidateUserToken(_context.Vtex.AdminUserAuthToken);
+            }
+            catch (Exception ex)
+            {
+                _context.Vtex.Logger.Error("IsAdminAuthUser", null, "Error fetching user", ex);
+                return HttpStatusCode.BadRequest;
+            }
+
+            bool hasAdminPermission = validatedAdminUser != null && validatedAdminUser.AuthStatus.Equals("Success");
+            
+            if (!hasAdminPermission)
+            {
+                _context.Vtex.Logger.Warn("IsAdminAuthUser", null, "User Does Not Have Permission");
                 return HttpStatusCode.Forbidden;
             }
 

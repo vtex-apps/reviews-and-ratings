@@ -14,16 +14,29 @@ namespace ReviewsRatings.GraphQL
         {
             Name = "Mutation";
 
-            Field<ReviewType>(
+            FieldAsync<ReviewType>(
                 "newReview",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<ReviewInputType>> {Name = "review"}
                 ),
-                resolve: context =>
+                resolve: async context =>
                 {
+                    HttpStatusCode isValidAuthUser = await productReviewService.IsValidAuthUser();
+
+                    if (isValidAuthUser != HttpStatusCode.OK)
+                    {
+                        context.Errors.Add(new ExecutionError(isValidAuthUser.ToString())
+                        {
+                            Code = isValidAuthUser.ToString()
+                        });
+                        
+                        return default;
+                    }
+
                     var review = context.GetArgument<Review>("review");
-                    return productReviewService.NewReview(review, true);
-                });
+                    return await productReviewService.NewReview(review, true);
+                }
+            );
 
             FieldAsync<ReviewType>(
                 "editReview",

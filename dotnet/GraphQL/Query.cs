@@ -4,6 +4,7 @@ using ReviewsRatings.GraphQL.Types;
 using ReviewsRatings.Models;
 using ReviewsRatings.Services;
 using System;
+using System.Net;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,6 +48,14 @@ namespace ReviewsRatings.GraphQL
                     int to = context.GetArgument<int>("to") + 1;
                     string orderBy = context.GetArgument<string>("orderBy");
                     string status = context.GetArgument<string>("status");
+
+                    HttpStatusCode isAdminAuthUser = await productReviewService.IsAdminAuthUser();
+
+                    if (isAdminAuthUser != HttpStatusCode.OK)
+                    {
+                        status = "true";
+                    }
+                    
                     var searchResult = await productReviewService.GetReviews(searchTerm, from, to, orderBy, status);
                     SearchResponse searchResponse = new SearchResponse
                     {
