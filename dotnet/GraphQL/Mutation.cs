@@ -3,6 +3,7 @@ using GraphQL.Types;
 using ReviewsRatings.GraphQL.Types;
 using ReviewsRatings.Models;
 using ReviewsRatings.Services;
+using System.Net;
 
 namespace ReviewsRatings.GraphQL
 {
@@ -13,54 +14,105 @@ namespace ReviewsRatings.GraphQL
         {
             Name = "Mutation";
 
-            Field<ReviewType>(
+            FieldAsync<ReviewType>(
                 "newReview",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<ReviewInputType>> {Name = "review"}
                 ),
-                resolve: context =>
+                resolve: async context =>
                 {
-                    var review = context.GetArgument<Review>("review");
-                    return productReviewService.NewReview(review, true);
-                });
+                    HttpStatusCode isValidAuthUser = await productReviewService.IsValidAuthUser();
 
-            Field<ReviewType>(
+                    if (isValidAuthUser != HttpStatusCode.OK)
+                    {
+                        context.Errors.Add(new ExecutionError(isValidAuthUser.ToString())
+                        {
+                            Code = isValidAuthUser.ToString()
+                        });
+                        
+                        return default;
+                    }
+
+                    var review = context.GetArgument<Review>("review");
+                    return await productReviewService.NewReview(review, true);
+                }
+            );
+
+            FieldAsync<ReviewType>(
                 "editReview",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IdGraphType>> {Name = "id"},
                     new QueryArgument<NonNullGraphType<ReviewInputType>> {Name = "review"}
                 ),
-                resolve: context =>
+                resolve: async context =>
                 {
+                    HttpStatusCode isValidAuthUser = await productReviewService.IsValidAuthUser();
+            
+                    if (isValidAuthUser != HttpStatusCode.OK)
+                    {
+                        context.Errors.Add(new ExecutionError(isValidAuthUser.ToString())
+                        {
+                            Code = isValidAuthUser.ToString()
+                        });
+                        
+                        return default;
+                    }
+
                     var id = context.GetArgument<int>("id");
                     var review = context.GetArgument<Review>("review");
                     review.Id = id;
-                    return productReviewService.EditReview(review);
+                    return await productReviewService.EditReview(review);
                 });
 
-            Field<BooleanGraphType>(
+            FieldAsync<BooleanGraphType>(
                 "deleteReview",
                 arguments: new QueryArguments(
                     new QueryArgument<ListGraphType<IdGraphType>> { Name = "ids"}
                 ),
-                resolve: context =>
+                resolve: async context =>
                 {
+                    HttpStatusCode isValidAuthUser = await productReviewService.IsValidAuthUser();
+            
+                    if (isValidAuthUser != HttpStatusCode.OK)
+                    {
+                        context.Errors.Add(new ExecutionError(isValidAuthUser.ToString())
+                        {
+                            Code = isValidAuthUser.ToString()
+                        });
+                        
+                        return default;
+                    }
+
                     var ids = context.GetArgument<int[]>("ids");
-                    return productReviewService.DeleteReview(ids);
+                    return await productReviewService.DeleteReview(ids);
                 });
 
-            Field<BooleanGraphType>(
+            FieldAsync<BooleanGraphType>(
                 "moderateReview",
                 arguments: new QueryArguments(
                     new QueryArgument<ListGraphType<IdGraphType>> { Name = "ids" },
                     new QueryArgument<BooleanGraphType> { Name = "approved"}
                 ),
-                resolve: context =>
+                resolve: async context =>
                 {
+                    HttpStatusCode isValidAuthUser = await productReviewService.IsValidAuthUser();
+            
+                    if (isValidAuthUser != HttpStatusCode.OK)
+                    {
+                        context.Errors.Add(new ExecutionError(isValidAuthUser.ToString())
+                        {
+                            Code = isValidAuthUser.ToString()
+                        });
+                        
+                        return default;
+                    }
+
                     var ids = context.GetArgument<int[]>("ids");
                     var approved = context.GetArgument<bool>("approved");
-                    return productReviewService.ModerateReview(ids, approved);
-                });
+
+                    return await productReviewService.ModerateReview(ids, approved);
+                }
+            );
         }
     }
 }
