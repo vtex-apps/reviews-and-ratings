@@ -21,16 +21,20 @@ namespace ReviewsRatings.GraphQL
                 ),
                 resolve: async context =>
                 {
-                    HttpStatusCode isValidAuthUser = await productReviewService.IsValidAuthUser();
-
-                    if (isValidAuthUser != HttpStatusCode.OK)
+                    AppSettings appSettings = await productReviewService.GetAppSettings();
+                    if (!appSettings.AllowAnonymousReviews)
                     {
-                        context.Errors.Add(new ExecutionError(isValidAuthUser.ToString())
+                        HttpStatusCode isValidAuthUser = await productReviewService.IsValidAuthUser();
+
+                        if (isValidAuthUser != HttpStatusCode.OK)
                         {
-                            Code = isValidAuthUser.ToString()
-                        });
-                        
-                        return default;
+                            context.Errors.Add(new ExecutionError(isValidAuthUser.ToString())
+                            {
+                                Code = isValidAuthUser.ToString()
+                            });
+                            
+                            return default;
+                        }
                     }
 
                     var review = context.GetArgument<Review>("review");
@@ -46,13 +50,13 @@ namespace ReviewsRatings.GraphQL
                 ),
                 resolve: async context =>
                 {
-                    HttpStatusCode isValidAuthUser = await productReviewService.IsValidAuthUser();
+                    HttpStatusCode IsAdminAuthUser = await productReviewService.IsAdminAuthUser();
             
-                    if (isValidAuthUser != HttpStatusCode.OK)
+                    if (IsAdminAuthUser != HttpStatusCode.OK)
                     {
-                        context.Errors.Add(new ExecutionError(isValidAuthUser.ToString())
+                        context.Errors.Add(new ExecutionError(IsAdminAuthUser.ToString())
                         {
-                            Code = isValidAuthUser.ToString()
+                            Code = IsAdminAuthUser.ToString()
                         });
                         
                         return default;
@@ -71,13 +75,13 @@ namespace ReviewsRatings.GraphQL
                 ),
                 resolve: async context =>
                 {
-                    HttpStatusCode isValidAuthUser = await productReviewService.IsValidAuthUser();
+                    HttpStatusCode IsAdminAuthUser = await productReviewService.IsAdminAuthUser();
             
-                    if (isValidAuthUser != HttpStatusCode.OK)
+                    if (IsAdminAuthUser != HttpStatusCode.OK)
                     {
-                        context.Errors.Add(new ExecutionError(isValidAuthUser.ToString())
+                        context.Errors.Add(new ExecutionError(IsAdminAuthUser.ToString())
                         {
-                            Code = isValidAuthUser.ToString()
+                            Code = IsAdminAuthUser.ToString()
                         });
                         
                         return default;
@@ -95,13 +99,13 @@ namespace ReviewsRatings.GraphQL
                 ),
                 resolve: async context =>
                 {
-                    HttpStatusCode isValidAuthUser = await productReviewService.IsValidAuthUser();
+                    HttpStatusCode IsAdminAuthUser = await productReviewService.IsAdminAuthUser();
             
-                    if (isValidAuthUser != HttpStatusCode.OK)
+                    if (IsAdminAuthUser != HttpStatusCode.OK)
                     {
-                        context.Errors.Add(new ExecutionError(isValidAuthUser.ToString())
+                        context.Errors.Add(new ExecutionError(IsAdminAuthUser.ToString())
                         {
-                            Code = isValidAuthUser.ToString()
+                            Code = IsAdminAuthUser.ToString()
                         });
                         
                         return default;
