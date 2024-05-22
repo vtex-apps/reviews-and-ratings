@@ -49,11 +49,31 @@ namespace ReviewsRatings.GraphQL
                     string orderBy = context.GetArgument<string>("orderBy");
                     string status = context.GetArgument<string>("status");
 
-                    HttpStatusCode isAdminAuthUser = await productReviewService.IsAdminAuthUser();
-
-                    if (isAdminAuthUser != HttpStatusCode.OK)
+                    if (string.IsNullOrEmpty(status) || (!string.IsNullOrEmpty(status) && status.Equals("false")))
                     {
-                        status = "true";
+                        HttpStatusCode isAdminAuthUser = await productReviewService.IsAdminAuthUser();
+
+                        if (isAdminAuthUser != HttpStatusCode.OK)
+                        {
+                            if (string.IsNullOrEmpty(status))
+                            {
+                                status = "true";
+                            }
+                            else
+                            {
+                                return new SearchResponse
+                                {
+                                    Data = new DataElement { data = new List<Review>() },
+                                    Range = new SearchRange
+                                    {
+                                        Total = 0,
+                                        From = 0,
+                                        To = 0
+                                    }
+                                };
+                            }
+
+                        }
                     }
                     
                     var searchResult = await productReviewService.GetReviews(searchTerm, from, to, orderBy, status);

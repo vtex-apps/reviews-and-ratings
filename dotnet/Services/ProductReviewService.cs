@@ -709,7 +709,7 @@
                 return HttpStatusCode.BadRequest;
             }
 
-            bool hasAdminPermission = validatedAdminUser != null && validatedAdminUser.AuthStatus.Equals("Success");
+            bool hasAdminPermission = validatedAdminUser != null && validatedAdminUser.AuthStatus.Equals("Success") && validatedAdminUser.Account.Equals(_context.Vtex.Account) && validatedAdminUser.Audience.Equals("admin");
             
             if (!hasAdminPermission)
             {
