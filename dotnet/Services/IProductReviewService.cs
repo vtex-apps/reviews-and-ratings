@@ -28,6 +28,8 @@
 
         Task<HttpStatusCode> IsValidAuthUser();
 
+        Task<HttpStatusCode> IsAdminAuthUser();
+
         Task<ReviewsResponseWrapper> GetReviewsByShopperId(string shopperId);
 
         Task<ReviewsResponseWrapper> GetReviewsByreviewDateTime(string reviewDateTime);
