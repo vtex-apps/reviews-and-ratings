@@ -930,6 +930,11 @@
 
                     string fieldName = Char.ToLowerInvariant(pi.Name[0]) + pi.Name.Substring(1);
 
+                    // Workaround: Sometimes master data returns in wrong order when sorting by reviewDateTime.
+                    if(fieldName == "reviewDateTime") {
+                        fieldName = "createdIn";
+                    }
+
                     sort = $"&_sort={fieldName}";
 
                     if (descendingOrder)
