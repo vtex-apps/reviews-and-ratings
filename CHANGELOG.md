@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.15.1] - 2024-07-22
+
 ### Fixed
 
 - Fix order response of ProductReview when using orderBy reviewDateTime
