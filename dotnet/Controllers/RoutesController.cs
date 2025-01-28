@@ -293,6 +293,12 @@ namespace ReviewsRatings.Controllers
 
                         return Json(searchResponse);
                     case RATING:
+
+                        if(string.IsNullOrEmpty(id))
+                        {
+                            return BadRequest("ProductId is missing.");
+                        }
+
                         AverageCount average = await _productReviewsService.GetAverageRatingByProductId(id);
                         wrapper = await _productReviewsService.GetReviewsByProductId(id);
                         RatingResponse ratingResponse = new RatingResponse
