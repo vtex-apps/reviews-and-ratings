@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.18.0] - 2025-01-29
+
 ### Added
 
 - StarsFive, StarsFour, StarsThree, StarsTwo, StarsOne to the RatingResponse
