@@ -162,7 +162,7 @@
                 
             }
 
-            AverageCount avergae = new AverageCount
+            AverageCount average = new AverageCount
             {
                 Average = decimal.Round(averageRating, 2, MidpointRounding.AwayFromZero),
                 StarsFive = stars5,
@@ -172,7 +172,7 @@
                 StarsOne = stars1,
                 Total = numberOfReviews
             };
-            return avergae;
+            return average;
         }
 
         public async Task<Review> GetReview(string Id)

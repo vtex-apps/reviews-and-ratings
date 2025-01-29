@@ -299,6 +299,11 @@ namespace ReviewsRatings.Controllers
                         RatingResponse ratingResponse = new RatingResponse
                         {
                             Average = average.Average,
+                            StarsFive = average.StarsFive,
+                            StarsFour = average.StarsFour,
+                            StarsThree = average.StarsThree,
+                            StarsTwo = average.StarsTwo,
+                            StarsOne = average.StarsOne,
                             TotalCount = wrapper.Range.Total
                         };
 
