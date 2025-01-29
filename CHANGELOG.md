@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - StarsFive, StarsFour, StarsThree, StarsTwo, StarsOne to the RatingResponse
 
+## [3.16.1] - 2025-01-29
+
+### Removed
+
+- Quality engineering (stale) actions
+
+
 ## [3.16.0] - 2024-12-18
 
 ### Fixed
