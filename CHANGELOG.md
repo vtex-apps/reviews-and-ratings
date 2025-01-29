@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.16.1] - 2025-01-29
+
 ### Removed
 
 - Quality engineering (stale) actions
