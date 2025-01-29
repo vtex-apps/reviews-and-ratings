@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Review's approved information received through the request body on the save review route
+
 ## [3.16.0] - 2024-12-18
 
 ### Fixed
