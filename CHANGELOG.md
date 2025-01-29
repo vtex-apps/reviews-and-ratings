@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - StarsFive, StarsFour, StarsThree, StarsTwo, StarsOne to the RatingResponse
+- 
+## [3.17.0] - 2025-01-29
+
+
+### Added
+
+- Review's approved information received through the request body on the save review route
 
 ## [3.16.1] - 2025-01-29
 

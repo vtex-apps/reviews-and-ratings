@@ -129,7 +129,8 @@ namespace ReviewsRatings.Controllers
                             Text = newReview.Text,
                             ReviewerName = newReview.ReviewerName,
                             ReviewDateTime = newReview.ReviewDateTime,
-                            VerifiedPurchaser = hasShopperPurchased
+                            VerifiedPurchaser = hasShopperPurchased,
+                            Approved = newReview.Approved
                         };
 
                         var reviewResponse = await this._productReviewsService.NewReview(reviewToSave, false);
