@@ -18,6 +18,8 @@
 
         Task<bool> ValidateKeyAndToken(string key, string token, string baseUrl);
 
+        Task<bool> ValidateLicenseManagerAccess(string userId);
+
         Task<VtexOrder> GetOrderInformation(string orderId);
 
         Task<VtexOrderList> ListOrders(string queryString);

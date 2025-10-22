@@ -363,6 +363,38 @@
             return keyAndTokenValidated && keyHasAccess;
         }
 
+        public async Task<bool> ValidateLicenseManagerAccess(string userId)
+        {
+            bool userHasAccess = false;
+            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri($"http://licensemanager.vtexcommercestable.com.br/api/license-manager/pvt/accounts/{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}/logins/{userId}/granted")
+            };
+
+            if (authToken != null)
+            {
+                request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
+            }
+
+            try
+            {
+                var client = _clientFactory.CreateClient();
+                var response = await client.SendAsync(request);
+                string responseContent = await response.Content.ReadAsStringAsync();
+                _context.Vtex.Logger.Info("ValidateLicenseManagerAccess", null, $"[{response.StatusCode}] {responseContent}");
+                userHasAccess = response.IsSuccessStatusCode && responseContent.Equals("true");
+            }
+            catch (Exception ex)
+            {
+                _context.Vtex.Logger.Error("ValidateLicenseManagerAccess", null, $"Error validating access for user '{userId}'", ex);
+            }
+
+            return userHasAccess;
+        }
+
         public async Task<VtexOrder> GetOrderInformation(string orderId)
         {
             VtexOrder vtexOrder = null;

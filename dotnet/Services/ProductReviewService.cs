@@ -717,6 +717,21 @@
                 return HttpStatusCode.Forbidden;
             }
 
+            try {
+                hasAdminPermission = await this._productReviewRepository.ValidateLicenseManagerAccess(validatedAdminUser.Id);
+            }
+            catch (Exception ex)
+            {
+                _context.Vtex.Logger.Error("IsAdminAuthUser", null, "Error fetching user", ex);
+                return HttpStatusCode.BadRequest;
+            }
+
+            if (!hasAdminPermission)
+            {
+                _context.Vtex.Logger.Warn("IsAdminAuthUser", null, "User Does Not Have Permission");
+                return HttpStatusCode.Forbidden;
+            }
+
             return HttpStatusCode.OK;
         }
 
