@@ -118,7 +118,7 @@ type Query {
     @cacheControl(scope: PRIVATE)
   appSettings: AppSettings
   verifySchema: String @cacheControl(scope: PUBLIC, maxAge: SHORT)
-  migrateData: String @cacheControl(scope: PUBLIC, maxAge: SHORT)
+  migrateData: String @cacheControl(scope: PRIVATE)
   verifyMigration: String @cacheControl(scope: PUBLIC, maxAge: SHORT)
   successfulMigration: String @cacheControl(scope: PUBLIC, maxAge: SHORT)
 }
