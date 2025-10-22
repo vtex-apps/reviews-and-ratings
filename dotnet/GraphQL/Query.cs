@@ -25,7 +25,14 @@ namespace ReviewsRatings.GraphQL
                     new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id", Description = "id of the review" }
                 ),
                 resolve: async context =>
-                {
+                {   
+                    HttpStatusCode IsAdminAuthUser = await productReviewService.IsAdminAuthUser();
+            
+                    if (IsAdminAuthUser != HttpStatusCode.OK)
+                    {
+                        return null;
+                    }
+                    
                     return await context.TryAsyncResolve(
                         async c => await productReviewService.GetReview(context.GetArgument<string>("id")));
                 }
@@ -49,31 +56,25 @@ namespace ReviewsRatings.GraphQL
                     string orderBy = context.GetArgument<string>("orderBy");
                     string status = context.GetArgument<string>("status");
 
-                    if (string.IsNullOrEmpty(status) || (!string.IsNullOrEmpty(status) && status.Equals("false")))
+                    HttpStatusCode IsAdminAuthUser = await productReviewService.IsAdminAuthUser();
+            
+                    if (IsAdminAuthUser != HttpStatusCode.OK)
                     {
-                        HttpStatusCode isAdminAuthUser = await productReviewService.IsAdminAuthUser();
-
-                        if (isAdminAuthUser != HttpStatusCode.OK)
+                        // context.Errors.Add(new ExecutionError(IsAdminAuthUser.ToString())
+                        // {
+                        //     Code = IsAdminAuthUser.ToString()
+                        // });
+                        
+                        return new SearchResponse
                         {
-                            if (string.IsNullOrEmpty(status))
+                            Data = new DataElement { data = new List<Review>() },
+                            Range = new SearchRange
                             {
-                                status = "true";
+                                Total = 0,
+                                From = 0,
+                                To = 0
                             }
-                            else
-                            {
-                                return new SearchResponse
-                                {
-                                    Data = new DataElement { data = new List<Review>() },
-                                    Range = new SearchRange
-                                    {
-                                        Total = 0,
-                                        From = 0,
-                                        To = 0
-                                    }
-                                };
-                            }
-
-                        }
+                        };
                     }
                     
                     var searchResult = await productReviewService.GetReviews(searchTerm, from, to, orderBy, status);
@@ -177,6 +178,22 @@ namespace ReviewsRatings.GraphQL
                     string orderBy = context.GetArgument<string>("orderBy");
                     string status = context.GetArgument<string>("status");
 
+                    HttpStatusCode IsAdminAuthUser = await productReviewService.IsAdminAuthUser();
+            
+                    if (IsAdminAuthUser != HttpStatusCode.OK)
+                    {
+                        return new SearchResponse
+                        {
+                            Data = new DataElement { data = new List<Review>() },
+                            Range = new SearchRange
+                            {
+                                Total = 0,
+                                From = 0,
+                                To = 0
+                            }
+                        };
+                    }
+
                     var searchResult = await productReviewService.GetReviewsByShopperId(shopperId);
                     SearchResponse searchResponse = new SearchResponse
                     {
@@ -205,6 +222,22 @@ namespace ReviewsRatings.GraphQL
                     string orderBy = context.GetArgument<string>("orderBy");
                     string status = context.GetArgument<string>("status");
 
+                    HttpStatusCode IsAdminAuthUser = await productReviewService.IsAdminAuthUser();
+            
+                    if (IsAdminAuthUser != HttpStatusCode.OK)
+                    {
+                        return new SearchResponse
+                        {
+                            Data = new DataElement { data = new List<Review>() },
+                            Range = new SearchRange
+                            {
+                                Total = 0,
+                                From = 0,
+                                To = 0
+                            }
+                        };
+                    }
+
                     var searchResult = await productReviewService.GetReviewsByreviewDateTime(reviewDateTime);
                     SearchResponse searchResponse = new SearchResponse
                     {
@@ -231,6 +264,22 @@ namespace ReviewsRatings.GraphQL
                     string orderBy = context.GetArgument<string>("orderBy");
                     string status = context.GetArgument<string>("status");
 
+                    HttpStatusCode IsAdminAuthUser = await productReviewService.IsAdminAuthUser();
+            
+                    if (IsAdminAuthUser != HttpStatusCode.OK)
+                    {
+                        return new SearchResponse
+                        {
+                            Data = new DataElement { data = new List<Review>() },
+                            Range = new SearchRange
+                            {
+                                Total = 0,
+                                From = 0,
+                                To = 0
+                            }
+                        };
+                    }
+
                     var searchResult = await productReviewService.GetReviewsByDateRange(fromDate, toDate);
                     SearchResponse searchResponse = new SearchResponse
                     {
@@ -250,6 +299,18 @@ namespace ReviewsRatings.GraphQL
                     ),
                 resolve: async context =>
                 {
+                    HttpStatusCode IsAdminAuthUser = await productReviewService.IsAdminAuthUser();
+            
+                    if (IsAdminAuthUser != HttpStatusCode.OK)
+                    {
+                        context.Errors.Add(new ExecutionError(IsAdminAuthUser.ToString())
+                        {
+                            Code = IsAdminAuthUser.ToString()
+                        });
+                        
+                        return default;
+                    }
+                    
                     return await context.TryAsyncResolve(
                         async c => await productReviewService.HasShopperReviewed(
                             context.GetArgument<string>("shopperId"), context.GetArgument<string>("productId")));
@@ -276,7 +337,19 @@ namespace ReviewsRatings.GraphQL
             FieldAsync<StringGraphType>(
                 "migrateData",
                 resolve: async context =>
-                {
+                {   
+                    HttpStatusCode IsAdminAuthUser = await productReviewService.IsAdminAuthUser();
+                    
+                    if (IsAdminAuthUser != HttpStatusCode.OK)
+                    {
+                        context.Errors.Add(new ExecutionError(IsAdminAuthUser.ToString())
+                        {
+                            Code = IsAdminAuthUser.ToString()
+                        });
+                        
+                        return default;
+                    }
+
                     return await productReviewService.MigrateData();
                 }
             );
