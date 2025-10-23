@@ -114,6 +114,16 @@ namespace ReviewsRatings.GraphQL
                     string status = context.GetArgument<string>("status");
 
                     var searchResult = await productReviewService.GetReviewsByProductId(productId, from, to, orderBy, searchTerm, rating, locale, pastReviews);
+                    
+                    HttpStatusCode IsAdminAuthUser = await productReviewService.IsAdminAuthUser();
+            
+                    if (IsAdminAuthUser != HttpStatusCode.OK)
+                    {
+                        foreach (var review in searchResult.Reviews){
+                            review.ShopperId = null; 
+                        }     
+                    }
+                    
                     SearchResponse searchResponse = new SearchResponse
                     {
                         Data = new DataElement { data = searchResult.Reviews },
@@ -303,12 +313,7 @@ namespace ReviewsRatings.GraphQL
             
                     if (IsAdminAuthUser != HttpStatusCode.OK)
                     {
-                        context.Errors.Add(new ExecutionError(IsAdminAuthUser.ToString())
-                        {
-                            Code = IsAdminAuthUser.ToString()
-                        });
-                        
-                        return default;
+                        return false;
                     }
                     
                     return await context.TryAsyncResolve(
