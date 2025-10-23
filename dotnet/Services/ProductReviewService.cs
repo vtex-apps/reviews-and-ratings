@@ -527,12 +527,10 @@
                         review.ShopperId = userId;
                         review.VerifiedPurchaser = hasShopperPurchased;
                     }
-
-                    if (review.Approved == null)
-                    {
-                        review.Approved = false;
-                    }
-
+                    
+                    AppSettings settings = await GetAppSettings();
+                    review.Approved = !settings.RequireApproval;
+                    
                     if (string.IsNullOrWhiteSpace(review.ReviewDateTime))
                     {
                         // TODO: Check timezone for store
