@@ -530,6 +530,9 @@
                     
                     AppSettings settings = await GetAppSettings();
                     review.Approved = !settings.RequireApproval;
+
+                    if(review.Rating < 1) review.Rating = 1; 
+                    if(review.Rating > 5) review.Rating = 5;
                     
                     if (string.IsNullOrWhiteSpace(review.ReviewDateTime))
                     {
