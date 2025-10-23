@@ -12,11 +12,11 @@
   "routes": {
     "reviewApiAction": {
       "path": "/reviews-and-ratings/api/:requestedAction",
-      "public": true
+      "public": false
     },
     "reviewApiActionId": {
       "path": "/reviews-and-ratings/api/:requestedAction/:id",
-      "public": true
+      "public": false
     },
     "verifySchema": {
       "path": "/reviews-and-ratings/verify-schema",
@@ -24,7 +24,7 @@
     },
     "migrateData": {
       "path": "/reviews-and-ratings/migrate-data",
-      "public": true
+      "public": false
     },
     "addSearchDate": {
       "path": "/reviews-and-ratings/add-search-date",
