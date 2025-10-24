@@ -109,6 +109,9 @@
             review.Locale = string.IsNullOrEmpty(review.Locale) ? oldReview.Locale : review.Locale;
             review.VerifiedPurchaser = review.VerifiedPurchaser ?? oldReview.VerifiedPurchaser;
 
+            if(review.Rating < 1) review.Rating = 1; 
+            if(review.Rating > 5) review.Rating = 5;
+
             string id = await this._productReviewRepository.SaveProductReviewMD(review);
             if (string.IsNullOrEmpty(id))
             {
