@@ -30,6 +30,11 @@ namespace ReviewsRatings.GraphQL
             
                     if (IsAdminAuthUser != HttpStatusCode.OK)
                     {
+                        context.Errors.Add(new ExecutionError(IsAdminAuthUser.ToString())
+                        {
+                            Code = IsAdminAuthUser.ToString()
+                        });
+                        
                         return null;
                     }
                     
@@ -60,10 +65,10 @@ namespace ReviewsRatings.GraphQL
             
                     if (IsAdminAuthUser != HttpStatusCode.OK)
                     {
-                        // context.Errors.Add(new ExecutionError(IsAdminAuthUser.ToString())
-                        // {
-                        //     Code = IsAdminAuthUser.ToString()
-                        // });
+                        context.Errors.Add(new ExecutionError(IsAdminAuthUser.ToString())
+                        {
+                            Code = IsAdminAuthUser.ToString()
+                        });
                         
                         return new SearchResponse
                         {
@@ -192,6 +197,11 @@ namespace ReviewsRatings.GraphQL
             
                     if (IsAdminAuthUser != HttpStatusCode.OK)
                     {
+                        context.Errors.Add(new ExecutionError(IsAdminAuthUser.ToString())
+                        {
+                            Code = IsAdminAuthUser.ToString()
+                        });
+                        
                         return new SearchResponse
                         {
                             Data = new DataElement { data = new List<Review>() },
@@ -236,6 +246,11 @@ namespace ReviewsRatings.GraphQL
             
                     if (IsAdminAuthUser != HttpStatusCode.OK)
                     {
+                        context.Errors.Add(new ExecutionError(IsAdminAuthUser.ToString())
+                        {
+                            Code = IsAdminAuthUser.ToString()
+                        });
+
                         return new SearchResponse
                         {
                             Data = new DataElement { data = new List<Review>() },
@@ -278,6 +293,11 @@ namespace ReviewsRatings.GraphQL
             
                     if (IsAdminAuthUser != HttpStatusCode.OK)
                     {
+                        context.Errors.Add(new ExecutionError(IsAdminAuthUser.ToString())
+                        {
+                            Code = IsAdminAuthUser.ToString()
+                        });
+                        
                         return new SearchResponse
                         {
                             Data = new DataElement { data = new List<Review>() },
@@ -313,6 +333,11 @@ namespace ReviewsRatings.GraphQL
             
                     if (IsAdminAuthUser != HttpStatusCode.OK)
                     {
+                        context.Errors.Add(new ExecutionError(IsAdminAuthUser.ToString())
+                        {
+                            Code = IsAdminAuthUser.ToString()
+                        });
+                        
                         return false;
                     }
                     

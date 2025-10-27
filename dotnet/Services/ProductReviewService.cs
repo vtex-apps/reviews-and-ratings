@@ -739,11 +739,6 @@
             return HttpStatusCode.OK;
         }
 
-        public async Task<bool> ValidateKeyAndToken(string key, string token, string baseUrl)
-        {
-            return await this._productReviewRepository.ValidateKeyAndToken(key, token, baseUrl);
-        }
-
         public async Task<bool> ShopperHasPurchasedProduct(string shopperId, string productId)
         {
             bool hasPurchased = false;

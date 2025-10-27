@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [3.19.0] - 2025-10-23
 
 - Fixed Authentication on queries and mutations
-- Added proper validation to aproved reviews and rating values
+- Added proper validation to approved reviews and rating values
 
 ### Added
 

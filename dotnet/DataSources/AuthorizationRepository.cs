@@ -112,10 +112,7 @@
                 Method = HttpMethod.Get,
                 RequestUri = new Uri($"https://licensemanager.vtexcommercestable.com.br/api/license-manager/pvt/accounts/{account}/logins/{userId}/granted")
             };
-            
-            if(authToken != null){
-                request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
-            }
+            request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
             
             try
             {
@@ -157,7 +154,8 @@
             };
 
             try
-            {   var client = _clientFactory.CreateClient();
+            {   
+                var client = _clientFactory.CreateClient();
                 var response = await client.SendAsync(request);
                 string responseContent = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)

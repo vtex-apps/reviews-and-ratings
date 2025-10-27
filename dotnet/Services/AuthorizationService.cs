@@ -83,11 +83,6 @@
             
             authenticatedUser = await this._authorizationRepository.ValidateUserToken(token);
 
-            if ( authenticatedUser == null)
-            {
-                return null;
-            }
-
             return authenticatedUser;
         }
     }
