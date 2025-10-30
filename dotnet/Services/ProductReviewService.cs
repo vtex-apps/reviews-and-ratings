@@ -109,6 +109,9 @@
             review.Locale = string.IsNullOrEmpty(review.Locale) ? oldReview.Locale : review.Locale;
             review.VerifiedPurchaser = review.VerifiedPurchaser ?? oldReview.VerifiedPurchaser;
 
+            if(review.Rating < 1) review.Rating = 1; 
+            if(review.Rating > 5) review.Rating = 5;
+
             string id = await this._productReviewRepository.SaveProductReviewMD(review);
             if (string.IsNullOrEmpty(id))
             {
@@ -527,12 +530,13 @@
                         review.ShopperId = userId;
                         review.VerifiedPurchaser = hasShopperPurchased;
                     }
+                    
+                    AppSettings settings = await GetAppSettings();
+                    review.Approved = !settings.RequireApproval;
 
-                    if (review.Approved == null)
-                    {
-                        review.Approved = false;
-                    }
-
+                    if(review.Rating < 1) review.Rating = 1; 
+                    if(review.Rating > 5) review.Rating = 5;
+                    
                     if (string.IsNullOrWhiteSpace(review.ReviewDateTime))
                     {
                         // TODO: Check timezone for store
@@ -717,12 +721,22 @@
                 return HttpStatusCode.Forbidden;
             }
 
-            return HttpStatusCode.OK;
-        }
+            try {
+                hasAdminPermission = await this._productReviewRepository.ValidateLicenseManagerAccess(validatedAdminUser.Id);
+            }
+            catch (Exception ex)
+            {
+                _context.Vtex.Logger.Error("IsAdminAuthUser", null, "Error fetching user", ex);
+                return HttpStatusCode.BadRequest;
+            }
 
-        public async Task<bool> ValidateKeyAndToken(string key, string token, string baseUrl)
-        {
-            return await this._productReviewRepository.ValidateKeyAndToken(key, token, baseUrl);
+            if (!hasAdminPermission)
+            {
+                _context.Vtex.Logger.Warn("IsAdminAuthUser", null, "User Does Not Have Permission");
+                return HttpStatusCode.Forbidden;
+            }
+
+            return HttpStatusCode.OK;
         }
 
         public async Task<bool> ShopperHasPurchasedProduct(string shopperId, string productId)

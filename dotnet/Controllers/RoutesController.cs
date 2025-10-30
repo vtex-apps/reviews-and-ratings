@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using ReviewsRatings.Models;
 using ReviewsRatings.Services;
 using System;
+using System.Net;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ namespace ReviewsRatings.Controllers
     public class RoutesController : Controller
     {
         private readonly IProductReviewService _productReviewsService;
+        private readonly IAuthorizationService _authorizationService;
 
         private const string REVIEW = "review";
         private const string REVIEWS = "reviews";
@@ -22,9 +24,11 @@ namespace ReviewsRatings.Controllers
         private const string HEADER_VTEX_APP_TOKEN = "X-VTEX-API-AppToken";
         private const string FORWARDED_HOST = "X-Forwarded-Host";
 
-        public RoutesController(IProductReviewService productReviewsService)
+        public RoutesController(IProductReviewService productReviewsService, IAuthorizationService authorizationService)
         {
             this._productReviewsService = productReviewsService ?? throw new ArgumentNullException(nameof(productReviewsService));
+
+            this._authorizationService = authorizationService ?? throw new ArgumentNullException(nameof(authorizationService));
         }
 
         public async Task<IActionResult> ReviewApiAction(string requestedAction)
@@ -41,37 +45,26 @@ namespace ReviewsRatings.Controllers
 
         public async Task<IActionResult> ProcessReviewApiAction(string requestedAction, string id)
         {
-            await this.VerifySchema();
-            Response.Headers.Add("Cache-Control", "public, max-age=300, stale-while-revalidate=3600, stale-if-error=3600");
-            string responseString = string.Empty;
-            string vtexCookie = HttpContext.Request.Headers[HEADER_VTEX_COOKIE];
-            ValidatedUser validatedUser = null;
-            bool userValidated = false;
-            bool keyAndTokenValid = false;
-            string vtexAppKey = HttpContext.Request.Headers[HEADER_VTEX_APP_KEY];
-            string vtexAppToken = HttpContext.Request.Headers[HEADER_VTEX_APP_TOKEN];
-            if (!string.IsNullOrEmpty(vtexCookie))
-            {
-                validatedUser = await this._productReviewsService.ValidateUserToken(vtexCookie);
-                if (validatedUser != null && validatedUser.AuthStatus.Equals(AUTH_SUCCESS))
-                {
-                    userValidated = true;
-                }
-            }
-
-            if (!string.IsNullOrEmpty(vtexAppKey) && !string.IsNullOrEmpty(vtexAppToken))
-            {
-                string baseUrl = HttpContext.Request.Headers[FORWARDED_HOST];
-                keyAndTokenValid = await this._productReviewsService.ValidateKeyAndToken(vtexAppKey, vtexAppToken, baseUrl);
-                if(keyAndTokenValid)
-                {
-                    await VerifySchema();
-                }
-            }
-
             if (string.IsNullOrEmpty(requestedAction))
             {
                 return BadRequest("Missing parameter");
+            }
+            
+            await this.VerifySchema();
+
+            Response.Headers.Add("Cache-Control", "private, no-store");
+            // Response.Headers.Add("Cache-Control", "public, max-age=300, stale-while-revalidate=3600, stale-if-error=3600");
+
+            string responseString = string.Empty;
+            
+            ValidatedUser authenticatedUser = await this._authorizationService.RetrieveAuthenticatedUser();
+            bool isValidAdminUser = false;
+            bool isUserValidated = false;
+
+            if (authenticatedUser != null)
+            {
+                isValidAdminUser = await this._authorizationService.ValidateLicenseManagerAccess(authenticatedUser.Id);
+                isUserValidated = true;
             }
 
             if ("post".Equals(HttpContext.Request.Method, StringComparison.OrdinalIgnoreCase))
@@ -80,7 +73,7 @@ namespace ReviewsRatings.Controllers
                 switch (requestedAction)
                 {
                     case REVIEW:
-                        if (!userValidated)
+                        if (!isUserValidated)
                         {
                             return Unauthorized("Invalid User");
                         }
@@ -112,19 +105,20 @@ namespace ReviewsRatings.Controllers
                             return BadRequest("Approved is missing.");
                         }
 
-                        bool hasShopperReviewed = await _productReviewsService.HasShopperReviewed(validatedUser.User, newReview.ProductId);
+                        bool hasShopperReviewed = await _productReviewsService.HasShopperReviewed(authenticatedUser.User, newReview.ProductId);
+                        
                         if (hasShopperReviewed)
                         {
                             return Json("Duplicate Review");
                         }
 
-                        bool hasShopperPurchased = await _productReviewsService.ShopperHasPurchasedProduct(validatedUser.User, newReview.ProductId);
+                        bool hasShopperPurchased = await _productReviewsService.ShopperHasPurchasedProduct(authenticatedUser.User, newReview.ProductId);
 
                         Review reviewToSave = new Review
                         {
                             ProductId = newReview.ProductId,
                             Rating = newReview.Rating,
-                            ShopperId = validatedUser.User,
+                            ShopperId = authenticatedUser.User,
                             Title = newReview.Title,
                             Text = newReview.Text,
                             ReviewerName = newReview.ReviewerName,
@@ -137,7 +131,7 @@ namespace ReviewsRatings.Controllers
                         return Json(reviewResponse.Id);
                         break;
                     case REVIEWS:
-                        if (!keyAndTokenValid)
+                        if (!isValidAdminUser)
                         {
                             return Unauthorized();
                         }
@@ -191,7 +185,7 @@ namespace ReviewsRatings.Controllers
                 switch (requestedAction)
                 {
                     case REVIEW:
-                        if (!userValidated && !keyAndTokenValid)
+                        if (!isValidAdminUser)
                         {
                             return Json("Invalid User");
                         }
@@ -205,7 +199,7 @@ namespace ReviewsRatings.Controllers
                         ids[0] = id;
                         return Json(await this._productReviewsService.DeleteReview(ids));
                     case REVIEWS:
-                        if (!keyAndTokenValid)
+                        if (!isValidAdminUser)
                         {
                             return Unauthorized();
                         }
@@ -220,7 +214,7 @@ namespace ReviewsRatings.Controllers
                 switch (requestedAction)
                 {
                     case REVIEW:
-                        if (!userValidated && !keyAndTokenValid)
+                        if (!isValidAdminUser)
                         {
                             return Json("Invalid User");
                         }
@@ -254,8 +248,13 @@ namespace ReviewsRatings.Controllers
                         {
                             return BadRequest("Missing parameter.");
                         }
-
+                        
                         Review review = await this._productReviewsService.GetReview(id);
+                        
+                        if (!isValidAdminUser){
+                            review.ShopperId = null;
+                        }
+                        
                         return Json(review);
                     case REVIEWS:
                         IList<Review> reviews;
@@ -284,6 +283,14 @@ namespace ReviewsRatings.Controllers
                         else
                         {
                             wrapper = await _productReviewsService.GetReviews(searchTerm, from, to, orderBy, status);
+                        }
+
+                        if (!isValidAdminUser)
+                        {
+                            foreach (var r in wrapper.Reviews)
+                            {
+                                r.ShopperId = null; 
+                            } 
                         }
 
                         SearchResponse searchResponse = new SearchResponse
@@ -345,6 +352,20 @@ namespace ReviewsRatings.Controllers
         public async Task<IActionResult> MigrateData()
         {
             string result = string.Empty;
+            
+            bool isValidAdminUser = false;
+            ValidatedUser authenticatedUser = await this._authorizationService.RetrieveAuthenticatedUser();
+            
+            if (authenticatedUser != null)
+            {
+                isValidAdminUser = await this._authorizationService.ValidateLicenseManagerAccess(authenticatedUser.Id);
+            }
+
+            if (!isValidAdminUser)
+            {
+                return Unauthorized("Invalid User");
+            }
+            
             if ("post".Equals(HttpContext.Request.Method, StringComparison.OrdinalIgnoreCase))
             {
                 try
