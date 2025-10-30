@@ -246,9 +246,11 @@
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
-                RequestUri = new Uri($"https://{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_ACCOUNT]}.vtexcommercestable.com.br/api/vtexid/credential/validate"),
+                RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_ACCOUNT]}.vtexcommercestable.com.br/api/vtexid/credential/validate"),
                 Content = new StringContent(jsonSerializedToken, Encoding.UTF8, APPLICATION_JSON)
             };
+
+            request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
 
             string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
             if (authToken != null)
@@ -283,8 +285,10 @@
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri($"https://licensemanager.vtexcommercestable.com.br/api/license-manager/pvt/accounts/{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}/logins/{userId}/granted")
+                RequestUri = new Uri($"http://licensemanager.vtexcommercestable.com.br/api/license-manager/pvt/accounts/{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}/logins/{userId}/granted")
             };
+
+            request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
 
             if (authToken != null)
             {
@@ -316,10 +320,11 @@
                 var request = new HttpRequestMessage
                 {
                     Method = HttpMethod.Get,
-                    RequestUri = new Uri($"https://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.{ENVIRONMENT}.com.br/api/oms/pvt/orders/{orderId}")
+                    RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.{ENVIRONMENT}.com.br/api/oms/pvt/orders/{orderId}")
                 };
 
                 request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
+
                 string authToken = _context.Vtex.AuthToken;
                 if (authToken != null)
                 {
@@ -359,8 +364,10 @@
                 var request = new HttpRequestMessage
                 {
                     Method = HttpMethod.Get,
-                    RequestUri = new Uri($"https://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.{ENVIRONMENT}.com.br/api/oms/pvt/orders?{queryString}")
+                    RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.{ENVIRONMENT}.com.br/api/oms/pvt/orders?{queryString}")
                 };
+
+                request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
 
                 string authToken = _context.Vtex.AuthToken;
                 if (authToken != null)
@@ -424,7 +431,7 @@
                     request = new HttpRequestMessage
                     {
                         Method = HttpMethod.Put,
-                        RequestUri = new Uri($"https://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/schemas/{SCHEMA}"),
+                        RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/schemas/{SCHEMA}"),
                         Content = new StringContent(SCHEMA_JSON, Encoding.UTF8, APPLICATION_JSON)
                     };
 
@@ -564,10 +571,11 @@
                 var request = new HttpRequestMessage
                 {
                     Method = HttpMethod.Get,
-                    RequestUri = new Uri($"https://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/search?_fields=_all&_schema={SCHEMA}{searchQuery}")
+                    RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/search?_fields=_all&_schema={SCHEMA}{searchQuery}")
                 };
 
                 request.Headers.Add("REST-Range", $"resources={from}-{to}");
+                request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
 
                 string authToken = _context.Vtex.AuthToken;
                 if (authToken != null)
@@ -652,10 +660,11 @@
                 var request = new HttpRequestMessage
                 {
                     Method = HttpMethod.Get,
-                    RequestUri = new Uri($"https://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/search?_fields=_all&_schema={SCHEMA}&_where=searchDate between {fromDate} AND {toDate}")
+                    RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/search?_fields=_all&_schema={SCHEMA}&_where=searchDate between {fromDate} AND {toDate}")
                 };
 
                 request.Headers.Add("REST-Range", $"resources={0}-{800}");
+                request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
 
                 string authToken = _context.Vtex.AuthToken;
                 if (authToken != null)
@@ -764,9 +773,11 @@
                 var request = new HttpRequestMessage
                 {
                     Method = HttpMethod.Put,
-                    RequestUri = new Uri($"https://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/documents?_schema={SCHEMA}"),
+                    RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[VTEX_ACCOUNT_HEADER_NAME]}.vtexcommercestable.com.br/api/dataentities/{DATA_ENTITY}/documents?_schema={SCHEMA}"),
                     Content = new StringContent(jsonSerializedReview, Encoding.UTF8, APPLICATION_JSON)
                 };
+
+                request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
 
                 string authToken = _context.Vtex.AuthToken;
                 if (authToken != null)
