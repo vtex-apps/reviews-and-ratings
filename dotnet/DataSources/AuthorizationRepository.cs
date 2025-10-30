@@ -64,7 +64,7 @@
             {
                 Token = token
             };
-
+            
             if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(account))
             {
                 return null;
@@ -75,9 +75,17 @@
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
-                RequestUri = new Uri($"https://{account}.vtexcommercestable.com.br/api/vtexid/credential/validate"),
+                RequestUri = new Uri($"http://{account}.vtexcommercestable.com.br/api/vtexid/credential/validate"),
                 Content = new StringContent(jsonSerializedToken, Encoding.UTF8, APPLICATION_JSON)
             };
+
+            request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
+
+            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+            if (authToken != null)
+            {
+                request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
+            }
 
             try
             {   var client = _clientFactory.CreateClient();
@@ -92,7 +100,7 @@
             {
                 _context.Vtex.Logger.Error("ValidateUserToken", null, $"Error validating user token", ex);
             }
-
+            
             return validatedUser;
         }
 
@@ -110,9 +118,11 @@
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri($"https://licensemanager.vtexcommercestable.com.br/api/license-manager/pvt/accounts/{account}/logins/{userId}/granted")
+                RequestUri = new Uri($"http://licensemanager.vtexcommercestable.com.br/api/license-manager/pvt/accounts/{account}/logins/{userId}/granted")
             };
+
             request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
+            request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
             
             try
             {
@@ -149,9 +159,17 @@
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
-                RequestUri = new Uri($"https://{account}.vtexcommercestable.com.br/api/vtexid/apptoken/login"),
+                RequestUri = new Uri($"http://{account}.vtexcommercestable.com.br/api/vtexid/apptoken/login"),
                 Content = new StringContent(jsonSerializedToken, Encoding.UTF8, APPLICATION_JSON)
             };
+
+            request.Headers.Add(USE_HTTPS_HEADER_NAME, "true");
+
+            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+            if (authToken != null)
+            {
+                request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
+            }
 
             try
             {   
