@@ -50,8 +50,6 @@
 
         Task<ValidatedUser> ValidateUserToken(string token);
 
-        Task<bool> ValidateKeyAndToken(string key, string token, string baseUrl);
-
         Task<bool> ShopperHasPurchasedProduct(string shopperId, string productId);
 
         Task<string> VerifySchema();

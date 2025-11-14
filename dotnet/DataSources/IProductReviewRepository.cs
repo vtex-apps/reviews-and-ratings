@@ -16,7 +16,7 @@
 
         Task<ValidatedUser> ValidateUserToken(string token);
 
-        Task<bool> ValidateKeyAndToken(string key, string token, string baseUrl);
+        Task<bool> ValidateLicenseManagerAccess(string userId);
 
         Task<VtexOrder> GetOrderInformation(string orderId);
 

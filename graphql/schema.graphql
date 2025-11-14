@@ -96,7 +96,7 @@ type Query {
     to: Int = 9
     orderBy: String
     status: String
-  ): ReviewsResult @cacheControl(scope: SEGMENT, maxAge: SHORT)
+  ): ReviewsResult @cacheControl(scope: PRIVATE)
   reviewByreviewDateTime(
     reviewDateTime: String!
     from: Int = 0
@@ -104,7 +104,7 @@ type Query {
     orderBy: String
     status: String
   ): ReviewsResult
-    @cacheControl(scope: PUBLIC, maxAge: MEDIUM)
+    @cacheControl(scope: PRIVATE)
     @deprecated(
       reason: "This query was deprecated, please use reviewByDateRange instead."
     )
@@ -113,12 +113,12 @@ type Query {
     toDate: String!
     orderBy: String
     status: String
-  ): ReviewsResult @cacheControl(scope: PUBLIC, maxAge: MEDIUM)
+  ): ReviewsResult @cacheControl(scope: PRIVATE)
   hasShopperReviewed(shopperId: String!, productId: String!): Boolean
     @cacheControl(scope: PRIVATE)
   appSettings: AppSettings
   verifySchema: String @cacheControl(scope: PUBLIC, maxAge: SHORT)
-  migrateData: String @cacheControl(scope: PUBLIC, maxAge: SHORT)
+  migrateData: String @cacheControl(scope: PRIVATE)
   verifyMigration: String @cacheControl(scope: PUBLIC, maxAge: SHORT)
   successfulMigration: String @cacheControl(scope: PUBLIC, maxAge: SHORT)
 }
