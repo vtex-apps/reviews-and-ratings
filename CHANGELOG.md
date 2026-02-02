@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+- Updating README.
+
+### Fixed
+
 ## [3.19.0] - 2025-10-23
 
 - Fixed Authentication on queries and mutations 
