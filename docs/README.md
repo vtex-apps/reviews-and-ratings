@@ -4,12 +4,6 @@
 
 [<i class="fa-brands fa-github"></i> Source code](https://github.com/vtex-apps/reviews-and-ratings)
 
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
-
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
-
 >⚠️ This app is no longer maintained by VTEX. This means support and maintenance are no longer provided.
 
 **Reviews & Ratings** allows customers to submit reviews and ratings for products and see them while navigating the store.
@@ -155,7 +149,7 @@ To see how to use the list of REST APIs, read [Reviews and Ratings API overview]
 
 ## GraphQL IDE
 
-To see how to use the graphQL queries and mutations, follow these steps:
+To see how to use the GraphQL queries and mutations, follow these steps:
 
 1. Open the Admin [GraphQL IDE app](https://developers.vtex.com/docs/guides/vtex-admin-graphql-ide).
 2. Select  the`vtex.reviews-and-ratings` app.
