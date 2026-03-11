@@ -844,6 +844,9 @@ Fix the bug for totalReviewsByProductId query
 
 - Missing parenthesis in translation message.
 
+### Fixed
+- New terms of use
+
 ## [2.2.0] - 2020-10-02
 
 ### Added
