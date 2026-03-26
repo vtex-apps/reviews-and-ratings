@@ -25,7 +25,7 @@ export const mutations = {
   newReview: async (
     _root: unknown,
     args: { review: Review },
-    ctx: { clients: Clients; vtex: any; headers?: Record<string, string> }
+    ctx: { clients: Clients; vtex: any; headers?: Record<string, string | string[] | undefined> }
   ): Promise<Review | null> => {
     const appSettingsData = await productReviewService.getAppSettings(
       ctx.clients.appSettings
@@ -36,7 +36,7 @@ export const mutations = {
         ctx.clients.productReview,
         ctx.vtex.storeUserAuthToken,
         ctx.vtex.adminUserAuthToken,
-        ctx.headers?.vtexidclientautcookie,
+        ctx.headers?.vtexidclientautcookie as string | undefined,
         ctx.vtex.logger
       )
 
