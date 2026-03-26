@@ -1,0 +1,34 @@
+{
+  "memory": 1024,
+  "timeout": 300,
+  "minReplicas": 8,
+  "maxReplicas": 80,
+  "routes": {
+    "reviewApiAction": {
+      "path": "/reviews-and-ratings/api/:requestedAction",
+      "public": true
+    },
+    "reviewApiActionId": {
+      "path": "/reviews-and-ratings/api/:requestedAction/:id",
+      "public": true
+    },
+    "verifySchema": {
+      "path": "/reviews-and-ratings/verify-schema",
+      "public": true
+    },
+    "migrateData": {
+      "path": "/reviews-and-ratings/migrate-data",
+      "public": true
+    },
+    "addSearchDate": {
+      "path": "/reviews-and-ratings/add-search-date",
+      "public": true
+    }
+  },
+  "events": {
+    "onAppsLinked": {
+      "sender": "apps",
+      "keys": ["linked"]
+    }
+  }
+}
