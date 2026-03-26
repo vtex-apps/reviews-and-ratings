@@ -12,7 +12,6 @@ import {
   REVIEW,
   REVIEWS,
   RATING,
-  AUTH_SUCCESS,
 } from '../utils/constants'
 import * as productReviewService from '../services/productReview'
 import * as authorizationService from '../services/authorization'

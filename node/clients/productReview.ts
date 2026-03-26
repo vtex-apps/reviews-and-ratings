@@ -5,7 +5,6 @@ import type {
   LegacyReview,
   Review,
   ReviewsResponseWrapper,
-  SearchRange,
   ValidatedUser,
   ValidateToken,
   VtexOrder,
