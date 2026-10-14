@@ -37,7 +37,7 @@
   "admin/reviews.table.error.refreshButton": "Aktualisieren",
   "admin/reviews.table.empty-state.no-results": "Keine Ergebnisse für \"{searchValue}\" gefunden.",
   "admin/reviews.table.empty-state.check-spelling": "Überprüfen Sie Ihre Rechtschreibung oder versuchen Sie andere Wörter.",
-  "admin/reviews.table.empty-state.pending": "Es sind keine Bewertungen anhängig.",
+  "admin/reviews.table.empty-state.pending": "Keine Bewertung gefunden.",
   "admin/reviews.cancel": "Abbrechen",
   "admin/reviews.table.empty-state.approved": "Es gibt keine genehmigten Bewertungen.",
   "admin/reviews.table.applyMatch.error.0": "Unbekannter Fehler. Versuchen Sie es erneut.",
