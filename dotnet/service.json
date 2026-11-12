@@ -3,18 +3,7 @@
   "memory": 256,
   "minReplicas": 8,
   "maxReplicas": 80,
-  "runtimeArgs": [
-  ],
-  "routes": {
-    "printHelloWorld": {
-      "path": "/_v/vtex/hello",
-      "public": true
-    },
-    "clearData": {
-      "path": "/reviews/clear",
-      "public": false
-    }
-  },
+  "runtimeArgs": [],
   "events": {
     "onAppsLinked": {
       "sender": "apps",

@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - `dotnet` builder from `1.x` to `2.x`.
 
+### Removed
+
+- Routes `/_v/vtex/hello` and `/reviews/clear`.
+
 ## [1.6.3] - 2020-12-14
 ### Security
 - Setting infrastructure `replica` parameters
