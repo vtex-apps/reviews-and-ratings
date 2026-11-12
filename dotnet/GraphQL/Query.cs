@@ -61,7 +61,7 @@ namespace ReviewsRatings.GraphQL
                     if (isAdminAuthUser != HttpStatusCode.OK)
                     {
                         AddAuthError(context, isAdminAuthUser);
-                        return EmptySearchResponse();
+                        return null;
                     }
 
                     var searchResult = productReviewService.GetReviews();
@@ -193,7 +193,7 @@ namespace ReviewsRatings.GraphQL
                     if (isAdminAuthUser != HttpStatusCode.OK)
                     {
                         AddAuthError(context, isAdminAuthUser);
-                        return EmptySearchResponse();
+                        return null;
                     }
 
                     var searchResult = productReviewService.GetReviewsByShopperId(shopperId);
@@ -241,15 +241,6 @@ namespace ReviewsRatings.GraphQL
             {
                 Code = status.ToString()
             });
-        }
-
-        private static SearchResponse EmptySearchResponse()
-        {
-            return new SearchResponse
-            {
-                Data = new DataElement { data = new List<Review>() },
-                Range = new SearchRange { Total = 0, From = 0, To = 0 }
-            };
         }
     }
 }
