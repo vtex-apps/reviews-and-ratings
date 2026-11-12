@@ -3,6 +3,8 @@ using GraphQL.Types;
 using ReviewsRatings.GraphQL.Types;
 using ReviewsRatings.Models;
 using ReviewsRatings.Services;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace ReviewsRatings.GraphQL
 {
@@ -24,43 +26,74 @@ namespace ReviewsRatings.GraphQL
                     return productReviewService.NewReview(review);
                 });
 
-            Field<ReviewType>(
+            FieldAsync<ReviewType>(
                 "editReview",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IdGraphType>> {Name = "id"},
                     new QueryArgument<NonNullGraphType<ReviewInputType>> {Name = "review"}
                 ),
-                resolve: context =>
+                resolve: async context =>
                 {
+                    if (!await IsAdmin(productReviewService, context))
+                    {
+                        return null;
+                    }
+
                     var id = context.GetArgument<int>("id");
                     var review = context.GetArgument<Review>("review");
                     review.Id = id;
-                    return productReviewService.EditReview(review);
+                    return await productReviewService.EditReview(review);
                 });
 
-            Field<BooleanGraphType>(
+            FieldAsync<BooleanGraphType>(
                 "deleteReview",
                 arguments: new QueryArguments(
                     new QueryArgument<ListGraphType<IdGraphType>> { Name = "ids"}
                 ),
-                resolve: context =>
+                resolve: async context =>
                 {
+                    if (!await IsAdmin(productReviewService, context))
+                    {
+                        return null;
+                    }
+
                     var ids = context.GetArgument<int[]>("ids");
-                    return productReviewService.DeleteReview(ids);
+                    return await productReviewService.DeleteReview(ids);
                 });
 
-            Field<BooleanGraphType>(
+            FieldAsync<BooleanGraphType>(
                 "moderateReview",
                 arguments: new QueryArguments(
                     new QueryArgument<ListGraphType<IdGraphType>> { Name = "ids" },
                     new QueryArgument<BooleanGraphType> { Name = "approved"}
                 ),
-                resolve: context =>
+                resolve: async context =>
                 {
+                    if (!await IsAdmin(productReviewService, context))
+                    {
+                        return null;
+                    }
+
                     var ids = context.GetArgument<int[]>("ids");
                     var approved = context.GetArgument<bool>("approved");
-                    return productReviewService.ModerateReview(ids, approved);
+                    return await productReviewService.ModerateReview(ids, approved);
                 });
+        }
+
+        private static async Task<bool> IsAdmin(IProductReviewService productReviewService, ResolveFieldContext<object> context)
+        {
+            HttpStatusCode isAdminAuthUser = await productReviewService.IsAdminAuthUser();
+            if (isAdminAuthUser == HttpStatusCode.OK)
+            {
+                return true;
+            }
+
+            context.Errors.Add(new ExecutionError(isAdminAuthUser.ToString())
+            {
+                Code = isAdminAuthUser.ToString()
+            });
+
+            return false;
         }
     }
 }

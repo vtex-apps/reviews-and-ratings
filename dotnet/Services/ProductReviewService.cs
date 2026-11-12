@@ -3,8 +3,10 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
     using System.Reflection;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Http;
     using Models;
     using ReviewsRatings.DataSources;
 
@@ -17,13 +19,18 @@
         private readonly IAppSettingsRepository _appSettingsRepository;
         private const int maximumReturnedRecords = 999;
         private const string DELIMITER = ":";
+        private const string VTEX_ID_COOKIE = "VtexIdclientAutCookie";
+        private const string HEADER_VTEX_ACCOUNT = "X-Vtex-Account";
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ProductReviewService(IProductReviewRepository productReviewRepository, IAppSettingsRepository appSettingsRepository)
+        public ProductReviewService(IProductReviewRepository productReviewRepository, IAppSettingsRepository appSettingsRepository, IHttpContextAccessor httpContextAccessor)
         {
             this._productReviewRepository = productReviewRepository ??
                                             throw new ArgumentNullException(nameof(productReviewRepository));
             this._appSettingsRepository = appSettingsRepository ??
                                             throw new ArgumentNullException(nameof(appSettingsRepository));
+            this._httpContextAccessor = httpContextAccessor ??
+                                        throw new ArgumentNullException(nameof(httpContextAccessor));
         }
 
         public async Task<bool> DeleteReview(int[] ids)
@@ -456,6 +463,56 @@
         public async Task<AppSettings> GetAppSettings()
         {
             return await this._appSettingsRepository.GetAppSettingAsync();
+        }
+
+        public async Task<ValidatedUser> ValidateUserToken(string token)
+        {
+            return await this._productReviewRepository.ValidateUserToken(token);
+        }
+
+        /// <summary>
+        /// Checks that the request has a valid admin user token for the current account.
+        /// VTEX IO sends the admin token in the VtexIdclientAutCookie cookie.
+        /// </summary>
+        public async Task<HttpStatusCode> IsAdminAuthUser()
+        {
+            HttpRequest request = this._httpContextAccessor.HttpContext.Request;
+            string adminToken = request.Cookies[VTEX_ID_COOKIE];
+            if (string.IsNullOrEmpty(adminToken))
+            {
+                adminToken = request.Headers[VTEX_ID_COOKIE];
+            }
+
+            if (string.IsNullOrEmpty(adminToken))
+            {
+                return HttpStatusCode.Unauthorized;
+            }
+
+            ValidatedUser validatedAdminUser = null;
+
+            try
+            {
+                validatedAdminUser = await ValidateUserToken(adminToken);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"IsAdminAuthUser Error: {ex.Message}");
+                return HttpStatusCode.BadRequest;
+            }
+
+            string account = request.Headers[HEADER_VTEX_ACCOUNT];
+            bool hasAdminPermission = validatedAdminUser != null
+                && "Success".Equals(validatedAdminUser.AuthStatus)
+                && !string.IsNullOrEmpty(account)
+                && account.Equals(validatedAdminUser.Account)
+                && "admin".Equals(validatedAdminUser.Audience);
+
+            if (!hasAdminPermission)
+            {
+                return HttpStatusCode.Forbidden;
+            }
+
+            return HttpStatusCode.OK;
         }
     }
 }

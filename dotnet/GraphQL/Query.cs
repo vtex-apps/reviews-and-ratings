@@ -7,6 +7,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace ReviewsRatings.GraphQL
 {
@@ -24,8 +26,19 @@ namespace ReviewsRatings.GraphQL
                 ),
                 resolve: async context =>
                 {
-                    return await context.TryAsyncResolve(
-                        async c => await productReviewService.GetReview(context.GetArgument<int>("id")));
+                    Review review = await productReviewService.GetReview(context.GetArgument<int>("id"));
+                    if (review != null && await productReviewService.IsAdminAuthUser() != HttpStatusCode.OK)
+                    {
+                        AppSettings appSettings = await productReviewService.GetAppSettings();
+                        if (appSettings.RequireApproval && !review.Approved)
+                        {
+                            return null;
+                        }
+
+                        review.ShopperId = null;
+                    }
+
+                    return review;
                 }
             );
 
@@ -46,8 +59,9 @@ namespace ReviewsRatings.GraphQL
                     int to = context.GetArgument<int>("to");
                     string orderBy = context.GetArgument<string>("orderBy");
                     string status = context.GetArgument<string>("status");
-                    var searchResult = productReviewService.GetReviews();
-                    IList<Review> searchData = await productReviewService.FilterReviews(searchResult.Result, searchTerm, orderBy, status);
+                    IList<Review> searchResult = await productReviewService.GetReviews();
+                    status = await RestrictForNonAdmin(productReviewService, searchResult, status);
+                    IList<Review> searchData = await productReviewService.FilterReviews(searchResult, searchTerm, orderBy, status);
                     int totalCount = searchData.Count;
                     searchData = await productReviewService.LimitReviews(searchData, from, to);
                     Console.WriteLine($"totalCount = {totalCount} : Filtered to {searchData.Count}");
@@ -81,6 +95,7 @@ namespace ReviewsRatings.GraphQL
                     string status = context.GetArgument<string>("status");
 
                     var searchResult = await productReviewService.GetReviewsByProductId(productId);
+                    status = await RestrictForNonAdmin(productReviewService, searchResult, status);
                     IList<Review> searchData = await productReviewService.FilterReviews(searchResult, searchTerm, orderBy, status);
                     int totalCount = searchData.Count;
                     searchData = await productReviewService.LimitReviews(searchData, from, to);
@@ -149,8 +164,9 @@ namespace ReviewsRatings.GraphQL
                     string orderBy = context.GetArgument<string>("orderBy");
                     string status = context.GetArgument<string>("status");
 
-                    var searchResult = productReviewService.GetReviewsByShopperId(shopperId);
-                    IList<Review> searchData = await productReviewService.FilterReviews(searchResult.Result, searchTerm, orderBy, status);
+                    IList<Review> searchResult = await productReviewService.GetReviewsByShopperId(shopperId);
+                    status = await RestrictForNonAdmin(productReviewService, searchResult, status);
+                    IList<Review> searchData = await productReviewService.FilterReviews(searchResult, searchTerm, orderBy, status);
                     int totalCount = searchData.Count;
                     searchData = await productReviewService.LimitReviews(searchData, from, to);
                     Console.WriteLine($"totalCount = {totalCount} : Filtered to {searchData.Count}");
@@ -186,6 +202,30 @@ namespace ReviewsRatings.GraphQL
                         async c => await productReviewService.GetAppSettings());
                 }
             );
+        }
+
+        /// <summary>
+        /// For callers that are not admin users: clears ShopperId and, when the store requires approval,
+        /// limits the result to approved reviews. Must run before FilterReviews, so searchTerm and orderBy
+        /// cannot probe ShopperId. Returns the status filter to use.
+        /// </summary>
+        private static async Task<string> RestrictForNonAdmin(IProductReviewService productReviewService, IList<Review> reviews, string status)
+        {
+            if (await productReviewService.IsAdminAuthUser() == HttpStatusCode.OK)
+            {
+                return status;
+            }
+
+            if (reviews != null)
+            {
+                foreach (Review review in reviews)
+                {
+                    review.ShopperId = null;
+                }
+            }
+
+            AppSettings appSettings = await productReviewService.GetAppSettings();
+            return appSettings.RequireApproval ? "true" : status;
         }
     }
 }
