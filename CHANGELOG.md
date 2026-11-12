@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - GraphQL queries no longer return `shopperId` to non-admin callers.
 - GraphQL queries return only approved reviews to non-admin callers when approval is required.
 
+### Changed
+
+- `dotnet` builder from `1.x` to `2.x`.
+
 ## [1.6.3] - 2020-12-14
 ### Security
 - Setting infrastructure `replica` parameters
