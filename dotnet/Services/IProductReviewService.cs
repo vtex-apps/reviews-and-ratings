@@ -29,6 +29,8 @@
 
         Task<HttpStatusCode> IsAdminAuthUser();
 
+        bool IsAdminUser(ValidatedUser validatedUser);
+
         Task<IList<Review>> GetReviewsByShopperId(string shopperId);
 
         Task ClearData();

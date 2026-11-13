@@ -55,21 +55,21 @@ type AppSettings {
 }
 
 type Query {
-  review(id: ID!): Review @cacheControl(scope: SEGMENT, maxAge: SHORT)
+  review(id: ID!): Review @cacheControl(scope: PRIVATE)
   reviews(
     searchTerm: String
     from: Int
     to: Int
     orderBy: String
     status: String
-  ): ReviewsResult @cacheControl(scope: SEGMENT, maxAge: SHORT)
+  ): ReviewsResult @cacheControl(scope: PRIVATE)
   reviewsByProductId(
     productId: String!
     from: Int
     to: Int
     orderBy: String
     status: String
-  ): ReviewsResult @cacheControl(scope: SEGMENT, maxAge: SHORT)
+  ): ReviewsResult @cacheControl(scope: PRIVATE)
   averageRatingByProductId(productId: String!): Float
     @cacheControl(scope: SEGMENT, maxAge: SHORT)
   totalReviewsByProductId(productId: String!): Int @cacheControl(scope: SEGMENT, maxAge: SHORT)
@@ -79,7 +79,7 @@ type Query {
     to: Int
     orderBy: String
     status: String
-  ): ReviewsResult @cacheControl(scope: SEGMENT, maxAge: SHORT)
+  ): ReviewsResult @cacheControl(scope: PRIVATE)
   hasShopperReviewed(shopperId: String!, productId: String!): Boolean
     @cacheControl(scope: SEGMENT, maxAge: SHORT)
   appSettings: AppSettings @cacheControl(scope: SEGMENT, maxAge: SHORT)

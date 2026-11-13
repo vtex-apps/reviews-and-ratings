@@ -2,8 +2,10 @@
 using Newtonsoft.Json;
 using ReviewsRatings.Models;
 using ReviewsRatings.Services;
+using ReviewsRatings.Utils;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace ReviewsRatings.Controllers
@@ -70,6 +72,11 @@ namespace ReviewsRatings.Controllers
                 return BadRequest("Missing parameter");
             }
 
+            // Admin: a valid appKey/appToken with access to the account, or an admin user token (header or cookie) for this account.
+            bool isAdmin = keyAndTokenValid
+                || this._productReviewsService.IsAdminUser(validatedUser)
+                || await this._productReviewsService.IsAdminAuthUser() == HttpStatusCode.OK;
+
             if ("post".Equals(HttpContext.Request.Method, StringComparison.OrdinalIgnoreCase))
             {
                 string bodyAsText = await new System.IO.StreamReader(HttpContext.Request.Body).ReadToEndAsync();
@@ -82,6 +89,11 @@ namespace ReviewsRatings.Controllers
                         }
 
                         Review newReview = JsonConvert.DeserializeObject<Review>(bodyAsText);
+                        if (newReview == null || !ReviewValidator.IsValidRating(newReview.Rating))
+                        {
+                            return BadRequest($"Rating must be between {ReviewValidator.MinRating} and {ReviewValidator.MaxRating}.");
+                        }
+
                         bool hasShopperReviewed = await _productReviewsService.HasShopperReviewed(validatedUser.User, newReview.ProductId);
                         if (hasShopperReviewed)
                         {
@@ -127,7 +139,7 @@ namespace ReviewsRatings.Controllers
                 switch (requestedAction)
                 {
                     case REVIEW:
-                        if (!userValidated && !keyAndTokenValid)
+                        if (!isAdmin)
                         {
                             return Json("Invalid User");
                         }
@@ -158,7 +170,7 @@ namespace ReviewsRatings.Controllers
                 switch (requestedAction)
                 {
                     case REVIEW:
-                        if (!userValidated && !keyAndTokenValid)
+                        if (!isAdmin)
                         {
                             return Json("Invalid User");
                         }
@@ -187,6 +199,11 @@ namespace ReviewsRatings.Controllers
                         }
 
                         Review review = await this._productReviewsService.GetReview(int.Parse(id));
+                        if (!isAdmin && review != null)
+                        {
+                            review.ShopperId = null;
+                        }
+
                         return Json(review);
                         break;
                     case REVIEWS:
@@ -213,6 +230,15 @@ namespace ReviewsRatings.Controllers
                         else
                         {
                             searchResult = await _productReviewsService.GetReviews();
+                        }
+
+                        if (!isAdmin && searchResult != null)
+                        {
+                            // Clear ShopperId before filtering, so search_term and order_by cannot probe it.
+                            foreach (Review r in searchResult)
+                            {
+                                r.ShopperId = null;
+                            }
                         }
 
                         IList<Review> searchData = await _productReviewsService.FilterReviews(searchResult, searchTerm, orderBy, status);

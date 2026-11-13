@@ -583,15 +583,22 @@
                 return HttpStatusCode.BadRequest;
             }
 
-            bool hasAdminPermission = validatedAdminUser != null && validatedAdminUser.AuthStatus.Equals("Success") && validatedAdminUser.Account.Equals(_context.Vtex.Account) && validatedAdminUser.Audience.Equals("admin");
-            
-            if (!hasAdminPermission)
+            if (!IsAdminUser(validatedAdminUser))
             {
                 _context.Vtex.Logger.Warn("IsAdminAuthUser", null, "User Does Not Have Permission");
                 return HttpStatusCode.Forbidden;
             }
 
             return HttpStatusCode.OK;
+        }
+
+        public bool IsAdminUser(ValidatedUser validatedUser)
+        {
+            return validatedUser != null
+                && "Success".Equals(validatedUser.AuthStatus)
+                && !string.IsNullOrEmpty(validatedUser.Account)
+                && validatedUser.Account.Equals(_context.Vtex.Account)
+                && "admin".Equals(validatedUser.Audience);
         }
 
         public async Task<AppSettings> GetAppSettings()
