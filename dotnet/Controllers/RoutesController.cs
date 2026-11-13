@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using ReviewsRatings.Models;
 using ReviewsRatings.Services;
+using ReviewsRatings.Utils;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -88,6 +89,11 @@ namespace ReviewsRatings.Controllers
                         }
 
                         Review newReview = JsonConvert.DeserializeObject<Review>(bodyAsText);
+                        if (newReview == null || !ReviewValidator.IsValidRating(newReview.Rating))
+                        {
+                            return BadRequest($"Rating must be between {ReviewValidator.MinRating} and {ReviewValidator.MaxRating}.");
+                        }
+
                         bool hasShopperReviewed = await _productReviewsService.HasShopperReviewed(validatedUser.User, newReview.ProductId);
                         if (hasShopperReviewed)
                         {

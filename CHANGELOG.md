@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - GraphQL query `reviewsByProductId` returns only approved reviews to non-admin callers when approval is required.
 - REST `DELETE` and `PATCH` routes for a single review now require an admin user or an authorized appKey/appToken.
 - Cache scope of the review list queries changed from `SEGMENT` to `PRIVATE`.
+- GraphQL mutation `newReview` and REST `POST review` reject a `rating` that is missing or outside 1 to 5.
 
 ## [2.13.0] - 2024-05-29
 
