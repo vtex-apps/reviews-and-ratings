@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - GraphQL mutations `editReview`, `deleteReview` and `moderateReview` now require an admin user.
 - GraphQL queries no longer return `shopperId` to non-admin callers.
 - GraphQL queries return only approved reviews to non-admin callers when approval is required.
+- GraphQL mutation `newReview` rejects a `rating` outside 1 to 5.
 
 ### Changed
 

@@ -3,6 +3,7 @@ using GraphQL.Types;
 using ReviewsRatings.GraphQL.Types;
 using ReviewsRatings.Models;
 using ReviewsRatings.Services;
+using ReviewsRatings.Utils;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -23,6 +24,16 @@ namespace ReviewsRatings.GraphQL
                 resolve: context =>
                 {
                     var review = context.GetArgument<Review>("review");
+                    if (!ReviewValidator.IsValidRating(review?.Rating))
+                    {
+                        context.Errors.Add(new ExecutionError($"Rating must be between {ReviewValidator.MinRating} and {ReviewValidator.MaxRating}.")
+                        {
+                            Code = HttpStatusCode.BadRequest.ToString()
+                        });
+
+                        return null;
+                    }
+
                     return productReviewService.NewReview(review);
                 });
 
