@@ -7,7 +7,7 @@
   "builders": {
     "admin": "0.x",
     "store": "0.x",
-    "dotnet": "1.x",
+    "dotnet": "2.x",
     "graphql": "1.x",
     "react": "3.x",
     "messages": "1.x",
@@ -57,18 +57,6 @@
   },
   "policies": [
     {
-      "name": "outbound-access",
-      "attrs": {
-        "host": "bnb.data.bl.uk"
-      }
-    },
-    {
-      "name": "outbound-access",
-      "attrs": {
-        "host": "nuget.org"
-      }
-    },
-    {
       "name": "ADMIN_DS"
     },
     {
@@ -76,6 +64,13 @@
       "attrs": {
         "host": "{{account}}.vtexcommercestable.com.br",
         "path": "/api/dataentities/*"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "{{account}}.vtexcommercestable.com.br",
+        "path": "/api/vtexid/*"
       }
     },
     {

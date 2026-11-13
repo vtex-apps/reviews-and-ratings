@@ -177,5 +177,45 @@
 
             response.EnsureSuccessStatusCode();
         }
+
+        public async Task<ValidatedUser> ValidateUserToken(string token)
+        {
+            ValidatedUser validatedUser = null;
+            ValidateToken validateToken = new ValidateToken
+            {
+                Token = token
+            };
+
+            var jsonSerializedToken = JsonConvert.SerializeObject(validateToken);
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri($"http://{this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_ACCOUNT]}.vtexcommercestable.com.br/api/vtexid/credential/validate"),
+                Content = new StringContent(jsonSerializedToken, Encoding.UTF8, APPLICATION_JSON)
+            };
+
+            string authToken = this._httpContextAccessor.HttpContext.Request.Headers[HEADER_VTEX_CREDENTIAL];
+            if (authToken != null)
+            {
+                request.Headers.Add(AUTHORIZATION_HEADER_NAME, authToken);
+            }
+
+            var client = _clientFactory.CreateClient();
+            try
+            {
+                var response = await client.SendAsync(request);
+                string responseContent = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    validatedUser = JsonConvert.DeserializeObject<ValidatedUser>(responseContent);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ValidateUserToken Error: {ex.Message}");
+            }
+
+            return validatedUser;
+        }
     }
 }

@@ -2,6 +2,7 @@
 {
     using Models;
     using System.Collections.Generic;
+    using System.Net;
     using System.Threading.Tasks;
 
     public interface IProductReviewService
@@ -33,6 +34,10 @@
         Task<bool> HasShopperReviewed(string shopperId, string productId);
 
         Task<AppSettings> GetAppSettings();
+
+        Task<ValidatedUser> ValidateUserToken(string token);
+
+        Task<HttpStatusCode> IsAdminAuthUser();
 
         Task<IList<Review>> FilterReviews(IList<Review> reviews, string searchTerm, string orderBy, string status);
 
