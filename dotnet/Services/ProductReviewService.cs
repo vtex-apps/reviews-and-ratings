@@ -507,8 +507,7 @@
         }
 
         /// <summary>
-        /// Returns the email of the shopper logged in to the current account, or null when the request
-        /// has no valid store user token.
+        /// Returns the email of the logged-in shopper, or null when the request has no valid store user token.
         /// </summary>
         public async Task<string> GetAuthenticatedShopperEmail()
         {
@@ -530,11 +529,8 @@
                 return null;
             }
 
-            string account = this._context.Vtex.Account;
             bool isValidShopper = validatedUser != null
                 && "Success".Equals(validatedUser.AuthStatus)
-                && !string.IsNullOrEmpty(account)
-                && account.Equals(validatedUser.Account)
                 && !string.IsNullOrEmpty(validatedUser.User);
 
             return isValidShopper ? validatedUser.User : null;
