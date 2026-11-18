@@ -202,6 +202,12 @@ namespace ReviewsRatings.Controllers
                         if (!isAdmin && review != null)
                         {
                             review.ShopperId = null;
+
+                            AppSettings appSettings = await this._productReviewsService.GetAppSettings();
+                            if (appSettings.RequireApproval && !(review.Approved ?? false))
+                            {
+                                review = null;
+                            }
                         }
 
                         return Json(review);
@@ -238,6 +244,12 @@ namespace ReviewsRatings.Controllers
                             foreach (Review r in searchResult)
                             {
                                 r.ShopperId = null;
+                            }
+
+                            AppSettings appSettings = await _productReviewsService.GetAppSettings();
+                            if (appSettings.RequireApproval)
+                            {
+                                status = "true";
                             }
                         }
 
