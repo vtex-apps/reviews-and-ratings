@@ -157,6 +157,17 @@ namespace ReviewsRatings.GraphQL
                 ),
                 resolve: async context =>
                 {
+                    HttpStatusCode isAdminAuthUser = await productReviewService.IsAdminAuthUser();
+                    if (isAdminAuthUser != HttpStatusCode.OK)
+                    {
+                        context.Errors.Add(new ExecutionError(isAdminAuthUser.ToString())
+                        {
+                            Code = isAdminAuthUser.ToString()
+                        });
+
+                        return null;
+                    }
+
                     string shopperId = context.GetArgument<string>("shopperId");
                     string searchTerm = context.GetArgument<string>("searchTerm");
                     int from = context.GetArgument<int>("from");
@@ -165,7 +176,6 @@ namespace ReviewsRatings.GraphQL
                     string status = context.GetArgument<string>("status");
 
                     IList<Review> searchResult = await productReviewService.GetReviewsByShopperId(shopperId);
-                    status = await RestrictForNonAdmin(productReviewService, searchResult, status);
                     IList<Review> searchData = await productReviewService.FilterReviews(searchResult, searchTerm, orderBy, status);
                     int totalCount = searchData.Count;
                     searchData = await productReviewService.LimitReviews(searchData, from, to);
