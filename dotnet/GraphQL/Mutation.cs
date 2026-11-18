@@ -16,12 +16,12 @@ namespace ReviewsRatings.GraphQL
         {
             Name = "Mutation";
 
-            Field<ReviewType>(
+            FieldAsync<ReviewType>(
                 "newReview",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<ReviewInputType>> {Name = "review"}
                 ),
-                resolve: context =>
+                resolve: async context =>
                 {
                     var review = context.GetArgument<Review>("review");
                     if (!ReviewValidator.IsValidRating(review?.Rating))
@@ -34,7 +34,26 @@ namespace ReviewsRatings.GraphQL
                         return null;
                     }
 
-                    return productReviewService.NewReview(review);
+                    string shopperEmail = await productReviewService.GetAuthenticatedShopperEmail();
+                    if (shopperEmail != null)
+                    {
+                        review.ShopperId = shopperEmail;
+                    }
+                    else
+                    {
+                        AppSettings appSettings = await productReviewService.GetAppSettings();
+                        if (!appSettings.AllowAnonymousReviews)
+                        {
+                            context.Errors.Add(new ExecutionError(HttpStatusCode.Unauthorized.ToString())
+                            {
+                                Code = HttpStatusCode.Unauthorized.ToString()
+                            });
+
+                            return null;
+                        }
+                    }
+
+                    return await productReviewService.NewReview(review);
                 });
 
             FieldAsync<ReviewType>(

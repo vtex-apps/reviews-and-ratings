@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - GraphQL queries no longer return `shopperId` to non-admin callers.
 - GraphQL queries return only approved reviews to non-admin callers when approval is required.
 - GraphQL mutation `newReview` rejects a `rating` outside 1 to 5.
+- GraphQL mutation `newReview` requires a logged-in shopper unless anonymous reviews are allowed, and takes `shopperId` from the shopper's session.
 
 ### Changed
 

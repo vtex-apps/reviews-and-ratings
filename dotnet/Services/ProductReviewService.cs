@@ -505,5 +505,39 @@
 
             return HttpStatusCode.OK;
         }
+
+        /// <summary>
+        /// Returns the email of the shopper logged in to the current account, or null when the request
+        /// has no valid store user token.
+        /// </summary>
+        public async Task<string> GetAuthenticatedShopperEmail()
+        {
+            string storeToken = this._context.Vtex.StoreUserAuthToken;
+            if (string.IsNullOrEmpty(storeToken))
+            {
+                return null;
+            }
+
+            ValidatedUser validatedUser = null;
+
+            try
+            {
+                validatedUser = await ValidateUserToken(storeToken);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"GetAuthenticatedShopperEmail Error: {ex.Message}");
+                return null;
+            }
+
+            string account = this._context.Vtex.Account;
+            bool isValidShopper = validatedUser != null
+                && "Success".Equals(validatedUser.AuthStatus)
+                && !string.IsNullOrEmpty(account)
+                && account.Equals(validatedUser.Account)
+                && !string.IsNullOrEmpty(validatedUser.User);
+
+            return isValidShopper ? validatedUser.User : null;
+        }
     }
 }
