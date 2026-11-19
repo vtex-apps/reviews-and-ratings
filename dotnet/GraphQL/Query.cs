@@ -200,9 +200,21 @@ namespace ReviewsRatings.GraphQL
                     ),
                 resolve: async context =>
                 {
+                    string productId = context.GetArgument<string>("productId");
+                    string shopperId = await productReviewService.GetAuthenticatedShopperEmail();
+                    if (shopperId == null)
+                    {
+                        AppSettings appSettings = await productReviewService.GetAppSettings();
+                        if (!appSettings.AllowAnonymousReviews)
+                        {
+                            return false;
+                        }
+
+                        shopperId = context.GetArgument<string>("shopperId");
+                    }
+
                     return await context.TryAsyncResolve(
-                        async c => await productReviewService.HasShopperReviewed(
-                            context.GetArgument<string>("shopperId"), context.GetArgument<string>("productId")));
+                        async c => await productReviewService.HasShopperReviewed(shopperId, productId));
                 }
             );
 
