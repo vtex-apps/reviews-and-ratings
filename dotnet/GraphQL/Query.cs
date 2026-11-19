@@ -3,6 +3,7 @@ using GraphQL.Types;
 using ReviewsRatings.GraphQL.Types;
 using ReviewsRatings.Models;
 using ReviewsRatings.Services;
+using ReviewsRatings.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,6 +37,7 @@ namespace ReviewsRatings.GraphQL
                         }
 
                         review.ShopperId = null;
+                        review.ReviewerName = ReviewerNameMasker.ToInitials(review.ReviewerName);
                     }
 
                     return review;
@@ -215,9 +217,10 @@ namespace ReviewsRatings.GraphQL
         }
 
         /// <summary>
-        /// For callers that are not admin users: clears ShopperId and, when the store requires approval,
-        /// limits the result to approved reviews. Must run before FilterReviews, so searchTerm and orderBy
-        /// cannot probe ShopperId. Returns the status filter to use.
+        /// For callers that are not admin users: clears ShopperId, reduces ReviewerName to initials and,
+        /// when the store requires approval, limits the result to approved reviews. Must run before
+        /// FilterReviews, so searchTerm and orderBy cannot probe ShopperId or the full ReviewerName.
+        /// Returns the status filter to use.
         /// </summary>
         private static async Task<string> RestrictForNonAdmin(IProductReviewService productReviewService, IList<Review> reviews, string status)
         {
@@ -231,6 +234,7 @@ namespace ReviewsRatings.GraphQL
                 foreach (Review review in reviews)
                 {
                     review.ShopperId = null;
+                    review.ReviewerName = ReviewerNameMasker.ToInitials(review.ReviewerName);
                 }
             }
 
