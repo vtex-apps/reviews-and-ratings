@@ -3,6 +3,7 @@ using GraphQL.Types;
 using ReviewsRatings.GraphQL.Types;
 using ReviewsRatings.Models;
 using ReviewsRatings.Services;
+using ReviewsRatings.Utils;
 using System;
 using System.Net;
 using System.Collections;
@@ -25,6 +26,14 @@ namespace ReviewsRatings.GraphQL
                 ),
                 resolve: async context =>
                 {
+                    HttpStatusCode isAdminAuthUser = await productReviewService.IsAdminAuthUser();
+
+                    if (isAdminAuthUser != HttpStatusCode.OK)
+                    {
+                        AddAuthError(context, isAdminAuthUser);
+                        return null;
+                    }
+
                     return await context.TryAsyncResolve(
                         async c => await productReviewService.GetReview(context.GetArgument<int>("id")));
                 }
@@ -48,31 +57,12 @@ namespace ReviewsRatings.GraphQL
                     string orderBy = context.GetArgument<string>("orderBy");
                     string status = context.GetArgument<string>("status");
 
-                    if (string.IsNullOrEmpty(status) || (!string.IsNullOrEmpty(status) && status.Equals("false")))
+                    HttpStatusCode isAdminAuthUser = await productReviewService.IsAdminAuthUser();
+
+                    if (isAdminAuthUser != HttpStatusCode.OK)
                     {
-                        HttpStatusCode isAdminAuthUser = await productReviewService.IsAdminAuthUser();
-
-                        if (isAdminAuthUser != HttpStatusCode.OK)
-                        {
-                            if (string.IsNullOrEmpty(status))
-                            {
-                                status = "true";
-                            }
-                            else
-                            {
-                                return new SearchResponse
-                                {
-                                    Data = new DataElement { data = new List<Review>() },
-                                    Range = new SearchRange
-                                    {
-                                        Total = 0,
-                                        From = from,
-                                        To = to
-                                    }
-                                };
-                            }
-
-                        }
+                        AddAuthError(context, isAdminAuthUser);
+                        return null;
                     }
 
                     var searchResult = productReviewService.GetReviews();
@@ -110,6 +100,28 @@ namespace ReviewsRatings.GraphQL
                     string status = context.GetArgument<string>("status");
 
                     var searchResult = await productReviewService.GetReviewsByProductId(productId);
+
+                    HttpStatusCode isAdminAuthUser = await productReviewService.IsAdminAuthUser();
+
+                    if (isAdminAuthUser != HttpStatusCode.OK)
+                    {
+                        // Mask before filtering, so searchTerm and orderBy cannot probe the hidden values.
+                        if (searchResult != null)
+                        {
+                            foreach (Review review in searchResult)
+                            {
+                                review.ShopperId = null;
+                                review.ReviewerName = ReviewerNameMasker.ToInitials(review.ReviewerName);
+                            }
+                        }
+
+                        AppSettings appSettings = await productReviewService.GetAppSettings();
+                        if (appSettings?.RequireApproval == true)
+                        {
+                            status = "true";
+                        }
+                    }
+
                     IList<Review> searchData = await productReviewService.FilterReviews(searchResult, searchTerm, orderBy, status);
                     int totalCount = searchData.Count;
                     searchData = await productReviewService.LimitReviews(searchData, from, to);
@@ -149,7 +161,7 @@ namespace ReviewsRatings.GraphQL
                     {
                         count = searchResult.Count;
                         AppSettings appSettings = await productReviewService.GetAppSettings();
-                        if (appSettings.RequireApproval)
+                        if (appSettings?.RequireApproval == true)
                         {
                             count = searchResult.Where(x => x.Approved ?? false).ToList().Count;
                         }
@@ -177,6 +189,14 @@ namespace ReviewsRatings.GraphQL
                     int to = context.GetArgument<int>("to");
                     string orderBy = context.GetArgument<string>("orderBy");
                     string status = context.GetArgument<string>("status");
+
+                    HttpStatusCode isAdminAuthUser = await productReviewService.IsAdminAuthUser();
+
+                    if (isAdminAuthUser != HttpStatusCode.OK)
+                    {
+                        AddAuthError(context, isAdminAuthUser);
+                        return null;
+                    }
 
                     var searchResult = productReviewService.GetReviewsByShopperId(shopperId);
                     IList<Review> searchData = await productReviewService.FilterReviews(searchResult.Result, searchTerm, orderBy, status);
@@ -215,6 +235,14 @@ namespace ReviewsRatings.GraphQL
                         async c => await productReviewService.GetAppSettings());
                 }
             );
+        }
+
+        private static void AddAuthError(ResolveFieldContext<object> context, HttpStatusCode status)
+        {
+            context.Errors.Add(new ExecutionError(status.ToString())
+            {
+                Code = status.ToString()
+            });
         }
     }
 }
