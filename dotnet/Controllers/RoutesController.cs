@@ -202,6 +202,7 @@ namespace ReviewsRatings.Controllers
                         if (!isAdmin && review != null)
                         {
                             review.ShopperId = null;
+                            review.ReviewerName = ReviewerNameMasker.ToInitials(review.ReviewerName);
 
                             AppSettings appSettings = await this._productReviewsService.GetAppSettings();
                             if (appSettings.RequireApproval && !(review.Approved ?? false))
@@ -240,10 +241,11 @@ namespace ReviewsRatings.Controllers
 
                         if (!isAdmin && searchResult != null)
                         {
-                            // Clear ShopperId before filtering, so search_term and order_by cannot probe it.
+                            // Mask before filtering, so search_term and order_by cannot probe the hidden values.
                             foreach (Review r in searchResult)
                             {
                                 r.ShopperId = null;
+                                r.ReviewerName = ReviewerNameMasker.ToInitials(r.ReviewerName);
                             }
 
                             AppSettings appSettings = await _productReviewsService.GetAppSettings();

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - GraphQL queries `review`, `reviews` and `reviewsByShopperId` now require an admin user.
 - GraphQL query `reviewsByProductId` and the REST `GET` routes no longer return `shopperId` to non-admin callers.
+- GraphQL query `reviewsByProductId` and the REST `GET` routes return only the initials of the first and last names in `reviewerName` to non-admin callers.
 - GraphQL query `reviewsByProductId` and the REST `GET` routes return only approved reviews to non-admin callers when approval is required.
 - REST `DELETE` and `PATCH` routes for a single review now require an admin user or an authorized appKey/appToken.
 - Cache scope of the review list queries changed from `SEGMENT` to `PRIVATE`.

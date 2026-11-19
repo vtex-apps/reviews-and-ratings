@@ -3,6 +3,7 @@ using GraphQL.Types;
 using ReviewsRatings.GraphQL.Types;
 using ReviewsRatings.Models;
 using ReviewsRatings.Services;
+using ReviewsRatings.Utils;
 using System;
 using System.Net;
 using System.Collections;
@@ -104,12 +105,13 @@ namespace ReviewsRatings.GraphQL
 
                     if (isAdminAuthUser != HttpStatusCode.OK)
                     {
-                        // Clear ShopperId before filtering, so searchTerm and orderBy cannot probe it.
+                        // Mask before filtering, so searchTerm and orderBy cannot probe the hidden values.
                         if (searchResult != null)
                         {
                             foreach (Review review in searchResult)
                             {
                                 review.ShopperId = null;
+                                review.ReviewerName = ReviewerNameMasker.ToInitials(review.ReviewerName);
                             }
                         }
 
