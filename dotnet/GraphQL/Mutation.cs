@@ -23,7 +23,7 @@ namespace ReviewsRatings.GraphQL
                 resolve: async context =>
                 {
                     AppSettings appSettings = await productReviewService.GetAppSettings();
-                    if (!appSettings.AllowAnonymousReviews)
+                    if (appSettings?.AllowAnonymousReviews != true)
                     {
                         HttpStatusCode isValidAuthUser = await productReviewService.IsValidAuthUser();
 

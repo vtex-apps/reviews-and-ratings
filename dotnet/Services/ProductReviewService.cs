@@ -105,7 +105,7 @@
             if (reviews != null)
             {
                 AppSettings settings = await GetAppSettings();
-                if(settings.RequireApproval)
+                if(settings?.RequireApproval == true)
                 {
                     reviews = reviews.Where(x => x.Approved ?? false).ToList();
                 }

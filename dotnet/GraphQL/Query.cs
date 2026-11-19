@@ -116,7 +116,7 @@ namespace ReviewsRatings.GraphQL
                         }
 
                         AppSettings appSettings = await productReviewService.GetAppSettings();
-                        if (appSettings.RequireApproval)
+                        if (appSettings?.RequireApproval == true)
                         {
                             status = "true";
                         }
@@ -161,7 +161,7 @@ namespace ReviewsRatings.GraphQL
                     {
                         count = searchResult.Count;
                         AppSettings appSettings = await productReviewService.GetAppSettings();
-                        if (appSettings.RequireApproval)
+                        if (appSettings?.RequireApproval == true)
                         {
                             count = searchResult.Where(x => x.Approved ?? false).ToList().Count;
                         }

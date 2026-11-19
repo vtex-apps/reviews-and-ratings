@@ -205,7 +205,7 @@ namespace ReviewsRatings.Controllers
                             review.ReviewerName = ReviewerNameMasker.ToInitials(review.ReviewerName);
 
                             AppSettings appSettings = await this._productReviewsService.GetAppSettings();
-                            if (appSettings.RequireApproval && !(review.Approved ?? false))
+                            if (appSettings?.RequireApproval == true && !(review.Approved ?? false))
                             {
                                 review = null;
                             }
@@ -249,7 +249,7 @@ namespace ReviewsRatings.Controllers
                             }
 
                             AppSettings appSettings = await _productReviewsService.GetAppSettings();
-                            if (appSettings.RequireApproval)
+                            if (appSettings?.RequireApproval == true)
                             {
                                 status = "true";
                             }
