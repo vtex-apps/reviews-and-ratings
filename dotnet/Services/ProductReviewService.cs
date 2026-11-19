@@ -3,10 +3,12 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
     using System.Reflection;
     using System.Threading.Tasks;
     using Models;
     using ReviewsRatings.DataSources;
+    using Vtex.Api.Context;
 
     /// <summary>
     /// Business logic 
@@ -17,13 +19,16 @@
         private readonly IAppSettingsRepository _appSettingsRepository;
         private const int maximumReturnedRecords = 999;
         private const string DELIMITER = ":";
+        private readonly IIOServiceContext _context;
 
-        public ProductReviewService(IProductReviewRepository productReviewRepository, IAppSettingsRepository appSettingsRepository)
+        public ProductReviewService(IProductReviewRepository productReviewRepository, IAppSettingsRepository appSettingsRepository, IIOServiceContext context)
         {
             this._productReviewRepository = productReviewRepository ??
                                             throw new ArgumentNullException(nameof(productReviewRepository));
             this._appSettingsRepository = appSettingsRepository ??
                                             throw new ArgumentNullException(nameof(appSettingsRepository));
+            this._context = context ??
+                            throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<bool> DeleteReview(int[] ids)
@@ -456,6 +461,79 @@
         public async Task<AppSettings> GetAppSettings()
         {
             return await this._appSettingsRepository.GetAppSettingAsync();
+        }
+
+        public async Task<ValidatedUser> ValidateUserToken(string token)
+        {
+            return await this._productReviewRepository.ValidateUserToken(token);
+        }
+
+        /// <summary>
+        /// Checks that the request has a valid admin user token for the current account.
+        /// </summary>
+        public async Task<HttpStatusCode> IsAdminAuthUser()
+        {
+            string adminToken = this._context.Vtex.AdminUserAuthToken;
+            if (string.IsNullOrEmpty(adminToken))
+            {
+                return HttpStatusCode.Unauthorized;
+            }
+
+            ValidatedUser validatedAdminUser = null;
+
+            try
+            {
+                validatedAdminUser = await ValidateUserToken(adminToken);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"IsAdminAuthUser Error: {ex.Message}");
+                return HttpStatusCode.BadRequest;
+            }
+
+            string account = this._context.Vtex.Account;
+            bool hasAdminPermission = validatedAdminUser != null
+                && "Success".Equals(validatedAdminUser.AuthStatus)
+                && !string.IsNullOrEmpty(account)
+                && account.Equals(validatedAdminUser.Account)
+                && "admin".Equals(validatedAdminUser.Audience);
+
+            if (!hasAdminPermission)
+            {
+                return HttpStatusCode.Forbidden;
+            }
+
+            return HttpStatusCode.OK;
+        }
+
+        /// <summary>
+        /// Returns the email of the logged-in shopper, or null when the request has no valid store user token.
+        /// </summary>
+        public async Task<string> GetAuthenticatedShopperEmail()
+        {
+            string storeToken = this._context.Vtex.StoreUserAuthToken;
+            if (string.IsNullOrEmpty(storeToken))
+            {
+                return null;
+            }
+
+            ValidatedUser validatedUser = null;
+
+            try
+            {
+                validatedUser = await ValidateUserToken(storeToken);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"GetAuthenticatedShopperEmail Error: {ex.Message}");
+                return null;
+            }
+
+            bool isValidShopper = validatedUser != null
+                && "Success".Equals(validatedUser.AuthStatus)
+                && !string.IsNullOrEmpty(validatedUser.User);
+
+            return isValidShopper ? validatedUser.User : null;
         }
     }
 }

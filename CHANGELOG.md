@@ -6,6 +6,26 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- GraphQL mutations `editReview`, `deleteReview` and `moderateReview` now require an admin user.
+- GraphQL query `reviewsByShopperId` now requires an admin user.
+- GraphQL queries no longer return `shopperId` to non-admin callers.
+- GraphQL queries return only the initials of the first and last names in `reviewerName` to non-admin callers.
+- GraphQL queries return only approved reviews to non-admin callers when approval is required.
+- GraphQL mutation `newReview` rejects a `rating` outside 1 to 5.
+- GraphQL mutation `newReview` requires a logged-in shopper unless anonymous reviews are allowed, and takes `shopperId` from the shopper's session.
+- GraphQL mutation `newReview` rejects a second review of the same product by a logged-in shopper.
+- GraphQL query `hasShopperReviewed` takes `shopperId` from the shopper's session, and returns `false` to callers who are not logged in unless anonymous reviews are allowed.
+
+### Changed
+
+- `dotnet` builder from `1.x` to `2.x`.
+
+### Removed
+
+- Routes `/_v/vtex/hello` and `/reviews/clear`.
+
 ## [1.6.3] - 2020-12-14
 ### Security
 - Setting infrastructure `replica` parameters
