@@ -37,6 +37,16 @@ namespace ReviewsRatings.GraphQL
                     string shopperEmail = await productReviewService.GetAuthenticatedShopperEmail();
                     if (shopperEmail != null)
                     {
+                        if (await productReviewService.HasShopperReviewed(shopperEmail, review.ProductId))
+                        {
+                            context.Errors.Add(new ExecutionError("Shopper has already reviewed this product.")
+                            {
+                                Code = HttpStatusCode.Conflict.ToString()
+                            });
+
+                            return null;
+                        }
+
                         review.ShopperId = shopperEmail;
                     }
                     else
